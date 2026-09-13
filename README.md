@@ -66,6 +66,8 @@ provenance for the archive. Verify downloaded bytes with:
 shasum -a 256 -c SHA256SUMS
 gh attestation verify catalog-snapshot.tar.gz \
   --repo yersonargotev/packy-catalog
+gh release verify catalog-<full-source-commit> \
+  --repo yersonargotev/packy-catalog
 ```
 
 Pull-request validation has read-only repository permission and no publication
@@ -74,6 +76,9 @@ validation workflow succeeds for an official `main` push. Its read-only job
 builds and retains the validated artifact; only the final job can attest and
 publish it, and that job never checks out or executes Catalog Project content.
 
-Retrying the same commit accepts only the same target and byte-identical assets.
-An interrupted release can upload missing expected assets, while an unexpected
-asset or any changed published byte is rejected.
+Repository settings enable native release immutability. The publisher creates a
+draft, uploads and verifies the complete asset set, publishes it, and requires
+GitHub to report the result as immutable. Retrying the same commit accepts only
+the same target and byte-identical assets. An interrupted draft can upload
+missing expected assets; a published mutable release, unexpected asset, or
+changed byte is rejected.
