@@ -15,5 +15,7 @@ if [[ $# -eq 1 ]]; then
   args+=(--baseline "$(cd "$1" && pwd)")
 fi
 
+"$catalog_root/scripts/validate-publication-workflows.sh"
+
 cd "$validator_root"
 go run ./internal/tools/catalogvalidate "${args[@]}"
