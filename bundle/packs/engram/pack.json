@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "engram",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "description": "Upstream Engram CLI memory workflows for agent work",
   "selectable": true,
   "surfaces": [
@@ -14,7 +14,14 @@
   "external_requirements": [
     "engram"
   ],
-  "origins": [],
+  "origins": [
+    {
+      "id": "engram",
+      "repository": "yersonargotev/engram",
+      "commit": "4ee31ced0021b5b56ec3b9a14976647841725665",
+      "revision": "pack-v3.3.1"
+    }
+  ],
   "resources": [
     {
       "kind": "asset",
@@ -23,8 +30,16 @@
       "description": "Machine-verifiable Engram Protocol contract v1 compatibility metadata",
       "requires": [],
       "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
       "bindings": [],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "origin": {
+        "id": "engram",
+        "path": "assets/protocol-contract-v1.json",
+        "relationship": "exact-copy"
+      }
     },
     {
       "kind": "notice",
@@ -33,10 +48,18 @@
       "description": "Preserve the upstream Engram MIT license and attribution",
       "requires": [],
       "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
       "bindings": [],
       "surface_exclusions": [],
       "license": "MIT",
-      "attribution": "Copyright (c) 2026 Alan Buscaglia"
+      "attribution": "Copyright (c) 2026 Alan Buscaglia",
+      "origin": {
+        "id": "engram",
+        "path": "notices/engram-mit",
+        "relationship": "exact-copy"
+      }
     },
     {
       "kind": "skill",
@@ -66,7 +89,12 @@
           ]
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "origin": {
+        "id": "engram",
+        "path": "skills/engram-memory-cli",
+        "relationship": "exact-copy"
+      }
     }
   ]
 }
