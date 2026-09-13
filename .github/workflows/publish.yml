@@ -1,0 +1,113 @@
+name: Catalog publication
+
+on:
+  workflow_run:
+    workflows:
+      - Catalog validation
+    types:
+      - completed
+
+permissions: {}
+
+concurrency:
+  group: catalog-publication
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Build immutable Catalog Snapshot
+    if: >-
+      github.repository == 'yersonargotev/packy-catalog' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      CATALOG_COMMIT: ${{ github.event.workflow_run.head_sha }}
+      PACKY_BUILDER_COMMIT: 73153dc07a2ed615e7cd2ddaa64b4edc2b9bf7ac
+    steps:
+      - name: Check out reviewed Catalog Project commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.CATALOG_COMMIT }}
+          path: catalog-project
+          persist-credentials: false
+
+      - name: Check out pinned Packy snapshot builder
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: yersonargotev/packy
+          ref: ${{ env.PACKY_BUILDER_COMMIT }}
+          path: packy-builder
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: packy-builder/go.mod
+          cache: false
+
+      - name: Build exact validated snapshot
+        working-directory: packy-builder
+        run: |
+          set -euo pipefail
+          [[ "$(git -C ../catalog-project rev-parse HEAD)" == "$CATALOG_COMMIT" ]]
+          go run ./internal/tools/catalogsnapshot \
+            --project ../catalog-project \
+            --source-repository "$GITHUB_REPOSITORY" \
+            --source-commit "$CATALOG_COMMIT" \
+            --builder "yersonargotev/packy@$PACKY_BUILDER_COMMIT" \
+            --out-dir ../dist
+
+      - name: Retain validated snapshot
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: catalog-snapshot-${{ env.CATALOG_COMMIT }}
+          path: dist
+          if-no-files-found: error
+
+  publish:
+    name: Attest and publish Catalog Snapshot
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      attestations: write
+      contents: write
+      id-token: write
+    env:
+      CATALOG_COMMIT: ${{ github.event.workflow_run.head_sha }}
+      PACKY_BUILDER_COMMIT: 73153dc07a2ed615e7cd2ddaa64b4edc2b9bf7ac
+    steps:
+      - name: Download validated snapshot only
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: catalog-snapshot-${{ env.CATALOG_COMMIT }}
+          path: dist
+
+      - name: Check out pinned trusted publisher
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: yersonargotev/packy
+          ref: ${{ env.PACKY_BUILDER_COMMIT }}
+          path: packy-publisher
+          persist-credentials: false
+
+      - name: Attest official publisher and artifact digest
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: dist/catalog-snapshot.tar.gz
+
+      - name: Publish or verify immutable release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          packy-publisher/scripts/publish-catalog-snapshot.sh
+          --repository "$GITHUB_REPOSITORY"
+          --commit "$CATALOG_COMMIT"
+          --dist dist
