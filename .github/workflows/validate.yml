@@ -1,0 +1,54 @@
+name: Catalog validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Catalog Project
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out Catalog Project candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: catalog-project
+          persist-credentials: false
+
+      - name: Check out Catalog Project baseline
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: catalog-baseline
+          persist-credentials: false
+
+      - name: Check out Packy validator
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: yersonargotev/packy
+          ref: 47070c7d58dd51ec3a9fdfec1b42b7f1bf06ee3f
+          path: packy-validator
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: packy-validator/go.mod
+          cache: false
+
+      - name: Validate inert catalog content
+        working-directory: packy-validator
+        shell: bash
+        run: |
+          args=(--project ../catalog-project)
+          if [[ -d ../catalog-baseline/bundle/packs ]]; then
+            args+=(--baseline ../catalog-baseline)
+          fi
+          go run ./internal/tools/catalogvalidate "${args[@]}"
