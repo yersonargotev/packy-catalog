@@ -45,6 +45,40 @@ increase. Packs whose content is unchanged must retain their versions. A new
 Pack may start at any valid SemVer. Pull-request CI applies the same rules
 against the exact base commit.
 
+## Update a Pack
+
+Select an immutable upstream release or full commit and record its full commit
+ID. Treat the Pack manifest and its declared resource closure as the reviewed
+contract; compare them completely before changing catalog files.
+
+Use Packy's transactional Upstream Refresh only when the complete comparison
+changes no manifest data except the Pack version and the selected origin's
+commit or optional revision, and changes no closure topology except resource
+bytes at already declared `exact-copy` paths:
+
+```sh
+packy catalog upstream-refresh <pack-id> \
+  --project . \
+  --origin-id <origin-id> \
+  --commit <full-commit> \
+  --version <new-pack-version>
+```
+
+Treat every other manifest or closure change as a contract migration. Reconcile
+the manifest and closure together, including additions, removals, moved paths,
+adaptations, and catalog-authored changes. Preserve the upstream author's
+declared provenance unless the catalog resource is a byte-exact copy of a newly
+pinned path. Pack versions are catalog-owned: choose a strictly greater SemVer
+that represents the reviewed compatibility change; matching the upstream
+version is useful but not required. The full commit is authoritative;
+`upstream-refresh` clears the optional human-readable `revision` label.
+
+Finish either route by reviewing the complete Pack closure, validating against
+a clean baseline checkout, and confirming that unrelated Pack versions remain
+unchanged. The update is complete only when the provenance resolves, exact-copy
+resources match byte-for-byte, the baseline validation passes, and the Git diff
+contains only the intended contract and closure changes.
+
 ## Publish
 
 Every successful validation of a reviewed merge to protected `main`

@@ -1,4 +1,4 @@
 interface:
   display_name: "Orchestrate"
-  short_description: "Manage large-scope work across agents"
-  default_prompt: "Use $orchestrate to manage this large-scope task across focused agents."
+  short_description: "Coordinate bounded work across agents"
+  default_prompt: "Use $orchestrate to delegate bounded work and integrate the results."
