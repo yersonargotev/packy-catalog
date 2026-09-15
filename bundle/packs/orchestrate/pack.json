@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "orchestrate",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Coordinate focused Codex subagents",
   "selectable": true,
   "surfaces": [
@@ -16,8 +16,8 @@
     {
       "id": "orchestrate-skill",
       "repository": "yersonargotev/orchestrate-skill",
-      "commit": "bd9d77b3c43a2544cea68d08492cbf306752cd22",
-      "revision": "1.0.1"
+      "commit": "fe3e0b7b690dcb14aefdb0d50e4e9b06a084dd00",
+      "revision": "pack-v1.0.3"
     }
   ],
   "resources": [
@@ -64,7 +64,7 @@
       "kind": "skill",
       "id": "orchestrate",
       "source": "skills/orchestrate",
-      "description": "Coordinate focused Codex subagents for substantial tasks",
+      "description": "Coordinate focused Codex subagents for delegated work",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -84,7 +84,7 @@
       "surface_exclusions": [],
       "origin": {
         "id": "orchestrate-skill",
-        "path": "orchestrate",
+        "path": "skills/orchestrate",
         "relationship": "exact-copy"
       }
     }

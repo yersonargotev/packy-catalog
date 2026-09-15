@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Catalog Pack"
+  short_description: "Refresh or migrate a reviewed Catalog Pack"
+  default_prompt: "Use $update-catalog-pack to update this Pack in the Packy Catalog Project."
