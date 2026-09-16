@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "matty",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Matty workflow",
   "selectable": true,
   "surfaces": [
@@ -18,8 +18,7 @@
     {
       "id": "mattpocock-skills",
       "repository": "mattpocock/skills",
-      "commit": "5b15a47f2d7150f545fbcacbfe381787fc0230dc",
-      "revision": "5b15a47f2d7150f545fbcacbfe381787fc0230dc"
+      "commit": "959a8e9f1edc3adbe2f7e3054bb6fbefa6696260"
     }
   ],
   "resources": [
@@ -568,6 +567,52 @@
     {
       "bindings": [
         {
+          "invocation": "implement-spec",
+          "mode": "native",
+          "name": "implement-spec",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "claude",
+          "capabilities": []
+        },
+        {
+          "invocation": "implement-spec",
+          "mode": "native",
+          "name": "implement-spec",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "codex",
+          "capabilities": []
+        },
+        {
+          "invocation": "implement-spec",
+          "mode": "native",
+          "name": "implement-spec",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "opencode",
+          "capabilities": []
+        }
+      ],
+      "description": "Implements a specification in code",
+      "id": "implement-spec",
+      "kind": "skill",
+      "requires": [],
+      "source": "skills/in-progress/implement-spec",
+      "surface_exclusions": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "mattpocock-skills",
+        "path": "skills/in-progress/implement-spec",
+        "relationship": "exact-copy"
+      }
+    },
+    {
+      "bindings": [
+        {
           "invocation": "improve-codebase-architecture",
           "mode": "native",
           "name": "improve-codebase-architecture",
@@ -792,6 +837,52 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/resolving-merge-conflicts",
+        "relationship": "exact-copy"
+      }
+    },
+    {
+      "bindings": [
+        {
+          "invocation": "retro",
+          "mode": "native",
+          "name": "retro",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "claude",
+          "capabilities": []
+        },
+        {
+          "invocation": "retro",
+          "mode": "native",
+          "name": "retro",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "codex",
+          "capabilities": []
+        },
+        {
+          "invocation": "retro",
+          "mode": "native",
+          "name": "retro",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "opencode",
+          "capabilities": []
+        }
+      ],
+      "description": "Conducts a retrospective on a coding session",
+      "id": "retro",
+      "kind": "skill",
+      "requires": [],
+      "source": "skills/in-progress/retro",
+      "surface_exclusions": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "mattpocock-skills",
+        "path": "skills/in-progress/retro",
         "relationship": "exact-copy"
       }
     },
