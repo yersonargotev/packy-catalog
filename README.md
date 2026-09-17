@@ -10,6 +10,7 @@ the manifests, resources, adaptations, provenance, and notices for:
 - Matty
 - Orchestrate
 - pstack
+- Web
 
 Independent upstream products keep their own repositories and release
 lifecycles. A pinned `origin` in a Pack manifest identifies the exact upstream
