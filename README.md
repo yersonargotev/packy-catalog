@@ -11,6 +11,7 @@ the manifests, resources, adaptations, provenance, and notices for:
 - Matty
 - Orchestrate
 - pstack
+- Warp
 - Web
 
 Independent upstream products keep their own repositories and release
