@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: yersonargotev/packy
-          ref: 661c4f7d563949eb318e896d66bf6b2fff1647fb
+          ref: 8557aae0c60c2d8bb3d0827f40affbb613982ac7
           path: packy-validator
           persist-credentials: false
 
