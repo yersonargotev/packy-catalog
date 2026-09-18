@@ -6,6 +6,7 @@ the manifests, resources, adaptations, provenance, and notices for:
 - Addy
 - Argote
 - Engram
+- HumanLayer
 - Issue Delivery
 - Matty
 - Orchestrate
