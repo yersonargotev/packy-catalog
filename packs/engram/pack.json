@@ -1,0 +1,100 @@
+{
+  "schema_version": 2,
+  "id": "engram",
+  "version": "4.0.0",
+  "description": "Upstream Engram CLI memory workflows for agent work",
+  "selectable": true,
+  "surfaces": [
+    "codex"
+  ],
+  "readiness_obligations": [
+    "runtime-usability",
+    "surface-authorization"
+  ],
+  "external_requirements": [
+    "engram"
+  ],
+  "origins": [
+    {
+      "id": "engram",
+      "repository": "yersonargotev/engram",
+      "commit": "4ee31ced0021b5b56ec3b9a14976647841725665",
+      "revision": "pack-v3.3.1"
+    }
+  ],
+  "resources": [
+    {
+      "kind": "asset",
+      "id": "protocol-contract-v1",
+      "source": "assets/protocol-contract-v1.json",
+      "description": "Machine-verifiable Engram Protocol contract v1 compatibility metadata",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "bindings": [],
+      "surface_exclusions": [],
+      "origin": {
+        "id": "engram",
+        "path": "assets/protocol-contract-v1.json",
+        "relationship": "exact-copy"
+      }
+    },
+    {
+      "kind": "notice",
+      "id": "mit",
+      "source": "notices/engram-mit",
+      "description": "Preserve the upstream Engram MIT license and attribution",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "bindings": [],
+      "surface_exclusions": [],
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Alan Buscaglia",
+      "origin": {
+        "id": "engram",
+        "path": "notices/engram-mit",
+        "relationship": "exact-copy"
+      }
+    },
+    {
+      "kind": "skill",
+      "id": "engram-memory-cli",
+      "source": "skills/engram-memory-cli",
+      "description": "Uses Engram project memory safely through the CLI",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "bindings": [
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "engram-memory-cli",
+          "invocation": "$engram-memory-cli",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": [
+            {
+              "type": "external-executable-acquisition",
+              "external_executable_acquisition": {
+                "tool": "engram"
+              }
+            }
+          ]
+        }
+      ],
+      "surface_exclusions": [],
+      "origin": {
+        "id": "engram",
+        "path": "skills/engram-memory-cli",
+        "relationship": "exact-copy"
+      }
+    }
+  ]
+}

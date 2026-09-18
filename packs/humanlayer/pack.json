@@ -1,0 +1,322 @@
+{
+  "schema_version": 2,
+  "id": "humanlayer",
+  "version": "2.0.0",
+  "description": "HumanLayer skills for visual explanations, pull requests, React types, and agentic workflows",
+  "selectable": true,
+  "surfaces": [
+    "claude",
+    "codex",
+    "opencode"
+  ],
+  "readiness_obligations": [
+    "runtime-usability",
+    "surface-authorization"
+  ],
+  "external_requirements": [],
+  "origins": [
+    {
+      "id": "humanlayer-skills",
+      "repository": "humanlayer/skills",
+      "commit": "ca7c8088db69e315a8b2deea43820270457f8f3c"
+    }
+  ],
+  "resources": [
+    {
+      "kind": "notice",
+      "id": "mit",
+      "source": "notices/humanlayer-mit",
+      "description": "Preserve the HumanLayer MIT license and attribution",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 HumanLayer",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "humanlayer-skills",
+        "path": "LICENSE",
+        "relationship": "exact-copy"
+      },
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "build-iterated-agentic-loop",
+      "source": "skills/humanlayer/build-iterated-agentic-loop",
+      "description": "build a repo-local skill and install a matching iterated coding-agent GitHub Actions workflow, prompt, memory file, and reference templates",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "humanlayer-skills",
+        "path": "plugins/build-iterated-agentic-loop/skills/build-iterated-agentic-loop",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "build-iterated-agentic-loop",
+          "invocation": "/build-iterated-agentic-loop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "build-iterated-agentic-loop",
+          "invocation": "$build-iterated-agentic-loop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "build-iterated-agentic-loop",
+          "invocation": "build-iterated-agentic-loop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "design-control-loop",
+      "source": "skills/humanlayer/design-control-loop",
+      "description": "interview the user to design an agentic control loop (sensor, controller, actuator under disturbances) tailored to their codebase, then build it as locally-runnable components plus a scheduled coding-agent workflow",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "humanlayer-skills",
+        "path": "plugins/design-control-loop/skills/design-control-loop",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "design-control-loop",
+          "invocation": "/design-control-loop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "design-control-loop",
+          "invocation": "$design-control-loop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "design-control-loop",
+          "invocation": "design-control-loop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "improve-claude-md",
+      "source": "skills/humanlayer/improve-claude-md",
+      "description": "improve a CLAUDE.md file using <important if> blocks to improve instruction adherence",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "humanlayer-skills",
+        "path": "plugins/improve-claude-md/skills/improve-claude-md",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "improve-claude-md",
+          "invocation": "/improve-claude-md",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "improve-claude-md",
+          "invocation": "$improve-claude-md",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "improve-claude-md",
+          "invocation": "improve-claude-md",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "narrow-react-prop-types",
+      "source": "skills/humanlayer/narrow-react-prop-types",
+      "description": "narrow React component prop types to match live code paths",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "humanlayer-skills",
+        "path": "plugins/narrow-react-prop-types/skills/narrow-react-prop-types",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "narrow-react-prop-types",
+          "invocation": "/narrow-react-prop-types",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "narrow-react-prop-types",
+          "invocation": "$narrow-react-prop-types",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "narrow-react-prop-types",
+          "invocation": "narrow-react-prop-types",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "show-me",
+      "source": "skills/humanlayer/show-me",
+      "description": "Help the user understand the current topic visually with concise diagrams, code-shape sketches, and focused HTML artifacts.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "humanlayer-skills",
+        "path": "plugins/show-me/skills/show-me",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "show-me",
+          "invocation": "/show-me",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "show-me",
+          "invocation": "$show-me",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "show-me",
+          "invocation": "show-me",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "visual-pr",
+      "source": "skills/humanlayer/visual-pr",
+      "description": "Create or update pull requests with concise visual descriptions when explicitly invoked",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "humanlayer-skills",
+        "path": "plugins/visual-pr/skills/visual-pr",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "visual-pr",
+          "invocation": "/visual-pr",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "visual-pr",
+          "invocation": "$visual-pr",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "visual-pr",
+          "invocation": "visual-pr",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    }
+  ]
+}
