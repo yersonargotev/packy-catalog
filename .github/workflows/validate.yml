@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: yersonargotev/packy
-          ref: 47070c7d58dd51ec3a9fdfec1b42b7f1bf06ee3f
+          ref: 8557aae0c60c2d8bb3d0827f40affbb613982ac7
           path: packy-validator
           persist-credentials: false
 
@@ -52,7 +52,7 @@ jobs:
         shell: bash
         run: |
           args=(--project ../catalog-project)
-          if [[ -d ../catalog-baseline/bundle/packs ]]; then
+          if [[ -d ../catalog-baseline/packs ]]; then
             args+=(--baseline ../catalog-baseline)
           fi
           go run ./internal/tools/catalogvalidate "${args[@]}"

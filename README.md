@@ -19,9 +19,10 @@ commit from which reviewed resources were copied or adapted.
 
 ## Layout
 
-Pack manifests live at `bundle/packs/<pack-id>/pack.json`. Their resource paths
-are relative to `bundle/`. The complete catalog is discovered from those
-manifest paths; there is no separately maintained registry.
+Each Pack is a self-contained module under `packs/<pack-id>/`. Its `pack.json`
+and every declared resource path are relative to that Pack root. The complete
+catalog is discovered from those directories; there is no separately
+maintained registry and Packs cannot reference files owned by another Pack.
 
 Catalog content is inert data. Validation reads manifests and files, checks
 their declared closures and exact-copy provenance, and evaluates Packy's typed
@@ -90,7 +91,7 @@ release approval or Packy promotion pull request is required.
 The release tag is `catalog-<full-source-commit>` and contains exactly:
 
 - `catalog-snapshot.tar.gz`, with the generated `catalog-index.json` and every
-  declared Pack closure under `bundle/`; and
+  declared Pack closure under `packs/<pack-id>/`; and
 - `SHA256SUMS`, with the archive's SHA-256 digest.
 
 The index identifies the exact Catalog Project and Packy builder commits, the

@@ -1,0 +1,226 @@
+{
+  "schema_version": 2,
+  "id": "web",
+  "version": "2.0.0",
+  "description": "Web automation and React engineering skills",
+  "selectable": true,
+  "surfaces": [
+    "claude",
+    "codex",
+    "opencode"
+  ],
+  "readiness_obligations": [
+    "runtime-usability",
+    "surface-authorization"
+  ],
+  "external_requirements": [
+    "agent-browser"
+  ],
+  "origins": [
+    {
+      "id": "vercel-agent-browser",
+      "repository": "vercel-labs/agent-browser",
+      "commit": "aff6125c023b810ea3f2e5deec5379e9a4270bdc"
+    },
+    {
+      "id": "vercel-agent-skills",
+      "repository": "vercel-labs/agent-skills",
+      "commit": "063bee94c3f4df8453406c830b0a7df0f2860278"
+    }
+  ],
+  "resources": [
+    {
+      "kind": "notice",
+      "id": "agent-browser-apache-2-0",
+      "source": "notices/vercel-agent-browser-apache-2.0",
+      "description": "Preserve the agent-browser Apache 2.0 license and attribution",
+      "arguments": {
+        "mode": ""
+      },
+      "license": "Apache-2.0",
+      "attribution": "Copyright 2025 Vercel Inc.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:agent-browser-apache-2-0"
+      ],
+      "origin": {
+        "id": "vercel-agent-browser",
+        "path": "LICENSE",
+        "relationship": "exact-copy"
+      },
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "notice",
+      "id": "agent-skills-mit",
+      "source": "notices/vercel-agent-skills-mit",
+      "description": "Preserve the Vercel Agent Skills MIT license declaration and attribution",
+      "arguments": {
+        "mode": ""
+      },
+      "license": "MIT",
+      "attribution": "Vercel",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:agent-skills-mit"
+      ],
+      "origin": {
+        "id": "vercel-agent-skills",
+        "path": "README.md",
+        "relationship": "adapted"
+      },
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "agent-browser",
+      "source": "skills/web/agent-browser",
+      "description": "Automate websites and browser-based workflows with the agent-browser CLI",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:agent-browser-apache-2-0"
+      ],
+      "origin": {
+        "id": "vercel-agent-browser",
+        "path": "skills/agent-browser",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "agent-browser",
+          "invocation": "/agent-browser",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "agent-browser",
+          "invocation": "$agent-browser",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "agent-browser",
+          "invocation": "agent-browser",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "composition-patterns",
+      "source": "skills/web/composition-patterns",
+      "description": "Apply scalable React composition patterns and component API design",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:agent-skills-mit"
+      ],
+      "origin": {
+        "id": "vercel-agent-skills",
+        "path": "skills/composition-patterns",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "composition-patterns",
+          "invocation": "/composition-patterns",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "composition-patterns",
+          "invocation": "$composition-patterns",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "composition-patterns",
+          "invocation": "composition-patterns",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "react-best-practices",
+      "source": "skills/web/react-best-practices",
+      "description": "Apply Vercel's React and Next.js performance best practices",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:agent-skills-mit"
+      ],
+      "origin": {
+        "id": "vercel-agent-skills",
+        "path": "skills/react-best-practices",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "react-best-practices",
+          "invocation": "/react-best-practices",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "react-best-practices",
+          "invocation": "$react-best-practices",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "react-best-practices",
+          "invocation": "react-best-practices",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    }
+  ]
+}

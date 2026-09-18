@@ -32,6 +32,12 @@ for required in \
   grep -Fq "$required" "$publication" || fail "publication workflow is missing $required"
 done
 
+builder_commit="$(sed -n 's/^[[:space:]]*PACKY_BUILDER_COMMIT:[[:space:]]*\([0-9a-f]\{40\}\)$/\1/p' "$publication" | sort -u)"
+validator_commit="$(sed -n 's/^[[:space:]]*ref:[[:space:]]*\([0-9a-f]\{40\}\)$/\1/p' "$validation" | tail -1)"
+if [[ ! "$builder_commit" =~ ^[0-9a-f]{40}$ ]] || [[ "$validator_commit" != "$builder_commit" ]]; then
+  fail "validation and publication must use the same immutable Packy commit"
+fi
+
 publish_job="$(sed -n '/^  publish:/,$p' "$publication")"
 if grep -Eq 'path: catalog-project|working-directory: catalog-project|catalog-project/' <<< "$publish_job"; then
   fail "write-authorized job must not check out or execute Catalog Project content"
