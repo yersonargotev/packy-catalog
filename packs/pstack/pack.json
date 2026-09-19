@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "id": "pstack",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -47,6 +47,220 @@
     },
     {
       "kind": "skill",
+      "id": "architect",
+      "source": "skills/architect",
+      "description": "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:arena",
+        "skill:how",
+        "skill:interrogate",
+        "skill:principle-foundational-thinking",
+        "skill:principle-outcome-oriented-execution",
+        "skill:principle-redesign-from-first-principles",
+        "skill:principle-subtract-before-you-add",
+        "skill:why"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/architect",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "architect",
+          "invocation": "architect",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "architect",
+          "invocation": "$architect",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "architect",
+          "invocation": "architect",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "arena",
+      "source": "skills/arena",
+      "description": "Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. Use for /arena, 'arena this', 'throw it in the arena', or when one attempt at a non-trivial artifact would lock in the wrong shape.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:principle-separate-before-serializing-shared-state"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/arena",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "arena",
+          "invocation": "arena",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "arena",
+          "invocation": "$arena",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "arena",
+          "invocation": "arena",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "automate-me",
+      "source": "skills/automate-me",
+      "description": "Use for \"automate me\", \"create/update/refresh my -mode skill\", \"turn/capture my preferences or working style into a skill\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via create-skill + unslop, optionally pulling fresh evidence from recent transcripts.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:poteto-mode",
+        "skill:unslop"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/automate-me",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "automate-me",
+          "invocation": "automate-me",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "automate-me",
+          "invocation": "$automate-me",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "automate-me",
+          "invocation": "automate-me",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "blast-radius",
+      "source": "skills/blast-radius",
+      "description": "Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. Use for 'blast radius of X', 'what could this break', or reviewing a small diff you don't trust.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:arena",
+        "skill:unslop",
+        "skill:why"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/blast-radius",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "blast-radius",
+          "invocation": "blast-radius",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "blast-radius",
+          "invocation": "$blast-radius",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "blast-radius",
+          "invocation": "blast-radius",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
       "id": "bro",
       "source": "skills/bro",
       "description": "Restate the last message in plain human language, with no jargon.",
@@ -87,6 +301,447 @@
           "projection": "skill",
           "name": "bro",
           "invocation": "bro",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "create-verification-skill",
+      "source": "skills/create-verification-skill",
+      "description": "Generate a project-local verification skill that drives your app the way a user does — any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/create-verification-skill",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "create-verification-skill",
+          "invocation": "create-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "create-verification-skill",
+          "invocation": "$create-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "create-verification-skill",
+          "invocation": "create-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "figure-it-out",
+      "source": "skills/figure-it-out",
+      "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions via show-me-your-work. Use for /figure-it-out, 'figure it out', a large migration, or when no narrower playbook applies.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:architect",
+        "skill:poteto-mode",
+        "skill:principle-laziness-protocol",
+        "skill:principle-never-block-on-the-human",
+        "skill:principle-prove-it-works",
+        "skill:principle-separate-before-serializing-shared-state",
+        "skill:show-me-your-work"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/figure-it-out",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "figure-it-out",
+          "invocation": "figure-it-out",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "figure-it-out",
+          "invocation": "$figure-it-out",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "figure-it-out",
+          "invocation": "figure-it-out",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "how",
+      "source": "skills/how",
+      "description": "Use for \"how does X work\", code walkthroughs before changing something, and placement / ownership / layering questions (\"where should this live\", \"which package owns this\", \"is this the right layer\"). Explains subsystem architecture, runtime flow, onboarding mental models. Use why for motivation.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/how",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "how",
+          "invocation": "how",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "how",
+          "invocation": "$how",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "how",
+          "invocation": "how",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "interrogate",
+      "source": "skills/interrogate",
+      "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/interrogate",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "interrogate",
+          "invocation": "interrogate",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "interrogate",
+          "invocation": "$interrogate",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "interrogate",
+          "invocation": "interrogate",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "maintain-verification-skill",
+      "source": "skills/maintain-verification-skill",
+      "description": "Periodic pass that keeps a project's verification skill and feature map honest: parallel source readers per feature, one live session driving every feature, at most one PR of proven corrections. Use for /maintain-verification-skill or \"audit the verify skill\".",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/maintain-verification-skill",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "maintain-verification-skill",
+          "invocation": "maintain-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "maintain-verification-skill",
+          "invocation": "$maintain-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "maintain-verification-skill",
+          "invocation": "maintain-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "make-bot-ui",
+      "source": "skills/make-bot-ui",
+      "description": "Use when building a custom UI (page, dashboard, buttons) that should wake a Grok Bot over a webhook, when the user must provide a webhook sender key, or when exposing that UI on Tailscale.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/make-bot-ui",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "make-bot-ui",
+          "invocation": "make-bot-ui",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "make-bot-ui",
+          "invocation": "$make-bot-ui",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "make-bot-ui",
+          "invocation": "make-bot-ui",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "no-comments",
+      "source": "skills/no-comments",
+      "description": "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:architect",
+        "skill:how",
+        "skill:principle-fix-root-causes",
+        "skill:principle-redesign-from-first-principles",
+        "skill:why"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/no-comments",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "no-comments",
+          "invocation": "no-comments",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "no-comments",
+          "invocation": "$no-comments",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "no-comments",
+          "invocation": "no-comments",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "poteto-mode",
+      "source": "skills/poteto-mode",
+      "description": "poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:architect",
+        "skill:arena",
+        "skill:how",
+        "skill:interrogate",
+        "skill:no-comments",
+        "skill:principle-attack-the-premise",
+        "skill:principle-boundary-discipline",
+        "skill:principle-build-the-lever",
+        "skill:principle-encode-lessons-in-structure",
+        "skill:principle-exhaust-the-design-space",
+        "skill:principle-experience-first",
+        "skill:principle-fix-root-causes",
+        "skill:principle-foundational-thinking",
+        "skill:principle-guard-the-context-window",
+        "skill:principle-laziness-protocol",
+        "skill:principle-make-operations-idempotent",
+        "skill:principle-migrate-callers-then-delete-legacy-apis",
+        "skill:principle-minimize-reader-load",
+        "skill:principle-model-the-domain",
+        "skill:principle-never-block-on-the-human",
+        "skill:principle-outcome-oriented-execution",
+        "skill:principle-prove-it-works",
+        "skill:principle-redesign-from-first-principles",
+        "skill:principle-separate-before-serializing-shared-state",
+        "skill:principle-sequence-verifiable-units",
+        "skill:principle-subtract-before-you-add",
+        "skill:principle-test-behavior-not-implementation",
+        "skill:principle-type-system-discipline",
+        "skill:reflect",
+        "skill:setup-pstack",
+        "skill:show-me-your-work",
+        "skill:swarm",
+        "skill:technical-writing",
+        "skill:unslop"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/poteto-mode",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "poteto-mode",
+          "invocation": "poteto-mode",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "poteto-mode",
+          "invocation": "$poteto-mode",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "poteto-mode",
+          "invocation": "poteto-mode",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1234,6 +1889,256 @@
     },
     {
       "kind": "skill",
+      "id": "recall",
+      "source": "skills/recall",
+      "description": "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:unslop",
+        "skill:why"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/recall",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "recall",
+          "invocation": "recall",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "recall",
+          "invocation": "$recall",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "recall",
+          "invocation": "recall",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "reflect",
+      "source": "skills/reflect",
+      "description": "Spawn three parallel review subagents over the active transcript, surface learnings, and route each to a concrete edit on an existing skill. Use when the user says reflect.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/reflect",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "reflect",
+          "invocation": "reflect",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "reflect",
+          "invocation": "$reflect",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "reflect",
+          "invocation": "reflect",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "setup-pstack",
+      "source": "skills/setup-pstack",
+      "description": "Configure which models pstack uses per role and at what reasoning budget. Detects your available models and writes an always-applied rule that overrides the skill defaults. Use for /setup-pstack, \"configure pstack models\", \"pstack budget\", or changing pstack's model choices.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/setup-pstack",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "setup-pstack",
+          "invocation": "setup-pstack",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "setup-pstack",
+          "invocation": "$setup-pstack",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "setup-pstack",
+          "invocation": "setup-pstack",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "show-me-your-work",
+      "source": "skills/show-me-your-work",
+      "description": "Keep a reviewable decision trail for long-running or unattended work: a TSV log with one row per decision (what, why, evidence, result). Local by default; commit it when a reviewer needs the trail to trust the result. Use for /show-me-your-work, autonomous or multi-phase runs, or work a human reviews after stepping away.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:unslop"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/show-me-your-work",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "show-me-your-work",
+          "invocation": "show-me-your-work",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "show-me-your-work",
+          "invocation": "$show-me-your-work",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "show-me-your-work",
+          "invocation": "show-me-your-work",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "swarm",
+      "source": "skills/swarm",
+      "description": "Fan out N parallel workers, drain them, and return one report. Use for /swarm, 'swarm this', or parallel coverage, races, gauntlets, and exploration.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/swarm",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "swarm",
+          "invocation": "swarm",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "swarm",
+          "invocation": "$swarm",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "swarm",
+          "invocation": "swarm",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
       "id": "tdd",
       "source": "skills/tdd",
       "description": "Use only when the user explicitly asks for TDD, a failing test, or a regression test, OR when the bug has an obvious cheap local test target. Skip when the test path is unclear, expensive, integration-heavy, or not requested.",
@@ -1274,6 +2179,59 @@
           "projection": "skill",
           "name": "tdd",
           "invocation": "tdd",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "teach",
+      "source": "skills/teach",
+      "description": "Explain a body of work plainly so a person actually understands it. Runs the `how` and `why` skills and weaves what they find into one clear explanation. Use for 'teach me this', 'help me really understand X', 'explain this change or subsystem to me'.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [
+        "skill:how",
+        "skill:unslop",
+        "skill:why"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/teach",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "teach",
+          "invocation": "teach",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "teach",
+          "invocation": "$teach",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "teach",
+          "invocation": "teach",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1426,6 +2384,55 @@
           "projection": "skill",
           "name": "unslop",
           "invocation": "unslop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "why",
+      "source": "skills/why",
+      "description": "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCPs and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/why",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "why",
+          "invocation": "why",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "why",
+          "invocation": "$why",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "why",
+          "invocation": "why",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
