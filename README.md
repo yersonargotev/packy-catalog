@@ -11,6 +11,7 @@ the manifests, resources, adaptations, provenance, and notices for:
 - Matty
 - Orchestrate
 - pstack
+- Thermos
 - Warp
 - Web
 

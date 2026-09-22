@@ -1,0 +1,382 @@
+{
+  "schema_version": 2,
+  "id": "thermos",
+  "version": "1.0.0",
+  "description": "Thermos correctness, security, and maintainability reviews with portable reviewer agents",
+  "selectable": true,
+  "surfaces": [
+    "claude",
+    "codex",
+    "opencode"
+  ],
+  "readiness_obligations": [
+    "runtime-usability",
+    "surface-authorization"
+  ],
+  "external_requirements": [],
+  "origins": [
+    {
+      "id": "cursor-plugins",
+      "repository": "cursor/plugins",
+      "commit": "53e579f1481697931fc44f5445171397cfa2b24b"
+    }
+  ],
+  "resources": [
+    {
+      "kind": "agent",
+      "id": "thermo-nuclear-code-quality-review-subagent",
+      "source": "agents/thermo-nuclear-code-quality-review-subagent.md",
+      "description": "Run the thermo-nuclear-code-quality-review rubric on a supplied diff",
+      "requires": [
+        "skill:thermo-nuclear-code-quality-review"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "thermos/agents/thermo-nuclear-code-quality-review-subagent.md",
+        "relationship": "adapted"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "agent",
+          "name": "thermo-nuclear-code-quality-review-subagent",
+          "invocation": "@thermo-nuclear-code-quality-review-subagent",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": [
+            {
+              "type": "claude-agent-document",
+              "claude_agent_document": {
+                "skills": [],
+                "authority": {
+                  "permission_mode": "default",
+                  "authorities": [
+                    {
+                      "portable": "filesystem",
+                      "declarations": [
+                        "permission:filesystem"
+                      ],
+                      "outcome": "native",
+                      "claude_tools": [
+                        "Glob",
+                        "Grep",
+                        "Read"
+                      ],
+                      "fallback": "report inaccessible evidence"
+                    },
+                    {
+                      "portable": "process",
+                      "declarations": [
+                        "permission:process"
+                      ],
+                      "outcome": "native",
+                      "claude_tools": [
+                        "Bash"
+                      ],
+                      "fallback": "use supplied diff and file contents"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "surface": "codex",
+          "projection": "agent",
+          "name": "thermo-nuclear-code-quality-review-subagent",
+          "invocation": "$thermo-nuclear-code-quality-review-subagent",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "agent",
+          "name": "thermo-nuclear-code-quality-review-subagent",
+          "invocation": "thermo-nuclear-code-quality-review-subagent",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "mode": "subagent",
+      "tools": [],
+      "permissions": [
+        "filesystem",
+        "process"
+      ]
+    },
+    {
+      "kind": "agent",
+      "id": "thermo-nuclear-review-subagent",
+      "source": "agents/thermo-nuclear-review-subagent.md",
+      "description": "Run the thermo-nuclear-review rubric on a supplied diff",
+      "requires": [
+        "skill:thermo-nuclear-review"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "thermos/agents/thermo-nuclear-review-subagent.md",
+        "relationship": "adapted"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "agent",
+          "name": "thermo-nuclear-review-subagent",
+          "invocation": "@thermo-nuclear-review-subagent",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": [
+            {
+              "type": "claude-agent-document",
+              "claude_agent_document": {
+                "skills": [],
+                "authority": {
+                  "permission_mode": "default",
+                  "authorities": [
+                    {
+                      "portable": "filesystem",
+                      "declarations": [
+                        "permission:filesystem"
+                      ],
+                      "outcome": "native",
+                      "claude_tools": [
+                        "Glob",
+                        "Grep",
+                        "Read"
+                      ],
+                      "fallback": "report inaccessible evidence"
+                    },
+                    {
+                      "portable": "network",
+                      "declarations": [
+                        "permission:network"
+                      ],
+                      "outcome": "native",
+                      "claude_tools": [
+                        "WebFetch",
+                        "WebSearch"
+                      ],
+                      "fallback": "return independent findings and disclose unavailable discussion access"
+                    },
+                    {
+                      "portable": "process",
+                      "declarations": [
+                        "permission:process"
+                      ],
+                      "outcome": "native",
+                      "claude_tools": [
+                        "Bash"
+                      ],
+                      "fallback": "use supplied diff and file contents"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "surface": "codex",
+          "projection": "agent",
+          "name": "thermo-nuclear-review-subagent",
+          "invocation": "$thermo-nuclear-review-subagent",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "agent",
+          "name": "thermo-nuclear-review-subagent",
+          "invocation": "thermo-nuclear-review-subagent",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "mode": "subagent",
+      "tools": [],
+      "permissions": [
+        "filesystem",
+        "network",
+        "process"
+      ]
+    },
+    {
+      "kind": "notice",
+      "id": "mit",
+      "source": "notices/cursor-mit",
+      "description": "Preserve the Cursor Thermos MIT license and attribution",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "thermos/LICENSE",
+        "relationship": "exact-copy"
+      },
+      "bindings": [],
+      "surface_exclusions": [],
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Cursor"
+    },
+    {
+      "kind": "skill",
+      "id": "thermo-nuclear-code-quality-review",
+      "source": "skills/thermo-nuclear-code-quality-review",
+      "description": "Audit scoped changes for maintainability and structural simplification",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "thermos/skills/thermo-nuclear-code-quality-review",
+        "relationship": "adapted"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "thermo-nuclear-code-quality-review",
+          "invocation": "/thermo-nuclear-code-quality-review",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "thermo-nuclear-code-quality-review",
+          "invocation": "$thermo-nuclear-code-quality-review",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "thermo-nuclear-code-quality-review",
+          "invocation": "thermo-nuclear-code-quality-review",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "thermo-nuclear-review",
+      "source": "skills/thermo-nuclear-review",
+      "description": "Audit scoped changes for correctness, security, developer experience, and feature-gate leaks",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "thermos/skills/thermo-nuclear-review",
+        "relationship": "adapted"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "thermo-nuclear-review",
+          "invocation": "/thermo-nuclear-review",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "thermo-nuclear-review",
+          "invocation": "$thermo-nuclear-review",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "thermo-nuclear-review",
+          "invocation": "thermo-nuclear-review",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "thermos",
+      "source": "skills/thermos",
+      "description": "Coordinate correctness/security and code-quality reviews and synthesize their findings",
+      "requires": [
+        "agent:thermo-nuclear-code-quality-review-subagent",
+        "agent:thermo-nuclear-review-subagent",
+        "skill:thermo-nuclear-code-quality-review",
+        "skill:thermo-nuclear-review"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "thermos/skills/thermos",
+        "relationship": "adapted"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "thermos",
+          "invocation": "/thermos",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "thermos",
+          "invocation": "$thermos",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "thermos",
+          "invocation": "thermos",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    }
+  ]
+}
