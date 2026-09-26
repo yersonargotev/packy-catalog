@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "id": "pstack",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -18,7 +18,7 @@
     {
       "id": "cursor-plugins",
       "repository": "cursor/plugins",
-      "commit": "e31650eea443aaea1e84cc15d88c13f40080b275"
+      "commit": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db"
     }
   ],
   "resources": [
