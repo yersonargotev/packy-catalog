@@ -4,9 +4,35 @@ description: "Fan out N parallel workers, drain them, and return one report. Use
 disable-model-invocation: true
 ---
 
+## Packy host adaptation
+
+This skill originated in Cursor. On Claude Code, Codex, and OpenCode, interpret
+Cursor-specific tool names and parameters as examples of the operation, not as
+an API contract. Use the host's available tools to achieve the same result.
+Delegate only when the host offers subagents and the current instructions permit
+it; otherwise perform the steps sequentially. Select a named model only when
+that host confirms it is available; otherwise use the parent model or host
+default. Never claim a parallel or independent review if it did not occur.
+Read `~/.pstack/models.md` only when its `# host` matches the current host;
+otherwise use the parent model.
+
+When this skill refers to another pstack skill, read the sibling installed
+`SKILL.md` and apply its instructions in the current context. Claude Code's
+`disable-model-invocation: true` prevents invoking that skill through its Skill
+tool. A user can still invoke each skill explicitly. Replace Cursor transcript,
+rule, and cloud-agent paths with the active host's documented equivalents only
+when accessible. If required evidence or a capability is unavailable, report the gap and
+continue only with independent supported steps. A missing required gate blocks
+the action it protects; do not invent a result.
+
 # Swarm
 
-Fan out N parallel cloud workers. They may cover separate slices, race the same brief, or mix both. The parent waits, aggregates, and returns one report.
+Fan out N workers when the host offers subagents. They may cover separate
+slices, race the same brief, or mix both. The parent waits, aggregates, and
+returns one report. Cloud workers are a Cursor option; local or hosted
+subagents on other hosts are valid when they can access the required inputs.
+When delegation is unavailable or disallowed, run the slices sequentially and
+label the result as a sequential review.
 
 ## Start
 
@@ -22,12 +48,17 @@ Open a todolist with one entry per phase before launching anything.
 1. State the done predicate and the artifact or report the swarm must return.
 2. Choose the shape. Partition into slices, race N workers on identical briefs, or mix both. For a race or mixed shape, declare `first pass`, `rank all`, or `best-of` before spawning.
 3. Set N from the user or derive it from the shape. N is total workers, not the cloud concurrency limit.
-4. Pick the worker model from the `swarm workers` line in `~/.cursor/rules/pstack-models.mdc`. If the rule or that line is missing, use `grok-4.7-xhigh-fast`. For `auto` or `inherit-parent`, omit `model` so the workers run on the parent model. If the Task tool rejects a slug, use the default and say so. If it rejects the default, use the closest valid slug of the same family from its error message. For a model race, name each arm's model up front.
+4. Pick the worker model from the `swarm workers` line in `~/.pstack/models.md`. If the rule or that line is missing, use `grok-4.7-xhigh-fast`. For `auto` or `inherit-parent`, omit `model` so the workers run on the parent model. If the Task tool rejects a slug, use the default and say so. If it rejects the default, use the closest valid slug of the same family from its error message. For a model race, name each arm's model up front.
 5. Give each worker its own writable output when it writes. When workers verify or measure commits, each brief names the exact SHAs. A measurement brief also names the method (sample count, what one sample is, order). The worker records both in its result.
 
 ## Phase B: Fan out
 
-Spawn all N workers in one message with `subagent_type: generalPurpose`, `environment: "cloud"`, `run_in_background: true`, and the step 4 model, left unset for `auto` or `inherit-parent`. Use `environment: "local"` only when the worker needs access to something on the user's computer.
+On Cursor, spawn all N workers in one message with `subagent_type:
+generalPurpose`, `environment: "cloud"`, `run_in_background: true`, and the
+step 4 model, left unset for `auto` or `inherit-parent`. Use `environment:
+"local"` when the worker needs the user's computer. On other hosts, use the
+available subagent tool and supported parameters, or run sequentially as
+described above.
 
 When a worker must start from a non-default pushed branch, pass `cloud_base_branch`.
 

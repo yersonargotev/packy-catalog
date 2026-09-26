@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "id": "pstack",
-  "version": "2.2.0",
-  "description": "Apply pstack's reviewed portable engineering workflows and principles",
+  "version": "3.0.0",
+  "description": "Apply pstack's host-adapted engineering workflows and principles",
   "selectable": true,
   "surfaces": [
     "claude",
@@ -70,7 +70,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/architect",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -121,7 +121,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/arena",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -173,7 +173,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/automate-me",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -226,7 +226,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/blast-radius",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -275,7 +275,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/bro",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -324,7 +324,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/create-verification-skill",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -381,7 +381,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/figure-it-out",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -430,7 +430,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/how",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -479,7 +479,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/interrogate",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -528,7 +528,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/maintain-verification-skill",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -577,7 +577,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/make-bot-ui",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -632,7 +632,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/no-comments",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -716,7 +716,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/poteto-mode",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -770,7 +770,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-attack-the-premise",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -819,7 +819,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-boundary-discipline",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -872,7 +872,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-build-the-lever",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -921,7 +921,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-encode-lessons-in-structure",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -970,7 +970,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-exhaust-the-design-space",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1019,7 +1019,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-experience-first",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1068,7 +1068,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-fix-root-causes",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1117,7 +1117,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-foundational-thinking",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1166,7 +1166,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-guard-the-context-window",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1215,7 +1215,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-laziness-protocol",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1264,7 +1264,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-make-operations-idempotent",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1313,7 +1313,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-migrate-callers-then-delete-legacy-apis",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1364,7 +1364,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-minimize-reader-load",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1413,7 +1413,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-model-the-domain",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1462,7 +1462,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-never-block-on-the-human",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1511,7 +1511,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-outcome-oriented-execution",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1560,7 +1560,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-prove-it-works",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1609,7 +1609,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-redesign-from-first-principles",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1658,7 +1658,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-separate-before-serializing-shared-state",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1707,7 +1707,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-sequence-verifiable-units",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1756,7 +1756,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-subtract-before-you-add",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1805,7 +1805,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-test-behavior-not-implementation",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1854,7 +1854,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/principle-type-system-discipline",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1906,7 +1906,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/recall",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1955,7 +1955,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/reflect",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2004,7 +2004,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/setup-pstack",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2055,7 +2055,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/show-me-your-work",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2104,7 +2104,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/swarm",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2153,7 +2153,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/tdd",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2206,7 +2206,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/teach",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2257,7 +2257,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/technical-writing",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2309,7 +2309,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/typescript-best-practices",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2358,7 +2358,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/unslop",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2407,7 +2407,7 @@
       "origin": {
         "id": "cursor-plugins",
         "path": "pstack/skills/why",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {

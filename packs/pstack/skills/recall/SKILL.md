@@ -4,6 +4,27 @@ description: "Reconstruct your recent working context from your own chat history
 disable-model-invocation: true
 ---
 
+## Packy host adaptation
+
+This skill originated in Cursor. On Claude Code, Codex, and OpenCode, interpret
+Cursor-specific tool names and parameters as examples of the operation, not as
+an API contract. Use the host's available tools to achieve the same result.
+Delegate only when the host offers subagents and the current instructions permit
+it; otherwise perform the steps sequentially. Select a named model only when
+that host confirms it is available; otherwise use the parent model or host
+default. Never claim a parallel or independent review if it did not occur.
+Read `~/.pstack/models.md` only when its `# host` matches the current host;
+otherwise use the parent model.
+
+When this skill refers to another pstack skill, read the sibling installed
+`SKILL.md` and apply its instructions in the current context. Claude Code's
+`disable-model-invocation: true` prevents invoking that skill through its Skill
+tool. A user can still invoke each skill explicitly. Replace Cursor transcript,
+rule, and cloud-agent paths with the active host's documented equivalents only
+when accessible. If required evidence or a capability is unavailable, report the gap and
+continue only with independent supported steps. A missing required gate blocks
+the action it protects; do not invent a result.
+
 # Recall
 
 **Before you start or resume work, you rebuild the user's recent working context and hand back a tight capsule of where things stand now and what to do next.**
@@ -12,11 +33,11 @@ Keep it tight and on-topic. Read only what the in-scope threads need, then stop.
 
 Your context lives in two records. Your own chat history holds what you did and decided. The shared record holds everything that happened around the same code under other names: the symptoms users keep reporting, the fixes that shipped and got reverted, the errors still firing in prod. That second record is what the **why** skill searches, across source control, the issue tracker, chat and issue channels, long-form docs, and error tracking. A feature with a long bug tail keeps most of its story there, so don't reconstruct it from your transcripts alone.
 
-Transcripts live at `~/.cursor/projects/<slug>/agent-transcripts/<uuid>/<uuid>.jsonl`, where `<slug>` is the workspace path with the leading slash dropped and each "/" turned into "-" (so `/Users/you/proj` becomes `Users-you-proj`). Every line is one chat message.
+On Cursor, transcripts live at `~/.cursor/projects/<slug>/agent-transcripts/<uuid>/<uuid>.jsonl`, where `<slug>` is the workspace path with the leading slash dropped and each "/" turned into "-". On other hosts, use only an active-workspace transcript location that the host actually exposes. If no transcript is accessible, use the conversation context and available project records, and identify the history gap in the brief.
 
 1. Classify, then route. One specific prior chat to resume is the `session-pickup` playbook, not this. Turning habits into a durable skill is `automate-me`. A human-readable summary of your work is a different task. Recall loads working context across recent chats before you act. If the user already gave you a full state capsule (paths, branch, the change), use it and skip the mining.
 2. Lock the scope before searching. Pin the window ("recent" is a real range, default the last 7 days), the topic if named, and the workspace (default the active one. Never read another project's transcripts without being asked). State the scope back. Never quietly turn "all" into "recent N".
-3. Fan out across your chat history. Spawn parallel subagents on a fast, cheap model, each taking a slice of the corpus. Tell every subagent to order candidates by real modification time (`ls -t`) and never by UUID name, grep the topic first and then read only the matching chats and only their relevant regions, and skip the current chat plus obvious noise (subagent, eval, and test chats). Each returns the same schema, one block per chat: topic, the user's goal, decisions, open threads, struggles and corrections, and artifacts (PRs, tickets, branches), each citing the chat UUID. For one or two chats, skip the fan-out and search directly. The raw transcripts stay in the subagents. The main thread gets only their findings.
+3. Search accessible chat history. If the corpus is large and delegation is available, give separate slices to subagents. Order file candidates by modification time, search the topic before reading full chats, and skip the current chat plus obvious subagent or test noise. For one or two chats, search directly. Each finding names its actual source identifier; never invent a chat UUID for a host that uses another identifier.
 4. Sweep the shared record whenever the topic names a feature, file, subsystem, area, or bug. This is the default, not a judgment call, and "my work on X" does not exempt it. Hand it to the **why** skill's source investigators, but steer their question from "why was this built this way" to "what's the current state, what's been tried and didn't hold, and what are users still reporting". Reuse its per-source playbooks, run the investigators in parallel with the chat-history mining, and inherit its posture: one investigator per source, null results are findings, skip an unavailable MCP and say so. Fold what comes back into the brief. Skip this step only for pure activity recall with no named target ("what did I do this week"), where your own history and live state are the entire answer.
 5. Verify against live state. Take the PRs, branches, and tickets that the mining and the sweep surfaced and check them with `git` and `gh`. When the answer hinges on what an agent actually did (the tools it ran, files it read, errors it hit), read the full transcript, not just a trimmed local copy.
 6. Write the brief to the contract below. Group by thread. Stay on the named topic.

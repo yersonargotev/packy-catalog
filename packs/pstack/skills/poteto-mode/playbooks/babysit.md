@@ -1,3 +1,10 @@
+> Packy host note: On Claude Code, Codex, and OpenCode, apply the parent
+> `poteto-mode` host adaptation. Cursor cloud agents, `/loop`, `/goal`,
+> `cursor-team-kit`, and Cursor transcript paths are optional integrations.
+> Use an available host equivalent; report any missing independent or live
+> verification instead of claiming it occurred. Follow the host's action and
+> approval rules for pushes, merges, messages, and other external effects.
+
 ### Babysit
 
 **You own the merge frontier. Declare a mode, clear one PR at a time, stop where the human's call begins.** This playbook replaces Cursor's built-in babysit skill for these requests, so do not route there even though its description matches the same words. A request to land or ship is `playbooks/shipping.md`, which begins where this playbook ends.
