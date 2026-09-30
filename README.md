@@ -5,6 +5,7 @@ the manifests, resources, adaptations, provenance, and notices for:
 
 - Addy
 - Argote
+- Emil
 - Engram
 - HumanLayer
 - Issue Delivery
