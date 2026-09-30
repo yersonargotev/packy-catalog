@@ -4,13 +4,34 @@ description: "Use for 'why does X work this way', 'why we picked Y', design rati
 disable-model-invocation: true
 ---
 
+## Packy host adaptation
+
+This skill originated in Cursor. On Claude Code, Codex, and OpenCode, interpret
+Cursor-specific tool names and parameters as examples of the operation, not as
+an API contract. Use the host's available tools to achieve the same result.
+Delegate only when the host offers subagents and the current instructions permit
+it; otherwise perform the steps sequentially. Select a named model only when
+that host confirms it is available; otherwise use the parent model or host
+default. Never claim a parallel or independent review if it did not occur.
+Read `~/.pstack/models.md` only when its `# host` matches the current host;
+otherwise use the parent model.
+
+When this skill refers to another pstack skill, read the sibling installed
+`SKILL.md` and apply its instructions in the current context. Claude Code's
+`disable-model-invocation: true` prevents invoking that skill through its Skill
+tool. A user can still invoke each skill explicitly. Replace Cursor transcript,
+rule, and cloud-agent paths with the active host's documented equivalents only
+when accessible. If required evidence or a capability is unavailable, report the gap and
+continue only with independent supported steps. A missing required gate blocks
+the action it protects; do not invent a result.
+
 # Why
 
 Investigate the motivation and intent behind code.
 
 Companion to the `how` skill. `how` answers what the code does and how it works. `why` answers what forces led to its shape.
 
-Each spawn below names a role line in the `pstack-models.mdc` rule and a default. Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Task tool rejects a slug, use the default and say so. If it rejects the default, use the closest valid slug of the same family from its error message.
+Each spawn below names a role line in the `~/.pstack/models.md` file and a default. Set `model` to that line's value, or to the default if the rule or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Task tool rejects a slug, use the default and say so. If it rejects the default, use the closest valid slug of the same family from its error message.
 
 ## Operating Posture
 

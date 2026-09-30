@@ -4,6 +4,27 @@ description: "Sketch types, signatures, and module structure before code, then s
 disable-model-invocation: true
 ---
 
+## Packy host adaptation
+
+This skill originated in Cursor. On Claude Code, Codex, and OpenCode, interpret
+Cursor-specific tool names and parameters as examples of the operation, not as
+an API contract. Use the host's available tools to achieve the same result.
+Delegate only when the host offers subagents and the current instructions permit
+it; otherwise perform the steps sequentially. Select a named model only when
+that host confirms it is available; otherwise use the parent model or host
+default. Never claim a parallel or independent review if it did not occur.
+Read `~/.pstack/models.md` only when its `# host` matches the current host;
+otherwise use the parent model.
+
+When this skill refers to another pstack skill, read the sibling installed
+`SKILL.md` and apply its instructions in the current context. Claude Code's
+`disable-model-invocation: true` prevents invoking that skill through its Skill
+tool. A user can still invoke each skill explicitly. Replace Cursor transcript,
+rule, and cloud-agent paths with the active host's documented equivalents only
+when accessible. If required evidence or a capability is unavailable, report the gap and
+continue only with independent supported steps. A missing required gate blocks
+the action it protects; do not invent a result.
+
 # Architect
 
 Design before implementing. Sketch types, function signatures, class shapes, and module boundaries with `not implemented` bodies and pseudocode. Synthesize across multiple model perspectives, then fill in code against the chosen sketch. If implementation proves the sketch wrong, throw it out and redesign.
@@ -30,7 +51,7 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 
 Run the **arena** skill with the design-sketch task and the Phase A grounding artifacts. Pass `references/runner-prompt.md` as each runner's prompt. Each candidate produces a design package shaped per `references/rationale-template.md`.
 
-Take the runners from the `architect runners` line in the `pstack-models.mdc` rule, in place of the `arena runners` line. If the rule or that line is missing, use `claude-opus-5-5-max`, `gpt-5.6-sol-max`, `grok-4.7-xhigh-fast`. Alias and rejected entries follow the runner rules in the **arena** skill's Phase A.
+Take the runners from the `architect runners` line in the `~/.pstack/models.md` file, in place of the `arena runners` line. If the rule or that line is missing, use `claude-opus-5-5-max`, `gpt-5.6-sol-max`, `grok-4.7-xhigh-fast`. Alias and rejected entries follow the runner rules in the **arena** skill's Phase A.
 
 Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the **exhaust-the-design-space** principle skill made concrete. Whole-shape alternatives, not point fixes inside one shape.
 

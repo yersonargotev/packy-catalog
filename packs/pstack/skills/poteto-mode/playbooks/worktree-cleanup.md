@@ -1,3 +1,10 @@
+> Packy host note: On Claude Code, Codex, and OpenCode, apply the parent
+> `poteto-mode` host adaptation. Cursor cloud agents, `/loop`, `/goal`,
+> `cursor-team-kit`, and Cursor transcript paths are optional integrations.
+> Use an available host equivalent; report any missing independent or live
+> verification instead of claiming it occurred. Follow the host's action and
+> approval rules for pushes, merges, messages, and other external effects.
+
 ### Worktree and simulator cleanup
 
 **You own the disk and the safety gate.** Prune merged or abandoned git worktrees and stale iOS simulators to reclaim space. Deletion is irreversible, so every step guards against deleting something in use or holding uncommitted work.

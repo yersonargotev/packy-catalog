@@ -1,3 +1,10 @@
+> Packy host note: On Claude Code, Codex, and OpenCode, apply the parent
+> `poteto-mode` host adaptation. Cursor cloud agents, `/loop`, `/goal`,
+> `cursor-team-kit`, and Cursor transcript paths are optional integrations.
+> Use an available host equivalent; report any missing independent or live
+> verification instead of claiming it occurred. Follow the host's action and
+> approval rules for pushes, merges, messages, and other external effects.
+
 ### Runtime forensics
 
 **You own the diagnosis. Instrument the live process, don't theorize from source.** The deliverable is a cited diagnosis, not a fix.

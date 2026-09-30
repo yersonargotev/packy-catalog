@@ -1,3 +1,10 @@
+> Packy host note: On Claude Code, Codex, and OpenCode, apply the parent
+> `poteto-mode` host adaptation. Cursor cloud agents, `/loop`, `/goal`,
+> `cursor-team-kit`, and Cursor transcript paths are optional integrations.
+> Use an available host equivalent; report any missing independent or live
+> verification instead of claiming it occurred. Follow the host's action and
+> approval rules for pushes, merges, messages, and other external effects.
+
 ### Autopilot-full
 
 **You own the verdicts, never the PRs. One owner runs each PR from build to merge, and nothing merges without your clean swarm verdict.** For "autopilot this queue", "full autopilot", and one-owner-per-PR programs. Orchestrate runs a standing program whose coordinator lands verified work itself and whose workers never merge. Here each PR's owner carries the whole lifecycle through the merge, and the root keeps only verification, countersigns, and audits.

@@ -1,3 +1,10 @@
+> Packy host note: On Claude Code, Codex, and OpenCode, apply the parent
+> `poteto-mode` host adaptation. Cursor cloud agents, `/loop`, `/goal`,
+> `cursor-team-kit`, and Cursor transcript paths are optional integrations.
+> Use an available host equivalent; report any missing independent or live
+> verification instead of claiming it occurred. Follow the host's action and
+> approval rules for pushes, merges, messages, and other external effects.
+
 ### Orchestrate
 
 **You own the program, never the code. Author briefs, drain the queue, keep the frontier green, decide.** For a whole project handed to one standing coordinator chat: multi-day, many stacked PRs, dozens to hundreds of subagents, the human checking in twice a day instead of every five minutes. One task driven to a predicate is Autonomous run. One ambitious run needing a bespoke workflow is figure-it-out. Route here when the work outlives any single agent. Work one agent could finish inside the session's budget is not a program.
