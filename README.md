@@ -36,7 +36,10 @@ capability vocabulary without executing catalog content.
 
 ## Validate
 
-Use a local Packy checkout containing the Catalog Project validator:
+Use the released Packy v0.2.26 checkout at
+`b4cf72d892570c1fb26571c434f2407bb0728bd3`, matching CI and publication.
+See [schema v3 adoption](docs/schema-v3-adoption.md) before upgrading existing
+installations. Validate with:
 
 ```sh
 PACKY_VALIDATOR_ROOT=../packy ./scripts/validate.sh

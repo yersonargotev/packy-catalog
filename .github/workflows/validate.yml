@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: yersonargotev/packy
-          ref: 8557aae0c60c2d8bb3d0827f40affbb613982ac7
+          ref: b4cf72d892570c1fb26571c434f2407bb0728bd3
           path: packy-validator
           persist-credentials: false
 
@@ -48,11 +48,13 @@ jobs:
           cache: false
 
       - name: Validate inert catalog content
-        working-directory: packy-validator
+        working-directory: catalog-project
+        env:
+          PACKY_VALIDATOR_ROOT: ../packy-validator
         shell: bash
         run: |
-          args=(--project ../catalog-project)
+          args=()
           if [[ -d ../catalog-baseline/packs ]]; then
-            args+=(--baseline ../catalog-baseline)
+            args+=(../catalog-baseline)
           fi
-          go run ./internal/tools/catalogvalidate "${args[@]}"
+          ./scripts/validate.sh "${args[@]}"
