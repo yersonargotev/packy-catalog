@@ -1,10 +1,10 @@
 ---
-name: deliver-issue-matt
+name: issue-delivery
 description: Deliver one ready issue through Matt Pocock's implementation workflow, manual verification, CI, protected integration, and cleanup.
 disable-model-invocation: true
 ---
 
-# Deliver Issue with Matt's Workflow
+# Issue Delivery
 
 Deliver exactly one ready issue identified by the user. Require its number or
 the tracker's unambiguous equivalent and explicit delivery intent.

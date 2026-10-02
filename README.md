@@ -6,15 +6,18 @@ the manifests, resources, adaptations, provenance, and notices for:
 - Addy
 - Argote
 - Emil
-- Engram
 - HumanLayer
-- Issue Delivery
 - Matty
 - Orchestrate
 - pstack
 - Thermos
 - Warp
 - Web
+
+Argote includes the Codex-only `issue-delivery` skill, adapted from Matt
+Pocock's implementation workflow. It requires the `tdd` and `code-review`
+skills from Matty at runtime. The standalone Engram and Issue Delivery Packs
+are no longer part of this catalog.
 
 Independent upstream products keep their own repositories and release
 lifecycles. A pinned `origin` in a Pack manifest identifies the exact upstream
