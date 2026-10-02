@@ -119,3 +119,12 @@ helper drift blocked removal. OpenCode's divergent simultaneous activation was
 rejected without state changes; after removing the conflicting installations,
 OpenCode installed and removed its own variant. Selecting only `architect`
 installed the additional effective principle dependencies.
+
+Two independent complete snapshot builds were byte-identical (archive and
+`SHA256SUMS`), with archive SHA-256
+`7420b9a76954fe6fb926b872a551e14bc07bd1aa5d77e9ddad987ec1925c8bf8`.
+The probe source label was `7a8597e6f0c3867540e342070fed46f97a2e1bfb`; these are
+local prepublication artifacts, not official releases. The publisher rebuilds
+from the actual reviewed merge SHA. Every archived Pack file was compared with
+the final candidate and matched. PR #24's reviewed source head was
+`62b19451f697091443b174fd1a10660168474554`.
