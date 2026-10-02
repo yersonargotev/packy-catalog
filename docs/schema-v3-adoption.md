@@ -69,3 +69,25 @@ common Emil resources for Codex, Claude, and OpenCode. Under v0.2.25, start with
 the published v2 snapshot, additionally set `PROBE_REJECT_SNAPSHOT` and
 `PROBE_REJECT_COMMIT` to the v3 candidate, and verify rejection preserves the
 selection bytes and leaves the prior catalog readable.
+
+### Executed evidence (2026-10-02)
+
+- Full v0.2.26 validation: 10 Packs, 552 fitness rows; all origins and exact
+  copies passed. PR validation also passed against the clean v2 base.
+- Strict cut comparison passed. Independent negative cases rejected resource
+  drift, identity changes, wrong schema, and a non-major version increase.
+- Two independent complete builds were byte-identical, including `SHA256SUMS`.
+  Archive SHA-256: `9c977bae05bf1a1b565a06c856166a4e10c12d47ec9364519a33399d64277cc3`.
+  These local prepublication probes used source label
+  `76b8b8a3013cf95850ba18d433fbe16b60f77e4f`; they are not official releases.
+  Publication rebuilds from the actual reviewed merge SHA.
+- The v0.2.26 CLI probe acquired the complete v3 snapshot and successfully
+  installed/uninstalled Emil's common resources on all three project surfaces.
+- The v0.2.25 CLI probe acquired the published v2 baseline, rejected the v3
+  snapshot with `Catalog Snapshot index schema_version must be 2`, preserved
+  the previous selection byte for byte, and could still list the old catalog.
+- The read-only PR / isolated write-authorized publisher boundary check passed.
+
+These tests establish catalog acquisition and lifecycle behavior, not model-backed
+execution of all skills. pstack host adaptations and runtime evidence belong to
+catalog issue #32.

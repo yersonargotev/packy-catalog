@@ -44,7 +44,7 @@ func TestCatalogAdoption(t *testing.T) {
 	if rejected := os.Getenv("PROBE_REJECT_SNAPSHOT"); rejected != "" {
 		source.release = adoptionRelease(t, rejected, os.Getenv("PROBE_REJECT_COMMIT"))
 		out, err := executeCommand(t, NewRootCommand(opts), "catalog", "refresh")
-		if err == nil || !strings.Contains(err.Error()+out, "newer Packy engine") {
+		if err == nil || !(strings.Contains(err.Error()+out, "newer Packy engine") || strings.Contains(err.Error()+out, "index schema_version must be 2")) {
 			t.Fatalf("expected incompatible rejection: %v\n%s", err, out)
 		}
 		after, err := os.ReadFile(selection)
