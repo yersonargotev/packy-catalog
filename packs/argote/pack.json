@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "id": "argote",
-  "version": "2.0.0",
-  "description": "Yerson Argote's engineering and communication guidance",
+  "version": "3.0.0",
+  "description": "Yerson Argote's engineering, communication, and issue-delivery workflows",
   "selectable": true,
   "surfaces": [
     "claude",
@@ -13,8 +13,18 @@
     "runtime-usability",
     "surface-authorization"
   ],
-  "external_requirements": [],
-  "origins": [],
+  "external_requirements": [
+    "gh",
+    "git"
+  ],
+  "origins": [
+    {
+      "id": "mattpocock-skills",
+      "repository": "mattpocock/skills",
+      "commit": "84fdeffd12f2ee307994d1eb6feb48173b6e0502",
+      "revision": "84fdeffd12f2ee307994d1eb6feb48173b6e0502"
+    }
+  ],
   "resources": [
     {
       "description": "Defines default engineering principles and neutral-Spanish communication guidance",
@@ -72,6 +82,18 @@
       "surface_exclusions": []
     },
     {
+      "kind": "notice",
+      "id": "mit",
+      "source": "notices/issue-delivery-mit",
+      "description": "Preserve the Issue Delivery MIT license and attribution",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Yerson Argote",
+      "requires": [],
+      "conflicts": [],
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
       "description": "Re-explains the last point in neutral Spanish when it did not land",
       "kind": "skill",
       "id": "espera-que",
@@ -109,6 +131,47 @@
         }
       ],
       "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "issue-delivery",
+      "source": "skills/productivity/issue-delivery",
+      "description": "Deliver one ready issue with Matt's workflow; requires the tdd and code-review skills from the matty Pack at runtime",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "mattpocock-skills",
+        "path": "skills/engineering/implement",
+        "relationship": "adapted"
+      },
+      "bindings": [
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "issue-delivery",
+          "invocation": "$issue-delivery",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [
+        {
+          "surface": "claude",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This delivery workflow retains its reviewed Codex-only availability."
+        },
+        {
+          "surface": "opencode",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This delivery workflow retains its reviewed Codex-only availability."
+        }
+      ]
     }
   ]
 }
