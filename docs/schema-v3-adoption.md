@@ -24,13 +24,14 @@ origins, and notices preserved:
 | Warp | 1.0.0 | 2.0.0 |
 | Web | 2.0.0 | 3.0.0 |
 
-The v3 engine deliberately has no v2 reader. For this one transition, validation
-compares the clean v2 baseline's entire Pack inventory with the candidate,
+The v3 engine deliberately has no v2 reader. For the first v3 transition (PR #33), a temporary validation check
+compared the clean v2 baseline's entire Pack inventory with the candidate,
 requiring identical file paths, modes, and bytes except for manifest schema and
 exact next-major versions. It requires every other manifest field to match.
-The complete candidate still passes the released engine's schema, origin,
+The complete candidate also passed the released engine's schema, origin,
 closure, fitness, and legal validation. This check does not convert or install
-old content. Ordinary v3 baselines use the engine's normal version validator.
+old content. The temporary cut check was removed after that merge. All subsequent baselines
+use the engine's normal v3 version validator.
 
 ## Operator handoff
 

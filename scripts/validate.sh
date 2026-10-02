@@ -12,17 +12,7 @@ fi
 
 args=(--project "$catalog_root")
 if [[ $# -eq 1 ]]; then
-  baseline_root="$(cd "$1" && pwd)"
-  if python3 - "$baseline_root" <<'PY'
-import json, pathlib, sys
-manifests = list(pathlib.Path(sys.argv[1]).glob('packs/*/pack.json'))
-sys.exit(0 if manifests and all(json.loads(p.read_text()).get('schema_version') == 2 for p in manifests) else 1)
-PY
-  then
-    python3 "$catalog_root/scripts/validate-schema-v3-cut.py" "$catalog_root" "$baseline_root"
-  else
-    args+=(--baseline "$baseline_root")
-  fi
+  args+=(--baseline "$(cd "$1" && pwd)")
 fi
 
 "$catalog_root/scripts/validate-publication-workflows.sh"
