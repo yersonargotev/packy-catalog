@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "id": "matty",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Matty workflow",
   "selectable": true,
   "surfaces": [
@@ -18,7 +18,7 @@
     {
       "id": "mattpocock-skills",
       "repository": "mattpocock/skills",
-      "commit": "959a8e9f1edc3adbe2f7e3054bb6fbefa6696260"
+      "commit": "d81f3a183412e71a5b1e84ca21bc1a35eea03a60"
     }
   ],
   "resources": [
@@ -598,7 +598,7 @@
       "id": "implement-spec",
       "kind": "skill",
       "requires": [],
-      "source": "skills/in-progress/implement-spec",
+      "source": "skills/engineering/implement-spec",
       "surface_exclusions": [],
       "conflicts": [],
       "notices": [
@@ -606,7 +606,7 @@
       ],
       "origin": {
         "id": "mattpocock-skills",
-        "path": "skills/in-progress/implement-spec",
+        "path": "skills/engineering/implement-spec",
         "relationship": "exact-copy"
       }
     },
@@ -705,6 +705,52 @@
     {
       "bindings": [
         {
+          "invocation": "pr",
+          "mode": "native",
+          "name": "pr",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "claude",
+          "capabilities": []
+        },
+        {
+          "invocation": "pr",
+          "mode": "native",
+          "name": "pr",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "codex",
+          "capabilities": []
+        },
+        {
+          "invocation": "pr",
+          "mode": "native",
+          "name": "pr",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "opencode",
+          "capabilities": []
+        }
+      ],
+      "description": "Shapes pull request bodies with a concise visual summary, evidence, and merge risk",
+      "id": "pr",
+      "kind": "skill",
+      "requires": [],
+      "source": "skills/engineering/pr",
+      "surface_exclusions": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "mattpocock-skills",
+        "path": "skills/engineering/pr",
+        "relationship": "exact-copy"
+      }
+    },
+    {
+      "bindings": [
+        {
           "invocation": "prototype",
           "mode": "native",
           "name": "prototype",
@@ -797,52 +843,6 @@
     {
       "bindings": [
         {
-          "invocation": "resolving-merge-conflicts",
-          "mode": "native",
-          "name": "resolving-merge-conflicts",
-          "projection": "skill",
-          "sharing": "exclusive",
-          "surface": "claude",
-          "capabilities": []
-        },
-        {
-          "invocation": "resolving-merge-conflicts",
-          "mode": "native",
-          "name": "resolving-merge-conflicts",
-          "projection": "skill",
-          "sharing": "exclusive",
-          "surface": "codex",
-          "capabilities": []
-        },
-        {
-          "invocation": "resolving-merge-conflicts",
-          "mode": "native",
-          "name": "resolving-merge-conflicts",
-          "projection": "skill",
-          "sharing": "exclusive",
-          "surface": "opencode",
-          "capabilities": []
-        }
-      ],
-      "description": "Resolves an in-progress Git merge or rebase conflict",
-      "id": "resolving-merge-conflicts",
-      "kind": "skill",
-      "requires": [],
-      "source": "skills/engineering/resolving-merge-conflicts",
-      "surface_exclusions": [],
-      "conflicts": [],
-      "notices": [
-        "notice:mit"
-      ],
-      "origin": {
-        "id": "mattpocock-skills",
-        "path": "skills/engineering/resolving-merge-conflicts",
-        "relationship": "exact-copy"
-      }
-    },
-    {
-      "bindings": [
-        {
           "invocation": "retro",
           "mode": "native",
           "name": "retro",
@@ -874,7 +874,7 @@
       "id": "retro",
       "kind": "skill",
       "requires": [],
-      "source": "skills/in-progress/retro",
+      "source": "skills/engineering/retro",
       "surface_exclusions": [],
       "conflicts": [],
       "notices": [
@@ -882,7 +882,7 @@
       ],
       "origin": {
         "id": "mattpocock-skills",
-        "path": "skills/in-progress/retro",
+        "path": "skills/engineering/retro",
         "relationship": "exact-copy"
       }
     },
