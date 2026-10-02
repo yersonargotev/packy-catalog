@@ -1,7 +1,7 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "id": "humanlayer",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "HumanLayer skills for visual explanations, pull requests, React types, and agentic workflows",
   "selectable": true,
   "surfaces": [

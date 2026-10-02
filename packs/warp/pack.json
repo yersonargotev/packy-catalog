@@ -1,7 +1,7 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "id": "warp",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Warp common engineering and agent workflows",
   "selectable": true,
   "surfaces": [

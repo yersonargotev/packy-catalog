@@ -1,7 +1,7 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "id": "thermos",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Thermos correctness, security, and maintainability reviews with portable reviewer agents",
   "selectable": true,
   "surfaces": [
