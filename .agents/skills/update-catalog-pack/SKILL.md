@@ -12,6 +12,11 @@ contract and declared closure before changing catalog files. Treat maintained
 source, the selected commit, and `packy catalog upstream-refresh --help` as
 authoritative over remembered commands.
 
+For pstack updates limited to selected surfaces, read the
+[partial-update notes](../../../docs/research/pstack-surface-variants.md#410-common-and-codex-update)
+before editing the contract. They record the shared origin pin, retained
+adaptations, and effective surface dependencies.
+
 Classify the contract diff using the README's closed **Refresh** rule; every
 delta outside that allowance is a **Migration**. For a Refresh, run Packy's
 transactional `catalog upstream-refresh` with the explicit Pack, origin, commit,
