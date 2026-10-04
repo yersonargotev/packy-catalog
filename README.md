@@ -9,6 +9,7 @@ the manifests, resources, adaptations, provenance, and notices for:
 - HumanLayer
 - Matty
 - Orchestrate
+- Ponytail
 - pstack
 - Thermos
 - Warp
@@ -56,6 +57,52 @@ When a Pack's manifest contract or referenced bytes change, its version must
 increase. Packs whose content is unchanged must retain their versions. A new
 Pack may start at any valid SemVer. Pull-request CI applies the same rules
 against the exact base commit.
+
+## Ponytail
+
+Ponytail 1.0.0 provides six skills and an independently selectable persistent
+instruction, adapted from upstream commit
+`c982cd411abb53323c4baa1baa3c2f020b8d0b08` (plugin version 4.10.3).
+It supports Codex, Claude Code, and OpenCode project installation using the
+existing Packy v0.2.26 engine. No engine changes are required.
+
+After this catalog revision is published, refresh catalog availability and
+install from the target Git project. The complete Pack is suitable when no
+other Pack owns the host's instruction file:
+
+```sh
+packy catalog refresh
+packy install ponytail --surface codex --dry-run
+packy install ponytail --surface codex
+```
+
+The complete Pack installs all six skills and permanent guidance. For skills
+without permanent guidance, repeat `--resource` for the desired skill roots:
+
+```sh
+packy install ponytail --surface codex \
+  --resource skill:ponytail --resource skill:ponytail-review --dry-run
+```
+
+Remove `--dry-run` after reviewing the preview. The standalone instruction is
+`instruction:ponytail-guidance`; it contributes to `AGENTS.md` on Codex/OpenCode
+and `CLAUDE.md` on Claude. It remains in effect when a conversational skill mode
+ends. Packy v0.2.26 blocks two different Packs from owning the same instruction
+file, even with distinct block identifiers. If Argote or another Pack already
+manages that file, select only Ponytail skills. Existing unmanaged instruction
+text is preserved. Supporting independent Pack blocks in the same file would
+require a separate engine change.
+
+This edition does not include lifecycle hooks, statusline integration, MCP,
+or mode configuration files. Skill levels are conversational. The main skill,
+help, benchmark summary, and persistent instruction are maintained adaptations;
+review, audit, debt, and the MIT notice retain exact upstream bytes. The benchmark
+skill reports the newer upstream agentic results with their limitations, not
+claimed savings for the Packy adaptation or the current project.
+
+The [Ponytail installation probe](scripts/probes/README.md#ponytail-project-installation)
+checks resource selection, notices, preservation, and the shared-file limit on
+all three hosts.
 
 ## Update a Pack
 

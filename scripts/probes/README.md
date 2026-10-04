@@ -62,3 +62,43 @@ substitutions are controlled CLI-boundary fixtures in temporary projects.
 
 The other probes in this directory retain their documented requirements in
 `docs/research/pstack-surface-variants.md`; this runner does not execute them.
+
+## Ponytail project installation
+
+`ponytail_install_test.go` exercises the real Packy CLI command handlers against
+a locally built catalog snapshot. It checks complete, skill-only, and
+instruction-only project installation on Codex, Claude, and OpenCode; read-only
+preview; notice inclusion; portable verification; and uninstall preservation.
+Skill-only installation coexists with Argote. The instruction cases verify
+that v0.2.26 rejects cross-Pack ownership of the same instruction file without
+changing the project. Personal activation is not accepted: installation uses
+JSON output to omit the optional interactive activation offer.
+
+Use a disposable checkout of the pinned Packy engine, with Go installed. Set
+`catalog_root` and `probe_engine` to absolute paths. Run from the catalog root:
+
+```sh
+catalog_root="$PWD"
+probe_engine=/absolute/path/to/disposable-packy-checkout
+probe_output="$(mktemp -d)"
+probe_commit="$(git rev-parse HEAD)"
+cp scripts/probes/catalog_adoption_test.go scripts/probes/ponytail_install_test.go \
+  "$probe_engine/internal/cli/"
+cd "$probe_engine"
+go run ./internal/tools/catalogsnapshot \
+  --project "$catalog_root" \
+  --source-repository yersonargotev/packy-catalog \
+  --source-commit "$probe_commit" \
+  --builder yersonargotev/packy@b4cf72d892570c1fb26571c434f2407bb0728bd3 \
+  --out-dir "$probe_output/snapshot"
+PROBE_SNAPSHOT="$probe_output/snapshot" PROBE_SOURCE_COMMIT="$probe_commit" \
+  go test ./internal/cli -run '^TestPonytailProjectInstall$' -count=1 -v
+```
+
+The builder resolves upstream origins over the network. The test itself uses
+temporary homes and Git projects, a local snapshot source, and fake host
+processes. It does not exercise model behavior, host discovery at runtime,
+authentication, or remote provenance verification. For an uncommitted candidate,
+the source commit above is only a test label; the snapshot is not a publication
+or a claim that its bytes match that commit. Remove the disposable engine
+checkout and probe output when finished.
