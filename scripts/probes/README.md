@@ -22,7 +22,7 @@ python3 scripts/probes/pstack-update.py contracts \
 
 `--project /path/to/candidate` selects another Catalog Project; it defaults to
 this checkout. The comparison covers bound roots and their dependency/notice
-closure after applying surface overrides. It checks effective resource metadata,
+closure after applying surface overrides. It checks Pack metadata, effective resource metadata,
 source file sets, bytes and executable bits. A shared origin commit or Pack
 version may advance; changing those does not imply a host-content update.
 An optional resource excluded on the preserved surface is not installed there

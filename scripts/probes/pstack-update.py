@@ -62,13 +62,17 @@ def surface_contract(project, surface):
 
     for key in sorted(roots):
         visit(key)
-    return roots, selected
+    pack_contract = {k: v for k, v in manifest.items()
+                     if k not in ('version', 'origins', 'resources')}
+    return pack_contract, roots, selected
 
 
 def compare_surfaces(project, baseline, surfaces):
     for surface in surfaces:
-        old_roots, old = surface_contract(baseline, surface)
-        new_roots, new = surface_contract(project, surface)
+        old_pack, old_roots, old = surface_contract(baseline, surface)
+        new_pack, new_roots, new = surface_contract(project, surface)
+        if old_pack != new_pack:
+            raise ValueError(f'{surface}: Pack contract drift')
         if old_roots != new_roots or old.keys() != new.keys():
             raise ValueError(f'{surface}: resource selection drift')
         for key in sorted(old):

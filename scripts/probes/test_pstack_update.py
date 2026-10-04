@@ -168,6 +168,13 @@ class PstackUpdateProbeTest(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn('common/obsolete-cadence', result.stderr)
 
+    def test_rejects_new_pack_wide_runtime_requirement(self):
+        self.manifest['external_requirements'] = ['new-runtime']
+        self.write_manifest()
+        result = self.contracts()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn('claude: Pack contract drift', result.stderr)
+
 
 if __name__ == '__main__':
     unittest.main()
