@@ -64,6 +64,10 @@ def surface_contract(project, surface):
         visit(key)
     pack_contract = {k: v for k, v in manifest.items()
                      if k not in ('version', 'origins', 'resources')}
+    pack_contract['origins'] = [
+        {k: v for k, v in origin.items() if k != 'commit'}
+        for origin in manifest['origins']
+    ]
     return pack_contract, roots, selected
 
 

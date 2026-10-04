@@ -175,6 +175,15 @@ class PstackUpdateProbeTest(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn('claude: Pack contract drift', result.stderr)
 
+    def test_rejects_changed_origin_identity(self):
+        for field, value in (('repository', 'example/other-plugins'), ('id', 'other-origin')):
+            with self.subTest(field=field):
+                self.manifest['origins'] = [{'commit': 'old', field: value}]
+                self.write_manifest()
+                result = self.contracts()
+                self.assertEqual(result.returncode, 1)
+                self.assertIn('claude: Pack contract drift', result.stderr)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -25,6 +25,7 @@ this checkout. The comparison covers bound roots and their dependency/notice
 closure after applying surface overrides. It checks Pack metadata, effective resource metadata,
 source file sets, bytes and executable bits. A shared origin commit or Pack
 version may advance; changing those does not imply a host-content update.
+Origin identities and repositories must still match.
 An optional resource excluded on the preserved surface is not installed there
 and does not enter its comparison. Use catalog validation for schema, origins,
 exact-copy provenance, cycles, and general runtime fitness.
