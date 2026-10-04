@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -18,7 +18,7 @@
     {
       "id": "cursor-plugins",
       "repository": "cursor/plugins",
-      "commit": "ecc249f1e306fc64ddf83c7bed16cacf7c2239db"
+      "commit": "e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a"
     }
   ],
   "resources": [
@@ -394,6 +394,66 @@
     },
     {
       "kind": "skill",
+      "id": "benchmark-checklist",
+      "source": "skills/benchmark-checklist",
+      "description": "Vet a perf measurement (limiter, tuning, limits, errors, repeatability, relevance, and whether the work happened) before you report or act on it. Use when you run a benchmark or report a speedup or regression you measured.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/benchmark-checklist",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "benchmark-checklist",
+          "invocation": "$benchmark-checklist",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [
+        {
+          "surface": "claude",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        },
+        {
+          "surface": "opencode",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        }
+      ],
+      "variants": [
+        {
+          "surface": "codex",
+          "source": "skills/codex/benchmark-checklist",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/benchmark-checklist",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Vet a perf measurement (limiter, tuning, limits, errors, repeatability, relevance, and whether the work happened) before you report or act on it. Use when you run a benchmark or report a speedup or regression you measured."
+        }
+      ]
+    },
+    {
+      "kind": "skill",
       "id": "blast-radius",
       "source": "skills/blast-radius",
       "description": "Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. Use for 'blast radius of X', 'what could this break', or reviewing a small diff you don't trust.",
@@ -591,6 +651,66 @@
           ],
           "requires": [],
           "description": "Restate the last message in plain human language, with no jargon."
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "correct",
+      "source": "skills/correct",
+      "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/correct",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "correct",
+          "invocation": "$correct",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [
+        {
+          "surface": "claude",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        },
+        {
+          "surface": "opencode",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        }
+      ],
+      "variants": [
+        {
+          "surface": "codex",
+          "source": "skills/codex/correct",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/correct",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
         }
       ]
     },
@@ -1312,6 +1432,7 @@
       "requires": [
         "skill:architect",
         "skill:arena",
+        "skill:benchmark-checklist",
         "skill:how",
         "skill:interrogate",
         "skill:no-comments",
@@ -1321,6 +1442,7 @@
         "skill:principle-encode-lessons-in-structure",
         "skill:principle-exhaust-the-design-space",
         "skill:principle-experience-first",
+        "skill:principle-explain-the-number",
         "skill:principle-fix-root-causes",
         "skill:principle-foundational-thinking",
         "skill:principle-guard-the-context-window",
@@ -1448,6 +1570,7 @@
           "requires": [
             "skill:architect",
             "skill:arena",
+            "skill:benchmark-checklist",
             "skill:how",
             "skill:interrogate",
             "skill:no-comments",
@@ -1457,6 +1580,7 @@
             "skill:principle-encode-lessons-in-structure",
             "skill:principle-exhaust-the-design-space",
             "skill:principle-experience-first",
+            "skill:principle-explain-the-number",
             "skill:principle-fix-root-causes",
             "skill:principle-foundational-thinking",
             "skill:principle-guard-the-context-window",
@@ -2125,6 +2249,68 @@
           ],
           "requires": [],
           "description": "Apply when product, UX, or feature-scope tradeoffs come up. Choose user delight over implementation convenience; ship fewer polished features over more rough ones."
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "principle-explain-the-number",
+      "source": "skills/principle-explain-the-number",
+      "description": "Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/principle-explain-the-number",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "principle-explain-the-number",
+          "invocation": "$principle-explain-the-number",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [
+        {
+          "surface": "claude",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        },
+        {
+          "surface": "opencode",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        }
+      ],
+      "variants": [
+        {
+          "surface": "codex",
+          "source": "skills/codex/principle-explain-the-number",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/principle-explain-the-number",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:benchmark-checklist"
+          ],
+          "description": "Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think."
         }
       ]
     },

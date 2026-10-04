@@ -1,5 +1,8 @@
 # Reviewed pstack surface variants
 
+The sections below record the 4.0.0 rollout. The final section records the
+4.1.0 update limited to common sources and Codex.
+
 Date: 2026-10-02. Catalog issue #32 follows the schema v3 rollout in #31.
 pstack changes from 3.0.0 to 4.0.0 because its effective host instructions,
 invocation behavior, helper execution, and selected dependency contracts change.
@@ -128,3 +131,43 @@ local prepublication artifacts, not official releases. The publisher rebuilds
 from the actual reviewed merge SHA. Every archived Pack file was compared with
 the final candidate and matched. PR #24's reviewed source head was
 `62b19451f697091443b174fd1a10660168474554`.
+
+## 4.1.0 common and Codex update
+
+The 2026-10-03 contract migration advances the shared `cursor-plugins` origin
+from `ecc249f1e306fc64ddf83c7bed16cacf7c2239db` to
+`e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`. It adds `benchmark-checklist`,
+`correct`, and `principle-explain-the-number`, bringing the common and Codex
+inventories to 50 skills each. All common trees and the MIT notice match the
+new upstream revision byte-for-byte, including file modes.
+
+Packy v0.2.26 allows only one origin per repository, so the origin pin is shared.
+The Claude and OpenCode trees, their 47 variant records per host, bindings,
+descriptions, invocation policies, and effective dependencies remain unchanged
+from 4.0.0. Their adaptations still derive from the earlier revision and
+intentionally omit these upstream changes. The three new resources have explicit
+exclusions on those hosts. No new Claude or OpenCode variants were added.
+
+Codex receives the upstream architecture checks, performance measurement
+guidance, schema-first TypeScript examples, fresh-worker rules, hourly autopilot
+audits, and revised PR workflow. It retains native invocation metadata, confirmed
+model preferences, installed-skill paths, and capability checks. Hourly audits
+use active-session monitoring or a verified scheduler rather than assuming
+Cursor's `/loop`. The benchmark checklist supports Linux and macOS core counts.
+
+The Codex `poteto-mode` dependency list adds both measurement skills.
+`principle-explain-the-number` requires `benchmark-checklist` only in its Codex
+variant. Keeping this dependency out of the common contract avoids traversing an
+unavailable dependency when the excluded root is evaluated on another host.
+The checklist's link back to the principle is optional background, avoiding a
+dependency cycle while allowing standalone checklist selection.
+
+Validation against the clean catalog baseline
+`da96c291a2325e96e15e702c75588b1290da5d58` passed with the pinned v0.2.26 engine:
+`PACKY_VALIDATOR_ROOT=../packy ./scripts/validate.sh <baseline-checkout>` reported
+10 Packs and 561 fitness rows. All 50 Codex skills passed skill-creator
+validation. The common and Codex plan checkers accepted filled versions of their
+shipped skeletons and rejected an obsolete audit cadence and a missing live
+verification lane. Byte/mode inventories and manifest comparisons proved the
+other hosts unchanged. Unrelated Pack versions remain unchanged. These checks
+do not claim model execution of all workflows or persistent scheduler execution.
