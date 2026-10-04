@@ -5,12 +5,28 @@ description: Update an existing Pack in this Packy Catalog Project from a review
 
 # Update a Catalog Pack
 
-Read the target manifest and the **Update a Pack** section of
+Inspect the target manifest and read the **Update a Pack** section of
 [`README.md`](../../../README.md). Anchor the work on a clean Git baseline.
 Resolve any upstream tag or branch to a full commit and inspect the target Pack
 contract and declared closure before changing catalog files. Treat maintained
 source, the selected commit, and `packy catalog upstream-refresh --help` as
 authoritative over remembered commands.
+
+Keep inspection output focused: summarize manifest metadata, list changed
+paths, then inspect the selected resource or file. For example, capture
+`catalog_base=$(git rev-parse HEAD)` on the clean baseline before editing, and
+substitute the target Pack, resource, and path in these commands:
+
+```sh
+jq '{id, version, surfaces, origins, resource_count: (.resources | length)}' packs/pstack/pack.json
+git diff --name-status "$catalog_base" -- packs/pstack
+jq '.resources[] | select(.id == "poteto-mode")' packs/pstack/pack.json
+git diff "$catalog_base" -- packs/pstack/skills/poteto-mode/SKILL.md
+```
+
+Use broader output when a specific question requires it. The baseline diff
+includes staged and unstaged tracked changes; use `git status --short` to
+discover new files and read them directly.
 
 For pstack updates limited to selected surfaces, read the
 [partial-update notes](../../../docs/research/pstack-surface-variants.md#410-common-and-codex-update)
