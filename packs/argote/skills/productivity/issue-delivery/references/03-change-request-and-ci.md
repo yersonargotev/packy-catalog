@@ -12,7 +12,8 @@ unchanged transient operation once. Adjudicate deterministic correctness,
 dependency, or security findings like review findings.
 
 For accepted CI findings, run one repair cycle through
-[`implement.md`](implement.md) and push its new commit. The workflow establishes
+the [implementation gate](02-implement-and-verify.md) and push its new commit.
+That gate establishes
 full-suite and independent-review proof for the new candidate; then rerun every
 affected manual scenario and the complete required CI set. Apply the repair
 limit from the invariants.
