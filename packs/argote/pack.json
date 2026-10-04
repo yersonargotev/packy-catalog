@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "argote",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Yerson Argote's engineering, communication, and issue-delivery workflows",
   "selectable": true,
   "surfaces": [

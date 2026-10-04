@@ -20,6 +20,15 @@ For every repair, repeat this sequence with a new candidate commit before
 review. Published history remains append-only. Any candidate change invalidates
 the affected evidence and returns to this sequence.
 
+Before dispatching each independent review context, share available verification
+receipts with the exact candidate SHA, command or scenario, outcome, and artifact
+location. Each reviewer still inspects the fixed-base diff independently for
+its own axis; receipts do not replace that judgment or inherit another verdict.
+Reuse a passing check only for the unchanged SHA and applicable scenario.
+Rerun missing, stale, failed, or finding-affected checks. Reviewers may request
+targeted independent execution when the evidence warrants it. Keep the complete
+automated suite and required CI gates intact.
+
 A seam is pre-agreed when the issue or its agent brief identifies an observable
 public interface. Before writing tests against any other seam, propose it and
 pause for confirmation. When TDD is impractical, record the concrete reason and
