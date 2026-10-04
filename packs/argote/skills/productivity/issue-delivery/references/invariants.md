@@ -25,8 +25,9 @@ unchanged.
 Diagnose and classify a failed gate. Retry an unchanged operation once when the
 evidence classifies the failure as transient. For deterministic findings, a
 **repair cycle** gathers every accepted finding from that failed gate, runs the
-vendored implementation workflow, commits the repair, and reruns every affected
-gate. A reappearing deterministic failure consumes another cycle. Three repair
+implementation gate's adapted sequence, creates the repair candidate commit
+before review, and reruns every affected gate. A reappearing deterministic
+failure consumes another cycle. Three repair
 cycles are the limit for one gate; the next failure requires an exception
 brief.
 
