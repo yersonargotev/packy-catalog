@@ -5,6 +5,7 @@ the manifests, resources, adaptations, provenance, and notices for:
 
 - Addy
 - Argote
+- Claude
 - Emil
 - HumanLayer
 - Matty
@@ -57,6 +58,16 @@ When a Pack's manifest contract or referenced bytes change, its version must
 increase. Packs whose content is unchanged must retain their versions. A new
 Pack may start at any valid SemVer. Pull-request CI applies the same rules
 against the exact base commit.
+
+## Claude
+
+Claude 1.0.0 provides `eli5` and `html-plan` for Claude Code, Codex, and
+OpenCode, adapted from the community repository at
+`f60f0454df3045f724c43c6346ec80bdcc3472b2`. `html-plan` includes its HTML
+runtime and requires Node.js. This edition includes the two self-contained
+skills, with their notices; the upstream marketplace and service-dependent
+plugins are outside its scope. See [scope, adaptations, and installation](docs/research/claude.md).
+No Packy engine changes are required.
 
 ## Ponytail
 
