@@ -1,0 +1,182 @@
+{
+  "schema_version": 3,
+  "id": "claude",
+  "version": "1.0.0",
+  "description": "Portable HTML explanation and planning skills from the Claude community repository",
+  "selectable": true,
+  "surfaces": [
+    "claude",
+    "codex",
+    "opencode"
+  ],
+  "readiness_obligations": [
+    "runtime-usability",
+    "surface-authorization"
+  ],
+  "external_requirements": [
+    "node"
+  ],
+  "origins": [
+    {
+      "id": "claude-community",
+      "repository": "anthropics/claude-plugins-community",
+      "commit": "f60f0454df3045f724c43c6346ec80bdcc3472b2"
+    }
+  ],
+  "resources": [
+    {
+      "kind": "notice",
+      "id": "apache-2-0",
+      "source": "notices/apache-2.0",
+      "description": "Preserve the repository Apache-2.0 license",
+      "license": "Apache-2.0",
+      "attribution": "anthropics/claude-plugins-community",
+      "requires": [],
+      "conflicts": [],
+      "bindings": [],
+      "surface_exclusions": [],
+      "origin": {
+        "id": "claude-community",
+        "path": "LICENSE",
+        "relationship": "exact-copy"
+      },
+      "notices": [
+        "notice:apache-2-0"
+      ]
+    },
+    {
+      "kind": "notice",
+      "id": "eli5-metadata",
+      "source": "notices/eli5-metadata.json",
+      "description": "Preserve eli5 upstream authorship and MIT license declaration",
+      "license": "MIT",
+      "attribution": "Thariq Shihipar",
+      "requires": [],
+      "conflicts": [],
+      "bindings": [],
+      "surface_exclusions": [],
+      "origin": {
+        "id": "claude-community",
+        "path": "eli5/.claude-plugin/plugin.json",
+        "relationship": "exact-copy"
+      },
+      "notices": [
+        "notice:eli5-metadata"
+      ]
+    },
+    {
+      "kind": "notice",
+      "id": "html-plan-metadata",
+      "source": "notices/html-plan-metadata.json",
+      "description": "Preserve html-plan upstream authorship and MIT license declaration",
+      "license": "MIT",
+      "attribution": "Thariq Shihipar",
+      "requires": [],
+      "conflicts": [],
+      "bindings": [],
+      "surface_exclusions": [],
+      "origin": {
+        "id": "claude-community",
+        "path": "html-plan/.claude-plugin/plugin.json",
+        "relationship": "exact-copy"
+      },
+      "notices": [
+        "notice:html-plan-metadata"
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "eli5",
+      "source": "skills/eli5",
+      "description": "Explain a topic with a simple HTML picture explainer",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:apache-2-0",
+        "notice:eli5-metadata"
+      ],
+      "origin": {
+        "id": "claude-community",
+        "path": "eli5/skills/eli5",
+        "relationship": "adapted"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "eli5",
+          "invocation": "/eli5",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "eli5",
+          "invocation": "$eli5",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "eli5",
+          "invocation": "eli5",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "html-plan",
+      "source": "skills/html-plan",
+      "description": "Create an interactive HTML implementation plan with decisions and code exhibits",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:apache-2-0",
+        "notice:html-plan-metadata"
+      ],
+      "origin": {
+        "id": "claude-community",
+        "path": "html-plan/skills/html-plan",
+        "relationship": "adapted"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "html-plan",
+          "invocation": "/html-plan",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "html-plan",
+          "invocation": "$html-plan",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "html-plan",
+          "invocation": "html-plan",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    }
+  ]
+}

@@ -102,3 +102,36 @@ authentication, or remote provenance verification. For an uncommitted candidate,
 the source commit above is only a test label; the snapshot is not a publication
 or a claim that its bytes match that commit. Remove the disposable engine
 checkout and probe output when finished.
+
+## Claude project installation
+
+`claude_install_test.go` uses the same snapshot fixture and pinned engine as the
+Ponytail probe. It installs the complete `claude` Pack and each individual skill
+on Claude, Codex, and OpenCode, alongside Argote guidance. It checks read-only
+preview, notice selection, the complete HTML runtime closure, portable
+verification, personal configuration preservation, and uninstall preservation.
+
+Follow the snapshot-build setup above, copying
+`scripts/probes/catalog_adoption_test.go` and
+`scripts/probes/claude_install_test.go` into the disposable engine's
+`internal/cli/`, then run:
+
+```sh
+PROBE_SNAPSHOT="$probe_output/snapshot" PROBE_SOURCE_COMMIT="$probe_commit" \
+  go test ./internal/cli -run '^TestClaudeProjectInstall$' -count=1 -v
+```
+
+For the HTML packing smoke check, run from the catalog root with Node installed:
+
+```sh
+probe_html="$(mktemp -d)"
+cp packs/claude/skills/html-plan/examples/scheduled-send.html "$probe_html/plan.html"
+node packs/claude/skills/html-plan/runtime/pack.mjs "$probe_html/plan.html" \
+  --root "$PWD/packs/claude/skills/html-plan"
+```
+
+The upstream example refers to a fictional app, so missing source-file excerpts
+produce warnings. Packing must still succeed, inline the two runtime assets,
+and write `plan.packed.html` in the temporary directory. Remove `probe_html`
+when finished. Neither check proves skill discovery or model behavior in a
+live host session.
