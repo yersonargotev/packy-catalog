@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -18,7 +18,7 @@
     {
       "id": "cursor-plugins",
       "repository": "cursor/plugins",
-      "commit": "e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a"
+      "commit": "ccb5507cec1546dc88135c1139c811e6c59115ba"
     }
   ],
   "resources": [
@@ -1418,6 +1418,69 @@
             "skill:why"
           ],
           "description": "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "poteto-help",
+      "source": "skills/poteto-help",
+      "description": "Guides users through pstack setup, /poteto-mode, and picking the skill, playbook, or principle for a task. Type /poteto-help with a question.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/poteto-help",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "poteto-help",
+          "invocation": "$poteto-help",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [
+        {
+          "surface": "claude",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        },
+        {
+          "surface": "opencode",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        }
+      ],
+      "variants": [
+        {
+          "surface": "codex",
+          "source": "skills/codex/poteto-help",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/poteto-help",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:poteto-mode",
+            "skill:setup-pstack"
+          ],
+          "description": "Help users configure pstack, start a task with $poteto-mode, choose a workflow or principle, and troubleshoot a run in Codex. Use $poteto-help with a question."
         }
       ]
     },
