@@ -40,13 +40,12 @@ Write one clear paragraph. If you're unsure about the intent, ask the user befor
 
 ## Step 3, Spawn Reviewers
 
-Launch all reviewers in a single message using the host subagent tool. Use the `interrogate reviewers` line in `~/.pstack/codex-models.md`, one reviewer per entry, extending or shrinking the Reviewer A/B/C labels below to the configured entry count. If the rule or that line is missing, use the table defaults.
+Launch all reviewers in a single message using the host subagent tool. Use the `interrogate reviewers` line in `~/.pstack/codex-models.md`, one reviewer per entry, extending or shrinking the Reviewer A/B labels below to the configured entry count. If the rule or that line is missing, use the table defaults.
 
 | Subagent | Default model |
 |----------|---------------|
 | Reviewer A | `inherit-parent` |
 | Reviewer B | `inherit-parent` |
-| Reviewer C | `inherit-parent` |
 
 For each reviewer:
 - agent type: a general-purpose type exposed by this host

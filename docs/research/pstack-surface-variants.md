@@ -1,7 +1,7 @@
 # Reviewed pstack surface variants
 
-The sections below record the 4.0.0 rollout. The final section records the
-4.1.0 update limited to common sources and Codex.
+The sections below record the 4.0.0 rollout and the subsequent 4.1.0 and
+4.2.0 updates limited to common sources and Codex.
 
 Date: 2026-10-02. Catalog issue #32 follows the schema v3 rollout in #31.
 pstack changes from 3.0.0 to 4.0.0 because its effective host instructions,
@@ -171,3 +171,69 @@ shipped skeletons and rejected an obsolete audit cadence and a missing live
 verification lane. Byte/mode inventories and manifest comparisons proved the
 other hosts unchanged. Unrelated Pack versions remain unchanged. These checks
 do not claim model execution of all workflows or persistent scheduler execution.
+
+## 4.2.0 common and Codex update
+
+The 2026-10-09 contract migration advances the shared `cursor-plugins` origin
+from `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a` to
+`ccb5507cec1546dc88135c1139c811e6c59115ba`. The latest pstack-specific change
+in that revision is `df581122cde17e6e27686b5a448bde23e4ad4318`.
+The new `poteto-help` resource brings the common and Codex inventories to
+51 skills each. The complete Pack has 552 files. Every common tree and the
+MIT notice matches the selected upstream revision, including executable modes.
+This is a migration because it adds a resource and a Codex adaptation.
+
+The Codex help skill routes setup, workflow selection, prompting, troubleshooting,
+and customization questions to installed sources. It distinguishes help from
+authorized work and includes adapted prompting and recipe references. Its
+effective dependencies are `poteto-mode` and `setup-pstack`; other recommendations
+are explicitly optional and checked before use. Common requirements stay empty
+so excluded hosts do not traverse the new Codex-only root.
+
+Upstream's explicit invocation policy is preserved through
+`agents/openai.yaml`, using the documented Codex
+[`allow_implicit_invocation` control](https://learn.chatgpt.com/docs/build-skills#optional-metadata).
+The help uses `$skill` invocations, installed Codex paths, portable preferences,
+and actual tool capabilities. It does not import the Cursor guide, private
+transcript layout, Custom Modes, `poteto-agent`, or `/loop` as Codex features.
+The original help and references remain exact copies in the common tree.
+
+Codex `arena`, `architect`, and `interrogate` now default to two independent
+workers, matching upstream's reduced panels. Existing configured panel sizes
+remain authoritative. Setup maps unlimited/large/medium/small to the requested
+max/xhigh/high/medium reasoning tier, offers large for a new configuration, and
+uses only advertised model and reasoning parameters. Aliases keep inherited
+settings; an unavailable tier falls back to a confirmed lower tier. Without a
+model catalog, the budget is recorded as a preference rather than claimed as
+applied. Cursor-specific model IDs remain deliberately absent from Codex.
+The architect runner prompt no longer assumes distinct models actually ran.
+The blast-radius wording and orchestration test fixture also follow upstream.
+
+Claude and OpenCode retain their 47 roots per host, all effective metadata,
+dependencies, invocation policies, file bytes, and executable modes. The shared
+origin pin advances, but their adaptations intentionally retain their earlier
+content. `poteto-help` has explicit exclusions on those hosts. Other Pack
+versions remain unchanged.
+
+Validation against clean baseline `8e231a7edb0b4ffd7fb3510b37da7f2b2f7d5224`:
+
+- `PACKY_VALIDATOR_ROOT=/tmp/packy-validator-01a123fd ./scripts/validate.sh /tmp/packy-catalog-base-01a123fd`
+  passed using Packy v0.2.26 at `b4cf72d892570c1fb26571c434f2407bb0728bd3`:
+  12 Packs, 597 fitness rows, resolved origins, exact-copy checks, and baseline
+  version rules.
+- `pstack-update.py contracts` preserved both other hosts: 47 roots and
+  48 closure resources each. All 52 exact-copy resources also passed direct
+  byte/executable-mode inventory comparison with the selected upstream checkout.
+- All 51 Codex skills passed skill-creator validation. Every relative link in
+  the new Codex help and references resolved within the Pack.
+- `pstack-update.py plans` passed all six common/Codex plan-checker scenarios.
+  The helper suite, copied into a temporary directory and installed with
+  `bun install --frozen-lockfile`, passed 52 tests and 206 assertions.
+- An independent read-only forward test answered three help requests: reviewing
+  a PR without edits, configuring a small budget without model selection, and
+  overnight work without a scheduler. It found no concrete contradictions or
+  missing dependencies in those scenarios.
+
+These checks do not establish execution of all workflows, native host discovery,
+or persistent background operation. This is a local catalog change, not a
+published snapshot or an update to a user's installed Pack.

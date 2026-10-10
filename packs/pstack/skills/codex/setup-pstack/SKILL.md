@@ -24,11 +24,17 @@ and does not change the host's own model configuration.
    If no model list is available, use `inherit-parent`; do not guess slugs.
 2. Read an existing `~/.pstack/codex-models.md` if present. Preserve role choices
    still supported by this host. Drop retired role names.
-3. Ask the user for a budget: unlimited, large, medium, or small. Show the
-   resulting model for each role. Let the user change individual roles. A
-   reasoning tier is a preference, not a guarantee: use only a model the host
-   confirms at that tier. Otherwise use the nearest confirmed lower tier, or
-   `inherit-parent`.
+3. Ask the user for a reasoning budget: unlimited (max), large (xhigh),
+   medium (high), or small (medium). Offer large when no preference exists.
+   Apply the requested tier to confirmed models, including every panel entry,
+   while preserving supported role choices and panel sizes. Show the resulting
+   model and reasoning tier for each role before writing. Let the user change
+   individual roles. Use the host's advertised model and reasoning parameters;
+   do not construct model IDs by appending a tier. Use the nearest confirmed
+   lower tier when the requested tier is unavailable, and report the fallback.
+   Keep `auto` and `inherit-parent` entries unchanged: omit the model override
+   and inherit the host reasoning setting. If no model catalog is available,
+   record the budget as a preference, not an applied reasoning tier.
 4. Write the complete file atomically. Use the role names below. A panel value
    can list multiple models; each entry represents one candidate or reviewer.
    Use `inherit-parent` for a role when the host cannot select a model for it.
@@ -38,7 +44,7 @@ and does not change the host's own model configuration.
 # pstack model preferences for the current host. This file is read by pstack
 # skills; it is not automatically loaded by the host.
 # host: codex
-# budget: medium
+# budget: large
 feature, refactoring: inherit-parent
 bug-fix: inherit-parent
 perf-issue: inherit-parent
@@ -51,11 +57,11 @@ why investigators: inherit-parent
 why synthesizer: inherit-parent
 reflect tooling: inherit-parent
 reflect judgment, divergent, synthesizer: inherit-parent
-arena runners: inherit-parent, inherit-parent, inherit-parent
+arena runners: inherit-parent, inherit-parent
 arena cross-judge pool: inherit-parent
 swarm workers: inherit-parent
 architect runners: inherit-parent, inherit-parent
-interrogate reviewers: inherit-parent, inherit-parent, inherit-parent
+interrogate reviewers: inherit-parent, inherit-parent
 ```
 
 Read this file only when `# host` matches the current host. On another host,
