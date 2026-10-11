@@ -25,6 +25,9 @@ Independent upstream products keep their own repositories and release
 lifecycles. A pinned `origin` in a Pack manifest identifies the exact upstream
 commit from which reviewed resources were copied or adapted.
 
+[Resource ownership terminology](GLOSSARY.md) distinguishes Catalog Resources,
+Catalog Adaptations, Upstream Resources, and Installed Resources.
+
 ## Layout
 
 Each Pack is a self-contained module under `packs/<pack-id>/`. Its `pack.json`
