@@ -1,9 +1,9 @@
 # Opt-in content probes
 
-The source-overlay lifecycle probes in this directory remain separate from
-released-tooling adoption (#54). Their remaining migration is tracked by #56–#57; they
-are not prerequisites for source-free validation, construction, or publication.
-Their explicitly documented Go/Packy-source requirements still apply.
+The remaining pstack source-overlay lifecycle probe is tracked by #57. It is
+separate from released-tooling adoption (#54), with its Go/Packy-source
+requirements still documented. It is not a prerequisite for source-free
+validation, construction, or publication.
 
 ## pstack update checks
 
@@ -72,7 +72,7 @@ substitutions are controlled CLI-boundary fixtures in temporary projects.
 The other probes in this directory retain their documented requirements in
 `docs/research/pstack-surface-variants.md`; this runner does not execute them.
 
-## Adoption and Ponytail acceptance
+## Released-binary content acceptance
 
 After reviewing content, run from a clean committed Catalog checkout:
 
@@ -82,6 +82,7 @@ python3 -B scripts/probes/content-probes.py --scenario adoption --scenario ponyt
 
 Select either scenario independently; repeat `--surface codex`, `--surface
 claude`, or `--surface opencode` to limit surfaces (default: all three).
+Add `--scenario claude` for Claude content acceptance.
 `--timeout 30` bounds each lifecycle child. Requirements are Python 3.9+ on
 Darwin/Linux (Unix PTYs), curl, Git, uname, and upstream HTTPS access. No Go,
 Packy source checkout, globally installed binary, host executable, credentials,
@@ -120,57 +121,39 @@ fixture content and fake external transports in the ordinary suite.
 prior art; this runner does not adopt its source-checkout acquisition design
 or modify/close that issue.
 
-## Claude project installation
+## Claude content acceptance
 
-`claude_install_test.go` retains the legacy snapshot fixture and engine overlay
-until #56. It installs the complete `claude` Pack and each individual skill
-on Claude, Codex, and OpenCode, alongside Argote guidance. It checks read-only
-preview, notice selection, the complete HTML runtime closure, portable
-verification, personal configuration preservation, and uninstall preservation.
-
-This unmigrated overlay requires Go and a disposable Packy v0.2.26 checkout
-at `b4cf72d892570c1fb26571c434f2407bb0728bd3`. The shared
-`catalog_adoption_test.go` contains only its still-needed `adoptionRelease`
-fixture. It no longer runs adoption acceptance. For this legacy probe only:
+After reviewing the Claude content, run from a clean committed checkout:
 
 ```sh
-catalog_root="$PWD"
-probe_engine=/absolute/path/to/disposable-packy-checkout
-probe_output="$(mktemp -d)"
-probe_commit="$(git rev-parse HEAD)"
-cp scripts/probes/catalog_adoption_test.go scripts/probes/claude_install_test.go \
-  "$probe_engine/internal/cli/"
-cd "$probe_engine"
-go run ./internal/tools/catalogsnapshot \
-  --project "$catalog_root" \
-  --source-repository yersonargotev/packy-catalog \
-  --source-commit "$probe_commit" \
-  --builder yersonargotev/packy@b4cf72d892570c1fb26571c434f2407bb0728bd3 \
-  --out-dir "$probe_output/snapshot"
+python3 -B scripts/probes/content-probes.py --scenario claude > /tmp/claude-content-evidence.json
 ```
 
-Construction resolves public upstream origins over the network. The overlay
-uses temporary projects/homes and fake hosts; it does not prove authentication,
-model behavior or remote attestation. An uncommitted source label is not proof
-of publication bytes. Remove the owned engine checkout and output afterward.
-Then run:
+This runs complete, eli5-only and html-plan-only selections on Claude, Codex
+and OpenCode. It checks read-only preview, notice selection, full HTML runtime
+closure, Argote coexistence, portable verification, personal configuration
+preservation and uninstall preservation. It shares the acquisition, one-build,
+isolation, exact-preview PTY, deadlines, cleanup and JSON evidence contracts
+above. Repeat `--scenario` to combine it with adoption or Ponytail in one build;
+repeat `--surface` to limit hosts. No Go or Packy source is needed. The
+[assertion inventory](assertion-inventory.md#claude-assertion-migration-56)
+accounts for the removed Claude Go overlay. The shared legacy Go fixture is
+retained only for pstack until #57.
+
+HTML packing is explicitly optional and additionally requires Node:
 
 ```sh
-PROBE_SNAPSHOT="$probe_output/snapshot" PROBE_SOURCE_COMMIT="$probe_commit" \
-  go test ./internal/cli -run '^TestClaudeProjectInstall$' -count=1 -v
+python3 -B scripts/probes/content-probes.py --scenario claude --html-pack > /tmp/claude-html-evidence.json
 ```
 
-For the HTML packing smoke check, run from the catalog root with Node installed:
-
-```sh
-probe_html="$(mktemp -d)"
-cp packs/claude/skills/html-plan/examples/scheduled-send.html "$probe_html/plan.html"
-node packs/claude/skills/html-plan/runtime/pack.mjs "$probe_html/plan.html" \
-  --root "$PWD/packs/claude/skills/html-plan"
-```
-
-The upstream example refers to a fictional app, so missing source-file excerpts
-produce warnings. Packing must still succeed, inline the two runtime assets,
-and write `plan.packed.html` in the temporary directory. Remove `probe_html`
-when finished. Neither check proves skill discovery or model behavior in a
-live host session.
+This executes the reviewed packer from each installed complete/html-plan skill,
+using the installed fictional example and disposable output. It requires exit
+zero, no reported errors, exact CSS/JavaScript bytes inside the packed document,
+and no remaining external runtime links. Evidence records the packed digest,
+expected fictional-source warnings (missing application code under
+`<doc-calls>`) and other warnings separately. Warnings do not count as errors;
+missing assets or a nonzero packer fail visibly and clean all owned state.
+Without `--html-pack`, lifecycle checks only inspect the HTML files as data and
+Node is not required. Neither command proves skill discovery, authentication
+or model behavior in a live host session. Ordinary tests use only an inert
+controlled Node fixture and never execute the shipped packer.

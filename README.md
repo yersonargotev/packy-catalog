@@ -125,7 +125,7 @@ review, audit, debt, and the MIT notice retain exact upstream bytes. The benchma
 skill reports the newer upstream agentic results with their limitations, not
 claimed savings for the Packy adaptation or the current project.
 
-The [Ponytail installation probe](scripts/probes/README.md#adoption-and-ponytail-acceptance)
+The [Ponytail installation probe](scripts/probes/README.md#released-binary-content-acceptance)
 checks resource selection, notices, preservation, and the shared-file limit on
 all three hosts.
 

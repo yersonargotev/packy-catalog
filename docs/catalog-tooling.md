@@ -28,10 +28,10 @@ owns official publication; do not manually publish a second release.
 
 No Go runtime, Packy source checkout, global installation, or alternative
 binary on PATH participates. Validation and construction read Pack resources
-as inert data. Adoption and Ponytail acceptance use the opt-in released-binary
+as inert data. Adoption, Ponytail and Claude acceptance use the opt-in released-binary
 runner documented in [`scripts/probes/README.md`](../scripts/probes/README.md).
-The remaining Claude and pstack overlays retain their legacy prerequisites
-until migration under #56–#57. Ordinary validation never invokes these probes.
+The remaining pstack overlay retains its legacy prerequisites
+until migration under #57. Ordinary validation never invokes these probes.
 
 ## Acquisition, cache, and network
 

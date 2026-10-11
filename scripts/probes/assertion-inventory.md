@@ -30,11 +30,37 @@ Catalog negative fixtures deliberately alter only an index schema and its
 archive checksum; they are not a second builder or a publication.
 
 `catalog_adoption_test.go` now retains only `adoptionRelease`, still imported
-by `claude_install_test.go` (#56) and `pstack_lifecycle_test.go` (#57). Remove
-that helper when its last consumer migrates. Neither remaining overlay is
-executed by the new runner or ordinary CI. Their legacy setup remains
+by `pstack_lifecycle_test.go` (#57). Remove
+that helper when its last consumer migrates. The remaining overlay is not
+executed by the new runner or ordinary CI. Its legacy setup remains
 documented until migration. #49 is overlapping prior art; its source-checkout
 acquisition model is superseded for these scenarios, and that issue is unchanged.
+
+## Claude assertion migration (#56)
+
+This inventory accounts for `TestClaudeProjectInstall` before removing
+`claude_install_test.go`. `--scenario claude` shares the verified executable,
+one complete snapshot, isolated environment, bounded process, exact-preview
+approval and structured evidence contracts established by #55.
+
+| Displaced assertion | Equivalent released-binary behavior |
+| --- | --- |
+| Complete, eli5-only and html-plan-only on Claude, Codex and OpenCode | Nine `claude` cases install each selection and assert skill frontmatter plus absence of unselected roots |
+| Read-only project/home preview | Entire prepared workspace bytes/modes, including project, personal roots, snapshot and ownership marker, unchanged after dry-run |
+| Complete HTML runtime closure | Complete/html-plan selections require `runtime/htmlplan.js`, `runtime/htmlplan.css`, `runtime/pack.mjs`, `references/blocks.md` and `examples/scheduled-send.html` in the installed skill |
+| Apache license and exactly selected skill metadata notices | Each selection requires Apache attribution text and includes eli5/html-plan metadata iff the corresponding skill was selected |
+| Local guidance and Argote coexistence | Install Argote guidance first in every case; project guidance bytes remain equal after Claude install and uninstall |
+| Portable verification | `verify --json` passes after Claude installation and again with retained Argote after Claude removal |
+| Personal configuration preservation | Both isolated home/config trees compared immediately after install and uninstall; common runner also preserves ambient home/config/data |
+| Uninstall removes both Claude skill roots and preserves Argote/local guidance | Each case checks root absence and retained instruction bytes, then removes Argote and checks final contract/notices/skills absence and unrelated files/modes |
+| Engine-internal fake host/terminal/source injection | Candidate host prohibition and official trust mechanisms remain Packy-owned; common runner uses single-use exact-preview PTY consent without live hosts/authentication/models |
+| Optional HTML packing smoke command | `--html-pack` executes installed packer only in complete/html-plan cases; requires success, no reported errors, exact inlined CSS/JS bytes, no external runtime links and packed digest. Fictional `<doc-calls>` source warnings are recorded separately from other warnings |
+
+Ordinary CLI fixtures use a real pinned binary, inert fictional Pack content
+and a controlled Node transport. They cover all nine selections, optional
+packing warning classification, missing Node, and checksum-valid content
+missing `runtime/htmlplan.js`; they never execute the shipped HTML packer.
+Real reviewed content and optional Node execution remain opt-in.
 
 Controlled runner-boundary fixtures live in
 `scripts/tests/test_content_probe_runner.py`. They execute only temporary Python
