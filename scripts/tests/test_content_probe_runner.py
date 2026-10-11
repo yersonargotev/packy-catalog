@@ -106,6 +106,11 @@ class ProbeCommandTests(unittest.TestCase):
         evidence = self.invoke()
         self.assertIn("missing prerequisite: git", evidence["error"])
 
+    def test_optional_html_packing_requires_node_and_cleans_owned_state(self):
+        self.command = [*self.command[:-1], "claude", "--html-pack"]
+        evidence = self.invoke()
+        self.assertIn("missing prerequisite: node", evidence["error"])
+
     def test_dirty_candidate_fails_without_acquisition(self):
         subprocess.run([shutil.which("git"), "init", "-q", str(self.catalog)], check=True)
         evidence = self.invoke()

@@ -122,13 +122,14 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.assert_rejected(self.run_cli("version", "--json"), "malformed release declaration")
         self.assertFalse((self.work / "downloads").exists())
 
-    def test_content_probe_command_uses_real_pin_with_inert_controlled_content(self):
+    def prepare_content_probe_fixture(self):
         """No shipped Pack runtime, origin service, host, or model participates."""
         shutil.rmtree(self.project / "packs")
-        for pack_id in ("argote", "emil", "ponytail"):
+        for pack_id in ("argote", "emil", "ponytail", "claude"):
             pack = self.project / "packs" / pack_id
             pack.mkdir(parents=True)
-            manifest = json.loads((ROOT / "packs/ponytail/pack.json").read_text())
+            manifest = json.loads((ROOT / ("packs/claude/pack.json" if pack_id == "claude"
+                                          else "packs/ponytail/pack.json")).read_text())
             manifest.update(id=pack_id, origins=[], external_requirements=[])
             resources = manifest["resources"]
             if pack_id == "argote":
@@ -151,36 +152,93 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
                     path.mkdir(parents=True)
                     (path / "SKILL.md").write_text("---\nname: " + resource["id"] +
                                                   "\ndescription: Inert controlled fixture\n---\nFixture text.\n")
+                    if resource["id"] == "html-plan":
+                        for name in ("runtime/htmlplan.js", "runtime/htmlplan.css", "runtime/pack.mjs",
+                                     "references/blocks.md", "examples/scheduled-send.html"):
+                            asset = path / name
+                            asset.parent.mkdir(exist_ok=True)
+                            asset.write_text("Inert fixture: " + name + "\n")
                 else:
                     path.parent.mkdir(parents=True, exist_ok=True)
                     if resource["kind"] == "instruction":
                         path.write_text("# Ponytail, lazy senior dev mode\n" if pack_id == "ponytail"
                                         else "# Argote fixture guidance\n")
                     else:
-                        path.write_text("MIT License\nCopyright (c) 2026 DietrichGebert\n")
+                        path.write_text("Apache License\n" if resource["id"] == "apache-2-0" else
+                                        '{"name": "eli5"}\n' if resource["id"] == "eli5-metadata" else
+                                        '{"name": "html-plan"}\n' if resource["id"] == "html-plan-metadata" else
+                                        "MIT License\nCopyright (c) 2026 DietrichGebert\n")
             (pack / "pack.json").write_text(json.dumps(manifest))
         # Controlled curl boundary supplies the real archive, still checksum/identity checked.
         (self.bin / "curl").write_text(
             "#!" + sys.executable + "\nimport shutil,sys\n"
             "args=sys.argv[1:]\nshutil.copyfile(" + repr(str(Path(ARCHIVE).resolve())) +
             ",args[args.index('--output')+1])\n")
+        # Node is an external transport fixture, never an executable Pack resource.
+        node = self.bin / "node"
+        node.write_text("#!" + sys.executable + "\nfrom pathlib import Path\nimport sys\n"
+                        "runtime=Path(sys.argv[1]).parent\npage=Path(sys.argv[2])\n"
+                        "packed='<style data-htmlplan>\\n'+(runtime/'htmlplan.css').read_text()+'\\n</style>'\n"
+                        "packed+='<script data-htmlplan>\\n'+(runtime/'htmlplan.js').read_text()+'\\n</script>'\n"
+                        "page.with_suffix('.packed.html').write_text(packed)\n"
+                        "print('  ⚠ line 48 <doc-calls>: 7 rows point at files not found under fixture')\n"
+                        "print('  ⚠ controlled editorial warning')\n")
+        node.chmod(0o755)
         git = shutil.which("git")
         for args in (("init", "-q"), ("add", "."),
                      ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Fixture")):
             subprocess.run([git, "-C", str(self.project), *args], env=self.env, check=True, capture_output=True)
         owned_temp = self.work / "owned-temp"
         owned_temp.mkdir()
-        env = {**self.env, "TMPDIR": str(owned_temp)}
-        result = subprocess.run([sys.executable, "-B", str(self.project / "scripts/probes/content-probes.py"),
-                                 "--scenario", "adoption", "--scenario", "ponytail"],
-                                env=env, text=True, capture_output=True, timeout=180)
-        self.assertEqual(result.returncode, 0, result.stderr + result.stdout[-3000:])
+        self.probe_env = {**self.env, "TMPDIR": str(owned_temp)}
+        self.probe_temp = owned_temp
+
+    def run_content_probe(self, *args):
+        result = subprocess.run([sys.executable, "-B", str(self.project / "scripts/probes/content-probes.py"), *args],
+                                env=self.probe_env, text=True, capture_output=True, timeout=180)
         report = json.loads(result.stdout)
+        self.assertEqual(report["cleanup"], "removed")
+        self.assertEqual(list(self.probe_temp.iterdir()), [])
+        return result, report
+
+    def test_content_probe_command_uses_real_pin_with_inert_controlled_content(self):
+        self.prepare_content_probe_fixture()
+        result, report = self.run_content_probe("--scenario", "adoption", "--scenario", "ponytail",
+                                                "--scenario", "claude", "--html-pack")
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout[-3000:])
         self.assertEqual(report["result"], "passed")
-        self.assertEqual(len(report["outcomes"]), 12)
+        self.assertEqual(len(report["outcomes"]), 21)
+        self.assertEqual({(case["surface"], case["selection"]) for case in report["outcomes"]
+                          if case["scenario"] == "claude"},
+                         {(surface, selection) for surface in ("codex", "claude", "opencode")
+                          for selection in ("complete", "eli5", "html-plan")})
         self.assertFalse(report["official_publication"])
         self.assertEqual(report["verified_packy_identity"]["version"], self.pin()["version"])
-        self.assertEqual(list(owned_temp.iterdir()), [])
+        packing = [case["html_packing"] for case in report["outcomes"] if "html_packing" in case]
+        self.assertEqual(len(packing), 6)
+        for outcome in packing:
+            self.assertEqual(len(outcome["fictional_source_warnings"]), 1)
+            self.assertEqual(outcome["other_warnings"], ["⚠ controlled editorial warning"])
+
+    def test_claude_missing_runtime_fails_and_cleans_owned_state(self):
+        self.prepare_content_probe_fixture()
+        # A checksum-valid built snapshot can still lack required Pack content.
+        (self.project / "packs/claude/skills/html-plan/runtime/htmlplan.js").unlink()
+        for args in (("add", "."), ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                                   "commit", "-qm", "Missing runtime fixture")):
+            subprocess.run([shutil.which("git"), "-C", str(self.project), *args], env=self.env, check=True, capture_output=True)
+        result, report = self.run_content_probe("--scenario", "claude", "--surface", "codex")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(report["result"], "failed")
+        self.assertIn("missing HTML runtime closure: runtime/htmlplan.js", report["error"])
+
+    def test_html_packing_success_without_included_assets_is_rejected(self):
+        self.prepare_content_probe_fixture()
+        node = self.bin / "node"
+        node.write_text(node.read_text().replace("write_text(packed)", "write_text('<html>Incomplete fixture</html>')"))
+        result, report = self.run_content_probe("--scenario", "claude", "--surface", "codex", "--html-pack")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("packed HTML missing runtime asset: htmlplan.css", report["error"])
 
     def test_unsupported_platform_is_rejected_before_download(self):
         (self.bin / "uname").unlink()

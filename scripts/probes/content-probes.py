@@ -1,4 +1,4 @@
-"""Opt-in adoption and Ponytail acceptance through the verified released CLI."""
+"""Opt-in Catalog content acceptance through the verified released CLI."""
 import argparse
 import hashlib
 import io
@@ -6,6 +6,7 @@ import json
 import math
 import os
 from pathlib import Path
+import re
 import shutil
 import signal
 import subprocess
@@ -209,22 +210,98 @@ def ponytail(probe, surfaces):
                                               "selection": selection, "result": "passed"})
 
 
+def pack_html(probe, workspace, skill):
+    output = workspace / "html-packing"
+    output.mkdir()
+    page = output / "plan.html"
+    shutil.copyfile(skill / "examples/scheduled-send.html", page)
+    stdout, stderr = probe.execute(["node", str(skill / "runtime/pack.mjs"), str(page), "--root", str(skill)])
+    require("✗" not in stdout + stderr, "HTML packing reported errors")
+    packed = (output / "plan.packed.html").read_text()
+    for tag, name in (("style", "htmlplan.css"), ("script", "htmlplan.js")):
+        asset = (skill / "runtime" / name).read_text()
+        if tag == "script":
+            asset = re.sub(r"</script", lambda match: "<\\/script", asset, flags=re.IGNORECASE)
+        require(f"<{tag} data-htmlplan>\n{asset}\n</{tag}>" in packed, "packed HTML missing runtime asset: " + name)
+    require(not re.search(r'(?:href|src)=["\'][^"\']*htmlplan\.(?:css|js)["\']', packed),
+            "packed HTML retained an external runtime link")
+    warnings = [line.strip() for line in (stdout + stderr).splitlines() if "⚠" in line]
+    fictional = [line for line in warnings if re.search(r"<doc-calls>: \d+ rows point at files not found under ", line)]
+    return {"result": "passed", "packed_sha256": hashlib.sha256(packed.encode()).hexdigest(),
+            "fictional_source_warnings": fictional, "other_warnings": [line for line in warnings if line not in fictional]}
+
+
+def claude(probe, surfaces):
+    for surface in surfaces:
+        for selection in ("complete", "eli5", "html-plan"):
+            workspace = probe.prepare("claude-" + surface + "-" + selection)
+            project = workspace / "project"
+            original_project = tree(project)
+            instruction = project / ("CLAUDE.md" if surface == "claude" else "AGENTS.md")
+            skill_root = project / SKILL_DIRECTORIES[surface]
+            probe.apply(workspace, ["install", "argote", "--surface", surface, "--resource", "instruction:guidance"])
+            original_instructions = instruction.read_bytes()
+            personal = (tree(workspace / "home"), tree(workspace / "config"))
+            args = ["install", "claude", "--surface", surface]
+            if selection != "complete":
+                args += ["--resource", "skill:" + selection]
+            before = tree(workspace)
+            probe.candidate(workspace, [*args, "--dry-run", "--json"])
+            require(tree(workspace) == before, "Claude preview changed workspace")
+            probe.apply(workspace, args)
+            probe.verify(workspace)
+            for name in ("eli5", "html-plan"):
+                path = skill_root / name / "SKILL.md"
+                want = selection == "complete" or selection == name
+                require((skill_root / name).exists() == want, "wrong Claude skill selection: " + name)
+                if want:
+                    require("name: " + name + "\n" in path.read_text(), "wrong Claude skill body: " + name)
+            if selection != "eli5":
+                for name in ("runtime/htmlplan.js", "runtime/htmlplan.css", "runtime/pack.mjs",
+                             "references/blocks.md", "examples/scheduled-send.html"):
+                    require((skill_root / "html-plan" / name).is_file(), "missing HTML runtime closure: " + name)
+            notices = (project / "PACKY-NOTICES.md").read_text()
+            require("Apache License" in notices, "Claude repository license missing")
+            for name in ("eli5", "html-plan"):
+                require(('"name": "' + name + '"' in notices) == (selection == "complete" or selection == name),
+                        "wrong Claude notice selection: " + name)
+            require(instruction.read_bytes() == original_instructions, "Claude install changed retained guidance")
+            require(personal == (tree(workspace / "home"), tree(workspace / "config")),
+                    "Claude install changed personal state")
+            outcome = {"scenario": "claude", "surface": surface, "selection": selection, "result": "passed"}
+            if probe.evidence["html_pack"] and selection != "eli5":
+                outcome["html_packing"] = pack_html(probe, workspace, skill_root / "html-plan")
+            probe.apply(workspace, ["uninstall", "claude", "--surface", surface])
+            probe.verify(workspace)
+            require(instruction.read_bytes() == original_instructions, "Claude uninstall changed retained guidance")
+            require(all(not (skill_root / name).exists() for name in ("eli5", "html-plan")),
+                    "Claude uninstall retained skills")
+            require(personal == (tree(workspace / "home"), tree(workspace / "config")),
+                    "Claude uninstall changed personal state")
+            probe.apply(workspace, ["uninstall", "argote", "--surface", surface])
+            assert_retired(project, original_project, surface)
+            probe.evidence["outcomes"].append(outcome)
+
+
 def interrupted(signum, frame):
     raise KeyboardInterrupt("probe interrupted by signal " + str(signum))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail"), required=True)
+    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude"), required=True)
     parser.add_argument("--surface", action="append", choices=SURFACES)
+    parser.add_argument("--html-pack", action="store_true", help="optionally execute the installed Claude HTML packer with Node")
     parser.add_argument("--timeout", type=float, default=30, help="lifecycle deadline in seconds (default: 30)")
     args = parser.parse_args()
     if not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error("timeout must be finite and positive")
     scenarios = list(dict.fromkeys(args.scenario))
+    if args.html_pack and "claude" not in scenarios:
+        parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
     evidence = {"schema_version": 1, "report": "catalog-content-probes", "provenance": "local-candidate",
-                "official_publication": False, "scenarios": scenarios, "surfaces": surfaces,
+                "official_publication": False, "scenarios": scenarios, "surfaces": surfaces, "html_pack": args.html_pack,
                 "commands": [], "outcomes": [], "result": "failed"}
     root = None
     previous_handler = signal.signal(signal.SIGTERM, interrupted)
@@ -233,7 +310,7 @@ def main():
             root = Path(directory).resolve()
             env = isolated_environment(root)
             probe = Probe(root / "packy", root / "dist", root, env, evidence, args.timeout)
-            for name in ("git", "curl", "uname"):
+            for name in ("git", "curl", "uname", *(("node",) if args.html_pack else ())):
                 require(shutil.which(name, path=env["PATH"]) is not None, "missing prerequisite: " + name)
             checkout_state, _ = probe.execute(["git", "-C", str(ROOT), "status", "--porcelain"])
             require(not checkout_state.strip(), "content probes require a clean committed Catalog candidate")
@@ -254,7 +331,7 @@ def main():
             ambient = {key: tree(Path(env[key])) for key in ("HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME")}
             for scenario in scenarios:
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
-                {"adoption": adoption, "ponytail": ponytail}[scenario](probe, surfaces)
+                {"adoption": adoption, "ponytail": ponytail, "claude": claude}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
             checkout_state, _ = probe.execute(["git", "-C", str(ROOT), "status", "--porcelain"])
             final_commit, _ = probe.execute(["git", "-C", str(ROOT), "rev-parse", "HEAD"])
