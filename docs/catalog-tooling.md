@@ -87,13 +87,18 @@ idempotent retries.
 
 ## Tests and reviewed upgrades
 
-Run the complete automated suite with Python and Node available:
+Run the complete ordinary tooling suite with the local Python prerequisites:
 
 ```sh
 ./scripts/test.sh
 ```
 
-It acquires the declared native archive once; cases then use controlled
+The pstack probe tests remain explicitly opt-in under
+[`scripts/probes/README.md`](../scripts/probes/README.md), including their Node
+prerequisite. They execute reviewed Pack helpers and are excluded from this
+suite and ordinary CI.
+
+The tooling suite acquires the declared native archive once; cases then use controlled
 transports and disposable state, without live GitHub publication, Go, host
 services, or model execution. `PACKY_TEST_ARCHIVE=/path/to/native-archive`
 reuses an already downloaded fixture; the cases still verify its declared

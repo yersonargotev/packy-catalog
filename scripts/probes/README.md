@@ -12,7 +12,9 @@ throwaway copies with Node. Temporary copies protect the managed files from
 relative writes; they are not a security sandbox for untrusted code.
 
 Requirements: Python 3.9 or newer, plus Node for `plans` and the probe tests.
-No packages, credentials or network access are needed.
+No packages, credentials or network access are needed. The probe test suite
+includes execution of the real Pack plan checkers and remains opt-in after
+content review; `scripts/test.sh` and ordinary PR CI do not invoke it.
 
 ## Compare surfaces that must remain unchanged
 

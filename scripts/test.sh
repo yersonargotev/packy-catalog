@@ -12,4 +12,3 @@ if [[ -z "${PACKY_TEST_ARCHIVE:-}" ]]; then
 fi
 [[ -f "$PACKY_TEST_ARCHIVE" ]] || { echo "native archive fixture is missing" >&2; exit 1; }
 python3 -B -m unittest discover -s "$root/scripts/tests" -v
-python3 -B -m unittest discover -s "$root/scripts/probes" -p 'test_*.py' -v
