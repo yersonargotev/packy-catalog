@@ -18,6 +18,7 @@ from content_probe_process import run_child
 
 ROOT = Path(__file__).resolve().parents[2]
 SURFACES = ("codex", "claude", "opencode")
+SKILL_DIRECTORIES = {"codex": ".agents/skills", "claude": ".claude/skills", "opencode": ".opencode/skills"}
 SKILLS = ("ponytail", "ponytail-review", "ponytail-audit", "ponytail-debt", "ponytail-gain", "ponytail-help")
 
 
@@ -154,7 +155,7 @@ def assert_retired(project, original, surface):
         require((project / name).read_bytes().rstrip(b"\n") == original[name][1].rstrip(b"\n"),
                 "uninstall changed unrelated document " + name)
         require((project / name).stat().st_mode == original[name][0], "uninstall changed unrelated mode " + name)
-    skill_root = project / {"codex": ".agents", "claude": ".claude", "opencode": ".opencode"}[surface] / "skills"
+    skill_root = project / SKILL_DIRECTORIES[surface]
     require(not skill_root.exists() or not list(skill_root.iterdir()), "uninstall retained managed skills")
 
 
@@ -164,7 +165,7 @@ def ponytail(probe, surfaces):
             workspace = probe.prepare("ponytail-" + surface + "-" + selection)
             project = workspace / "project"
             instruction = project / ("CLAUDE.md" if surface == "claude" else "AGENTS.md")
-            skill_root = project / {"codex": ".agents", "claude": ".claude", "opencode": ".opencode"}[surface] / "skills"
+            skill_root = project / SKILL_DIRECTORIES[surface]
             original_project = tree(project)
             if selection == "skill":
                 probe.apply(workspace, ["install", "argote", "--surface", surface, "--resource", "instruction:guidance"])
