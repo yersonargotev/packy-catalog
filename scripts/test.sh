@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 root="$(cd "${BASH_SOURCE[0]%/*}/.." && pwd)"
+python3 -B "$root/scripts/check_syntax.py"
 scratch="$(mktemp -d)"
 trap 'rm -rf "$scratch"' EXIT
 if [[ -z "${PACKY_TEST_ARCHIVE:-}" ]]; then
@@ -11,4 +12,4 @@ if [[ -z "${PACKY_TEST_ARCHIVE:-}" ]]; then
   done
 fi
 [[ -f "$PACKY_TEST_ARCHIVE" ]] || { echo "native archive fixture is missing" >&2; exit 1; }
-python3 -B -m unittest discover -s "$root/scripts/tests" -v
+python3 -B "$root/scripts/run_tooling_tests.py"

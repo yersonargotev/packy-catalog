@@ -93,6 +93,15 @@ Run the complete ordinary tooling suite with the local Python prerequisites:
 ./scripts/test.sh
 ```
 
+This command checks Catalog-owned Python and shell syntax, including workflow
+shell blocks, before acquiring the native test archive. Syntax checks read
+opt-in probe scripts as data. The ordinary suite then runs once in a disposable
+copy with every pstack `check-plan.mjs` helper replaced by an execution sentinel.
+Any sentinel execution fails the command even if a test ignores the helper's
+exit status. The source checkout is untouched, temporary state is cleaned up,
+and no Node runtime is needed. This scenario protects the inert ordinary-CI
+boundary; it does not execute or replace the opt-in lifecycle probes.
+
 The pstack probe tests remain explicitly opt-in under
 [`scripts/probes/README.md`](../scripts/probes/README.md), including their Node
 prerequisite. They execute reviewed Pack helpers and are excluded from this
