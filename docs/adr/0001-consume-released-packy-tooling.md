@@ -79,7 +79,8 @@ to it. As of 2026-10-10 (America/Bogota), immutable
 has satisfied that prerequisite through
 [Packy #834](https://github.com/yersonargotev/packy/issues/834#issuecomment-6104158748).
 [Catalog #54](https://github.com/yersonargotev/packy-catalog/issues/54) tracks
-adoption; the Catalog validation and publication workflows still use v0.2.26.
+adoption. The Catalog entry points and connected publication workflow now
+consume that immutable release through `packy-release.json`.
 
 Evidence and alternatives: [Versioned Catalog tooling research](../research/versioned-catalog-tooling.md).
 
@@ -88,4 +89,5 @@ Approved specifications and child tickets are published under
 [Catalog #53](https://github.com/yersonargotev/packy-catalog/issues/53).
 The Catalog adoption ticket declares the Packy release ticket as its
 prerequisite; that ticket is now completed. Release availability does not
-itself migrate Catalog entry points or lifecycle probes.
+itself migrate lifecycle probes; their separately tracked migration remains
+outstanding after entry-point adoption.

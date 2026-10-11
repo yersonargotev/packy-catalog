@@ -1,5 +1,10 @@
 # Opt-in pstack update probes
 
+The source-overlay lifecycle probes in this directory remain separate from
+released-tooling adoption (#54). Their migration is tracked by #55–#57; they
+are not prerequisites for source-free validation, construction, or publication.
+Their explicitly documented Go/Packy-source requirements still apply.
+
 Run these checks after the catalog validator, against reviewed local content.
 They are separate from `scripts/validate.sh` and CI's inert-content validation.
 The `plans` command executes the shipped common and Codex plan checkers in
@@ -7,7 +12,9 @@ throwaway copies with Node. Temporary copies protect the managed files from
 relative writes; they are not a security sandbox for untrusted code.
 
 Requirements: Python 3.9 or newer, plus Node for `plans` and the probe tests.
-No packages, credentials or network access are needed.
+No packages, credentials or network access are needed. The probe test suite
+includes execution of the real Pack plan checkers and remains opt-in after
+content review; `scripts/test.sh` and ordinary PR CI do not invoke it.
 
 ## Compare surfaces that must remain unchanged
 

@@ -29,32 +29,20 @@ jobs:
           path: catalog-baseline
           persist-credentials: false
 
-      - name: Check out Packy validator
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: yersonargotev/packy
-          ref: b4cf72d892570c1fb26571c434f2407bb0728bd3
-          path: packy-validator
-          persist-credentials: false
-
-      - name: Validate publication workflow boundaries
+      - name: Install workflow parser
         working-directory: catalog-project
-        run: ./scripts/validate-publication-workflows.sh
+        run: python3 -m pip install -r requirements-tooling.txt
 
-      - name: Set up Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: packy-validator/go.mod
-          cache: false
+      - name: Test source-free entry points and publication boundary
+        working-directory: catalog-project
+        run: ./scripts/test.sh
 
       - name: Validate inert catalog content
         working-directory: catalog-project
-        env:
-          PACKY_VALIDATOR_ROOT: ../packy-validator
         shell: bash
         run: |
           args=()
           if [[ -d ../catalog-baseline/packs ]]; then
             args+=(../catalog-baseline)
           fi
-          ./scripts/validate.sh "${args[@]}"
+          ./scripts/validate.sh "${args[@]}" --json
