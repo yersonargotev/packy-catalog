@@ -5,6 +5,12 @@ against the ready issue with the commit/review ordering adapted below. The
 vendored source remains unchanged; this delivery-specific ordering takes
 precedence over its closing review-before-commit sequence.
 
+Use structured editing capabilities when available. In a command-only
+environment, keep edits small and independently parseable. Discover tools by
+name and purpose, then load only the selected contracts needed for the active
+gate. Run independent checks with separately observable results and preserve
+each failure status.
+
 1. Implement the issue with its TDD and incremental-check guidance.
 2. Commit the complete candidate locally and require a clean worktree. Record
    its exact SHA before running the complete automated suite and `/code-review`.
