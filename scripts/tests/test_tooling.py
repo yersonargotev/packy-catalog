@@ -122,6 +122,66 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.assert_rejected(self.run_cli("version", "--json"), "malformed release declaration")
         self.assertFalse((self.work / "downloads").exists())
 
+    def test_content_probe_command_uses_real_pin_with_inert_controlled_content(self):
+        """No shipped Pack runtime, origin service, host, or model participates."""
+        shutil.rmtree(self.project / "packs")
+        for pack_id in ("argote", "emil", "ponytail"):
+            pack = self.project / "packs" / pack_id
+            pack.mkdir(parents=True)
+            manifest = json.loads((ROOT / "packs/ponytail/pack.json").read_text())
+            manifest.update(id=pack_id, origins=[], external_requirements=[])
+            resources = manifest["resources"]
+            if pack_id == "argote":
+                resources = [resources[0]]
+                resources[0].update(id="guidance", notices=[])
+                for binding in resources[0]["bindings"]:
+                    binding.update(name="guidance", invocation="guidance")
+                    for capability in binding["capabilities"]:
+                        capability["project_instruction"]["id"] = "guidance"
+            elif pack_id == "emil":
+                resources = [resources[2]]
+                resources[0].update(id="example", notices=[])
+                for binding in resources[0]["bindings"]:
+                    binding.update(name="example", invocation="example")
+            manifest["resources"] = resources
+            for resource in resources:
+                resource.pop("origin", None)
+                path = pack / resource["source"]
+                if resource["kind"] == "skill":
+                    path.mkdir(parents=True)
+                    (path / "SKILL.md").write_text("---\nname: " + resource["id"] +
+                                                  "\ndescription: Inert controlled fixture\n---\nFixture text.\n")
+                else:
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    if resource["kind"] == "instruction":
+                        path.write_text("# Ponytail, lazy senior dev mode\n" if pack_id == "ponytail"
+                                        else "# Argote fixture guidance\n")
+                    else:
+                        path.write_text("MIT License\nCopyright (c) 2026 DietrichGebert\n")
+            (pack / "pack.json").write_text(json.dumps(manifest))
+        # Controlled curl boundary supplies the real archive, still checksum/identity checked.
+        (self.bin / "curl").write_text(
+            "#!" + sys.executable + "\nimport shutil,sys\n"
+            "args=sys.argv[1:]\nshutil.copyfile(" + repr(str(Path(ARCHIVE).resolve())) +
+            ",args[args.index('--output')+1])\n")
+        git = shutil.which("git")
+        for args in (("init", "-q"), ("add", "."),
+                     ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Fixture")):
+            subprocess.run([git, "-C", str(self.project), *args], env=self.env, check=True, capture_output=True)
+        owned_temp = self.work / "owned-temp"
+        owned_temp.mkdir()
+        env = {**self.env, "TMPDIR": str(owned_temp)}
+        result = subprocess.run([sys.executable, "-B", str(self.project / "scripts/probes/content-probes.py"),
+                                 "--scenario", "adoption", "--scenario", "ponytail"],
+                                env=env, text=True, capture_output=True, timeout=180)
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout[-3000:])
+        report = json.loads(result.stdout)
+        self.assertEqual(report["result"], "passed")
+        self.assertEqual(len(report["outcomes"]), 12)
+        self.assertFalse(report["official_publication"])
+        self.assertEqual(report["verified_packy_identity"]["version"], self.pin()["version"])
+        self.assertEqual(list(owned_temp.iterdir()), [])
+
     def test_unsupported_platform_is_rejected_before_download(self):
         (self.bin / "uname").unlink()
         (self.bin / "uname").write_text("#!/bin/bash\necho unsupported\n")

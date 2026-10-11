@@ -1,9 +1,11 @@
-# Opt-in pstack update probes
+# Opt-in content probes
 
 The source-overlay lifecycle probes in this directory remain separate from
-released-tooling adoption (#54). Their migration is tracked by #55–#57; they
+released-tooling adoption (#54). Their remaining migration is tracked by #56–#57; they
 are not prerequisites for source-free validation, construction, or publication.
 Their explicitly documented Go/Packy-source requirements still apply.
+
+## pstack update checks
 
 Run these checks after the catalog validator, against reviewed local content.
 They are separate from `scripts/validate.sh` and CI's inert-content validation.
@@ -70,26 +72,73 @@ substitutions are controlled CLI-boundary fixtures in temporary projects.
 The other probes in this directory retain their documented requirements in
 `docs/research/pstack-surface-variants.md`; this runner does not execute them.
 
-## Ponytail project installation
+## Adoption and Ponytail acceptance
 
-`ponytail_install_test.go` exercises the real Packy CLI command handlers against
-a locally built catalog snapshot. It checks complete, skill-only, and
-instruction-only project installation on Codex, Claude, and OpenCode; read-only
-preview; notice inclusion; portable verification; and uninstall preservation.
-Skill-only installation coexists with Argote. The instruction cases verify
-that v0.2.26 rejects cross-Pack ownership of the same instruction file without
-changing the project. Personal activation is not accepted: installation uses
-JSON output to omit the optional interactive activation offer.
+After reviewing content, run from a clean committed Catalog checkout:
 
-Use a disposable checkout of the pinned Packy engine, with Go installed. Set
-`catalog_root` and `probe_engine` to absolute paths. Run from the catalog root:
+```sh
+python3 -B scripts/probes/content-probes.py --scenario adoption --scenario ponytail > /tmp/catalog-content-evidence.json
+```
+
+Select either scenario independently; repeat `--surface codex`, `--surface
+claude`, or `--surface opencode` to limit surfaces (default: all three).
+`--timeout 30` bounds each lifecycle child. Requirements are Python 3.9+ on
+Darwin/Linux (Unix PTYs), curl, Git, uname, and upstream HTTPS access. No Go,
+Packy source checkout, globally installed binary, host executable, credentials,
+or model is required. The runner acquires and verifies `packy-release.json`
+once into owned disposable state and builds one complete candidate snapshot
+for all selected scenarios. Tool downloads and upstream origin resolution need
+network access; the runner removes its private cache when finished.
+
+`adoption` consumes the entire Catalog, rejects a controlled incompatible-index
+fixture without changing prior usable state or leaving a new workspace, and
+installs/verifies/uninstalls Emil on the selected surfaces. `ponytail` covers
+complete, skill-only and instruction-only selection, read-only preview,
+notices, portable verification, Argote coexistence for skill-only selection,
+shared-instruction ownership conflicts, personal-state preservation, and
+uninstall preservation. The [assertion inventory](assertion-inventory.md)
+accounts for every displaced Go assertion and the Packy-owned mechanisms.
+
+The supported `catalog candidate` interface owns temporary homes, configuration,
+retained snapshot and Git projects. Install/uninstall uses a controlled stdin
+PTY, answering only the exact project approval prompt bound to the freshly
+observed preview digest. Unexpected/repeated prompts, missing approvals,
+nonzero children, timeouts and SIGINT/SIGTERM fail visibly. Child groups and
+owned state are removed on success, failure and interruption; forced SIGKILL
+or machine termination cannot run cleanup. JSON stdout records the committed
+candidate, verified Packy identity, builder and archive digests, selected
+scenarios, command receipts and outcomes. Progress and failures go to stderr.
+The clean commit is rechecked at completion. Save evidence outside the checkout
+so redirection does not create an untracked file before the clean-state check.
+
+The evidence describes **local authoring candidates**, not attested Catalog
+Publications. No publication, host authentication, activation, model calls or
+live user-state changes occur. Ordinary `scripts/test.sh`, validation and PR CI
+do not invoke real-content scenarios. Controlled runner-boundary tests use inert
+fixture content and fake external transports in the ordinary suite.
+[#49](https://github.com/yersonargotev/packy-catalog/issues/49) is overlapping
+prior art; this runner does not adopt its source-checkout acquisition design
+or modify/close that issue.
+
+## Claude project installation
+
+`claude_install_test.go` retains the legacy snapshot fixture and engine overlay
+until #56. It installs the complete `claude` Pack and each individual skill
+on Claude, Codex, and OpenCode, alongside Argote guidance. It checks read-only
+preview, notice selection, the complete HTML runtime closure, portable
+verification, personal configuration preservation, and uninstall preservation.
+
+This unmigrated overlay requires Go and a disposable Packy v0.2.26 checkout
+at `b4cf72d892570c1fb26571c434f2407bb0728bd3`. The shared
+`catalog_adoption_test.go` contains only its still-needed `adoptionRelease`
+fixture. It no longer runs adoption acceptance. For this legacy probe only:
 
 ```sh
 catalog_root="$PWD"
 probe_engine=/absolute/path/to/disposable-packy-checkout
 probe_output="$(mktemp -d)"
 probe_commit="$(git rev-parse HEAD)"
-cp scripts/probes/catalog_adoption_test.go scripts/probes/ponytail_install_test.go \
+cp scripts/probes/catalog_adoption_test.go scripts/probes/claude_install_test.go \
   "$probe_engine/internal/cli/"
 cd "$probe_engine"
 go run ./internal/tools/catalogsnapshot \
@@ -98,30 +147,13 @@ go run ./internal/tools/catalogsnapshot \
   --source-commit "$probe_commit" \
   --builder yersonargotev/packy@b4cf72d892570c1fb26571c434f2407bb0728bd3 \
   --out-dir "$probe_output/snapshot"
-PROBE_SNAPSHOT="$probe_output/snapshot" PROBE_SOURCE_COMMIT="$probe_commit" \
-  go test ./internal/cli -run '^TestPonytailProjectInstall$' -count=1 -v
 ```
 
-The builder resolves upstream origins over the network. The test itself uses
-temporary homes and Git projects, a local snapshot source, and fake host
-processes. It does not exercise model behavior, host discovery at runtime,
-authentication, or remote provenance verification. For an uncommitted candidate,
-the source commit above is only a test label; the snapshot is not a publication
-or a claim that its bytes match that commit. Remove the disposable engine
-checkout and probe output when finished.
-
-## Claude project installation
-
-`claude_install_test.go` uses the same snapshot fixture and pinned engine as the
-Ponytail probe. It installs the complete `claude` Pack and each individual skill
-on Claude, Codex, and OpenCode, alongside Argote guidance. It checks read-only
-preview, notice selection, the complete HTML runtime closure, portable
-verification, personal configuration preservation, and uninstall preservation.
-
-Follow the snapshot-build setup above, copying
-`scripts/probes/catalog_adoption_test.go` and
-`scripts/probes/claude_install_test.go` into the disposable engine's
-`internal/cli/`, then run:
+Construction resolves public upstream origins over the network. The overlay
+uses temporary projects/homes and fake hosts; it does not prove authentication,
+model behavior or remote attestation. An uncommitted source label is not proof
+of publication bytes. Remove the owned engine checkout and output afterward.
+Then run:
 
 ```sh
 PROBE_SNAPSHOT="$probe_output/snapshot" PROBE_SOURCE_COMMIT="$probe_commit" \
