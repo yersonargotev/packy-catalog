@@ -40,6 +40,12 @@ capability vocabulary without executing catalog content.
 
 Use the released Packy v0.2.26 checkout at
 `b4cf72d892570c1fb26571c434f2407bb0728bd3`, matching CI and publication.
+The accepted [released-tooling design](docs/adr/0001-consume-released-packy-tooling.md)
+and [supporting research](docs/research/versioned-catalog-tooling.md) describe
+the planned migration. Packy v0.2.27 satisfies its release prerequisite;
+[Catalog #54](https://github.com/yersonargotev/packy-catalog/issues/54) tracks
+adoption. The current validation and publication pin remains v0.2.26 until
+that migration is delivered.
 See [schema v3 adoption](docs/schema-v3-adoption.md) before upgrading existing
 installations. Validate with:
 
