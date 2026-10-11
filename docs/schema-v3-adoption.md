@@ -58,20 +58,21 @@ environment flag on one launch does not bypass Packy's discovery guard. See the
 
 ## Reproducible acceptance probes
 
-`scripts/probes/catalog_adoption_test.go` is a test-only overlay for the pinned
-engine's `internal/cli` package, run in disposable engine worktrees. It consumes
-complete snapshot assets through an injected local Source and uses disposable
-homes and projects. It does not modify the user's installations or test remote
-attestation verification. The production publication workflow retains its
-separate attestation and immutable-release checks.
+From a clean committed Catalog checkout, run:
 
-Set `PROBE_SNAPSHOT` to an asset directory and `PROBE_SOURCE_COMMIT` to its
-index source commit, then run `go test ./internal/cli -run '^TestCatalogAdoption$'
--v -count=1`. Under v0.2.26 it acquires the full catalog and installs/uninstalls
-common Emil resources for Codex, Claude, and OpenCode. Under v0.2.25, start with
-the published v2 snapshot, additionally set `PROBE_REJECT_SNAPSHOT` and
-`PROBE_REJECT_COMMIT` to the v3 candidate, and verify rejection preserves the
-selection bytes and leaves the prior catalog readable.
+```sh
+python3 -B scripts/probes/content-probes.py --scenario adoption
+```
+
+The opt-in runner acquires the verified release declaration, builds the complete
+candidate once, and uses the supported isolated `catalog candidate` interface.
+It checks full Catalog readability, incompatible-index rejection without
+changing a previous workspace, and real Emil install/verify/uninstall on all
+three surfaces. Local candidates do not test official attestation or selection;
+those mechanisms remain in Packy's focused fixtures and the official publication
+workflow. See the [assertion inventory](../scripts/probes/assertion-inventory.md)
+for the mapping from the retired adoption overlay, and the
+[runner documentation](../scripts/probes/README.md) for isolation and evidence.
 
 ### Executed evidence (2026-10-02)
 
