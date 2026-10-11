@@ -66,7 +66,7 @@ one skill with `--resource skill:eli5` or `--resource skill:html-plan`.
 Packy v0.2.26 already discovers Pack directories and projects native skills on
 all three hosts. This addition needs only Catalog Project changes, with no
 engine or registry update. Validate the catalog against an unchanged checkout
-and run the [project installation probe](../../scripts/probes/README.md#claude-project-installation).
+and run the [project installation probe](../../scripts/probes/README.md#claude-content-acceptance).
 The probe checks actual CLI projection, selection, notice closure, preservation,
 and removal. A separate packing smoke check uses the shipped HTML example.
 These checks do not establish model behavior or discovery in live host sessions.
