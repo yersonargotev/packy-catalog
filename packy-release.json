@@ -1,0 +1,10 @@
+{
+  "version": "v0.2.27",
+  "source_commit": "1b8d04ddee510b24adcb12906914240bd7063aa6",
+  "artifacts": {
+    "darwin_amd64": "a848ea20e3a2edfe091623483d056c99fbe1f6aefc9f5c138ecf0e8444409889",
+    "darwin_arm64": "b777a4c9d520e5edf424cfd3db68411e2ea087b2107bfcef750e9fa4aeec898b",
+    "linux_amd64": "14e6db2dd5a7872c8aaadc45efa2f760b1fd766772c9d25a2d468c7374098c47",
+    "linux_arm64": "2c02758cc3120207738eb4ed84a11bc161cc7cbd1aea4e707c86ed66ff32902f"
+  }
+}

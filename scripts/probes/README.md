@@ -1,5 +1,10 @@
 # Opt-in pstack update probes
 
+The source-overlay lifecycle probes in this directory remain separate from
+released-tooling adoption (#54). Their migration is tracked by #55–#57; they
+are not prerequisites for source-free validation, construction, or publication.
+Their explicitly documented Go/Packy-source requirements still apply.
+
 Run these checks after the catalog validator, against reviewed local content.
 They are separate from `scripts/validate.sh` and CI's inert-content validation.
 The `plans` command executes the shipped common and Codex plan checkers in

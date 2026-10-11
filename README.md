@@ -38,27 +38,32 @@ capability vocabulary without executing catalog content.
 
 ## Validate
 
-Use the released Packy v0.2.26 checkout at
-`b4cf72d892570c1fb26571c434f2407bb0728bd3`, matching CI and publication.
-The accepted [released-tooling design](docs/adr/0001-consume-released-packy-tooling.md)
-and [supporting research](docs/research/versioned-catalog-tooling.md) describe
-the planned migration. Packy v0.2.27 satisfies its release prerequisite;
-[Catalog #54](https://github.com/yersonargotev/packy-catalog/issues/54) tracks
-adoption. The current validation and publication pin remains v0.2.26 until
-that migration is delivered.
-See [schema v3 adoption](docs/schema-v3-adoption.md) before upgrading existing
-installations. Validate with:
+Use Python 3.9+, `curl`, Git, and the workflow parser installed with
+`python3 -m pip install -r requirements-tooling.txt`. Validate with:
 
 ```sh
-PACKY_VALIDATOR_ROOT=../packy ./scripts/validate.sh
+./scripts/validate.sh
 ```
+
+The entry point automatically acquires the exact immutable Packy release in
+[`packy-release.json`](packy-release.json), verifies its archive checksum and
+embedded identity, and reuses verified archives from a local cache. It needs
+neither Go, a neighboring Packy checkout, nor a global Packy installation.
+GitHub access is needed on first acquisition and for upstream origin validation;
+a warm tool cache does not make content validation offline.
 
 To enforce independent Pack version changes against another Catalog Project
-checkout, pass that checkout as the only argument:
+checkout, pass that checkout as the baseline. Add `--json` for the versioned
+validation report:
 
 ```sh
-PACKY_VALIDATOR_ROOT=../packy ./scripts/validate.sh ../packy-catalog-main
+./scripts/validate.sh ../packy-catalog-main --json
 ```
+
+[Catalog tooling](docs/catalog-tooling.md) describes cache recovery, prerequisites,
+contract tests, snapshot commands, and reviewed release upgrades.
+See [schema v3 adoption](docs/schema-v3-adoption.md) before upgrading existing
+installations.
 
 When a Pack's manifest contract or referenced bytes change, its version must
 increase. Packs whose content is unchanged must retain their versions. A new
@@ -184,7 +189,9 @@ Pull-request validation has read-only repository permission and no publication
 credentials. The publication workflow starts only after the separate
 validation workflow succeeds for an official `main` push. Its read-only job
 builds and retains the validated artifact; only the final job can attest and
-publish it, and that job never checks out or executes Catalog Project content.
+publish it, and that job reads the reviewed release declaration at the validated commit,
+independently acquires and verifies the released publisher, and never executes
+Catalog Project scripts or resources.
 
 Repository settings enable native release immutability. The publisher creates a
 draft, uploads and verifies the complete asset set, publishes it, and requires

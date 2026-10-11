@@ -1,9 +1,11 @@
 # Catalog schema v3 adoption
 
-The catalog validator, snapshot builder, and trusted publisher are pinned to
-Packy v0.2.26, commit `b4cf72d892570c1fb26571c434f2407bb0728bd3`.
+The original schema v3 cut pinned its validator, snapshot builder, and trusted
+publisher to Packy v0.2.26, commit `b4cf72d892570c1fb26571c434f2407bb0728bd3`.
 The engine release is immutable (GitHub release 402053995). This catalog cut
-requires that engine; earlier engines cannot consume schema v3 snapshots.
+requires that engine or a compatible later release; earlier engines cannot
+consume schema v3 snapshots. Current authoring and publication tooling is
+declared in [`packy-release.json`](../packy-release.json).
 
 ## Version decisions
 
