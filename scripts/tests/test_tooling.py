@@ -326,3 +326,12 @@ else:
                 result = subprocess.run([str(self.project / "scripts/validate-publication-workflows.sh")],
                                         env=self.env, text=True, capture_output=True, timeout=30)
                 self.assertNotEqual(result.returncode, 0, label)
+
+    def test_guard_rejects_substituted_attestation_action(self):
+        workflow = self.workflow()
+        steps = workflow["jobs"]["publish"]["steps"]
+        steps[3]["uses"] = steps[0]["uses"]
+        (self.project / ".github/workflows/publish.yml").write_text(yaml.safe_dump(workflow, sort_keys=False))
+        result = subprocess.run([str(self.project / "scripts/validate-publication-workflows.sh")],
+                                env=self.env, text=True, capture_output=True, timeout=30)
+        self.assertNotEqual(result.returncode, 0, "attestation must actually be emitted")

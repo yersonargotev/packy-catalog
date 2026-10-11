@@ -108,20 +108,19 @@ PY
             "publication must invoke only independently verified release tooling")
     for step in (pin, release):
         require(step["env"] == {"GH_TOKEN": "${{ github.token }}"}, "credentials belong only to reviewed pin read and publisher")
+    for step, action in ((checkout, "checkout"), (retain, "upload-artifact"),
+                         (download, "download-artifact"), (attest, "attest-build-provenance")):
+        require(re.fullmatch(r"actions/" + action + r"@[0-9a-f]{40}", step.get("uses", "")),
+                "publication step must use pinned actions/" + action)
     for step in prepare["steps"] + publish["steps"]:
         allowed = {"name", "uses", "with"} if "uses" in step else {"name", "run", "shell", "env", "working-directory"}
         require(set(step) <= allowed, "unexpected publication step execution controls")
         if "run" in step:
             require(step.get("shell", "bash") == "bash", "publication must use its reviewed shell")
-        else:
-            require(re.fullmatch(r"actions/(checkout|upload-artifact|download-artifact|attest-build-provenance)@[0-9a-f]{40}", step["uses"]),
-                    "publication actions must be pinned trusted orchestration")
     require(build.get("working-directory") == "catalog-project" and "env" not in build,
             "preparation must build the reviewed project with the declared environment")
     for step in publish["steps"]:
-        require(not any(key in step for key in ("if", "continue-on-error", "working-directory")), "publisher steps may not bypass or redirect proof")
-        require("uses" not in step or re.fullmatch(r"actions/(download-artifact|attest-build-provenance)@[0-9a-f]{40}", step["uses"]),
-                "publisher may use only pinned trusted artifact/attestation actions")
+        require("working-directory" not in step, "publisher steps may not redirect proof")
     require(not re.search(r"go run|setup-go|repository: yersonargotev/packy|PACKY_(BUILDER_COMMIT|VALIDATOR_ROOT)|v[0-9]+\.[0-9]+\.[0-9]+", "\n".join(
         line for line in (validation_text + publication_text).splitlines() if not line.lstrip().startswith("uses:")
     )), "workflows must consume one data pin without source/tool-version declarations")
