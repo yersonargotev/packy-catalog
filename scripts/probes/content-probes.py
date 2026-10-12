@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 
 from content_probe_process import run_child
 
@@ -60,26 +61,42 @@ class Probe:
     def __init__(self, executable, snapshot, root, env, evidence, timeout):
         self.executable, self.snapshot, self.root = executable, snapshot, root
         self.env, self.evidence, self.timeout = env, evidence, timeout
+        self.set_context("candidate-verification")
 
-    def execute(self, command, *, approval=None, failure=False, timeout=None):
-        receipt = {"command": [str(value) for value in command], "outcome": "failed"}
+    def set_context(self, stage, *, scenario=None, surface=None, scope=None):
+        self.context = {"stage": stage, "scenario": scenario, "surface": surface, "scope": scope}
+
+    def execute(self, command, *, approval=None, failure=False, timeout=None, context=None):
+        receipt = {"command": [str(value) for value in command], "outcome": "failed",
+                   "context": {**self.context, **(context or {})}}
         self.evidence["commands"].append(receipt)
+        event = {"command_id": len(self.evidence["commands"]), "context": receipt["context"]}
+        print("Content probe: " + json.dumps({**event, "event": "started", "command": receipt["command"]}),
+              file=sys.stderr, flush=True)
+        started = time.monotonic()
         try:
-            status, stdout, stderr = run_child(command, cwd=self.root, env=self.env,
-                                              timeout=timeout or self.timeout, approval=approval)
-        except (Exception, KeyboardInterrupt) as error:
-            receipt["error"] = str(error) or "interrupted"
-            raise
-        receipt.update(exit_status=status, stdout_sha256=hashlib.sha256(stdout.encode()).hexdigest(),
-                       diagnostic=stderr.strip())
-        require((status != 0) if failure else (status == 0), "unexpected child exit: " + json.dumps(receipt) + "\n" + stdout)
-        receipt["outcome"] = "expected-rejection" if failure else "passed"
-        return stdout, stderr
+            try:
+                status, stdout, stderr = run_child(command, cwd=self.root, env=self.env,
+                                                  timeout=timeout or self.timeout, approval=approval)
+            except (Exception, KeyboardInterrupt) as error:
+                receipt["error"] = str(error) or "interrupted"
+                raise
+            receipt.update(exit_status=status, stdout_sha256=hashlib.sha256(stdout.encode()).hexdigest(),
+                           diagnostic=stderr.strip())
+            require((status != 0) if failure else (status == 0), "unexpected child exit: " + json.dumps(receipt) + "\n" + stdout)
+            receipt["outcome"] = "expected-rejection" if failure else "passed"
+            return stdout, stderr
+        finally:
+            receipt["elapsed_seconds"] = time.monotonic() - started
+            print("Content probe: " + json.dumps({**event, "event": receipt["outcome"],
+                                                  "elapsed_seconds": receipt["elapsed_seconds"]}),
+                  file=sys.stderr, flush=True)
 
     def candidate(self, workspace, args, *, snapshot=None, approval=None, failure=False):
+        context = {"surface": args[args.index("--surface") + 1]} if "--surface" in args else None
         stdout, stderr = self.execute([str(self.executable), "catalog", "candidate", "--snapshot",
                                       str(snapshot or self.snapshot), "--workspace", str(workspace), "--", *args],
-                                     approval=approval, failure=failure)
+                                     approval=approval, failure=failure, context=context)
         if not failure:
             require("not an official Catalog Publication" in stderr, "missing local candidate provenance")
         if failure:
@@ -147,6 +164,7 @@ def adoption(probe, surfaces):
     bad = probe.root / "incompatible-fixture"
     incompatible_snapshot(probe.snapshot, bad)
     for surface in surfaces:
+        probe.context["surface"] = surface
         workspace = probe.prepare("adoption-" + surface)
         before = tree(workspace)
         out, diagnostic = probe.candidate(workspace, ["list", "--json"], snapshot=bad, failure=True)
@@ -178,6 +196,7 @@ def assert_retired(project, original, surface):
 
 def ponytail(probe, surfaces):
     for surface in surfaces:
+        probe.context["surface"] = surface
         for selection in ("complete", "skill", "instruction"):
             workspace = probe.prepare("ponytail-" + surface + "-" + selection)
             project = workspace / "project"
@@ -246,6 +265,7 @@ def pack_html(probe, workspace, skill):
 
 def claude(probe, surfaces):
     for surface in surfaces:
+        probe.context["surface"] = surface
         for selection in ("complete", "eli5", "html-plan"):
             workspace = probe.prepare("claude-" + surface + "-" + selection)
             project = workspace / "project"
@@ -318,6 +338,9 @@ def pstack(probe, surfaces):
     baseline = probe.evidence["pstack_baseline"]
     old = Probe(probe.executable, probe.root / "baseline-dist", probe.root, probe.env, probe.evidence, probe.timeout)
     for scope in ("project", "global"):
+        for runner in (probe, old):
+            runner.set_context("content-acceptance", scenario="pstack",
+                               scope="project" if scope == "project" else "disposable-global")
         workspace = old.prepare("pstack-" + scope, pack_ids=baseline["pack_ids"])
         base = workspace / ("project" if scope == "project" else "home")
         apply, remove = ("install", "uninstall") if scope == "project" else ("activate", "deactivate")
@@ -423,21 +446,28 @@ def main():
             commit = checkout_commit(probe, ROOT)
             if args.pstack_baseline is not None:
                 args.pstack_baseline = args.pstack_baseline.resolve(strict=True)
+                probe.set_context("baseline-verification")
                 baseline_commit = checkout_commit(probe, args.pstack_baseline)
+            probe.set_context("acquisition")
             probe.execute([sys.executable, "-B", str(ROOT / "scripts/packy_tool.py"), "--pin",
                            str(ROOT / "packy-release.json"), "--executable-output", str(probe.executable)], timeout=180)
             version, _ = probe.execute([str(probe.executable), "version", "--json"])
             evidence["verified_packy_identity"] = json.loads(version)
+            probe.set_context("candidate-construction")
             evidence.update(build_catalog(probe, ROOT, commit, probe.snapshot))
             if args.pstack_baseline is not None:
+                probe.set_context("baseline-construction")
                 evidence["pstack_baseline"] = build_catalog(probe, args.pstack_baseline, baseline_commit, root / "baseline-dist")
             ambient = {key: tree(Path(env[key])) for key in ("HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME")}
             for scenario in scenarios:
+                probe.set_context("content-acceptance", scenario=scenario, scope="project")
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
                 {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
+            probe.set_context("candidate-verification")
             require(checkout_commit(probe, ROOT) == commit, "Catalog candidate changed during probes")
             if args.pstack_baseline is not None:
+                probe.set_context("baseline-verification")
                 require(checkout_commit(probe, args.pstack_baseline) == baseline_commit, "pstack baseline changed during probes")
             evidence["result"] = "passed"
     except (OSError, ValueError, KeyError, RuntimeError, subprocess.SubprocessError, KeyboardInterrupt) as error:

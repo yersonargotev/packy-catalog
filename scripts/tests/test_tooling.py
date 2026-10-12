@@ -1,6 +1,7 @@
 """Contract tests for the documented Catalog entry points and workflow guard."""
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import shutil
@@ -201,6 +202,21 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         report = json.loads(result.stdout)
         self.assertEqual(report["cleanup"], "removed")
         self.assertEqual(list(self.probe_temp.iterdir()), [])
+        events = [json.loads(line.removeprefix("Content probe: ")) for line in result.stderr.splitlines()
+                  if line.startswith("Content probe: ")]
+        self.assertEqual(len(events), 2 * len(report["commands"]))
+        for index, receipt in enumerate(report["commands"]):
+            self.assertTrue(math.isfinite(receipt["elapsed_seconds"]))
+            self.assertGreaterEqual(receipt["elapsed_seconds"], 0)
+            start, end = events[2 * index:2 * index + 2]
+            self.assertEqual(start["event"], "started")
+            self.assertEqual(start["command"], receipt["command"])
+            self.assertEqual(end["event"], receipt["outcome"])
+            self.assertEqual(start["command_id"], index + 1)
+            self.assertEqual(end["command_id"], index + 1)
+            self.assertEqual(start["context"], receipt["context"])
+            self.assertEqual(end["context"], receipt["context"])
+            self.assertEqual(end["elapsed_seconds"], receipt["elapsed_seconds"])
         return result, report
 
     def test_content_probe_command_uses_real_pin_with_inert_controlled_content(self):
@@ -216,6 +232,17 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
                           for selection in ("complete", "eli5", "html-plan")})
         self.assertFalse(report["official_publication"])
         self.assertEqual(report["verified_packy_identity"]["version"], self.pin()["version"])
+        contexts = [receipt["context"] for receipt in report["commands"]]
+        self.assertEqual({context["stage"] for context in contexts},
+                         {"candidate-verification", "acquisition", "candidate-construction", "content-acceptance"})
+        self.assertEqual({(context["scenario"], context["surface"], context["scope"]) for context in contexts
+                          if context["stage"] == "content-acceptance"},
+                         {(scenario, surface, "project") for scenario in ("adoption", "ponytail", "claude")
+                          for surface in ("codex", "claude", "opencode")})
+        self.assertTrue(any(receipt["outcome"] == "expected-rejection" for receipt in report["commands"]))
+        for context in contexts:
+            if context["stage"] != "content-acceptance":
+                self.assertEqual((context["scenario"], context["surface"], context["scope"]), (None, None, None))
         packing = [case["html_packing"] for case in report["outcomes"] if "html_packing" in case]
         self.assertEqual(len(packing), 6)
         for outcome in packing:
@@ -281,6 +308,27 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.assertEqual(report["result"], "passed")
         self.assertEqual({case["scope"] for case in report["outcomes"]}, {"project", "global"})
         self.assertIn("pstack_baseline", report)
+        self.assertEqual({receipt["context"]["stage"] for receipt in report["commands"]},
+                         {"candidate-verification", "baseline-verification", "acquisition",
+                          "candidate-construction", "baseline-construction", "content-acceptance"})
+        acceptance = [receipt for receipt in report["commands"]
+                      if receipt["context"]["stage"] == "content-acceptance"]
+        self.assertEqual({receipt["context"]["scope"] for receipt in acceptance},
+                         {"project", "disposable-global"})
+        for receipt in acceptance:
+            self.assertEqual(receipt["context"]["scenario"], "pstack")
+            args = receipt["command"]
+            if "--surface" in args:
+                self.assertEqual(receipt["context"]["surface"], args[args.index("--surface") + 1])
+            else:
+                self.assertIsNone(receipt["context"]["surface"], "shared operation inherited a stale surface")
+        baseline_commands = [receipt for receipt in acceptance
+                             if Path(receipt["command"][receipt["command"].index("--snapshot") + 1]).name == "baseline-dist"]
+        self.assertEqual({receipt["context"]["scope"] for receipt in baseline_commands},
+                         {"project", "disposable-global"})
+        for receipt in report["commands"][-4:]:
+            self.assertIn(receipt["context"]["stage"], {"candidate-verification", "baseline-verification"})
+            self.assertEqual([receipt["context"][key] for key in ("scenario", "surface", "scope")], [None] * 3)
 
     def test_pstack_missing_effective_dependency_fails_and_cleans_owned_state(self):
         baseline = self.prepare_pstack_fixture()

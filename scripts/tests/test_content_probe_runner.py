@@ -1,6 +1,9 @@
 """Controlled subprocess fixtures; these tests never execute Pack content."""
 import importlib.util
+import json
+import math
 import os
+import selectors
 from pathlib import Path
 import shutil
 import signal
@@ -111,7 +114,47 @@ class ProbeCommandTests(unittest.TestCase):
         evidence = json.loads(result.stdout)
         self.assertEqual(evidence["result"], "failed")
         self.assertEqual(list(self.temp.iterdir()), [])
+        events = [json.loads(line.removeprefix("Content probe: ")) for line in result.stderr.splitlines()
+                  if line.startswith("Content probe: ")]
+        self.assertEqual(len(events), 2 * len(evidence["commands"]))
+        for index, receipt in enumerate(evidence["commands"]):
+            self.assertTrue(math.isfinite(receipt["elapsed_seconds"]))
+            self.assertGreaterEqual(receipt["elapsed_seconds"], 0)
+            start, end = events[2 * index:2 * index + 2]
+            self.assertEqual(start["event"], "started")
+            self.assertEqual(start["command"], receipt["command"])
+            self.assertEqual(end["event"], receipt["outcome"])
+            self.assertEqual(start["command_id"], index + 1)
+            self.assertEqual(end["command_id"], index + 1)
+            self.assertEqual(start["context"], receipt["context"])
+            self.assertEqual(end["context"], receipt["context"])
+            self.assertEqual(end["elapsed_seconds"], receipt["elapsed_seconds"])
         return evidence
+
+    def test_failed_timed_out_and_unspawnable_commands_retain_telemetry(self):
+        (self.bin / "git").unlink()
+        fixtures = [
+            ("exit", "#!" + sys.executable + "\nimport sys\nprint('controlled failure', file=sys.stderr)\nsys.exit(7)\n",
+             "unexpected child exit"),
+            ("timeout", "#!" + sys.executable + "\nimport time\ntime.sleep(30)\n", "timeout"),
+            ("spawn", "#!/nonexistent-packy-fixture-interpreter\n", "spawn failed"),
+        ]
+        self.command += ["--timeout", "2"]
+        for name, source, diagnostic in fixtures:
+            with self.subTest(name=name):
+                (self.bin / "git").write_text(source)
+                (self.bin / "git").chmod(0o700)
+                evidence = self.invoke()
+                self.assertIn(diagnostic, evidence["error"])
+                self.assertEqual(len(evidence["commands"]), 1)
+                receipt = evidence["commands"][0]
+                self.assertEqual(receipt["outcome"], "failed")
+                self.assertEqual(receipt["context"]["stage"], "candidate-verification")
+                if name == "exit":
+                    self.assertEqual(receipt["exit_status"], 7)
+                    self.assertEqual(receipt["diagnostic"], "controlled failure")
+                else:
+                    self.assertIn(diagnostic, receipt["error"])
 
     def test_missing_prerequisite_fails_and_cleans_owned_state(self):
         (self.bin / "git").unlink()
@@ -128,6 +171,11 @@ class ProbeCommandTests(unittest.TestCase):
         evidence = self.invoke()
         self.assertIn("clean committed Catalog candidate", evidence["error"])
         self.assertEqual(len(evidence["commands"]), 1)
+        receipt = evidence["commands"][0]
+        self.assertTrue(math.isfinite(receipt["elapsed_seconds"]))
+        self.assertGreaterEqual(receipt["elapsed_seconds"], 0)
+        self.assertEqual(receipt["context"], {"stage": "candidate-verification", "scenario": None,
+                                              "surface": None, "scope": None})
 
     def test_interruption_cleans_state_processes_and_strips_token(self):
         ready = self.root / "ready"
@@ -146,10 +194,29 @@ class ProbeCommandTests(unittest.TestCase):
             while not ready.exists() and time.monotonic() < deadline:
                 time.sleep(0.02)
             self.assertTrue(ready.exists(), "controlled child did not start")
+            with selectors.DefaultSelector() as selector:
+                selector.register(child.stderr, selectors.EVENT_READ)
+                self.assertTrue(selector.select(2), "start progress was not flushed while the child was running")
+            start_line = child.stderr.readline()
+            start = json.loads(start_line.removeprefix("Content probe: "))
+            self.assertEqual(start["event"], "started")
+            self.assertEqual(start["context"]["stage"], "candidate-verification")
+            self.assertIsNone(child.poll())
             child.send_signal(signal.SIGTERM)
             stdout, stderr = child.communicate(timeout=5)
             self.assertNotEqual(child.returncode, 0, stderr)
             self.assertIn('probe interrupted by signal', stdout)
+            evidence = json.loads(stdout)
+            receipt = evidence["commands"][0]
+            self.assertTrue(math.isfinite(receipt["elapsed_seconds"]))
+            self.assertGreaterEqual(receipt["elapsed_seconds"], 0)
+            self.assertEqual(receipt["outcome"], "failed")
+            self.assertIn('probe interrupted by signal', receipt["error"])
+            terminal = [json.loads(line.removeprefix("Content probe: ")) for line in stderr.splitlines()
+                        if line.startswith("Content probe: ")]
+            self.assertEqual(len(terminal), 1)
+            self.assertEqual(terminal[0], {"command_id": 1, "context": start["context"], "event": "failed",
+                                           "elapsed_seconds": receipt["elapsed_seconds"]})
             self.assertEqual(list(self.temp.iterdir()), [])
             time.sleep(2)
             self.assertFalse(late.exists())
