@@ -280,6 +280,9 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.assertIn("pstack_baseline", report)
 
     def test_pstack_missing_effective_dependency_fails_and_cleans_owned_state(self):
+        # Fixture commits must work without a developer's Git identity.
+        self.env.update(GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_COUNT="1",
+                        GIT_CONFIG_KEY_0="user.useConfigOnly", GIT_CONFIG_VALUE_0="true")
         baseline = self.prepare_pstack_fixture()
         path = self.project / "packs/pstack/pack.json"
         manifest = json.loads(path.read_text())
@@ -287,7 +290,8 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         codex = next(variant for variant in architect["variants"] if variant["surface"] == "codex")
         codex["requires"].remove("skill:principle-exhaust-the-design-space")
         path.write_text(json.dumps(manifest))
-        subprocess.run([shutil.which("git"), "-C", str(self.project), "commit", "-qam", "Missing dependency fixture"],
+        subprocess.run([shutil.which("git"), "-C", str(self.project), "-c", "user.name=Fixture",
+                        "-c", "user.email=fixture@example.invalid", "commit", "-qam", "Missing dependency fixture"],
                        env=self.env, check=True, capture_output=True)
         result, report = self.run_content_probe("--scenario", "pstack", "--pstack-baseline", str(baseline))
         self.assertNotEqual(result.returncode, 0)
