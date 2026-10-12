@@ -11,6 +11,8 @@ import unittest
 
 import yaml
 
+from scripts.fixture_commands import prepare
+
 ROOT = Path(__file__).resolve().parents[2]
 ARCHIVE = os.environ.get("PACKY_TEST_ARCHIVE")
 
@@ -185,9 +187,9 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
                         "print('  ⚠ controlled editorial warning')\n")
         node.chmod(0o755)
         git = shutil.which("git")
-        for args in (("init", "-q"), ("add", "."),
-                     ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Fixture")):
-            subprocess.run([git, "-C", str(self.project), *args], env=self.env, check=True, capture_output=True)
+        for label, args in (("git init", ("init", "-q")), ("git add", ("add", ".")),
+                            ("git commit", ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Fixture"))):
+            prepare([git, "-C", str(self.project), *args], label=label, env=self.env)
         owned_temp = self.work / "owned-temp"
         owned_temp.mkdir()
         self.probe_env = {**self.env, "TMPDIR": str(owned_temp)}
@@ -224,9 +226,10 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.prepare_content_probe_fixture()
         # A checksum-valid built snapshot can still lack required Pack content.
         (self.project / "packs/claude/skills/html-plan/runtime/htmlplan.js").unlink()
-        for args in (("add", "."), ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
-                                   "commit", "-qm", "Missing runtime fixture")):
-            subprocess.run([shutil.which("git"), "-C", str(self.project), *args], env=self.env, check=True, capture_output=True)
+        for label, args in (("git add", ("add", ".")),
+                            ("git commit", ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                                            "commit", "-qm", "Missing runtime fixture"))):
+            prepare([shutil.which("git"), "-C", str(self.project), *args], label=label, env=self.env)
         result, report = self.run_content_probe("--scenario", "claude", "--surface", "codex")
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(report["result"], "failed")
@@ -265,10 +268,10 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         for surface in ("codex", "claude", "opencode"):
             shutil.rmtree(baseline / "packs/pstack/skills" / surface)
         for checkout in (self.project, baseline):
-            for args in (("init", "-q"), ("add", "."),
-                         ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Pstack fixture")):
-                subprocess.run([shutil.which("git"), "-C", str(checkout), *args],
-                               env=self.env, check=True, capture_output=True)
+            for label, args in (("git init", ("init", "-q")), ("git add", ("add", ".")),
+                                ("git commit", ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Pstack fixture"))):
+                prepare([shutil.which("git"), "-C", str(checkout), *args],
+                        label=label, env=self.env)
         return baseline
 
     def test_pstack_transitions_both_scopes_through_the_released_binary(self):
@@ -287,9 +290,9 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         codex = next(variant for variant in architect["variants"] if variant["surface"] == "codex")
         codex["requires"].remove("skill:principle-exhaust-the-design-space")
         path.write_text(json.dumps(manifest))
-        subprocess.run([shutil.which("git"), "-C", str(self.project), "-c", "user.name=Fixture",
-                        "-c", "user.email=fixture@example.invalid", "commit", "-qam", "Missing dependency fixture"],
-                       env=self.env, check=True, capture_output=True)
+        prepare([shutil.which("git"), "-C", str(self.project), "-c", "user.name=Fixture",
+                 "-c", "user.email=fixture@example.invalid", "commit", "-qam", "Missing dependency fixture"],
+                label="git commit missing dependency fixture", env=self.env)
         result, report = self.run_content_probe("--scenario", "pstack", "--pstack-baseline", str(baseline))
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("missing pstack effective dependency: principle-exhaust-the-design-space", report["error"])
@@ -362,11 +365,11 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
 
     def build_with_preparation_workflow(self):
         self.make_fixture()
-        for args in (("init", str(self.project)), ("-C", str(self.project), "add", "."),
-                     ("-C", str(self.project), "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
-                      "-c", "commit.gpgsign=false", "-c", "core.hooksPath=/dev/null", "commit", "-m", "Fixture")):
-            subprocess.run(["git", *args], env=self.env, check=True, capture_output=True)
-        commit = subprocess.check_output(["git", "-C", str(self.project), "rev-parse", "HEAD"], env=self.env, text=True).strip()
+        for label, args in (("git init", ("init", str(self.project))), ("git add", ("-C", str(self.project), "add", ".")),
+                            ("git commit", ("-C", str(self.project), "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                                            "-c", "commit.gpgsign=false", "-c", "core.hooksPath=/dev/null", "commit", "-m", "Fixture"))):
+            prepare(["git", *args], label=label, env=self.env)
+        commit = prepare(["git", "-C", str(self.project), "rev-parse", "HEAD"], label="git rev-parse", env=self.env).strip()
         self.env.update({"CATALOG_COMMIT": commit, "GITHUB_WORKSPACE": str(self.work),
                          "GITHUB_REPOSITORY": "yersonargotev/packy-catalog", "RUNNER_TEMP": str(self.work / "runner")})
         Path(self.env["RUNNER_TEMP"]).mkdir()

@@ -3,7 +3,9 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
+import time
 import unittest
 
 import yaml
@@ -40,25 +42,176 @@ class OrdinaryChecks(unittest.TestCase):
 
     def test_fixture_identity_is_required_for_every_commit(self):
         self.fixture.write_text('''import subprocess, tempfile, unittest
+from scripts.fixture_commands import prepare
 class Fixture(unittest.TestCase):
     def test_identity(self):
         with tempfile.TemporaryDirectory() as repo:
             def git(*args):
                 return subprocess.run(["git", "-C", repo, *args], text=True,
                                       capture_output=True, timeout=10)
-            self.assertEqual(git("init", "-q").returncode, 0)
+            prepare(["git", "-C", repo, "init", "-q"], label="git init")
             for _ in range(2):
                 missing = git("commit", "--allow-empty", "-m", "Missing identity")
                 self.assertEqual(missing.returncode, 128, missing.stderr)
                 self.assertIn("auto-detection is disabled", missing.stderr)
-                explicit = git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
-                               "commit", "--allow-empty", "-m", "Fixture")
-                self.assertEqual(explicit.returncode, 0, explicit.stderr)
+                prepare(["git", "-C", repo, "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                         "commit", "--allow-empty", "-m", "Fixture"], label="git commit")
 ''')
         result = self.run_checks(GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1",
                                  GIT_CONFIG_COUNT="1", GIT_CONFIG_KEY_0="user.useConfigOnly",
                                  GIT_CONFIG_VALUE_0="false")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_fixture_command_failure_exposes_captured_cause(self):
+        child = Path(self.temp.name) / "controlled-git.py"
+        child.write_text("import sys\nsys.stderr.buffer.write(b'fatal: author identity unknown\\xff\\n')\nsys.exit(128)\n")
+        self.fixture.write_text(f'''import unittest
+from scripts.fixture_commands import prepare
+class Fixture(unittest.TestCase):
+    def test_prepare(self):
+        prepare([{sys.executable!r}, {str(child)!r}], label="git commit")
+''')
+        result = self.run_checks()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("fixture command git commit: exit status 128", result.stderr)
+        self.assertIn("fatal: author identity unknown", result.stderr)
+
+    def test_fixture_deadline_cleans_descendants_and_preserves_unrelated_state(self):
+        late = Path(self.temp.name) / "late-write"
+        child = Path(self.temp.name) / "controlled-slow.py"
+        descendant = f"import time; from pathlib import Path; time.sleep(1.5); Path({str(late)!r}).touch()"
+        child.write_text("import subprocess, sys, time\n"
+                         f"subprocess.Popen([sys.executable, '-c', {descendant!r}])\n"
+                         "print('waiting for fixture input', file=sys.stderr, flush=True)\ntime.sleep(30)\n")
+        self.fixture.write_text(f'''import tempfile, unittest
+from pathlib import Path
+from scripts.fixture_commands import prepare
+class Fixture(unittest.TestCase):
+    def test_prepare(self):
+        with tempfile.TemporaryDirectory() as owned:
+            print("OWNED=" + owned, flush=True)
+            prepare([{sys.executable!r}, {str(child)!r}], label="slow fixture", cwd=owned, timeout=0.5)
+''')
+        marker = Path(self.temp.name) / "unrelated-marker"
+        marker.write_text("preserve")
+        unrelated = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(30)"])
+        try:
+            result = self.run_checks()
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("fixture command slow fixture: deadline expired", result.stderr)
+            self.assertIn("waiting for fixture input", result.stderr)
+            owned = [line.removeprefix("OWNED=") for line in result.stdout.splitlines() if line.startswith("OWNED=")]
+            self.assertEqual(len(owned), 1, result.stdout)
+            self.assertFalse(Path(owned[0]).exists())
+            time.sleep(1.5)
+            self.assertFalse(late.exists())
+            self.assertIsNone(unrelated.poll())
+            self.assertEqual(marker.read_text(), "preserve")
+        finally:
+            unrelated.terminate()
+            unrelated.wait(timeout=5)
+
+    def test_fixture_spawn_failure_has_distinct_diagnostic(self):
+        self.fixture.write_text('''import os, unittest
+from scripts.fixture_commands import prepare
+class Fixture(unittest.TestCase):
+    def test_prepare(self):
+        prepare([os.environ["MISSING_EXECUTABLE"]], label="git init")
+''')
+        missing = str(Path(self.temp.name) / "private-missing-executable")
+        result = self.run_checks(MISSING_EXECUTABLE=missing)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("fixture command git init: spawn failed", result.stderr)
+        self.assertIn("No such file or directory", result.stderr)
+        self.assertNotIn(missing, result.stderr)
+
+    def test_fixture_requires_a_finite_positive_deadline_before_spawn(self):
+        marker = Path(self.temp.name) / "must-not-run"
+        child = Path(self.temp.name) / "invalid-deadline.py"
+        child.write_text(f"from pathlib import Path\nPath({str(marker)!r}).touch()\n")
+        self.fixture.write_text(f'''import os, unittest
+from scripts.fixture_commands import prepare
+class Fixture(unittest.TestCase):
+    def test_prepare(self):
+        prepare([{sys.executable!r}, {str(child)!r}], label="invalid deadline", timeout=float(os.environ["DEADLINE"]))
+''')
+        for value in ("0", "-1", "inf", "nan"):
+            with self.subTest(deadline=value):
+                result = self.run_checks(DEADLINE=value)
+                self.assertEqual(result.returncode, 1)
+                self.assertIn("deadline must be finite and positive", result.stderr)
+                self.assertFalse(marker.exists())
+
+    def test_fixture_diagnostics_redact_declared_data_and_credentials(self):
+        child = Path(self.temp.name) / "controlled-sensitive.py"
+        child.write_text("import os, sys, time\n"
+                         "print('fatal: author identity unknown; ' + sys.argv[1] + ' ' + os.environ['FIXTURE_TOKEN'], file=sys.stderr, flush=True)\n"
+                         "if os.environ['SLOW']: time.sleep(30)\n"
+                         "sys.exit(128)\n")
+        self.fixture.write_text(f'''import os, unittest
+from scripts.fixture_commands import prepare
+class Fixture(unittest.TestCase):
+    def test_prepare(self):
+        value = os.environ["PRIVATE_DATA"]
+        prepare([{sys.executable!r}, {str(child)!r}, value], label="git commit", redact=[value], timeout=0.5)
+''')
+        for slow in ("", "1"):
+            with self.subTest(timeout=bool(slow)):
+                result = self.run_checks(PRIVATE_DATA="private-argument-73", FIXTURE_TOKEN="credential-73",
+                                         UNRELATED_ENV="environment-must-not-be-dumped", SLOW=slow)
+                self.assertEqual(result.returncode, 1)
+                self.assertIn("fatal: author identity unknown; [redacted] [redacted]", result.stderr)
+                for value in ("private-argument-73", "credential-73", "environment-must-not-be-dumped"):
+                    self.assertNotIn(value, result.stdout + result.stderr)
+
+    def test_fixture_success_returns_output_and_releases_descendants(self):
+        late = Path(self.temp.name) / "success-late-write"
+        child = Path(self.temp.name) / "controlled-success.py"
+        descendant = f"import time; from pathlib import Path; time.sleep(1.5); Path({str(late)!r}).touch()"
+        child.write_text("import subprocess, sys\n"
+                         f"subprocess.Popen([sys.executable, '-c', {descendant!r}], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)\n"
+                         "print('fixture data [y/N]')\n")
+        self.fixture.write_text(f'''import unittest
+from scripts.fixture_commands import prepare
+class Fixture(unittest.TestCase):
+    def test_prepare(self):
+        result = prepare([{sys.executable!r}, {str(child)!r}], label="successful fixture")
+        self.assertEqual(result, "fixture data [y/N]\\n")
+''')
+        result = self.run_checks()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        time.sleep(1.5)
+        self.assertFalse(late.exists())
+
+    def test_failed_fixture_retains_primary_error_when_cleanup_also_fails(self):
+        late = Path(self.temp.name) / "failure-late-write"
+        child = Path(self.temp.name) / "controlled-failure.py"
+        descendant = f"import time; from pathlib import Path; time.sleep(1.5); Path({str(late)!r}).touch()"
+        child.write_text("import subprocess, sys\n"
+                         f"subprocess.Popen([sys.executable, '-c', {descendant!r}])\n"
+                         "print('fatal: fixture cause', file=sys.stderr)\nsys.exit(128)\n")
+        self.fixture.write_text(f'''import tempfile, unittest
+from scripts.fixture_commands import prepare
+class Fixture(unittest.TestCase):
+    def test_prepare(self):
+        owned = tempfile.TemporaryDirectory()
+        print("OWNED=" + owned.name, flush=True)
+        self.addCleanup(owned.cleanup)
+        self.addCleanup(self.failing_cleanup)
+        prepare([{sys.executable!r}, {str(child)!r}], label="git commit", timeout=0.5)
+    def failing_cleanup(self):
+        raise RuntimeError("secondary fixture cleanup failure")
+''')
+        result = self.run_checks()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("fixture command git commit: exit status 128", result.stderr)
+        self.assertIn("fatal: fixture cause", result.stderr)
+        self.assertIn("secondary fixture cleanup failure", result.stderr)
+        owned = [line.removeprefix("OWNED=") for line in result.stdout.splitlines() if line.startswith("OWNED=")]
+        self.assertEqual(len(owned), 1, result.stdout)
+        self.assertFalse(Path(owned[0]).exists())
+        time.sleep(1.5)
+        self.assertFalse(late.exists())
 
     def test_helper_execution_fails_even_when_its_status_is_ignored(self):
         helper = self.helpers[0].relative_to(self.project).as_posix()
@@ -78,8 +231,9 @@ class Fixture(unittest.TestCase):
         config.write_text("[user]\n name = Ambient\n email = ambient@example.invalid\n"
                           "[commit]\n gpgsign = true\n[core]\n bare = true\n")
         before = config.read_bytes()
-        self.fixture.write_text('''import os, subprocess, tempfile, unittest
+        self.fixture.write_text('''import os, tempfile, unittest
 from pathlib import Path
+from scripts.fixture_commands import prepare
 class Fixture(unittest.TestCase):
     def test_isolation(self):
         home = Path.home()
@@ -89,10 +243,7 @@ class Fixture(unittest.TestCase):
         print("OWNED_HOME=" + str(home), flush=True)
         with tempfile.TemporaryDirectory() as repo:
             def git(*args):
-                result = subprocess.run(["git", "-C", repo, *args], text=True,
-                                        capture_output=True, timeout=10)
-                self.assertEqual(result.returncode, 0, result.stderr)
-                return result.stdout.strip()
+                return prepare(["git", "-C", repo, *args], label="git isolation fixture").strip()
             git("init", "-q")
             git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
                 "commit", "--allow-empty", "-m", "Fixture")

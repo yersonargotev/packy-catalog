@@ -10,6 +10,8 @@ import tempfile
 import time
 import unittest
 
+from scripts.fixture_commands import prepare
+
 
 SCRIPT = Path(__file__).resolve().parents[1] / "probes/content_probe_process.py"
 spec = importlib.util.spec_from_file_location("probe_process", SCRIPT)
@@ -122,7 +124,7 @@ class ProbeCommandTests(unittest.TestCase):
         self.assertIn("missing prerequisite: node", evidence["error"])
 
     def test_dirty_candidate_fails_without_acquisition(self):
-        subprocess.run([shutil.which("git"), "init", "-q", str(self.catalog)], check=True)
+        prepare([shutil.which("git"), "init", "-q", str(self.catalog)], label="git init")
         evidence = self.invoke()
         self.assertIn("clean committed Catalog candidate", evidence["error"])
         self.assertEqual(len(evidence["commands"]), 1)
