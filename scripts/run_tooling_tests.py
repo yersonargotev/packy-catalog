@@ -8,6 +8,8 @@ import subprocess
 import sys
 import tempfile
 
+import yaml
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -30,8 +32,17 @@ def main():
                 f"appendFileSync({json.dumps(str(log))}, {json.dumps(name + chr(10))});\n"
                 "process.exit(97);\n"
             )
-        env = {**os.environ, "PACKY_TEST_ARCHIVE": str(Path(os.environ["PACKY_TEST_ARCHIVE"]).resolve()),
-               "PYTHONDONTWRITEBYTECODE": "1"}
+        # Git state belongs to the disposable fixtures, never to the caller.
+        env = {key: value for key, value in os.environ.items()
+               if not key.startswith("GIT_") and key != "EMAIL"}
+        env.update(PACKY_TEST_ARCHIVE=str(Path(os.environ["PACKY_TEST_ARCHIVE"]).resolve()),
+                   HOME=str(Path(scratch) / "home"), XDG_CONFIG_HOME=str(Path(scratch) / "config"),
+                   PYTHONPATH=os.pathsep.join(filter(None, (str(Path(yaml.__file__).parent.parent),
+                                                            os.environ.get("PYTHONPATH")))),
+                   PYTHONDONTWRITEBYTECODE="1", GIT_CONFIG_GLOBAL=os.devnull,
+                   GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_SYSTEM=os.devnull,
+                   GIT_CONFIG_COUNT="1", GIT_CONFIG_KEY_0="user.useConfigOnly",
+                   GIT_CONFIG_VALUE_0="true")
         result = subprocess.run([sys.executable, "-B", "-m", "unittest", "discover",
                                  "-s", str(project / "scripts/tests"), "-v"], cwd=project, env=env)
         if log.exists():
