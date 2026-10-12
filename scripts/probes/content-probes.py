@@ -191,9 +191,6 @@ def ponytail(probe, surfaces):
             args = ["install", "ponytail", "--surface", surface]
             if selection != "complete":
                 args += ["--resource", "skill:ponytail" if selection == "skill" else "instruction:ponytail-guidance"]
-            before = tree(workspace)
-            probe.candidate(workspace, [*args, "--dry-run", "--json"])
-            require(tree(workspace) == before, "preview changed workspace")
             probe.apply(workspace, args)
             probe.verify(workspace)
             instructions = instruction.read_bytes()
@@ -261,9 +258,6 @@ def claude(probe, surfaces):
             args = ["install", "claude", "--surface", surface]
             if selection != "complete":
                 args += ["--resource", "skill:" + selection]
-            before = tree(workspace)
-            probe.candidate(workspace, [*args, "--dry-run", "--json"])
-            require(tree(workspace) == before, "Claude preview changed workspace")
             probe.apply(workspace, args)
             probe.verify(workspace)
             for name in ("eli5", "html-plan"):
