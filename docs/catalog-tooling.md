@@ -89,6 +89,10 @@ idempotent retries.
 
 ## Tests and reviewed upgrades
 
+The [delivery guard](delivery.md) verifies GitHub-recognized closing references
+before protected integration and requalifies delivery issues after prerequisites.
+Its tracker-boundary tests run with the ordinary suite below.
+
 Run the complete ordinary tooling suite with the local Python prerequisites:
 
 ```sh
