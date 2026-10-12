@@ -106,13 +106,14 @@ independent review or execution of all 47 workflows. No inference or background
 completion is claimed where it did not occur. Cursor original preservation does
 not advertise Cursor installation support.
 
-For lifecycle and snapshot reproduction, copy `scripts/probes/pstack_lifecycle_test.go`
-and `catalog_adoption_test.go` into a disposable v0.2.26 engine's `internal/cli`.
-Set `PROBE_OLD_SNAPSHOT` / `PROBE_OLD_COMMIT` to the complete #31 snapshot and
-`PROBE_SNAPSHOT` / `PROBE_SOURCE_COMMIT` to the complete #32 candidate. Run
-`go test ./internal/cli -run '^TestPstackCatalogVariants$' -v -count=1`.
-These test-only local sources do not verify remote attestations; the official
-publication workflow retains that separate check.
+For current lifecycle and snapshot reproduction, use the
+[released-binary pstack scenario](../../scripts/probes/README.md#pstack-lifecycle-acceptance)
+with the complete pstack 3.0.0 baseline at
+`7a8597e6f0c3867540e342070fed46f97a2e1bfb`. It retains the actual-content
+transition and both scopes through the candidate's reviewed release pin.
+The copied Go probe and final shared source fixture were retired under #57
+after equivalent released-binary coverage passed. Local authoring candidates
+do not verify remote attestations; official publication retains that check.
 
 The full acquired-catalog lifecycle probe passed for both global and project
 scope. It installed pstack 3.0.0 simultaneously on Codex and Claude, acquired

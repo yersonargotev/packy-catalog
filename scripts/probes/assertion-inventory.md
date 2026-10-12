@@ -29,11 +29,9 @@ and the native release scenario `internal/ci/catalog_candidate_test.go`.
 Catalog negative fixtures deliberately alter only an index schema and its
 archive checksum; they are not a second builder or a publication.
 
-`catalog_adoption_test.go` now retains only `adoptionRelease`, still imported
-by `pstack_lifecycle_test.go` (#57). Remove
-that helper when its last consumer migrates. The remaining overlay is not
-executed by the new runner or ordinary CI. Its legacy setup remains
-documented until migration. #49 is overlapping prior art; its source-checkout
+The final `adoptionRelease` shared helper and `pstack_lifecycle_test.go` were
+retired after the released-binary pstack scenarios below passed. No copied
+Go overlay or engine-source prerequisite remains. #49 is overlapping prior art; its source-checkout
 acquisition model is superseded for these scenarios, and that issue is unchanged.
 
 ## Claude assertion migration (#56)
@@ -61,6 +59,39 @@ and a controlled Node transport. They cover all nine selections, optional
 packing warning classification, missing Node, and checksum-valid content
 missing `runtime/htmlplan.js`; they never execute the shipped HTML packer.
 Real reviewed content and optional Node execution remain opt-in.
+
+## pstack assertion migration (#57)
+
+This inventory accounts for every `TestPstackCatalogVariants` assertion before
+removing `pstack_lifecycle_test.go` and its final `adoptionRelease` caller.
+The `pstack` scenario uses one complete candidate and an explicitly supplied
+clean committed complete baseline, both built by the same verified release.
+The documented baseline is `7a8597e6f0c3867540e342070fed46f97a2e1bfb`
+(pstack 3.0.0), preserving the original common-to-host-variant transition.
+
+| Displaced assertion | Equivalent released-binary behavior |
+| --- | --- |
+| Complete baseline and candidate snapshots in both global/project scope | Full released `catalog build` of both checkouts; install/activate baseline on Codex and Claude in separate owned project/global workspaces |
+| Acquire candidate while retaining baseline installations | Supported digest-bound `transition --json`; require candidate/baseline archive identities and local provenance, with home/config/project bytes/modes/links unchanged |
+| Targeted Codex update selects Codex definition and preserves Claude | Real `update` (with `--project` for project scope); require `## Codex execution` in installed `reflect`, compare complete Claude tree including link targets and linked file bytes/modes |
+| Targeted Claude update selects Claude definition and preserves Codex | Require `## Claude Code execution`; compare complete Codex tree |
+| OpenCode divergent coexistence rejection without state changes | Applicable operation's dry-run fails with coexistence diagnostic; entire prepared workspace unchanged, so rejection cannot pass merely because consent is absent |
+| Bootstrap helper drift blocks removal | Mutate only disposable installed `bootstrap.ts`; removal preview must fail for projection drift or retained index identity, workspace unchanged; restore exact bytes/mode before removal |
+| Remove Codex without affecting Claude, then remove Claude | Exact-preview approved uninstall/deactivate; complete Claude tree unchanged after Codex removal |
+| OpenCode installs its own definition after conflicting projections retire | Real install/activate, require `## OpenCode execution`, then approved uninstall/deactivate |
+| Architect selection includes variant-only dependencies | Architect-only install/activate requires exhaust-the-design-space, fix-root-causes, prove-it-works, redesign-from-first-principles; unrelated reflect absent |
+| Scope isolation, original files and complete retirement | All three skill roots empty/absent; inactive project or personal roots unchanged, sentinel files retained, project final contract/lock/notices absent; ambient state preserved by common runner |
+| Injected fake source, host and terminal | Real released candidate route and controlled ordered single-use preview/plan PTY approvals; official trust, no host execution and isolated global roots remain Packy-owned contracts |
+
+Packy v0.2.28 (`eed834cb34dbcc15cdb6164caaa94083392f51f6`) owns
+synthetic mechanism coverage in `internal/cli/issue842_candidate_test.go` and
+the native `internal/ci/catalog_candidate_transition_test.go` contracts.
+Catalog owns the actual pstack content assertions above. Controlled ordinary
+fixtures contain inert replacement skill/helper text and no upstream origins;
+they exercise both scopes and reject an omitted effective dependency. They
+never execute shipped resources. Independent `pstack-update.py`, its opt-in
+tests, `pstack-helpers.py` and `pstack-host-loading.py` are retained unchanged;
+they already require no Packy source and are not part of ordinary CI.
 
 Controlled runner-boundary fixtures live in
 `scripts/tests/test_content_probe_runner.py`. They execute only temporary Python
