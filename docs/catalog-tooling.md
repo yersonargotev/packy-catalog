@@ -120,6 +120,25 @@ reuses an already downloaded fixture; the cases still verify its declared
 checksum and identity. Real full-catalog provenance validation remains
 `./scripts/validate.sh [baseline] --json` and needs upstream network access.
 
+The ordinary runner establishes one strict Git environment before discovering
+tests. It removes inherited `GIT_*` variables and `EMAIL`, disables global and
+system Git configuration, and sets `user.useConfigOnly=true`. Its HOME and XDG
+configuration directory belong to the disposable run and are removed on both
+success and failure. The existing Python/YAML prerequisite remains available
+when installed in the caller's user site; no caller Git configuration is written.
+All fixture subprocesses inherit this profile, including the content, pstack,
+negative mutation, and publication-preparation commit paths. Each commit must
+still declare `Fixture <fixture@example.invalid>` through invocation-scoped
+configuration (or repository-local configuration inside its owned fixture).
+An earlier command's `-c` identity does not configure later commands. Direct
+`unittest` invocations bypass the runner and are not proof of this contract.
+
+Public-command regressions check repeated missing-identity failures, conflicting
+ambient author/committer and configuration injection, preserved caller state,
+and cleanup after success and failure. Delivery evidence must record the full
+ordinary command on required Linux CI and available local Darwin execution;
+focused tests or one platform do not establish the other platform's result.
+
 Upgrade the pin only through a reviewed PR after the immutable stable release
 is published and its four native functional contract results are available.
 Verify the release tag's source commit, published archive digests, embedded
