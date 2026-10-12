@@ -1,9 +1,8 @@
 # Opt-in content probes
 
-The remaining pstack source-overlay lifecycle probe is tracked by #57. It is
-separate from released-tooling adoption (#54), with its Go/Packy-source
-requirements still documented. It is not a prerequisite for source-free
-validation, construction, or publication.
+Adoption, Ponytail, Claude and pstack lifecycle acceptance use the verified
+released binary below. Independent pstack content/host checks remain separate
+and opt-in. Ordinary validation, construction and publication do not run them.
 
 ## pstack update checks
 
@@ -88,7 +87,8 @@ Darwin/Linux (Unix PTYs), curl, Git, uname, and upstream HTTPS access. No Go,
 Packy source checkout, globally installed binary, host executable, credentials,
 or model is required. The runner acquires and verifies `packy-release.json`
 once into owned disposable state and builds one complete candidate snapshot
-for all selected scenarios. Tool downloads and upstream origin resolution need
+for all selected scenarios, plus one complete baseline when pstack is selected.
+Tool downloads and upstream origin resolution need
 network access; the runner removes its private cache when finished.
 
 `adoption` consumes the entire Catalog, rejects a controlled incompatible-index
@@ -101,9 +101,10 @@ uninstall preservation. The [assertion inventory](assertion-inventory.md)
 accounts for every displaced Go assertion and the Packy-owned mechanisms.
 
 The supported `catalog candidate` interface owns temporary homes, configuration,
-retained snapshot and Git projects. Install/uninstall uses a controlled stdin
-PTY, answering only the exact project approval prompt bound to the freshly
-observed preview digest. Unexpected/repeated prompts, missing approvals,
+retained snapshots and Git projects. Apply uses a controlled stdin PTY,
+answering only the exact ordered approval prompts bound to the freshly
+observed preview or plan identity. Each expected prompt is single-use.
+Unexpected/repeated prompts, missing approvals,
 nonzero children, timeouts and SIGINT/SIGTERM fail visibly. Child groups and
 owned state are removed on success, failure and interruption; forced SIGKILL
 or machine termination cannot run cleanup. JSON stdout records the committed
@@ -113,8 +114,9 @@ The clean commit is rechecked at completion. Save evidence outside the checkout
 so redirection does not create an untracked file before the clean-state check.
 
 The evidence describes **local authoring candidates**, not attested Catalog
-Publications. No publication, host authentication, activation, model calls or
-live user-state changes occur. Ordinary `scripts/test.sh`, validation and PR CI
+Publications. Global activation is confined to pstack's owned disposable
+workspace. No publication, host authentication, model calls or live user-state
+changes occur. Ordinary `scripts/test.sh`, validation and PR CI
 do not invoke real-content scenarios. Controlled runner-boundary tests use inert
 fixture content and fake external transports in the ordinary suite.
 [#49](https://github.com/yersonargotev/packy-catalog/issues/49) is overlapping
@@ -137,8 +139,7 @@ isolation, exact-preview PTY, deadlines, cleanup and JSON evidence contracts
 above. Repeat `--scenario` to combine it with adoption or Ponytail in one build;
 repeat `--surface` to limit hosts. No Go or Packy source is needed. The
 [assertion inventory](assertion-inventory.md#claude-assertion-migration-56)
-accounts for the removed Claude Go overlay. The shared legacy Go fixture is
-retained only for pstack until #57.
+accounts for the removed Claude Go overlay.
 
 HTML packing is explicitly optional and additionally requires Node:
 
@@ -157,3 +158,48 @@ Without `--html-pack`, lifecycle checks only inspect the HTML files as data and
 Node is not required. Neither command proves skill discovery, authentication
 or model behavior in a live host session. Ordinary tests use only an inert
 controlled Node fixture and never execute the shipped packer.
+
+## pstack lifecycle acceptance
+
+From a clean committed Catalog candidate, use the complete schema-v3 baseline
+that preceded the host variants (pstack 3.0.0):
+
+```sh
+git worktree add --detach /tmp/pstack-baseline 7a8597e6f0c3867540e342070fed46f97a2e1bfb
+python3 -B scripts/probes/content-probes.py --scenario pstack \
+  --pstack-baseline /tmp/pstack-baseline > /tmp/pstack-content-evidence.json
+git worktree remove /tmp/pstack-baseline
+```
+
+The baseline must be a clean committed complete Catalog Project. Both checkouts
+are rechecked at completion. The runner uses the candidate's single verified
+release to build both snapshots, recording their commits, builders, full Pack
+inventories and archive digests. Another reviewed baseline can be supplied
+explicitly; it must support an actual update to this candidate. Builds validate
+every Pack and provenance; neither snapshot is an attested publication.
+
+Every invocation exercises project and isolated global scope with all three
+surfaces; a partial `--surface` selection is rejected because the assertions
+depend on Codex/Claude coexistence and subsequent OpenCode retirement. It
+installs baseline Codex and Claude, transitions snapshot availability without
+changing installed state, then updates each surface while preserving the
+other's complete bytes, modes and links. OpenCode coexistence is rejected
+without mutation. Drifting an installed bootstrap helper blocks removal: the
+project copy fails projection checks; the global link exposes retained-source
+integrity failure. The helper is restored before successful retirement.
+
+Codex removal preserves Claude, then both retire before OpenCode installs and
+removes its own variant. Architect-only selection must include the four
+surface-effective principle dependencies and exclude unrelated `reflect`.
+Final checks require no managed skill roots, preservation of unrelated files
+and the inactive scope, and project contract/lock/notices retirement. Ambient
+home/config/data state and both source checkouts remain unchanged. All writes,
+global links and deliberate drift stay beneath runner-owned disposable state.
+
+This uses the common deadlines, exact ordered PTY approvals, command receipts,
+JSON evidence and process/state cleanup. It requires no Go, Packy source,
+host executable, authentication or model execution. The
+[pstack assertion inventory](assertion-inventory.md#pstack-assertion-migration-57)
+accounts for the removed Go probe and its final shared helper. The plan checks,
+helper checks and host-loading probes remain independent opt-in commands; this
+lifecycle run does not claim native skill discovery or model behavior.

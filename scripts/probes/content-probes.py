@@ -30,8 +30,13 @@ def require(condition, message):
 
 def tree(root):
     """Observe complete owned filesystem effects, including modes and directories."""
-    return {str(path.relative_to(root)): (path.stat().st_mode, path.read_bytes() if path.is_file() else None)
-            for path in sorted(root.rglob("*"))}
+    result = {}
+    for directory, folders, files in os.walk(root, followlinks=True):
+        for name in sorted(folders + files):
+            path = Path(directory) / name
+            result[str(path.relative_to(root))] = (path.lstat().st_mode, path.read_bytes() if path.is_file() else None,
+                                                  os.readlink(path) if path.is_symlink() else None)
+    return result
 
 
 def isolated_environment(root):
@@ -86,18 +91,29 @@ class Probe:
         return report
 
     def apply(self, workspace, args):
+        before = tree(workspace)
         preview = self.candidate(workspace, [*args, "--dry-run", "--json"])
-        observation = preview["observation"]
-        require(isinstance(observation, str) and observation, "missing exact preview observation")
-        operation = "project installation" if args[0] == "install" else "project surface uninstall"
-        prompt = f"Approve {operation} for exact preview {observation}? [y/N] "
-        return self.candidate(workspace, [*args, "--json"], approval=prompt)
+        require(tree(workspace) == before, "preview changed workspace")
+        if args[0] in ("install", "uninstall") or args[0] == "update" and "--project" in args:
+            observation = preview["observation"]
+            require(isinstance(observation, str) and observation, "missing exact preview observation")
+            operation = {"install": "project installation", "uninstall": "project surface uninstall",
+                         "update": "project update"}[args[0]]
+            prompts = [f"Approve {operation} for exact preview {observation}? [y/N] "]
+            if args[0] == "update" and preview.get("retirements"):
+                prompts.append(f"Approve destructive-cleanup phase for exact project update preview {observation}? [y/N] ")
+        else:
+            require(preview["plan_id"] and preview["disposition"] == "applicable", "global plan cannot apply")
+            prompts = [f"Approve {phase['kind']} phase for exact plan {preview['plan_id']}? [y/N] "
+                       for phase in preview["phases"] if phase["approval_required"]]
+            require(bool(prompts), "global lifecycle missing approval phases")
+        return self.candidate(workspace, [*args, "--json"], approval=prompts)
 
-    def prepare(self, name):
+    def prepare(self, name, *, pack_ids=None):
         workspace = self.root / name
         listing = self.candidate(workspace, ["list", "--json"])
         actual = {pack["id"] for pack in listing["packs"]}
-        require(actual == set(self.evidence["pack_ids"]), "complete catalog consumption lost Packs")
+        require(actual == set(pack_ids or self.evidence["pack_ids"]), "complete catalog consumption lost Packs")
         project = workspace / "project"
         for name in ("AGENTS.md", "CLAUDE.md", "unrelated.txt"):
             (project / name).write_text("# Existing project guidance\n\nKeep local conventions.\n")
@@ -175,9 +191,6 @@ def ponytail(probe, surfaces):
             args = ["install", "ponytail", "--surface", surface]
             if selection != "complete":
                 args += ["--resource", "skill:ponytail" if selection == "skill" else "instruction:ponytail-guidance"]
-            before = tree(workspace)
-            probe.candidate(workspace, [*args, "--dry-run", "--json"])
-            require(tree(workspace) == before, "preview changed workspace")
             probe.apply(workspace, args)
             probe.verify(workspace)
             instructions = instruction.read_bytes()
@@ -245,9 +258,6 @@ def claude(probe, surfaces):
             args = ["install", "claude", "--surface", surface]
             if selection != "complete":
                 args += ["--resource", "skill:" + selection]
-            before = tree(workspace)
-            probe.candidate(workspace, [*args, "--dry-run", "--json"])
-            require(tree(workspace) == before, "Claude preview changed workspace")
             probe.apply(workspace, args)
             probe.verify(workspace)
             for name in ("eli5", "html-plan"):
@@ -287,9 +297,103 @@ def interrupted(signum, frame):
     raise KeyboardInterrupt("probe interrupted by signal " + str(signum))
 
 
+def checkout_commit(probe, project):
+    state, _ = probe.execute(["git", "-C", str(project), "status", "--porcelain"])
+    require(not state.strip(), "content probes require a clean committed Catalog candidate: " + str(project))
+    commit, _ = probe.execute(["git", "-C", str(project), "rev-parse", "HEAD"])
+    return commit.strip()
+
+
+def build_catalog(probe, project, commit, output):
+    built, _ = probe.execute([str(probe.executable), "catalog", "build", "--project", str(project),
+                              "--source-repository", "yersonargotev/packy-catalog", "--source-commit",
+                              commit, "--out-dir", str(output), "--json"], timeout=600)
+    build = json.loads(built)
+    require(build["result"] == "built", "incomplete candidate build")
+    return {"candidate_commit": commit, "archive_sha256": build["archive_sha256"],
+            "builder": build["index"]["builder"], "pack_ids": [pack["id"] for pack in build["index"]["packs"]]}
+
+
+def pstack(probe, surfaces):
+    baseline = probe.evidence["pstack_baseline"]
+    old = Probe(probe.executable, probe.root / "baseline-dist", probe.root, probe.env, probe.evidence, probe.timeout)
+    for scope in ("project", "global"):
+        workspace = old.prepare("pstack-" + scope, pack_ids=baseline["pack_ids"])
+        base = workspace / ("project" if scope == "project" else "home")
+        apply, remove = ("install", "uninstall") if scope == "project" else ("activate", "deactivate")
+        targets = {surface: base / SKILL_DIRECTORIES[surface] for surface in SURFACES}
+        if scope == "global":
+            targets["opencode"] = workspace / "config/opencode/skills"
+        original_project = tree(workspace / "project")
+        personal_sentinels = {name: (workspace / name / "personal-sentinel").read_bytes() for name in ("home", "config")}
+        inactive = {name: tree(workspace / name) for name in (("home", "config") if scope == "project" else ("project",))}
+        for surface in ("codex", "claude"):
+            old.apply(workspace, [apply, "pstack", "--surface", surface])
+        installed = {name: tree(workspace / name) for name in ("home", "config", "project")}
+        transition = probe.candidate(workspace, ["transition", "--expect-archive-sha256", baseline["archive_sha256"], "--json"])
+        require(transition["report"] == "catalog-candidate-transition" and transition["result"] == "transitioned"
+                and transition["provenance"] == "local-candidate"
+                and transition["previous_archive_sha256"] == baseline["archive_sha256"]
+                and transition["archive_sha256"] == probe.evidence["archive_sha256"], "wrong snapshot transition report")
+        require(installed == {name: tree(workspace / name) for name in installed}, "transition changed installed baseline")
+        for surface, other in (("codex", "claude"), ("claude", "codex")):
+            untouched = tree(targets[other])
+            args = ["update", "pstack", "--surface", surface]
+            if scope == "project":
+                args.append("--project")
+            probe.apply(workspace, args)
+            label = "Codex" if surface == "codex" else "Claude Code"
+            require("## " + label + " execution" in (targets[surface] / "reflect/SKILL.md").read_text(),
+                    "wrong pstack " + surface + " definition")
+            require(untouched == tree(targets[other]), "pstack update changed other surface")
+        before = tree(workspace)
+        out, diagnostic = probe.candidate(workspace, [apply, "pstack", "--surface", "opencode", "--dry-run", "--json"], failure=True)
+        require("deterministic coexistence is not verified" in out + diagnostic, "OpenCode coexistence failed for unrelated reason")
+        require(tree(workspace) == before, "OpenCode coexistence rejection changed workspace")
+        helper = targets["codex"] / "poteto-mode/scripts/bootstrap.ts"
+        original_helper = helper.read_bytes()
+        original_mode = helper.stat().st_mode
+        try:
+            helper.write_bytes(original_helper + b"\n// drift probe\n")
+            before = tree(workspace)
+            out, diagnostic = probe.candidate(workspace, [remove, "pstack", "--surface", "codex", "--dry-run", "--json"], failure=True)
+            require("drift" in out + diagnostic or "does not match its indexed identity" in diagnostic,
+                    "helper rejection failed for unrelated reason")
+            require(tree(workspace) == before, "helper drift rejection changed workspace")
+        finally:
+            helper.write_bytes(original_helper)
+            helper.chmod(original_mode)
+        claude_before = tree(targets["claude"])
+        probe.apply(workspace, [remove, "pstack", "--surface", "codex"])
+        require(claude_before == tree(targets["claude"]), "Codex removal changed Claude tree")
+        probe.apply(workspace, [remove, "pstack", "--surface", "claude"])
+        probe.apply(workspace, [apply, "pstack", "--surface", "opencode"])
+        require("## OpenCode execution" in (targets["opencode"] / "reflect/SKILL.md").read_text(),
+                "wrong pstack OpenCode definition")
+        probe.apply(workspace, [remove, "pstack", "--surface", "opencode"])
+        probe.apply(workspace, [apply, "pstack", "--surface", "codex", "--resource", "skill:architect"])
+        for name in ("principle-exhaust-the-design-space", "principle-fix-root-causes", "principle-prove-it-works",
+                     "principle-redesign-from-first-principles"):
+            require((targets["codex"] / name / "SKILL.md").is_file(), "missing pstack effective dependency: " + name)
+        require(not (targets["codex"] / "reflect").exists(), "architect selection installed unrelated reflect")
+        probe.apply(workspace, [remove, "pstack", "--surface", "codex"])
+        for surface, target in targets.items():
+            require(not target.exists() or not list(target.iterdir()), "pstack retirement retained " + surface + " skills")
+        if scope == "project":
+            assert_retired(workspace / "project", original_project, "codex")
+        require(inactive == {name: tree(workspace / name) for name in inactive}, "pstack lifecycle changed inactive scope")
+        for name, contents in personal_sentinels.items():
+            require((workspace / name / "personal-sentinel").read_bytes() == contents, "pstack changed unrelated personal file")
+        probe.evidence["outcomes"].append({"scenario": "pstack", "scope": scope, "result": "passed",
+                                          "checks": ["baseline-transition", "targeted-updates", "other-surface-preservation",
+                                                     "opencode-coexistence-rejection", "helper-drift-rejection",
+                                                     "effective-dependencies", "complete-retirement", "unrelated-state-preservation"]})
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude"), required=True)
+    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack"), required=True)
+    parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
     parser.add_argument("--surface", action="append", choices=SURFACES)
     parser.add_argument("--html-pack", action="store_true", help="optionally execute the installed Claude HTML packer with Node")
     parser.add_argument("--timeout", type=float, default=30, help="lifecycle deadline in seconds (default: 30)")
@@ -300,6 +404,10 @@ def main():
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
+    if "pstack" in scenarios and (args.pstack_baseline is None or set(surfaces) != set(SURFACES)):
+        parser.error("pstack requires --pstack-baseline and all three surfaces")
+    if args.pstack_baseline is not None and "pstack" not in scenarios:
+        parser.error("--pstack-baseline requires --scenario pstack")
     evidence = {"schema_version": 1, "report": "catalog-content-probes", "provenance": "local-candidate",
                 "official_publication": False, "scenarios": scenarios, "surfaces": surfaces, "html_pack": args.html_pack,
                 "commands": [], "outcomes": [], "result": "failed"}
@@ -312,30 +420,25 @@ def main():
             probe = Probe(root / "packy", root / "dist", root, env, evidence, args.timeout)
             for name in ("git", "curl", "uname", *(("node",) if args.html_pack else ())):
                 require(shutil.which(name, path=env["PATH"]) is not None, "missing prerequisite: " + name)
-            checkout_state, _ = probe.execute(["git", "-C", str(ROOT), "status", "--porcelain"])
-            require(not checkout_state.strip(), "content probes require a clean committed Catalog candidate")
-            commit, _ = probe.execute(["git", "-C", str(ROOT), "rev-parse", "HEAD"])
-            evidence["candidate_commit"] = commit.strip()
+            commit = checkout_commit(probe, ROOT)
+            if args.pstack_baseline is not None:
+                args.pstack_baseline = args.pstack_baseline.resolve(strict=True)
+                baseline_commit = checkout_commit(probe, args.pstack_baseline)
             probe.execute([sys.executable, "-B", str(ROOT / "scripts/packy_tool.py"), "--pin",
                            str(ROOT / "packy-release.json"), "--executable-output", str(probe.executable)], timeout=180)
             version, _ = probe.execute([str(probe.executable), "version", "--json"])
             evidence["verified_packy_identity"] = json.loads(version)
-            built, _ = probe.execute([str(probe.executable), "catalog", "build", "--project", str(ROOT),
-                                      "--source-repository", "yersonargotev/packy-catalog", "--source-commit",
-                                      commit.strip(), "--out-dir", str(probe.snapshot), "--json"], timeout=600)
-            build = json.loads(built)
-            require(build["result"] == "built", "incomplete candidate build")
-            evidence["archive_sha256"] = build["archive_sha256"]
-            evidence["builder"] = build["index"]["builder"]
-            evidence["pack_ids"] = [pack["id"] for pack in build["index"]["packs"]]
+            evidence.update(build_catalog(probe, ROOT, commit, probe.snapshot))
+            if args.pstack_baseline is not None:
+                evidence["pstack_baseline"] = build_catalog(probe, args.pstack_baseline, baseline_commit, root / "baseline-dist")
             ambient = {key: tree(Path(env[key])) for key in ("HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME")}
             for scenario in scenarios:
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
-                {"adoption": adoption, "ponytail": ponytail, "claude": claude}[scenario](probe, surfaces)
+                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
-            checkout_state, _ = probe.execute(["git", "-C", str(ROOT), "status", "--porcelain"])
-            final_commit, _ = probe.execute(["git", "-C", str(ROOT), "rev-parse", "HEAD"])
-            require(not checkout_state.strip() and final_commit == commit, "Catalog candidate changed during probes")
+            require(checkout_commit(probe, ROOT) == commit, "Catalog candidate changed during probes")
+            if args.pstack_baseline is not None:
+                require(checkout_commit(probe, args.pstack_baseline) == baseline_commit, "pstack baseline changed during probes")
             evidence["result"] = "passed"
     except (OSError, ValueError, KeyError, RuntimeError, subprocess.SubprocessError, KeyboardInterrupt) as error:
         evidence["error"] = str(error) or "probe interrupted"

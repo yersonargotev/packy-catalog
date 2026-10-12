@@ -232,6 +232,71 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.assertEqual(report["result"], "failed")
         self.assertIn("missing HTML runtime closure: runtime/htmlplan.js", report["error"])
 
+    def prepare_pstack_fixture(self):
+        self.prepare_content_probe_fixture()
+        pack = self.project / "packs/pstack"
+        manifest = json.loads((ROOT / "packs/pstack/pack.json").read_text())
+        manifest.update(origins=[], external_requirements=[])
+        for resource in manifest["resources"]:
+            definitions = [(resource, "Common"), *[(variant, {"codex": "Codex", "claude": "Claude Code",
+                                                            "opencode": "OpenCode"}[variant["surface"]])
+                                                  for variant in resource.get("variants", [])]]
+            for definition, label in definitions:
+                definition.pop("origin", None)
+                path = pack / definition.get("source", resource["source"])
+                if resource["kind"] == "notice":
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_text("MIT License\nCopyright fixture\n")
+                else:
+                    path.mkdir(parents=True, exist_ok=True)
+                    (path / "SKILL.md").write_text("---\nname: " + resource["id"] +
+                                                  "\ndescription: Inert fixture\n---\n## " + label + " execution\n")
+                    if resource["id"] == "poteto-mode":
+                        (path / "scripts").mkdir(exist_ok=True)
+                        (path / "scripts/bootstrap.ts").write_text("Inert helper fixture.\n")
+        (pack / "pack.json").write_text(json.dumps(manifest))
+        baseline = self.work / "pstack-baseline"
+        shutil.copytree(self.project, baseline, ignore=shutil.ignore_patterns(".git"))
+        manifest["version"] = "3.0.0"
+        for resource in manifest["resources"]:
+            resource.pop("variants", None)
+            resource["requires"] = []
+        (baseline / "packs/pstack/pack.json").write_text(json.dumps(manifest))
+        for surface in ("codex", "claude", "opencode"):
+            shutil.rmtree(baseline / "packs/pstack/skills" / surface)
+        for checkout in (self.project, baseline):
+            for args in (("init", "-q"), ("add", "."),
+                         ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Pstack fixture")):
+                subprocess.run([shutil.which("git"), "-C", str(checkout), *args],
+                               env=self.env, check=True, capture_output=True)
+        return baseline
+
+    def test_pstack_transitions_both_scopes_through_the_released_binary(self):
+        baseline = self.prepare_pstack_fixture()
+        result, report = self.run_content_probe("--scenario", "pstack", "--pstack-baseline", str(baseline))
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout[-3000:])
+        self.assertEqual(report["result"], "passed")
+        self.assertEqual({case["scope"] for case in report["outcomes"]}, {"project", "global"})
+        self.assertIn("pstack_baseline", report)
+
+    def test_pstack_missing_effective_dependency_fails_and_cleans_owned_state(self):
+        # Fixture commits must work without a developer's Git identity.
+        self.env.update(GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_COUNT="1",
+                        GIT_CONFIG_KEY_0="user.useConfigOnly", GIT_CONFIG_VALUE_0="true")
+        baseline = self.prepare_pstack_fixture()
+        path = self.project / "packs/pstack/pack.json"
+        manifest = json.loads(path.read_text())
+        architect = next(resource for resource in manifest["resources"] if resource["id"] == "architect")
+        codex = next(variant for variant in architect["variants"] if variant["surface"] == "codex")
+        codex["requires"].remove("skill:principle-exhaust-the-design-space")
+        path.write_text(json.dumps(manifest))
+        subprocess.run([shutil.which("git"), "-C", str(self.project), "-c", "user.name=Fixture",
+                        "-c", "user.email=fixture@example.invalid", "commit", "-qam", "Missing dependency fixture"],
+                       env=self.env, check=True, capture_output=True)
+        result, report = self.run_content_probe("--scenario", "pstack", "--pstack-baseline", str(baseline))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing pstack effective dependency: principle-exhaust-the-design-space", report["error"])
+
     def test_html_packing_success_without_included_assets_is_rejected(self):
         self.prepare_content_probe_fixture()
         node = self.bin / "node"
