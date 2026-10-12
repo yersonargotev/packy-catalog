@@ -129,6 +129,13 @@ The [Ponytail installation probe](scripts/probes/README.md#released-binary-conte
 checks resource selection, notices, preservation, and the shared-file limit on
 all three hosts.
 
+## Investigate a new Pack
+
+For a reviewed local Claude plugin marketplace checkout, use the
+[bounded marketplace inspector](docs/marketplace-inspection.md) to classify
+sources and locate focused follow-up evidence. Summaries do not replace source
+review or decide which resources belong in a Pack.
+
 ## Update a Pack
 
 Select an immutable upstream release or full commit and record its full commit
