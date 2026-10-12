@@ -49,6 +49,16 @@ class ProbeProcessTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "without expected approval"):
             self.run_child("print('{}')", approval="Approve fixture? [y/N] ")
 
+    def test_each_previewed_phase_is_approved_once_in_order(self):
+        result = self.run_child(
+            "print('{\"report\":\"preview\"}'); "
+            "print('Approve configuration? [y/N] ',end='',flush=True); assert input() == 'y'; "
+            "print('Approve cleanup? [y/N] ',end='',flush=True); assert input() == 'y'; "
+            "print('{\"result\":\"passed\"}')",
+            approval=["Approve configuration? [y/N] ", "Approve cleanup? [y/N] "])
+        self.assertEqual(result[0], 0)
+        self.assertEqual(result[1], '{"report":"preview"}\n{"result":"passed"}\n')
+
     def test_child_failure_preserves_diagnostic_and_status(self):
         result = self.run_child("import sys; print('fixture failed',file=sys.stderr); sys.exit(7)")
         self.assertEqual(result, (7, "", "fixture failed\n"))

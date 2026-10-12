@@ -12,7 +12,8 @@ def run_child(command, *, cwd, env, timeout, approval=None):
     master, slave = pty.openpty()
     child = None
     output = {"stdout": bytearray(), "stderr": bytearray()}
-    answered = False
+    prompts = [approval] if isinstance(approval, str) else list(approval or [])
+    answered = 0
     try:
         child = subprocess.Popen(command, cwd=cwd, env=env, stdin=slave if approval else subprocess.DEVNULL,
                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
@@ -35,20 +36,20 @@ def run_child(command, *, cwd, env, timeout, approval=None):
                     if sum(len(value) for value in output.values()) > 16_000_000:
                         raise RuntimeError("child output exceeded limit")
                     if b"[y/N]" in stream:
-                        expected = approval.encode() if approval else b""
+                        expected = prompts[answered].encode() if answered < len(prompts) else b""
                         prefix, separator, prompt = bytes(stream).rpartition(b"\n")
-                        if key.data != "stdout" or answered or not expected or not expected.startswith(prompt):
+                        if key.data != "stdout" or not expected or not expected.startswith(prompt):
                             raise RuntimeError("unexpected child approval prompt: " + stream.decode(errors="replace"))
                         if prompt == expected:
                             for line in prefix.splitlines():
                                 if not isinstance(json.loads(line), dict):
                                     raise RuntimeError("unstructured output before approval")
                             os.write(master, b"y\n")
-                            answered = True
+                            answered += 1
                             stream.clear()
                             stream.extend(prefix + separator)
             status = child.wait(timeout=max(0.01, deadline - time.monotonic()))
-        if approval and status == 0 and not answered:
+        if status == 0 and answered != len(prompts):
             raise RuntimeError("child succeeded without expected approval")
         return status, output["stdout"].decode(), output["stderr"].decode()
     finally:
