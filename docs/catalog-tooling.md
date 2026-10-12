@@ -139,6 +139,54 @@ and cleanup after success and failure. Delivery evidence must record the full
 ordinary command on required Linux CI and available local Darwin execution;
 focused tests or one platform do not establish the other platform's result.
 
+### Fixture preparation failures
+
+Ordinary fixture preparation uses `scripts.fixture_commands.prepare`. It returns
+captured stdout on success and raises a test error on failure, for example:
+
+```text
+fixture command git commit: exit status 128
+fatal: author identity unknown
+```
+
+Callers supply a static, non-sensitive command `label` (such as `git commit`),
+the argument list, and their existing `env`/`cwd`. Arguments and child
+environments are not dumped. The default deadline is 30 seconds per command;
+an explicit `timeout` must be finite and positive. Spawn errors report
+`spawn failed` with the OS reason; deadlines report `deadline expired` and any
+stderr captured before expiry. Invalid UTF-8 is replaced rather than hiding the
+failure. Diagnostics are limited to 8,192 characters after redaction, with a
+truncation marker when necessary.
+
+The helper reuses the content-probe runner's bounded capture (16 MB combined
+stdout/stderr) and isolated process session. Fixture input is closed; text
+containing `[y/N]` is data, not an approval request. Content probes retain their
+existing strict approval handling. The runner kills the owned process group
+when its leader exits, on timeout, or on failure, and waits for its direct child
+before returning. Normal descendants cannot retain its pipes or write after
+fixture removal; orphan reaping belongs to the OS. Children that deliberately
+escape the session are outside this test-fixture contract. Fixture directories
+remain owned by the caller's `TemporaryDirectory`/`addCleanup` lifecycle. Register
+cleanup before preparing commands; `unittest` reports an additional fixture
+cleanup failure separately without hiding the primary command failure.
+
+Failure diagnostics redact exact nonempty values passed through `redact` and
+environment values whose names contain `TOKEN`, `PASSWORD`, `SECRET`,
+`CREDENTIAL`, or a `KEY` component. Redaction runs before truncation and applies
+to both nonzero-exit and timeout diagnostics. Other sensitive argument or child
+data values must be declared through `redact`; this is not a detector for
+unknown secrets or encoded/transformed values. Do not embed secrets in labels
+or Python source: the test runner may show source lines in a traceback.
+Successful returned stdout remains data for the caller, not a sanitized log.
+
+The migrated callers cover ordinary Git initialization, staging, commits and
+revision reads for content, pstack, negative fixtures, publication preparation,
+and probe/identity regressions. Subprocesses exercising commands under test
+(including intentional missing-identity rejection) remain observable test
+subjects, not preparation commands. Public-command regressions exercise success,
+exit 128, spawn failure, timeout, sensitive diagnostics, descendant cleanup,
+secondary fixture-cleanup errors and preservation of unrelated state.
+
 Upgrade the pin only through a reviewed PR after the immutable stable release
 is published and its four native functional contract results are available.
 Verify the release tag's source commit, published archive digests, embedded
