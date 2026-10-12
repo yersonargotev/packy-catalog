@@ -20,7 +20,7 @@ python3 -m pip install -r requirements-tooling.txt
 ```
 
 `packy.sh` forwards arguments to the verified released CLI. Its
-[command documentation](https://github.com/yersonargotev/packy/blob/1b8d04ddee510b24adcb12906914240bd7063aa6/docs/catalog-project.md)
+[command documentation](https://github.com/yersonargotev/packy/blob/eed834cb34dbcc15cdb6164caaa94083392f51f6/docs/catalog-project.md)
 explains versioned JSON reports, optional build baselines, and publication.
 Local construction labels do not certify a clean reviewed commit and do not
 create an attestation or official Catalog Publication. The main-push workflow
