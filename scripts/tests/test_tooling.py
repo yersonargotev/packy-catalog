@@ -53,8 +53,8 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
             result = self.run_cli("version", "--json")
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(json.loads(result.stdout), {
-                "schema_version": 1, "report": "packy-version", "version": "v0.2.27",
-                "source_commit": "1b8d04ddee510b24adcb12906914240bd7063aa6"})
+                "schema_version": 1, "report": "packy-version", "version": "v0.2.28",
+                "source_commit": "eed834cb34dbcc15cdb6164caaa94083392f51f6"})
         self.assertEqual(len((self.work / "downloads").read_text().splitlines()), 1)
         self.assertFalse((self.work / "home").exists())
 
@@ -293,7 +293,7 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
                 if result.returncode:
                     self.assert_rejected(result, "checksum mismatch")
                 self.assertTrue((self.work / "downloads").read_text().splitlines()[-1].endswith(
-                    "packy_v0.2.27_" + key + ".tar.gz"))
+                    "packy_v0.2.28_" + key + ".tar.gz"))
 
     def workflow(self):
         return yaml.load((self.project / ".github/workflows/publish.yml").read_text(), Loader=yaml.BaseLoader)
@@ -314,7 +314,7 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.assertEqual(result.returncode, 0, result.stderr)
         report = json.loads(result.stdout)
         self.assertEqual(report["result"], "built")
-        self.assertEqual(report["index"]["builder"], "yersonargotev/packy@1b8d04ddee510b24adcb12906914240bd7063aa6")
+        self.assertEqual(report["index"]["builder"], "yersonargotev/packy@eed834cb34dbcc15cdb6164caaa94083392f51f6")
         self.assertEqual(set(p.name for p in (self.work / "dist").iterdir()), {"catalog-snapshot.tar.gz", "SHA256SUMS"})
         self.assertEqual(report["archive_sha256"], hashlib.sha256((self.work / "dist/catalog-snapshot.tar.gz").read_bytes()).hexdigest())
         return report
