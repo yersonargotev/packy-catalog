@@ -113,6 +113,57 @@ scenarios, command receipts and outcomes. Progress and failures go to stderr.
 The clean commit is rechecked at completion. Save evidence outside the checkout
 so redirection does not create an untracked file before the clean-state check.
 
+### Command timing and progress
+
+Each attempted top-level child command has an additive `elapsed_seconds` number
+and `context` object in its receipt. Elapsed time uses a monotonic clock, from
+immediately before child execution through its result handling and process-group
+cleanup, including spawn failure, timeout and interruption. It is finite and
+nonnegative; it is not CPU time or an absolute timestamp. Acquisition is timed
+at its existing wrapper boundary, not separately for each nested download or
+identity-check subprocess. Existing receipt fields and outcome meanings remain
+unchanged, as does evidence `schema_version: 1`.
+
+Context always contains `stage`, `scenario`, `surface` and `scope`. Stages are
+`candidate-verification`, `baseline-verification` (initial and final clean-commit
+checks), `acquisition` (download/verification and reported binary identity),
+`candidate-construction`, `baseline-construction`, and `content-acceptance`.
+Outside content acceptance, scenario, surface and scope are `null`. Content
+acceptance names its scenario and scope (`project` or `disposable-global`).
+Single-surface cases carry their surface throughout preparation, lifecycle and
+helper commands. In pstack's multi-surface cases, commands with an explicit
+surface carry it; shared listing and snapshot transition commands use `null`.
+The baseline runner carries the same pstack case context. Historical outcome
+records still use `scope: "global"`; only the new context calls this disposable.
+Final verification resets case context, so it never inherits the last surface.
+
+Stderr emits flushed lines prefixed `Content probe: ` followed by a JSON object.
+Each command has a `started` event containing its argument vector and a terminal
+`passed`, `expected-rejection` or `failed` event containing `elapsed_seconds`.
+Both include `context` and a one-based `command_id` indexing the final report's
+`commands` array. Start events arrive while the child is still running, including
+during acquisition and builds. A passed child can still be followed by a failed
+scenario assertion; the final report and existing failure message describe that
+run-level failure. Forced SIGKILL/machine termination cannot emit a final event
+or report. Other human-readable scenario/failure lines remain on stderr; stdout
+contains only the final JSON evidence for supported run outcomes (argument
+validation errors still use argparse's stderr/exit behavior).
+
+To inspect the commands that consumed the most observed time:
+
+```sh
+python3 - <<'PY'
+import json
+from pathlib import Path
+report = json.loads(Path('/tmp/catalog-content-evidence.json').read_text())
+for receipt in sorted(report['commands'], key=lambda item: item['elapsed_seconds'], reverse=True)[:10]:
+    print(receipt['elapsed_seconds'], receipt['context'], receipt['command'])
+PY
+```
+
+These measurements describe that run, including I/O and network waits. They do
+not establish a performance improvement or replace exact-candidate acceptance.
+
 The evidence describes **local authoring candidates**, not attested Catalog
 Publications. Global activation is confined to pstack's owned disposable
 workspace. No publication, host authentication, model calls or live user-state
