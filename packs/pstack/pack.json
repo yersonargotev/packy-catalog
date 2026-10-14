@@ -1338,7 +1338,7 @@
       "kind": "skill",
       "id": "make-bot-ui",
       "source": "skills/make-bot-ui",
-      "description": ">-",
+      "description": "Use when building a custom UI (page, dashboard, buttons) that should wake a Grok Bot over a webhook, when the user must provide a webhook sender key, or when exposing that UI on Tailscale.",
       "arguments": {
         "mode": ""
       },
@@ -1409,7 +1409,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": ">-"
+          "description": "Use when building a custom UI (page, dashboard, buttons) that should wake a Grok Bot over a webhook, when the user must provide a webhook sender key, or when exposing that UI on Tailscale."
         },
         {
           "surface": "opencode",

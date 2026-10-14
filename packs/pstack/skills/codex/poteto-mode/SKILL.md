@@ -13,7 +13,7 @@ Use accessible current-workspace history and authorized tools. Missing history, 
 
 # Poteto mode
 
-Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's absolute path in every `poteto-agent` prompt.
+Bundled skills live at `../<name>/SKILL.md` from this file, so put this file's absolute path in every Codex delegate's brief.
 
 ## Non-negotiables
 
