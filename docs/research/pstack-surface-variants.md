@@ -1,7 +1,7 @@
 # Reviewed pstack surface variants
 
-The sections below record the 4.0.0 rollout and the subsequent 4.1.0 and
-4.2.0 updates limited to common sources and Codex.
+The sections below record the 4.0.0 rollout and the subsequent 4.1.0,
+4.2.0, and 4.3.0 updates limited to common sources and Codex.
 
 Date: 2026-10-02. Catalog issue #32 follows the schema v3 rollout in #31.
 pstack changes from 3.0.0 to 4.0.0 because its effective host instructions,
@@ -238,3 +238,78 @@ Validation against clean baseline `8e231a7edb0b4ffd7fb3510b37da7f2b2f7d5224`:
 These checks do not establish execution of all workflows, native host discovery,
 or persistent background operation. This is a local catalog change, not a
 published snapshot or an update to a user's installed Pack.
+
+
+## 4.3.0 common and Codex update
+
+The 2026-10-14 contract migration advances the shared `cursor-plugins` origin
+from `ccb5507cec1546dc88135c1139c811e6c59115ba` to
+[`1e5c90a4b6f249917bd21fe361b3a2a7deb741b8`](https://github.com/cursor/plugins/tree/1e5c90a4b6f249917bd21fe361b3a2a7deb741b8/pstack),
+upstream pstack 0.15.24. It adds `in-your-own-words`, `ketchup`, and `sharpen`,
+bringing the common and Codex inventories to 54 skills each. The Pack has 563
+files. All 55 exact-copy resources, including the MIT notice, match upstream
+bytes and executable modes. New resources have Codex-only bindings and explicit
+Claude/OpenCode exclusions. This is a migration because it adds resources,
+adaptations, and effective dependencies.
+
+Codex receives the revised investigation and writing guidance, task-sensitive
+reasoning and speed selection, simplified autopilot/landing rules, and updated
+orchestration, PR watcher, worktree-audit, and fenced-plan helpers. Orchestration
+resolves PR base chains through `gh` or Origin instead of Graphite. `ketchup`
+requires `bro`; `poteto-mode` requires `ketchup`. Arena's Codex variant now
+requires `principle-laziness-protocol`, which its tie-breaking rule already uses.
+Optional help routes do not add dependencies on every recommended workflow.
+
+Codex keeps its explicit invocation policy through `agents/openai.yaml`, native
+skill roots, confirmed role preferences, capability checks, authorized connector
+discovery, and isolated helper bootstrap. The compatibility basis remains the
+[official skill documentation](https://learn.chatgpt.com/docs/build-skills) and
+[official subagent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents).
+Reasoning and speed changes use only advertised controls. `auto` and
+`inherit-parent` omit model, effort, and speed overrides. Without a supported
+control, the requested preference is reported as unapplied. The receiving chat
+runs the playbook and delegates bounded steps. Hourly audits use active-session
+monitoring or a verified scheduler. Transcript lookup remains workspace-scoped.
+The plan regression fixture uses Codex's execution-playbook and audit markers.
+
+Independent forward testing found two additional helper/workflow defects. The
+Codex frontier resolver now prefers a unique active PR when a branch also has
+closed history, retaining a visible failure for ambiguous historical anchors.
+Its regression cases cover both supported forges. Babysit now explicitly queries
+the bottom PR in single-PR mode before acting on a stack-wide blocker from above
+it. This preserves the watcher's stack-wide semantics and the playbook's
+frontier-only repair scope. The common upstream helper remains an exact copy.
+
+Claude and OpenCode retain their 47 roots and 48 closure resources per host,
+including effective metadata, dependencies, policies, bytes, and executable
+modes. Their shared origin pin advances, while their adaptations retain their
+earlier content. Unrelated Pack versions remain unchanged.
+
+Validation against clean catalog baseline
+`e6b1c3c285857f4c8c5b57de9298fa2dce192167`, using the pinned Packy v0.2.28
+at `eed834cb34dbcc15cdb6164caaa94083392f51f6`:
+
+- `scripts/validate.sh <baseline> --json` passed for 12 Packs and 606 fitness
+  rows, including provenance, exact-copy checks, and baseline version rules.
+  PyYAML from `requirements-tooling.txt` was installed in a disposable venv.
+- `pstack-update.py contracts --baseline <baseline> --preserve-surface claude
+  --preserve-surface opencode` passed. All 55 exact-copy byte/mode inventories
+  also matched the selected upstream checkout directly.
+- All 54 Codex skills passed skill-creator validation. Relative links resolved;
+  the synthesizer prompt's literal `[text](url)` remains an example placeholder.
+- `pstack-update.py plans` passed six scenarios. The Codex helper suite, copied
+  into a disposable workspace with `bun install --frozen-lockfile`, passed 72
+  tests and 252 assertions. `bun run typecheck` passed. New frontier regressions
+  failed before the correction and passed after it.
+- `pstack-helpers.py` executed orchestration, watcher, and decision-log helpers
+  for all hosts without altering installed bytes. An isolated Git fixture also
+  checked explicit audit base selection, open-PR preservation, the merged-PR
+  history gate, and missing-base rejection.
+- Read-only independent forward testing exercised overnight work without a
+  scheduler/model catalog, operator-landed dependent PRs, chat catch-up without
+  screenshots, and a minimal Arena installation. Its dependency and frontier
+  findings were corrected in Codex.
+
+These checks do not establish native host discovery, execution of every workflow,
+or persistent background operation. This update changes the local Catalog
+Project; it does not publish a snapshot or update installed Packs.

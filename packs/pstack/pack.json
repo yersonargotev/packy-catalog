@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -18,7 +18,7 @@
     {
       "id": "cursor-plugins",
       "repository": "cursor/plugins",
-      "commit": "ccb5507cec1546dc88135c1139c811e6c59115ba"
+      "commit": "1e5c90a4b6f249917bd21fe361b3a2a7deb741b8"
     }
   ],
   "resources": [
@@ -261,6 +261,7 @@
             "notice:pstack-mit"
           ],
           "requires": [
+            "skill:principle-laziness-protocol",
             "skill:principle-prove-it-works",
             "skill:principle-redesign-from-first-principles",
             "skill:principle-separate-before-serializing-shared-state"
@@ -811,7 +812,7 @@
       "kind": "skill",
       "id": "figure-it-out",
       "source": "skills/figure-it-out",
-      "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions via show-me-your-work. Use for /figure-it-out, 'figure it out', a large migration, or when no narrower playbook applies.",
+      "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'.",
       "arguments": {
         "mode": ""
       },
@@ -906,7 +907,7 @@
             "skill:principle-separate-before-serializing-shared-state",
             "skill:show-me-your-work"
           ],
-          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions via show-me-your-work. Use for /figure-it-out, 'figure it out', a large migration, or when no narrower playbook applies."
+          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'."
         },
         {
           "surface": "opencode",
@@ -1027,6 +1028,66 @@
     },
     {
       "kind": "skill",
+      "id": "in-your-own-words",
+      "source": "skills/in-your-own-words",
+      "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for /in-your-own-words.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/in-your-own-words",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "in-your-own-words",
+          "invocation": "$in-your-own-words",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [
+        {
+          "surface": "claude",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        },
+        {
+          "surface": "opencode",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        }
+      ],
+      "variants": [
+        {
+          "surface": "codex",
+          "source": "skills/codex/in-your-own-words",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/in-your-own-words",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for $in-your-own-words."
+        }
+      ]
+    },
+    {
+      "kind": "skill",
       "id": "interrogate",
       "source": "skills/interrogate",
       "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles.",
@@ -1115,6 +1176,68 @@
           ],
           "requires": [],
           "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles."
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "ketchup",
+      "source": "skills/ketchup",
+      "description": "Catch the user up on what changed in this chat since their last message, in a few plain sentences and small visuals. Give each action item just enough context to make the call. Use for /ketchup.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/ketchup",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "ketchup",
+          "invocation": "$ketchup",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [
+        {
+          "surface": "claude",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        },
+        {
+          "surface": "opencode",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        }
+      ],
+      "variants": [
+        {
+          "surface": "codex",
+          "source": "skills/codex/ketchup",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/ketchup",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:bro"
+          ],
+          "description": "Catch the user up on what changed in this chat since their last message, in a few plain sentences and small visuals. Give each action item just enough context to make the call. Use for $ketchup."
         }
       ]
     },
@@ -1636,6 +1759,7 @@
             "skill:benchmark-checklist",
             "skill:how",
             "skill:interrogate",
+            "skill:ketchup",
             "skill:no-comments",
             "skill:principle-attack-the-premise",
             "skill:principle-boundary-discipline",
@@ -3040,7 +3164,7 @@
       "kind": "skill",
       "id": "principle-model-the-domain",
       "source": "skills/principle-model-the-domain",
-      "description": "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files. Encode the domain in a structure instead of scattered conditionals.",
+      "description": "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files.",
       "arguments": {
         "mode": ""
       },
@@ -3111,7 +3235,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files. Encode the domain in a structure instead of scattered conditionals."
+          "description": "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files."
         },
         {
           "surface": "opencode",
@@ -3133,7 +3257,7 @@
       "kind": "skill",
       "id": "principle-never-block-on-the-human",
       "source": "skills/principle-never-block-on-the-human",
-      "description": "Apply when tempted to ask 'should I do X?' on reversible work. Proceed, present the result, let the human course-correct after the fact; reserve confirmation for irreversible actions.",
+      "description": "Apply when tempted to ask 'should I do X?' on reversible work.",
       "arguments": {
         "mode": ""
       },
@@ -3204,7 +3328,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when tempted to ask 'should I do X?' on reversible work. Proceed, present the result, let the human course-correct after the fact; reserve confirmation for irreversible actions."
+          "description": "Apply when tempted to ask 'should I do X?' on reversible work."
         },
         {
           "surface": "opencode",
@@ -3412,7 +3536,7 @@
       "kind": "skill",
       "id": "principle-redesign-from-first-principles",
       "source": "skills/principle-redesign-from-first-principles",
-      "description": "Apply when integrating a new requirement into an existing design. Redesign as if the requirement had been a foundational assumption from day one, instead of bolting it on.",
+      "description": "Apply when integrating a new requirement into an existing design.",
       "arguments": {
         "mode": ""
       },
@@ -3483,7 +3607,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when integrating a new requirement into an existing design. Redesign as if the requirement had been a foundational assumption from day one, instead of bolting it on."
+          "description": "Apply when integrating a new requirement into an existing design."
         },
         {
           "surface": "opencode",
@@ -3691,7 +3815,7 @@
       "kind": "skill",
       "id": "principle-subtract-before-you-add",
       "source": "skills/principle-subtract-before-you-add",
-      "description": "Apply when sequencing an addition, refactor, or rewrite. Remove dead weight, redundant validators, and stub references first, then build on the simpler base.",
+      "description": "Apply when sequencing an addition, refactor, or rewrite. Remove dead code, redundant validators, and stub references first, then build on the simpler base.",
       "arguments": {
         "mode": ""
       },
@@ -3784,7 +3908,7 @@
       "kind": "skill",
       "id": "principle-test-behavior-not-implementation",
       "source": "skills/principle-test-behavior-not-implementation",
-      "description": "Apply when you write, change, or keep a test. Call the code the way its users do and assert the result they observe against a literal expected value. If the test would still pass when every imported function returns undefined, rewrite the assertion or delete the test.",
+      "description": "Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined.",
       "arguments": {
         "mode": ""
       },
@@ -3855,7 +3979,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when you write, change, or keep a test. Call the code the way its users do and assert the result they observe against a literal expected value. If the test would still pass when every imported function returns undefined, rewrite the assertion or delete the test."
+          "description": "Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined."
         },
         {
           "surface": "opencode",
@@ -4260,6 +4384,66 @@
           ],
           "requires": [],
           "description": "Configure the models and reasoning budget used by pstack roles on the active agent host. Use for /setup-pstack, \"configure pstack models\", or \"pstack budget\"."
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "sharpen",
+      "source": "skills/sharpen",
+      "description": "Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/sharpen",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "sharpen",
+          "invocation": "$sharpen",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [
+        {
+          "surface": "claude",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        },
+        {
+          "surface": "opencode",
+          "mode": "optional",
+          "code": "codex-only",
+          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+        }
+      ],
+      "variants": [
+        {
+          "surface": "codex",
+          "source": "skills/codex/sharpen",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/sharpen",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for $sharpen."
         }
       ]
     },
@@ -4869,7 +5053,7 @@
       "kind": "skill",
       "id": "unslop",
       "source": "skills/unslop",
-      "description": "Cut AI tells from any writing. Must always apply.",
+      "description": "Cut AI tells from any writing.",
       "arguments": {
         "mode": ""
       },
@@ -4940,7 +5124,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Cut AI tells from any writing. Must always apply."
+          "description": "Cut AI tells from any writing."
         },
         {
           "surface": "opencode",
