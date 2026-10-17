@@ -8,7 +8,7 @@ and opt-in. Ordinary validation, construction and publication do not run them.
 
 Run these checks after the catalog validator, against reviewed local content.
 They are separate from `scripts/validate.sh` and CI's inert-content validation.
-The `plans` command executes the shipped common and Codex plan checkers in
+The `plans` command executes the shipped common, Claude and Codex plan checkers in
 throwaway copies with Node. Temporary copies protect the managed files from
 relative writes; they are not a security sandbox for untrusted code.
 

@@ -115,11 +115,12 @@ class PstackUpdateProbeTest(unittest.TestCase):
 
     def test_plan_scenarios_pass_without_mutating_owned_helpers(self):
         paths = [PROJECT / 'packs/pstack/skills' / host / 'poteto-mode/scripts/check-plan.mjs'
-                 for host in ('', 'codex')]
+                 for host in ('', 'claude', 'codex')]
         before = [p.read_bytes() for p in paths]
         result = self.run_probe('plans', '--project', str(PROJECT))
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('common: 3 plan scenarios passed', result.stdout)
+        self.assertIn('claude: 3 plan scenarios passed', result.stdout)
         self.assertIn('codex: 3 plan scenarios passed', result.stdout)
         self.assertEqual([p.read_bytes() for p in paths], before)
 

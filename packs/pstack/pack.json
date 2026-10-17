@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -243,6 +243,7 @@
             "notice:pstack-mit"
           ],
           "requires": [
+            "skill:principle-laziness-protocol",
             "skill:principle-prove-it-works",
             "skill:principle-redesign-from-first-principles",
             "skill:principle-separate-before-serializing-shared-state"
@@ -413,6 +414,15 @@
       },
       "bindings": [
         {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "benchmark-checklist",
+          "invocation": "benchmark-checklist",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "codex",
           "projection": "skill",
           "name": "benchmark-checklist",
@@ -424,19 +434,27 @@
       ],
       "surface_exclusions": [
         {
-          "surface": "claude",
-          "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
-        },
-        {
           "surface": "opencode",
           "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+          "code": "not-adapted",
+          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
         }
       ],
       "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/claude/benchmark-checklist",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/benchmark-checklist",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Vet a perf measurement (limiter, tuning, limits, errors, repeatability, relevance, and whether the work happened) before you report or act on it. Use when you run a benchmark or report a speedup or regression you measured."
+        },
         {
           "surface": "codex",
           "source": "skills/codex/benchmark-checklist",
@@ -675,6 +693,15 @@
       },
       "bindings": [
         {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "correct",
+          "invocation": "correct",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "codex",
           "projection": "skill",
           "name": "correct",
@@ -686,19 +713,27 @@
       ],
       "surface_exclusions": [
         {
-          "surface": "claude",
-          "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
-        },
-        {
           "surface": "opencode",
           "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+          "code": "not-adapted",
+          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
         }
       ],
       "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/claude/correct",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/correct",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
+        },
         {
           "surface": "codex",
           "source": "skills/codex/correct",
@@ -885,7 +920,7 @@
             "skill:principle-separate-before-serializing-shared-state",
             "skill:show-me-your-work"
           ],
-          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions via show-me-your-work. Use for /figure-it-out, 'figure it out', a large migration, or when no narrower playbook applies."
+          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'."
         },
         {
           "surface": "codex",
@@ -1046,6 +1081,15 @@
       },
       "bindings": [
         {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "in-your-own-words",
+          "invocation": "in-your-own-words",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "codex",
           "projection": "skill",
           "name": "in-your-own-words",
@@ -1057,19 +1101,27 @@
       ],
       "surface_exclusions": [
         {
-          "surface": "claude",
-          "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
-        },
-        {
           "surface": "opencode",
           "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+          "code": "not-adapted",
+          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
         }
       ],
       "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/claude/in-your-own-words",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/in-your-own-words",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for /in-your-own-words."
+        },
         {
           "surface": "codex",
           "source": "skills/codex/in-your-own-words",
@@ -1199,6 +1251,15 @@
       },
       "bindings": [
         {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "ketchup",
+          "invocation": "ketchup",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "codex",
           "projection": "skill",
           "name": "ketchup",
@@ -1210,19 +1271,29 @@
       ],
       "surface_exclusions": [
         {
-          "surface": "claude",
-          "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
-        },
-        {
           "surface": "opencode",
           "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+          "code": "not-adapted",
+          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
         }
       ],
       "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/claude/ketchup",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/ketchup",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:bro"
+          ],
+          "description": "Catch the user up on what changed in this chat since their last message, in a few plain sentences and small visuals. Give each action item just enough context to make the call. Use for /ketchup."
+        },
         {
           "surface": "codex",
           "source": "skills/codex/ketchup",
@@ -1564,6 +1635,15 @@
       },
       "bindings": [
         {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "poteto-help",
+          "invocation": "poteto-help",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "codex",
           "projection": "skill",
           "name": "poteto-help",
@@ -1575,19 +1655,30 @@
       ],
       "surface_exclusions": [
         {
-          "surface": "claude",
-          "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
-        },
-        {
           "surface": "opencode",
           "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+          "code": "not-adapted",
+          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
         }
       ],
       "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/claude/poteto-help",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/poteto-help",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:poteto-mode",
+            "skill:setup-pstack"
+          ],
+          "description": "Help users configure pstack, start a task with /poteto-mode, choose a workflow or principle, and troubleshoot a run in Claude Code. Use /poteto-help with a question."
+        },
         {
           "surface": "codex",
           "source": "skills/codex/poteto-help",
@@ -1707,8 +1798,10 @@
           "requires": [
             "skill:architect",
             "skill:arena",
+            "skill:benchmark-checklist",
             "skill:how",
             "skill:interrogate",
+            "skill:ketchup",
             "skill:no-comments",
             "skill:principle-attack-the-premise",
             "skill:principle-boundary-discipline",
@@ -1716,6 +1809,7 @@
             "skill:principle-encode-lessons-in-structure",
             "skill:principle-exhaust-the-design-space",
             "skill:principle-experience-first",
+            "skill:principle-explain-the-number",
             "skill:principle-fix-root-causes",
             "skill:principle-foundational-thinking",
             "skill:principle-guard-the-context-window",
@@ -2459,6 +2553,15 @@
       },
       "bindings": [
         {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "principle-explain-the-number",
+          "invocation": "principle-explain-the-number",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "codex",
           "projection": "skill",
           "name": "principle-explain-the-number",
@@ -2470,19 +2573,29 @@
       ],
       "surface_exclusions": [
         {
-          "surface": "claude",
-          "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
-        },
-        {
           "surface": "opencode",
           "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+          "code": "not-adapted",
+          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
         }
       ],
       "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/claude/principle-explain-the-number",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/principle-explain-the-number",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:benchmark-checklist"
+          ],
+          "description": "Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think."
+        },
         {
           "surface": "codex",
           "source": "skills/codex/principle-explain-the-number",
@@ -3221,7 +3334,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files. Encode the domain in a structure instead of scattered conditionals."
+          "description": "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files."
         },
         {
           "surface": "codex",
@@ -3314,7 +3427,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when tempted to ask 'should I do X?' on reversible work. Proceed, present the result, let the human course-correct after the fact; reserve confirmation for irreversible actions."
+          "description": "Apply when tempted to ask 'should I do X?' on reversible work."
         },
         {
           "surface": "codex",
@@ -3593,7 +3706,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when integrating a new requirement into an existing design. Redesign as if the requirement had been a foundational assumption from day one, instead of bolting it on."
+          "description": "Apply when integrating a new requirement into an existing design."
         },
         {
           "surface": "codex",
@@ -3965,7 +4078,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when you write, change, or keep a test. Call the code the way its users do and assert the result they observe against a literal expected value. If the test would still pass when every imported function returns undefined, rewrite the assertion or delete the test."
+          "description": "Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined."
         },
         {
           "surface": "codex",
@@ -4407,6 +4520,15 @@
       },
       "bindings": [
         {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "sharpen",
+          "invocation": "sharpen",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "codex",
           "projection": "skill",
           "name": "sharpen",
@@ -4418,19 +4540,27 @@
       ],
       "surface_exclusions": [
         {
-          "surface": "claude",
-          "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
-        },
-        {
           "surface": "opencode",
           "mode": "optional",
-          "code": "codex-only",
-          "reason": "This upstream update is limited to common sources and Codex; this surface retains its previous skill set."
+          "code": "not-adapted",
+          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
         }
       ],
       "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/claude/sharpen",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/sharpen",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen."
+        },
         {
           "surface": "codex",
           "source": "skills/codex/sharpen",
@@ -5110,7 +5240,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Cut AI tells from any writing. Must always apply."
+          "description": "Cut AI tells from any writing."
         },
         {
           "surface": "codex",

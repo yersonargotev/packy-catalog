@@ -1,7 +1,8 @@
 # Reviewed pstack surface variants
 
-The sections below record the 4.0.0 rollout and the subsequent 4.1.0,
-4.2.0, and 4.3.0 updates limited to common sources and Codex.
+The sections below record the 4.0.0 rollout, the subsequent 4.1.0, 4.2.0,
+and 4.3.0 updates limited to common sources and Codex, and the 4.4.0 Claude
+adaptation.
 
 Date: 2026-10-02. Catalog issue #32 follows the schema v3 rollout in #31.
 pstack changes from 3.0.0 to 4.0.0 because its effective host instructions,
@@ -312,4 +313,70 @@ at `eed834cb34dbcc15cdb6164caaa94083392f51f6`:
 
 These checks do not establish native host discovery, execution of every workflow,
 or persistent background operation. This update changes the local Catalog
+Project; it does not publish a snapshot or update installed Packs.
+
+
+## 4.4.0 Claude update
+
+The 2026-10-17 contract migration brings the Claude adaptation to the same
+upstream revision as Codex,
+[`1e5c90a4b6f249917bd21fe361b3a2a7deb741b8`](https://github.com/cursor/plugins/tree/1e5c90a4b6f249917bd21fe361b3a2a7deb741b8/pstack)
+(upstream pstack 0.15.24). The origin pin, common trees, and MIT notice are
+unchanged. Claude gains `benchmark-checklist`, `correct`, `in-your-own-words`,
+`ketchup`, `poteto-help`, `principle-explain-the-number`, and `sharpen`,
+bringing it to 54 roots and 55 closure resources. Those seven resources now
+bind Claude and keep an optional `not-adapted` exclusion only on OpenCode.
+This is a migration because it adds bindings, adaptations, and effective
+dependencies.
+
+The adaptation ports the reviewed Codex 4.0.0 → 4.3.0 delta onto each Claude
+tree with a three-way merge, after translating host terms (skill roots, model
+preference file, delegation API). Claude-specific deltas from 4.0.0 therefore
+survive while the upstream workflow, reference, and helper changes from 4.1.0
+through 4.3.0 arrive with the review Codex already received. Seven merge
+conflicts were frontmatter or setup defaults; each kept Claude's
+`disable-model-invocation` policy and took the updated description or budget.
+Claude helper scripts are now byte-identical to the Codex helpers, including
+the frontier resolver and the plan regression fixture.
+
+Claude keeps `disable-model-invocation` on 53 skills; `setup-pstack` remains
+implicit. Dependencies are read as files, not invoked through the Skill tool.
+Delegation uses the Agent tool with the agent types and parameters the session
+exposes. Effort follows confirmed role preferences in
+`~/.pstack/claude-models.md` and is adjusted only through an advertised effort
+control. Claude Code fast mode is a session setting, so workflows make no
+per-subagent speed claim. `auto` and `inherit-parent` omit model and effort
+overrides. The help skill describes Claude invocation and troubleshooting,
+including the manual-only frontmatter, and makes no Cursor Custom Mode or
+`poteto-agent` claim. Effective Claude dependencies now match Codex, including
+`arena -> principle-laziness-protocol`, `ketchup -> bro`, and `poteto-mode`'s
+measurement and catch-up skills.
+
+The `plans` probe now runs the Claude checker as a third host. Codex and
+OpenCode keep their effective contracts, bytes, and executable modes.
+Unrelated Pack versions remain unchanged.
+
+Validation against clean catalog baseline
+`15ca0f7033d8d505a2325d20d224ba31fc66fdac`, using the pinned Packy v0.2.28:
+
+- `scripts/validate.sh <baseline> --json` passed for 12 Packs and 606 fitness
+  rows.
+- `pstack-update.py contracts --baseline <baseline> --preserve-surface codex
+  --preserve-surface opencode` passed: Codex 54 roots / 55 closure resources,
+  OpenCode 47 / 48.
+- All 54 Claude frontmatters parse, names match logical IDs, and manifest
+  descriptions equal the parsed descriptions. Every relative link in the Claude
+  tree resolves.
+- `pstack-update.py plans` passed nine scenarios across common, Claude, and
+  Codex; the probe test suite passed 14 tests. The Claude helper suite, copied
+  into a disposable workspace with `bun install --frozen-lockfile`, passed 72
+  tests and 252 assertions, and `bun run typecheck` passed.
+- `pstack-helpers.py` executed the helpers for all hosts without altering
+  installed bytes. `scripts/test.sh` passed.
+- `pstack-host-loading.py claude` passed in project and global scope with
+  Claude Code 2.1.302: native skill body and auxiliary reference reads reached
+  the localhost provider. No inference occurred.
+
+These checks do not establish model-backed execution of every workflow or
+persistent background operation. This update changes the local Catalog
 Project; it does not publish a snapshot or update installed Packs.

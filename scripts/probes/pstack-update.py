@@ -89,9 +89,9 @@ def compare_surfaces(project, baseline, surfaces):
 
 def check_plans(project):
     template = (Path(__file__).parent / 'fixtures/pstack-plan.md').read_text(encoding='utf-8')
-    for host, cadence in (('common', '/loop 1h'), ('codex', 'hourly audit')):
+    for host, cadence in (('common', '/loop 1h'), ('claude', 'hourly audit'), ('codex', 'hourly audit')):
         skills = project / 'packs/pstack/skills'
-        source = skills / ('codex/' if host == 'codex' else '') / 'poteto-mode/scripts/check-plan.mjs'
+        source = skills / ('' if host == 'common' else host) / 'poteto-mode/scripts/check-plan.mjs'
         valid = template.replace('@AUDIT@', cadence)
         scenarios = (
             ('valid', valid, 0, '1 PR sections, 0 problems'),
@@ -127,7 +127,7 @@ def main():
     contracts.add_argument('--baseline', type=Path, required=True)
     contracts.add_argument('--preserve-surface', action='append', required=True,
                            choices=('claude', 'codex', 'opencode'))
-    plans = commands.add_parser('plans', help='execute reviewed common/Codex plan checkers in temporary copies')
+    plans = commands.add_parser('plans', help='execute reviewed common/Claude/Codex plan checkers in temporary copies')
     plans.add_argument('--project', type=Path, default=PROJECT)
     args = parser.parse_args()
     try:
