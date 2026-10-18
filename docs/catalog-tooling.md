@@ -6,6 +6,23 @@ release version, its full embedded source commit, and the four archive SHA-256
 checksums for Darwin/Linux amd64/arm64. It is strictly parsed data; unknown,
 duplicate, missing, or malformed fields fail before acquisition.
 
+## Reviewed engine adoption
+
+The current pin adopts [Packy v0.2.30](https://github.com/yersonargotev/packy/releases/tag/v0.2.30),
+source `65992143121fe33f65d5ac3c98e6a1ed14484874`, to fix immutable-source
+handoff for byte-identical global Claude skills. The previous engine was
+v0.2.28. This change keeps the existing ordinary skill contracts; the optional
+skill-template capability introduced in v0.2.29 is not requested by these Packs.
+
+The [release execution](https://github.com/yersonargotev/packy/actions/runs/39175836256)
+passed the complete native executable Catalog contract on Darwin/Linux
+amd64/arm64 before publication. Its four retained `contract-v0.2.30-<platform>`
+artifacts contain matching source/version identities, artifact validation,
+functional test events, and the same `SHA256SUMS` as the published archives.
+All four published archive digests and the local native executable identity were
+verified before changing the pin. Candidate/baseline validation, construction,
+and released-binary lifecycle acceptance must also pass for this Catalog candidate.
+
 ## Local commands and prerequisites
 
 Install Python 3.9 or newer, curl, Git, and the workflow parser:
@@ -20,7 +37,7 @@ python3 -m pip install -r requirements-tooling.txt
 ```
 
 `packy.sh` forwards arguments to the verified released CLI. Its
-[command documentation](https://github.com/yersonargotev/packy/blob/eed834cb34dbcc15cdb6164caaa94083392f51f6/docs/catalog-project.md)
+[command documentation](https://github.com/yersonargotev/packy/blob/65992143121fe33f65d5ac3c98e6a1ed14484874/docs/catalog-project.md)
 explains versioned JSON reports, optional build baselines, and publication.
 Local construction labels do not certify a clean reviewed commit and do not
 create an attestation or official Catalog Publication. The main-push workflow

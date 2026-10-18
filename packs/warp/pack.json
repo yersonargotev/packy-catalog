@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "warp",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Warp common engineering and agent workflows",
   "selectable": true,
   "surfaces": [
@@ -18,7 +18,7 @@
     {
       "id": "warp-common-skills",
       "repository": "warpdotdev/common-skills",
-      "commit": "69b4753651ab7fab518c82be087b9f1d5b966631"
+      "commit": "7c4eb852de8d7c3e68c81802e1c59db9a611f914"
     }
   ],
   "resources": [

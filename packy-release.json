@@ -1,10 +1,10 @@
 {
-  "version": "v0.2.28",
-  "source_commit": "eed834cb34dbcc15cdb6164caaa94083392f51f6",
+  "version": "v0.2.30",
+  "source_commit": "65992143121fe33f65d5ac3c98e6a1ed14484874",
   "artifacts": {
-    "darwin_amd64": "b6e9c1bd0458b62eaada405860f7e487fb0ee2e873a5e7c4a4de4baba9b75f33",
-    "darwin_arm64": "df3fcd7056e48dad90190f1bab0b67de2fc1ccb91d56dadbeb1cb52903332eeb",
-    "linux_amd64": "c803b96584e7b14f0723810a7a2147115be8d2f74bee81d08d7016913f0dcd0c",
-    "linux_arm64": "34a012629c030b0955c31a94a053aba839309e125c52ea84175c6e8e5f0464a3"
+    "darwin_amd64": "d50f3563cf492a4e6b7287afc81c232056694ae1e39b2c1b747ece5c30fafe51",
+    "darwin_arm64": "b04e65c4b9806cd00dc26ce23f700a9f65053567cb46a161c655281e46e620be",
+    "linux_amd64": "c03c449577385a9ef762ed38e6901332159cef3123fb0c513062fd11b54e8a33",
+    "linux_arm64": "9cae3a208153dbaddf1ef68e296ed97d6e9ef4d9d4aafd33dc9c3a87abfe3326"
   }
 }

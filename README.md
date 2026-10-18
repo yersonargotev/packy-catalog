@@ -85,11 +85,16 @@ No Packy engine changes are required.
 
 ## Ponytail
 
-Ponytail 1.0.0 provides six skills and an independently selectable persistent
+Ponytail 2.0.0 provides six skills and an independently selectable persistent
 instruction, adapted from upstream commit
-`c982cd411abb53323c4baa1baa3c2f020b8d0b08` (plugin version 4.10.3).
+`09c434ab73ca43761c5d8b0c5d341926c2fba710` (upstream package version 5.3.2).
 It supports Codex, Claude Code, and OpenCode project installation using the
-existing Packy v0.2.26 engine. No engine changes are required.
+existing Packy v0.2.28 engine. No engine changes are required.
+
+The coding skill applies Ponytail 5's smallest-complete-change approach.
+Review and audit cover correctness, safety, real load, tests, speed, and
+unnecessary complexity. Debt reports recognize `shortcut:` comments and the
+legacy `ponytail:` form.
 
 After this catalog revision is published, refresh catalog availability and
 install from the target Git project. The complete Pack is suitable when no
@@ -112,17 +117,17 @@ packy install ponytail --surface codex \
 Remove `--dry-run` after reviewing the preview. The standalone instruction is
 `instruction:ponytail-guidance`; it contributes to `AGENTS.md` on Codex/OpenCode
 and `CLAUDE.md` on Claude. It remains in effect when a conversational skill mode
-ends. Packy v0.2.26 blocks two different Packs from owning the same instruction
+ends. Packy v0.2.28 blocks two different Packs from owning the same instruction
 file, even with distinct block identifiers. If Argote or another Pack already
 manages that file, select only Ponytail skills. Existing unmanaged instruction
 text is preserved. Supporting independent Pack blocks in the same file would
 require a separate engine change.
 
-This edition does not include lifecycle hooks, statusline integration, MCP,
+This edition does not include lifecycle hooks, band/statusline integration, MCP,
 or mode configuration files. Skill levels are conversational. The main skill,
 help, benchmark summary, and persistent instruction are maintained adaptations;
 review, audit, debt, and the MIT notice retain exact upstream bytes. The benchmark
-skill reports the newer upstream agentic results with their limitations, not
+skill reports the Ponytail 5 upstream agentic benchmark with its limitations, not
 claimed savings for the Packy adaptation or the current project.
 
 The [Ponytail installation probe](scripts/probes/README.md#released-binary-content-acceptance)

@@ -33,7 +33,7 @@ Use the caller's files or diff. Otherwise use the current diff against the base 
 
 ## Steps
 
-1. Run Comment Sicko when installed, or use the reviewer brief above with the
+1. Run `comment-sicko` when installed, or use the reviewer brief above with the
    host's available subagent tool. Pass the scope and ask for `MUST KILL`,
    `RESHAPE`, and `KEEP` findings with reasons. A direct audit uses the same
    categories.

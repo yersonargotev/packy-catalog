@@ -1,8 +1,8 @@
 # Reviewed pstack surface variants
 
 The sections below record the 4.0.0 rollout, the subsequent 4.1.0, 4.2.0,
-and 4.3.0 updates limited to common sources and Codex, and the 4.4.0 Claude
-adaptation.
+and 4.3.0 updates limited to common sources and Codex, the 4.4.0 Claude
+adaptation, and the 4.5.0 update across all three hosts.
 
 Date: 2026-10-02. Catalog issue #32 follows the schema v3 rollout in #31.
 pstack changes from 3.0.0 to 4.0.0 because its effective host instructions,
@@ -380,3 +380,60 @@ Validation against clean catalog baseline
 These checks do not establish model-backed execution of every workflow or
 persistent background operation. This update changes the local Catalog
 Project; it does not publish a snapshot or update installed Packs.
+
+
+## 4.5.0 all-surface update
+
+The 2026-10-18 contract migration advances the shared `cursor-plugins` origin
+from `1e5c90a4b6f249917bd21fe361b3a2a7deb741b8` to
+[`0148b78c56c72a1b8412055913c79f767095b217`](https://github.com/cursor/plugins/tree/0148b78c56c72a1b8412055913c79f767095b217/pstack),
+upstream pstack 0.15.27. Common sources and all three host variants now contain
+55 skills, including the new `create-formal-verification-skill`. The Pack has
+56 logical resources and 588 files. This is a migration because it adds a
+resource, bindings, adaptations, and effective dependencies.
+
+Claude and Codex receive the latest workflow and principle changes. OpenCode
+also receives the earlier common/Codex and Claude updates, including the seven
+previously excluded skills: `benchmark-checklist`, `correct`,
+`in-your-own-words`, `ketchup`, `poteto-help`, `principle-explain-the-number`,
+and `sharpen`. Its playbooks, setup guidance, and helpers now match the current
+workflow while retaining OpenCode's task/skill/read APIs, native roots, explicit
+invocation intent, and capability checks. All host helper trees are identical,
+including the isolated bootstrap and reviewed frontier resolver correction.
+
+OpenCode's effective dependencies now include `ketchup -> bro`,
+`poteto-help -> poteto-mode + setup-pstack`, and
+`principle-explain-the-number -> benchmark-checklist`; its `poteto-mode`
+dependency list matches Claude and Codex. Arena also declares the
+`principle-laziness-protocol` dependency used by its tie-breaking rule.
+Setup seeds two Arena runners and
+two Interrogate reviewers. Its recorded reasoning budget is a preference:
+without a portable per-spawn reasoning control, OpenCode makes no claim to
+apply that override and keeps only confirmed model choices or `inherit-parent`.
+
+The new formal-verification workflow selects a tool for the project's problem
+and language; inclusion does not claim that every verification tool is already
+installed. Existing host invocation policies, confirmed model preferences,
+workspace-scoped history, and scheduler checks remain in effect. Common trees
+and the MIT notice retain exact upstream bytes; host variants remain maintained
+adaptations.
+
+Validation against clean catalog baseline
+`5c7e39821603258ec0f8d42ac2ac4d3858de2883`, using the pinned Packy v0.2.28:
+
+- `scripts/validate.sh <baseline> --json` passed for 12 Packs and 621 fitness
+  rows, including exact-copy provenance and baseline version rules. The seven
+  unrelated Packs retain their versions, manifest digests, and closure digests.
+- `scripts/test.sh` passed 68 ordinary tooling tests and the helper-execution
+  sentinel guard. PyYAML was installed in a disposable virtual environment.
+- `pstack-update.py plans` passed for common, Claude, and Codex. The all-host
+  `pstack-helpers.py` probe passed without changing installed bytes.
+- The OpenCode helper suite passed 72 tests and strict type checking in a
+  disposable workspace. All host helper trees are byte-identical.
+- Independent read-only review covered the new workflow, host adaptations,
+  effective dependencies, capability gates, and helper preservation.
+
+These checks do not establish native host discovery, model-backed execution
+of every workflow, or persistent background operation. This update changes
+the local Catalog Project; it does not publish a snapshot or update installed
+Packs.

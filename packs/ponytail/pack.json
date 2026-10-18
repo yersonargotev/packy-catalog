@@ -1,8 +1,8 @@
 {
   "schema_version": 3,
   "id": "ponytail",
-  "version": "1.0.0",
-  "description": "Ponytail minimal-code guidance and six skills, adapted for Packy without plugin runtime hooks",
+  "version": "2.0.0",
+  "description": "Ponytail 5 minimal-code guidance and six skills, adapted for Packy without plugin runtime hooks",
   "selectable": true,
   "surfaces": [
     "claude",
@@ -18,7 +18,7 @@
     {
       "id": "ponytail",
       "repository": "DietrichGebert/ponytail",
-      "commit": "c982cd411abb53323c4baa1baa3c2f020b8d0b08"
+      "commit": "09c434ab73ca43761c5d8b0c5d341926c2fba710"
     }
   ],
   "resources": [
@@ -146,7 +146,7 @@
       "kind": "skill",
       "id": "ponytail-audit",
       "source": "skills/ponytail-audit",
-      "description": "Audit the repository for unnecessary complexity without applying changes",
+      "description": "Audit repository quality across correctness, safety, load, tests, speed, and complexity without applying changes",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -192,7 +192,7 @@
       "kind": "skill",
       "id": "ponytail-debt",
       "source": "skills/ponytail-debt",
-      "description": "Report deliberate shortcuts recorded in ponytail comments",
+      "description": "Report deliberate shortcuts recorded in shortcut or legacy ponytail comments",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -330,7 +330,7 @@
       "kind": "skill",
       "id": "ponytail-review",
       "source": "skills/ponytail-review",
-      "description": "Review a diff for over-engineering without applying changes",
+      "description": "Review a diff for correctness, safety, load, tests, speed, and complexity without applying changes",
       "requires": [],
       "conflicts": [],
       "notices": [

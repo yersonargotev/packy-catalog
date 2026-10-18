@@ -24,11 +24,12 @@ and does not change the host's own model configuration.
    If no model list is available, use `inherit-parent`; do not guess slugs.
 2. Read an existing `~/.pstack/opencode-models.md` if present. Preserve role choices
    still supported by this host. Drop retired role names.
-3. Ask the user for a budget: unlimited, large, medium, or small. Show the
-   resulting model for each role. Let the user change individual roles. A
-   reasoning tier is a preference, not a guarantee: use only a model the host
-   confirms at that tier. Otherwise use the nearest confirmed lower tier, or
-   `inherit-parent`.
+3. Ask the user for a reasoning budget: unlimited (max), large (xhigh),
+   medium (high), or small (medium). Offer large when no preference exists.
+   Record the requested tier as a preference because OpenCode does not expose
+   a portable per-spawn reasoning override. Show the resulting model for each
+   role before writing and let the user change individual roles. Preserve only
+   model choices the host confirms; otherwise use `inherit-parent`.
 4. Write the complete file atomically. Use the role names below. A panel value
    can list multiple models; each entry represents one candidate or reviewer.
    Use `inherit-parent` for a role when the host cannot select a model for it.
@@ -38,7 +39,7 @@ and does not change the host's own model configuration.
 # pstack model preferences for the current host. This file is read by pstack
 # skills; it is not automatically loaded by the host.
 # host: opencode
-# budget: medium
+# budget: large
 feature, refactoring: inherit-parent
 bug-fix: inherit-parent
 perf-issue: inherit-parent
@@ -51,11 +52,11 @@ why investigators: inherit-parent
 why synthesizer: inherit-parent
 reflect tooling: inherit-parent
 reflect judgment, divergent, synthesizer: inherit-parent
-arena runners: inherit-parent, inherit-parent, inherit-parent
+arena runners: inherit-parent, inherit-parent
 arena cross-judge pool: inherit-parent
 swarm workers: inherit-parent
 architect runners: inherit-parent, inherit-parent
-interrogate reviewers: inherit-parent, inherit-parent, inherit-parent
+interrogate reviewers: inherit-parent, inherit-parent
 ```
 
 Read this file only when `# host` matches the current host. On another host,

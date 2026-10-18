@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "4.4.0",
+  "version": "4.5.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -18,7 +18,7 @@
     {
       "id": "cursor-plugins",
       "repository": "cursor/plugins",
-      "commit": "1e5c90a4b6f249917bd21fe361b3a2a7deb741b8"
+      "commit": "0148b78c56c72a1b8412055913c79f767095b217"
     }
   ],
   "resources": [
@@ -281,6 +281,7 @@
             "notice:pstack-mit"
           ],
           "requires": [
+            "skill:principle-laziness-protocol",
             "skill:principle-prove-it-works",
             "skill:principle-redesign-from-first-principles",
             "skill:principle-separate-before-serializing-shared-state"
@@ -430,16 +431,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        }
-      ],
-      "surface_exclusions": [
+        },
         {
           "surface": "opencode",
-          "mode": "optional",
-          "code": "not-adapted",
-          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
+          "projection": "skill",
+          "name": "benchmark-checklist",
+          "invocation": "benchmark-checklist",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
         }
       ],
+      "surface_exclusions": [],
       "variants": [
         {
           "surface": "claude",
@@ -458,6 +461,20 @@
         {
           "surface": "codex",
           "source": "skills/codex/benchmark-checklist",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/benchmark-checklist",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Vet a perf measurement (limiter, tuning, limits, errors, repeatability, relevance, and whether the work happened) before you report or act on it. Use when you run a benchmark or report a speedup or regression you measured."
+        },
+        {
+          "surface": "opencode",
+          "source": "skills/opencode/benchmark-checklist",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/benchmark-checklist",
@@ -709,16 +726,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        }
-      ],
-      "surface_exclusions": [
+        },
         {
           "surface": "opencode",
-          "mode": "optional",
-          "code": "not-adapted",
-          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
+          "projection": "skill",
+          "name": "correct",
+          "invocation": "correct",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
         }
       ],
+      "surface_exclusions": [],
       "variants": [
         {
           "surface": "claude",
@@ -747,6 +766,113 @@
           ],
           "requires": [],
           "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
+        },
+        {
+          "surface": "opencode",
+          "source": "skills/opencode/correct",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/correct",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "create-formal-verification-skill",
+      "source": "skills/create-formal-verification-skill",
+      "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for /create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests.",
+      "arguments": {
+        "mode": ""
+      },
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/create-formal-verification-skill",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "create-formal-verification-skill",
+          "invocation": "create-formal-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "create-formal-verification-skill",
+          "invocation": "$create-formal-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "create-formal-verification-skill",
+          "invocation": "create-formal-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/claude/create-formal-verification-skill",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/create-formal-verification-skill",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for /create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests."
+        },
+        {
+          "surface": "codex",
+          "source": "skills/codex/create-formal-verification-skill",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/create-formal-verification-skill",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for $create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests."
+        },
+        {
+          "surface": "opencode",
+          "source": "skills/opencode/create-formal-verification-skill",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/create-formal-verification-skill",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for /create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests."
         }
       ]
     },
@@ -964,7 +1090,7 @@
             "skill:principle-separate-before-serializing-shared-state",
             "skill:show-me-your-work"
           ],
-          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions via show-me-your-work. Use for /figure-it-out, 'figure it out', a large migration, or when no narrower playbook applies."
+          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'."
         }
       ]
     },
@@ -1097,16 +1223,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        }
-      ],
-      "surface_exclusions": [
+        },
         {
           "surface": "opencode",
-          "mode": "optional",
-          "code": "not-adapted",
-          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
+          "projection": "skill",
+          "name": "in-your-own-words",
+          "invocation": "in-your-own-words",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
         }
       ],
+      "surface_exclusions": [],
       "variants": [
         {
           "surface": "claude",
@@ -1135,6 +1263,20 @@
           ],
           "requires": [],
           "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for $in-your-own-words."
+        },
+        {
+          "surface": "opencode",
+          "source": "skills/opencode/in-your-own-words",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/in-your-own-words",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for /in-your-own-words."
         }
       ]
     },
@@ -1235,7 +1377,7 @@
       "kind": "skill",
       "id": "ketchup",
       "source": "skills/ketchup",
-      "description": "Catch the user up on what changed in this chat since their last message, in a few plain sentences and small visuals. Give each action item just enough context to make the call. Use for /ketchup.",
+      "description": "Catch the user up on what changed in this chat since their last message, in plain words and small visuals. List every item waiting on them with what they need to decide it from the reply alone. Use for /ketchup.",
       "arguments": {
         "mode": ""
       },
@@ -1267,16 +1409,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        }
-      ],
-      "surface_exclusions": [
+        },
         {
           "surface": "opencode",
-          "mode": "optional",
-          "code": "not-adapted",
-          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
+          "projection": "skill",
+          "name": "ketchup",
+          "invocation": "ketchup",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
         }
       ],
+      "surface_exclusions": [],
       "variants": [
         {
           "surface": "claude",
@@ -1292,7 +1436,7 @@
           "requires": [
             "skill:bro"
           ],
-          "description": "Catch the user up on what changed in this chat since their last message, in a few plain sentences and small visuals. Give each action item just enough context to make the call. Use for /ketchup."
+          "description": "Catch the user up on what changed in this chat since their last message, in plain words and small visuals. List every item waiting on them with what they need to decide it from the reply alone. Use for /ketchup."
         },
         {
           "surface": "codex",
@@ -1308,7 +1452,23 @@
           "requires": [
             "skill:bro"
           ],
-          "description": "Catch the user up on what changed in this chat since their last message, in a few plain sentences and small visuals. Give each action item just enough context to make the call. Use for $ketchup."
+          "description": "Catch the user up on what changed in this chat since their last message, in plain words and small visuals. List every item waiting on them with what they need to decide it from the reply alone. Use for $ketchup."
+        },
+        {
+          "surface": "opencode",
+          "source": "skills/opencode/ketchup",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/ketchup",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:bro"
+          ],
+          "description": "Catch the user up on what changed in this chat since their last message, in plain words and small visuals. List every item waiting on them with what they need to decide it from the reply alone. Use for /ketchup."
         }
       ]
     },
@@ -1651,16 +1811,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        }
-      ],
-      "surface_exclusions": [
+        },
         {
           "surface": "opencode",
-          "mode": "optional",
-          "code": "not-adapted",
-          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
+          "projection": "skill",
+          "name": "poteto-help",
+          "invocation": "poteto-help",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
         }
       ],
+      "surface_exclusions": [],
       "variants": [
         {
           "surface": "claude",
@@ -1695,6 +1857,23 @@
             "skill:setup-pstack"
           ],
           "description": "Help users configure pstack, start a task with $poteto-mode, choose a workflow or principle, and troubleshoot a run in Codex. Use $poteto-help with a question."
+        },
+        {
+          "surface": "opencode",
+          "source": "skills/opencode/poteto-help",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/poteto-help",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:poteto-mode",
+            "skill:setup-pstack"
+          ],
+          "description": "Help users configure pstack, start a task with /poteto-mode, choose a workflow or principle, and troubleshoot a run in OpenCode. Use /poteto-help with a question."
         }
       ]
     },
@@ -1902,8 +2081,10 @@
           "requires": [
             "skill:architect",
             "skill:arena",
+            "skill:benchmark-checklist",
             "skill:how",
             "skill:interrogate",
+            "skill:ketchup",
             "skill:no-comments",
             "skill:principle-attack-the-premise",
             "skill:principle-boundary-discipline",
@@ -1911,6 +2092,7 @@
             "skill:principle-encode-lessons-in-structure",
             "skill:principle-exhaust-the-design-space",
             "skill:principle-experience-first",
+            "skill:principle-explain-the-number",
             "skill:principle-fix-root-causes",
             "skill:principle-foundational-thinking",
             "skill:principle-guard-the-context-window",
@@ -1943,7 +2125,7 @@
       "kind": "skill",
       "id": "principle-attack-the-premise",
       "source": "skills/principle-attack-the-premise",
-      "description": "Apply when two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it.",
+      "description": "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it.",
       "arguments": {
         "mode": ""
       },
@@ -2010,7 +2192,7 @@
             "skill:principle-laziness-protocol",
             "skill:principle-redesign-from-first-principles"
           ],
-          "description": "Apply when two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it."
+          "description": "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it."
         },
         {
           "surface": "codex",
@@ -2029,7 +2211,7 @@
             "skill:principle-laziness-protocol",
             "skill:principle-redesign-from-first-principles"
           ],
-          "description": "Apply when two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it."
+          "description": "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it."
         },
         {
           "surface": "opencode",
@@ -2048,7 +2230,7 @@
             "skill:principle-laziness-protocol",
             "skill:principle-redesign-from-first-principles"
           ],
-          "description": "Apply when two or more fixes that share one premise have failed the same gate. Take a census of which actors hold the imbalance before the next fix, then question the premise instead of writing another fix that assumes it."
+          "description": "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it."
         }
       ]
     },
@@ -2569,16 +2751,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        }
-      ],
-      "surface_exclusions": [
+        },
         {
           "surface": "opencode",
-          "mode": "optional",
-          "code": "not-adapted",
-          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
+          "projection": "skill",
+          "name": "principle-explain-the-number",
+          "invocation": "principle-explain-the-number",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
         }
       ],
+      "surface_exclusions": [],
       "variants": [
         {
           "surface": "claude",
@@ -2611,6 +2795,22 @@
             "skill:benchmark-checklist"
           ],
           "description": "Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think."
+        },
+        {
+          "surface": "opencode",
+          "source": "skills/opencode/principle-explain-the-number",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/principle-explain-the-number",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:benchmark-checklist"
+          ],
+          "description": "Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think."
         }
       ]
     },
@@ -2618,7 +2818,7 @@
       "kind": "skill",
       "id": "principle-fix-root-causes",
       "source": "skills/principle-fix-root-causes",
-      "description": "Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes.",
+      "description": "Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate.",
       "arguments": {
         "mode": ""
       },
@@ -2675,7 +2875,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes."
+          "description": "Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate."
         },
         {
           "surface": "codex",
@@ -2689,7 +2889,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes."
+          "description": "Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate."
         },
         {
           "surface": "opencode",
@@ -2703,7 +2903,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when debugging. Trace each symptom to its root cause and fix it there; reproduce first, ask why until you reach it, resist nil-check guards that silence crashes."
+          "description": "Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate."
         }
       ]
     },
@@ -3362,7 +3562,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files. Encode the domain in a structure instead of scattered conditionals."
+          "description": "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files."
         }
       ]
     },
@@ -3455,7 +3655,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when tempted to ask 'should I do X?' on reversible work. Proceed, present the result, let the human course-correct after the fact; reserve confirmation for irreversible actions."
+          "description": "Apply when tempted to ask 'should I do X?' on reversible work."
         }
       ]
     },
@@ -3734,7 +3934,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when integrating a new requirement into an existing design. Redesign as if the requirement had been a foundational assumption from day one, instead of bolting it on."
+          "description": "Apply when integrating a new requirement into an existing design."
         }
       ]
     },
@@ -4021,7 +4221,7 @@
       "kind": "skill",
       "id": "principle-test-behavior-not-implementation",
       "source": "skills/principle-test-behavior-not-implementation",
-      "description": "Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined.",
+      "description": "Apply when you write, change, or keep a test. Assert what the code's users can observe, so that the test fails when that behavior breaks and keeps passing when only the internals change.",
       "arguments": {
         "mode": ""
       },
@@ -4078,7 +4278,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined."
+          "description": "Apply when you write, change, or keep a test. Assert what the code's users can observe, so that the test fails when that behavior breaks and keeps passing when only the internals change."
         },
         {
           "surface": "codex",
@@ -4092,7 +4292,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when you write, change, or keep a test. Call the code as its users do and assert the exact result they see. Rewrite or delete a test that would pass if every imported function returned undefined."
+          "description": "Apply when you write, change, or keep a test. Assert what the code's users can observe, so that the test fails when that behavior breaks and keeps passing when only the internals change."
         },
         {
           "surface": "opencode",
@@ -4106,7 +4306,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when you write, change, or keep a test. Call the code the way its users do and assert the result they observe against a literal expected value. If the test would still pass when every imported function returns undefined, rewrite the assertion or delete the test."
+          "description": "Apply when you write, change, or keep a test. Assert what the code's users can observe, so that the test fails when that behavior breaks and keeps passing when only the internals change."
         }
       ]
     },
@@ -4114,7 +4314,7 @@
       "kind": "skill",
       "id": "principle-type-system-discipline",
       "source": "skills/principle-type-system-discipline",
-      "description": "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas.",
+      "description": "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas.",
       "arguments": {
         "mode": ""
       },
@@ -4171,7 +4371,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas."
+          "description": "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas."
         },
         {
           "surface": "codex",
@@ -4185,7 +4385,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas."
+          "description": "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas."
         },
         {
           "surface": "opencode",
@@ -4199,7 +4399,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, refuse to lie to the compiler, exhaust variants, derive from authoritative schemas."
+          "description": "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas."
         }
       ]
     },
@@ -4536,16 +4736,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        }
-      ],
-      "surface_exclusions": [
+        },
         {
           "surface": "opencode",
-          "mode": "optional",
-          "code": "not-adapted",
-          "reason": "This upstream update is adapted for Claude and Codex only; this surface retains its previous skill set."
+          "projection": "skill",
+          "name": "sharpen",
+          "invocation": "sharpen",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
         }
       ],
+      "surface_exclusions": [],
       "variants": [
         {
           "surface": "claude",
@@ -4574,6 +4776,20 @@
           ],
           "requires": [],
           "description": "Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for $sharpen."
+        },
+        {
+          "surface": "opencode",
+          "source": "skills/opencode/sharpen",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/sharpen",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen."
         }
       ]
     },
@@ -5268,7 +5484,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Cut AI tells from any writing. Must always apply."
+          "description": "Cut AI tells from any writing."
         }
       ]
     },
