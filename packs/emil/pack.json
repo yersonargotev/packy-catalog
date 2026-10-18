@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "emil",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Emil Kowalski skills for UI design, web and Expo animation, mobile polish, Swift, and frontend libraries",
   "selectable": true,
   "surfaces": [
@@ -18,7 +18,7 @@
     {
       "id": "emil-skills",
       "repository": "emilkowalski/skills",
-      "commit": "d16ebe60d09a5ba2afcb7054ede9d0a10c9f6128"
+      "commit": "2d228630ba1446365f614a108cb8252f1feda202"
     }
   ],
   "resources": [
@@ -127,6 +127,52 @@
           "projection": "skill",
           "name": "animate-expo",
           "invocation": "animate-expo",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "animation-performance",
+      "source": "skills/animation-performance",
+      "description": "Keep web animations inside the frame budget — animate composite-only properties, keep motion off the main thread when the page is busy, and find the cause when an animation drops frames. Covers the layout/paint/composite pipeline, cheaper property swaps, CSS vs WAAPI vs requestAnimationFrame, Framer Motion's hardware-accelerated path, React re-rendering per frame, inherited CSS variable recalculation, blur cost, and when `will-change` actually helps. Use when an animation is janky, choppy, stutters, or drops frames; when choosing which property to animate; when deciding between CSS and JS animation on performance grounds; or when reaching for `will-change` or GPU layers. For choosing easing, duration, or whether to animate at all use animate; for reviewing motion as a whole use review-animations.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "emil-skills",
+        "path": "skills/animation-performance",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "animation-performance",
+          "invocation": "/animation-performance",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "animation-performance",
+          "invocation": "$animation-performance",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "animation-performance",
+          "invocation": "animation-performance",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -265,6 +311,52 @@
           "projection": "skill",
           "name": "ask-sonner",
           "invocation": "ask-sonner",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "break-ui",
+      "source": "skills/break-ui",
+      "description": "Try to break a piece of UI by feeding it worst-case data — long names, unbreakable emails, one-letter names, missing fields, huge counts, zero items, long labels, non-Latin text, emoji, extreme numbers — then render it behind a \"Demo data / Worst case\" toggle and report everything that broke, with the fix for each. Use when the user asks to stress-test, break, or find edge cases in a component or screen, or to \"try the worst case\". For visual design critique use emil-design-eng; for motion use review-animations.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "emil-skills",
+        "path": "skills/break-ui",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "break-ui",
+          "invocation": "/break-ui",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "break-ui",
+          "invocation": "$break-ui",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "break-ui",
+          "invocation": "break-ui",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
