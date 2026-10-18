@@ -52,12 +52,13 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
                               text=True, capture_output=True, timeout=30)
 
     def test_cold_and_warm_use_declared_release_without_go_or_path_fallback(self):
+        pin = self.pin()
         for _ in range(2):
             result = self.run_cli("version", "--json")
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(json.loads(result.stdout), {
-                "schema_version": 1, "report": "packy-version", "version": "v0.2.28",
-                "source_commit": "eed834cb34dbcc15cdb6164caaa94083392f51f6"})
+                "schema_version": 1, "report": "packy-version", "version": pin["version"],
+                "source_commit": pin["source_commit"]})
         self.assertEqual(len((self.work / "downloads").read_text().splitlines()), 1)
         self.assertFalse((self.work / "home").exists())
 
@@ -395,6 +396,7 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.assertEqual(len((self.work / "downloads").read_text().splitlines()), 1)
 
     def test_all_four_platforms_select_only_declared_artifact(self):
+        pin = self.pin()
         for system, machine, key in (("Darwin", "x86_64", "darwin_amd64"), ("Darwin", "arm64", "darwin_arm64"),
                                      ("Linux", "x86_64", "linux_amd64"), ("Linux", "aarch64", "linux_arm64")):
             with self.subTest(key=key):
@@ -406,7 +408,7 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
                 if result.returncode:
                     self.assert_rejected(result, "checksum mismatch")
                 self.assertTrue((self.work / "downloads").read_text().splitlines()[-1].endswith(
-                    "packy_v0.2.28_" + key + ".tar.gz"))
+                    "packy_" + pin["version"] + "_" + key + ".tar.gz"))
 
     def workflow(self):
         return yaml.load((self.project / ".github/workflows/publish.yml").read_text(), Loader=yaml.BaseLoader)
@@ -427,7 +429,7 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.assertEqual(result.returncode, 0, result.stderr)
         report = json.loads(result.stdout)
         self.assertEqual(report["result"], "built")
-        self.assertEqual(report["index"]["builder"], "yersonargotev/packy@eed834cb34dbcc15cdb6164caaa94083392f51f6")
+        self.assertEqual(report["index"]["builder"], "yersonargotev/packy@" + self.pin()["source_commit"])
         self.assertEqual(set(p.name for p in (self.work / "dist").iterdir()), {"catalog-snapshot.tar.gz", "SHA256SUMS"})
         self.assertEqual(report["archive_sha256"], hashlib.sha256((self.work / "dist/catalog-snapshot.tar.gz").read_bytes()).hexdigest())
         return report
