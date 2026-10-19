@@ -1,0 +1,6 @@
+interface:
+  display_name: "Issue Delivery"
+  short_description: "Deliver one ready issue through verified merge"
+  default_prompt: "Use $issue-delivery to deliver ready issue #123 through implementation, verification, CI, merge, and cleanup."
+policy:
+  allow_implicit_invocation: false
