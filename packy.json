@@ -2,6 +2,25 @@
   "schema_version": 1,
   "packs": [
     {
+      "id": "argote",
+      "surface_intents": [
+        {
+          "surface": "codex",
+          "version": "4.0.2",
+          "selection": {
+            "mode": "custom",
+            "roots": [
+              {
+                "kind": "skill",
+                "id": "issue-delivery"
+              }
+            ]
+          },
+          "aliases": []
+        }
+      ]
+    },
+    {
       "id": "matty",
       "surface_intents": [
         {
