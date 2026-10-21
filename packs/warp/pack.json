@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "warp",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Warp common engineering and agent workflows",
   "selectable": true,
   "surfaces": [
@@ -18,7 +18,7 @@
     {
       "id": "warp-common-skills",
       "repository": "warpdotdev/common-skills",
-      "commit": "7c4eb852de8d7c3e68c81802e1c59db9a611f914"
+      "commit": "8792394ff1b655e0af451b8fabb68ef0cfcbd208"
     }
   ],
   "resources": [
@@ -449,6 +449,52 @@
           "projection": "skill",
           "name": "implement-specs",
           "invocation": "implement-specs",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "merge-risk",
+      "source": "skills/merge-risk",
+      "description": "Use when assessing the risk of merging a PR",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "warp-common-skills",
+        "path": ".agents/skills/merge-risk",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "merge-risk",
+          "invocation": "/merge-risk",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "merge-risk",
+          "invocation": "$merge-risk",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "opencode",
+          "projection": "skill",
+          "name": "merge-risk",
+          "invocation": "merge-risk",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
