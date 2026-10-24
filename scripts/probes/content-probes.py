@@ -661,7 +661,7 @@ def matty_installation_state(workspace):
 
 
 def matty_design(probe, surfaces, *, delivery=False):
-    """Review all 38 roots, nested references, retained snapshots and native contracts."""
+    """Check one reviewed slice or the complete Matty inventory through the CLI."""
     scenario = "matty-delivery" if delivery else "matty-design"
     inventory = {**MATTY_DESIGN_DEPENDENCIES, **MATTY_DELIVERY_DEPENDENCIES} if delivery else MATTY_DESIGN_DEPENDENCIES
     changed = MATTY_DELIVERY_DEPENDENCIES if delivery else MATTY_DESIGN_DEPENDENCIES
@@ -673,11 +673,13 @@ def matty_design(probe, surfaces, *, delivery=False):
     baseline_resources = json.loads((Path(probe.evidence["matty_baseline_project"]) / "packs/matty/pack.json").read_text())["resources"]
     require(all(not item.get("on_demand") for item in baseline_resources if item["id"] in changed),
             "Matty baseline must precede the scoped on-demand adaptation")
+    require(not delivery or set(inventory) == {item["id"] for item in manifest["resources"] if item["kind"] == "skill"},
+            "complete Matty inventory is not accounted for")
     for host in ("codex", "claude"):
         probe.set_context("content-acceptance", scenario=scenario, surface=host, scope="project")
         workspace = probe.prepare(scenario + "-" + host)
         # Host tools and content runtimes are unavailable during all retrievals.
-        runtime_path = probe.root / ("matty-no-runtimes-" + host)
+        runtime_path = probe.root / (scenario + "-no-runtimes-" + host)
         runtime_path.mkdir()
         (runtime_path / "git").symlink_to(shutil.which("git", path=probe.env["PATH"]))
         access = Probe(probe.executable, probe.snapshot, probe.root, {**probe.env, "PATH": str(runtime_path)},
@@ -685,7 +687,10 @@ def matty_design(probe, surfaces, *, delivery=False):
         access.set_context("content-acceptance", scenario=scenario, surface=host, scope="project")
         # A modified local native primitive must never substitute for Matty's resource.
         installed = workspace / "project" / SKILL_DIRECTORIES[host] / ("tdd" if delivery else "grilling")
-        installed.mkdir(parents=True)
+        if delivery:
+            probe.apply(workspace, ["install", "matty", "--surface", host, "--resource", "skill:tdd"])
+        else:
+            installed.mkdir(parents=True)
         (installed / "SKILL.md").write_text("# Locally modified native primitive\nDo not use this copy.\n")
         # Seed provider ancestors so only preparation data is excluded below.
         (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
@@ -694,8 +699,10 @@ def matty_design(probe, surfaces, *, delivery=False):
         discovery = access.candidate(workspace, ["show", "matty", "--surface", host, "--json"])
         require(discovery["schema_version"] == 1 and discovery["report"] == "skill-discovery", "wrong discovery contract")
         entries = {item["qualified_skill"]: item for item in discovery["skills"]}
+        require(not delivery or set(entries) == {"matty:" + skill for skill in inventory}, "Matty discovery inventory changed")
         roots = {}
         for skill, dependencies in inventory.items():
+            report = access.candidate(workspace, ["get", "skill", "matty:" + skill, "--surface", host, "--json"])
             item = entries["matty:" + skill]
             resource = resources[skill]
             require(resource["on_demand"]["dependencies"] == [{"type": "skill", "target": "matty:" + name}
@@ -704,7 +711,6 @@ def matty_design(probe, surfaces, *, delivery=False):
                     "Matty discovery claims missing compatibility or verified runtimes")
             require(all(item["on_demand"].get(key, []) == value for key, value in resource["on_demand"].items())
                     and item["prerequisites"] == resource["on_demand"]["prerequisites"], "Matty discovery lost reviewed declarations")
-            report = access.candidate(workspace, ["get", "skill", "matty:" + skill, "--surface", host, "--json"])
             descriptors = matty_descriptors(report, host, manifest["version"], [skill, *dependencies, *sorted({nested for dependency in dependencies
                                                           for nested in inventory[dependency]} - set(dependencies))])
             require(report["qualified_skill"] == "matty:" + skill, "wrong Matty root")
@@ -719,6 +725,7 @@ def matty_design(probe, surfaces, *, delivery=False):
                                                           "relative-references", "legal-closure", "absent-content-runtimes"]})
         require(protected == matty_installation_state(workspace), "Matty retrieval altered installation/target state")
         require(tree(workspace / "snapshots") == snapshots, "Matty retrieval mutated immutable snapshot")
+        prepared = tree(workspace / "home/.local/share/packy/skill-access")
         # Switch only availability through the existing digest-bound candidate transition.
         baseline = probe.evidence["matty_baseline"]
         old = Probe(probe.executable, probe.root / "matty-baseline-dist", probe.root, access.env, probe.evidence, probe.timeout)
@@ -731,15 +738,26 @@ def matty_design(probe, surfaces, *, delivery=False):
             prior = {item["entry_document"]: Path(item["entry_document"]).read_bytes()
                      for item in [report, *report["dependencies"]]}
             for dependency in inventory[wrapper]:
+                from urllib.parse import unquote
+                entry = Path(report["entry_document"])
+                references = re.findall(r"\[matty:" + dependency + r"\]\(([^)]+)\)", entry.read_text())
+                expected = next(item for item in report["dependencies"] if item["qualified_skill"] == "matty:" + dependency)
+                require(bool(references) and all((entry.parent / unquote(path)).resolve() == Path(expected["entry_document"])
+                                                  for path in references), "nested authored reference points outside qualified closure")
                 nested = old.candidate(workspace, ["get", "skill", "matty:" + dependency, "--surface", host,
                                                    "--snapshot", report["snapshot_id"], "--json"])
-                expected = next(item for item in report["dependencies"] if item["qualified_skill"] == "matty:" + dependency)
                 require(nested["snapshot_id"] == report["snapshot_id"] and nested["surface"] == host
                         and nested["qualified_skill"] == expected["qualified_skill"]
                         and nested["pack_version"] == expected["pack_version"]
                         and Path(nested["entry_document"]).read_bytes() == prior[expected["entry_document"]],
                         "nested Matty access lost initiating snapshot/content")
             require(all(Path(path).read_bytes() == data for path, data in prior.items()), "prior Matty references stopped working")
+        observed = tree(workspace / "home/.local/share/packy/skill-access")
+        require(all(observed.get(path) == value for path, value in prepared.items()),
+                "nested retrieval changed prior prepared bytes/modes")
+        observed_snapshots = tree(workspace / "snapshots")
+        require(all(observed_snapshots.get(path) == value for path, value in snapshots.items()),
+                "transition/nested access changed prior immutable resources")
         output, _ = old.candidate(workspace, ["get", "skill", "matty:" + transition_root, "--surface", host, "--json"], failure=True)
         require(json.loads(output)["error"]["code"] == "incompatible_resource", "new independent access ignored changed selection")
         retained = workspace / "snapshots" / roots[transition_root]["snapshot_id"] / "packs/matty"
@@ -750,11 +768,51 @@ def matty_design(probe, surfaces, *, delivery=False):
                 or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
                 "missing retained Matty content fell back or failed for unrelated reason")
         require(protected == matty_installation_state(workspace), "nested Matty access changed installation/target state")
+        if delivery:
+            matty_pstack_tdd(probe, access, host, manifest)
         probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "result": "passed",
-                                           "checks": ["wrapper-and-wayfinder-nesting", "changed-selection", "retained-snapshot",
+                                           "checks": ["qualified-nested-references", "changed-selection", "retained-snapshot",
                                                       "missing-retained-fails", "modified-installed-copy-preserved", "unchanged-target-and-installation"]})
     require(tree(ROOT / "packs/matty") == authored, "Matty acceptance changed authored immutable content")
     matty_native(probe, manifest, inventory, scenario)
+
+
+def matty_pstack_tdd(probe, access, host, manifest):
+    """Use a separate native scope to respect same-name conflict rules."""
+    from urllib.parse import unquote
+
+    workspace = probe.prepare("matty-with-pstack-tdd-" + host)
+    probe.apply(workspace, ["activate", "pstack", "--surface", host, "--resource", "skill:tdd"])
+    native = workspace / "home" / SKILL_DIRECTORIES[host] / "tdd/SKILL.md"
+    require(native.is_file() and native.read_bytes() == (ROOT / "packs/pstack/skills" / host / "tdd/SKILL.md").read_bytes(), "pstack TDD was not actually activated")
+    (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
+    protected = matty_installation_state(workspace)
+    snapshots = tree(workspace / "snapshots")
+    report = access.candidate(workspace, ["get", "skill", "matty:implement-spec", "--surface", host, "--json"])
+    descriptors = matty_descriptors(report, host, manifest["version"], ["implement-spec", "code-review", "tdd", "codebase-design"])
+    assert_matty_content(descriptors, manifest)
+    entry = Path(report["entry_document"])
+    text = entry.read_text()
+    # Follow the rendered implementation/delegation references, not installed names.
+    for dependency in ("tdd", "code-review"):
+        references = re.findall(r"\[matty:" + dependency + r"\]\(([^)]+)\)", text)
+        require(bool(references), "implementation delegation lost qualified " + dependency)
+        expected = descriptors["matty:" + dependency]
+        require(all((entry.parent / unquote(path)).resolve() == Path(expected["entry_document"]) for path in references),
+                "delegated reference targets a foreign/native resource")
+        nested = access.candidate(workspace, ["get", "skill", "matty:" + dependency, "--surface", host,
+                                               "--snapshot", report["snapshot_id"], "--json"])
+        require(nested["qualified_skill"] == expected["qualified_skill"] and nested["surface"] == host
+                and nested["snapshot_id"] == report["snapshot_id"]
+                and Path(nested["entry_document"]).read_bytes() == Path(expected["entry_document"]).read_bytes(),
+                "pstack-active nested retrieval substituted another workflow")
+    require("Refactoring is not part of the loop" in Path(descriptors["matty:tdd"]["entry_document"]).read_text(),
+            "Matty TDD semantics lost while pstack was active")
+    require(protected == matty_installation_state(workspace) and tree(workspace / "snapshots") == snapshots,
+            "qualified Matty retrieval changed active pstack/target/immutable state")
+    probe.evidence["outcomes"].append({"scenario": "matty-delivery", "surface": host, "result": "passed",
+                                       "checks": ["pstack-tdd-active", "qualified-Matty-TDD", "delegated-rendered-references",
+                                                  "nested-host-snapshot", "active-native-state-preserved"]})
 
 
 def matty_native(probe, manifest, inventory, scenario):
@@ -765,7 +823,7 @@ def matty_native(probe, manifest, inventory, scenario):
     resources = {item["id"]: item for item in manifest["resources"]}
     for host in SURFACES:
         probe.set_context("native-regression", scenario=scenario, surface=host, scope="project")
-        workspace = probe.prepare("matty-native-" + host)
+        workspace = probe.prepare(scenario + "-native-" + host)
         args = ["install", "matty", "--surface", host]
         for skill in inventory:
             args.extend(["--resource", "skill:" + skill])
@@ -844,7 +902,7 @@ def main():
                 probe.set_context("baseline-construction")
                 evidence["matty_baseline"] = build_catalog(probe, args.matty_baseline, matty_baseline_commit,
                                                           root / "matty-baseline-dist")
-            ambient = {key: tree(Path(env[key])) for key in ("HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME")}
+            ambient = {key: tree(Path(env[key])) for key in ("HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME")}
             for scenario in scenarios:
                 probe.set_context("content-acceptance", scenario=scenario, scope="project")
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
