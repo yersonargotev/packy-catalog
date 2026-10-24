@@ -566,22 +566,194 @@ def reviewed_retrieval(probe):
                                                       "absent-runtime", "inert-scripts", "unchanged-target-and-sources"]})
 
 
+# Reviewed expectations from issue #91, independent of the manifest under test.
+MATTY_DESIGN_DEPENDENCIES = {
+    "codebase-design": [], "domain-modeling": [], "grilling": [],
+    "grill-me": ["grilling"], "grill-with-docs": ["domain-modeling", "grilling"],
+    "improve-codebase-architecture": ["codebase-design", "domain-modeling", "grilling"],
+    "to-questionnaire": [], "to-spec": [], "to-tickets": [],
+    "triage": ["domain-modeling", "grilling"],
+    "wayfinder": ["domain-modeling", "grilling", "prototype", "research"],
+    "loop-me": ["grilling"], "setup-matt-pocock-skills": [], "wizard": [],
+    "writing-for-agents": [], "wait-what": [], "handoff": [], "research": [], "prototype": [],
+}
+
+
+def matty_descriptors(report, host, version, expected):
+    require(report["schema_version"] == 1 and report["report"] == "skill-access"
+            and report["result"] == "prepared", "invalid Matty access envelope")
+    descriptors = {item["qualified_skill"]: item for item in [report, *report["dependencies"]]}
+    require(set(descriptors) == {"matty:" + name for name in expected}, "wrong Matty dependency closure")
+    require(len(descriptors) == len(report["dependencies"]) + 1, "duplicate Matty dependency descriptor")
+    for descriptor in descriptors.values():
+        require(descriptor["pack_version"] == version and descriptor["surface"] == host
+                and descriptor["snapshot_id"] == report["snapshot_id"], "wrong Matty identity/version/host/snapshot")
+        entry, root = Path(descriptor["entry_document"]), Path(descriptor["resource_root"])
+        require(entry.is_absolute() and root.is_absolute() and entry.parent == root
+                and entry.name == "ACCESS.md" and entry.is_file(), "unusable Matty resource location")
+    return descriptors
+
+
+def assert_matty_content(descriptors, manifest):
+    """Compare every authored byte/mode, rendering only explicitly reviewed tokens."""
+    from urllib.parse import quote, unquote
+
+    resources = {item["id"]: item for item in manifest["resources"]}
+    for identity, descriptor in descriptors.items():
+        resource = resources[identity.split(":")[1]]
+        source = ROOT / "packs/matty" / resource["source"]
+        root = Path(descriptor["resource_root"])
+        authored = tree(source)
+        require(set(tree(root)) == set(authored), "Matty supporting tree is incomplete: " + identity)
+        for relative, (mode, data, link) in authored.items():
+            destination = root / relative
+            require(destination.lstat().st_mode == mode and not link, "Matty resource mode/link changed")
+            if data is None:
+                continue
+            if relative in resource["on_demand"]["reference_files"]:
+                def reference(match):
+                    target = match[1]
+                    if ":" not in target:
+                        target = "matty:" + target
+                    require(target in descriptors, "authored Matty reference lacks declared closure")
+                    return quote(os.path.relpath(descriptors[target]["entry_document"], destination.parent), safe="/")
+                data = re.sub(r"\{\{packy.access:([^}]+)\}\}", reference, data.decode()).encode()
+            require(destination.read_bytes() == data, "Matty content differs: " + identity + "/" + relative)
+        # Check real authored Markdown links, excluding illustrative fenced templates.
+        for document in root.glob("*.md"):
+            prose = re.sub(r"```.*?```", "", document.read_text(), flags=re.S)
+            for target in re.findall(r"\]\(([^)]+)\)", prose):
+                if "://" in target or target.startswith("#"):
+                    continue
+                path = (document.parent / unquote(target.split("#")[0])).resolve()
+                require(path.is_file() and path.stat().st_size > 0, "broken Matty relative reference: " + target)
+        pack_root = root
+        while not (pack_root / "pack.json").is_file():
+            require(pack_root.parent != pack_root, "prepared Matty manifest missing")
+            pack_root = pack_root.parent
+        require(json.loads((pack_root / "pack.json").read_text()) == manifest, "prepared Matty provenance changed")
+        require((pack_root / "notices/matty-mit").read_bytes()
+                == (ROOT / "packs/matty/notices/matty-mit").read_bytes(), "Matty MIT notice missing or changed")
+
+
 def matty_design(probe, surfaces):
-    """Exercise reviewed Matty content through the public released CLI."""
+    """Review all 38 roots, nested references, retained snapshots and native contracts."""
+    manifest = json.loads((ROOT / "packs/matty/pack.json").read_text())
+    resources = {item["id"]: item for item in manifest["resources"]}
+    authored = tree(ROOT / "packs/matty")
+    baseline_resources = json.loads((Path(probe.evidence["matty_baseline_project"]) / "packs/matty/pack.json").read_text())["resources"]
+    require(all(not item.get("on_demand") for item in baseline_resources if item["id"] in MATTY_DESIGN_DEPENDENCIES),
+            "Matty baseline must precede the scoped on-demand adaptation")
     for host in ("codex", "claude"):
         probe.set_context("content-acceptance", scenario="matty-design", surface=host, scope="project")
         workspace = probe.prepare("matty-design-" + host)
-        report = probe.candidate(workspace, ["get", "skill", "matty:grill-me", "--surface", host, "--json"])
-        require(report["qualified_skill"] == "matty:grill-me" and report["result"] == "prepared",
-                "Matty wrapper is unavailable")
-        require({item["qualified_skill"] for item in report["dependencies"]} == {"matty:grilling"},
-                "Matty wrapper did not prepare its own grilling primitive")
+        # Host tools and content runtimes are unavailable during all retrievals.
+        runtime_path = probe.root / ("matty-no-runtimes-" + host)
+        runtime_path.mkdir()
+        (runtime_path / "git").symlink_to(shutil.which("git", path=probe.env["PATH"]))
+        access = Probe(probe.executable, probe.snapshot, probe.root, {**probe.env, "PATH": str(runtime_path)},
+                       probe.evidence, probe.timeout)
+        access.set_context("content-acceptance", scenario="matty-design", surface=host, scope="project")
+        # A modified local native primitive must never substitute for Matty's resource.
+        installed = workspace / "project" / SKILL_DIRECTORIES[host] / "grilling"
+        installed.mkdir(parents=True)
+        (installed / "SKILL.md").write_text("# Locally modified foreign grilling\nDo not use this copy.\n")
+        protected = {name: tree(workspace / name) for name in ("project", "home", "config")}
+        snapshots = tree(workspace / "snapshots")
+        discovery = access.candidate(workspace, ["show", "matty", "--surface", host, "--json"])
+        require(discovery["schema_version"] == 1 and discovery["report"] == "skill-discovery", "wrong discovery contract")
+        entries = {item["qualified_skill"]: item for item in discovery["skills"]}
+        roots = {}
+        for skill, dependencies in MATTY_DESIGN_DEPENDENCIES.items():
+            item = entries["matty:" + skill]
+            resource = resources[skill]
+            require(resource["on_demand"]["dependencies"] == [{"type": "skill", "target": "matty:" + name}
+                                                            for name in dependencies], "wrong direct Matty dependency declarations")
+            require(item["compatible"] and not discovery["prerequisites_verified"],
+                    "Matty discovery claims missing compatibility or verified runtimes")
+            require(all(item["on_demand"].get(key, []) == value for key, value in resource["on_demand"].items())
+                    and item["prerequisites"] == resource["on_demand"]["prerequisites"], "Matty discovery lost reviewed declarations")
+            report = access.candidate(workspace, ["get", "skill", "matty:" + skill, "--surface", host, "--json"])
+            descriptors = matty_descriptors(report, host, manifest["version"], [skill, *dependencies])
+            require(report["qualified_skill"] == "matty:" + skill, "wrong Matty root")
+            assert_matty_content(descriptors, manifest)
+            for identity, descriptor in descriptors.items():
+                require(descriptor["prerequisites"] == resources[identity.split(":")[1]]["on_demand"]["prerequisites"],
+                        "Matty access lost known execution prerequisites")
+            roots[skill] = report
+            probe.evidence["outcomes"].append({"scenario": "matty-design", "surface": host, "skill": skill,
+                                               "snapshot_id": report["snapshot_id"], "result": "passed",
+                                               "checks": ["reviewed-discovery", "qualified-closure", "full-source-bytes-and-modes",
+                                                          "relative-references", "legal-closure", "absent-content-runtimes"]})
+        require(protected == {name: tree(workspace / name) for name in protected}, "Matty retrieval altered installation/target state")
+        require(tree(workspace / "snapshots") == snapshots, "Matty retrieval mutated immutable snapshot")
+        # Switch only availability through the existing digest-bound candidate transition.
+        baseline = probe.evidence["matty_baseline"]
+        old = Probe(probe.executable, probe.root / "matty-baseline-dist", probe.root, access.env, probe.evidence, probe.timeout)
+        old.set_context("snapshot-transition", scenario="matty-design", surface=host, scope="project")
+        transition = old.candidate(workspace, ["transition", "--expect-archive-sha256", probe.evidence["archive_sha256"], "--json"])
+        require(transition["result"] == "transitioned" and transition["archive_sha256"] == baseline["archive_sha256"],
+                "Matty controlled availability transition failed")
+        for wrapper in ("grill-me", "grill-with-docs", "wayfinder"):
+            report = roots[wrapper]
+            prior = {item["entry_document"]: Path(item["entry_document"]).read_bytes()
+                     for item in [report, *report["dependencies"]]}
+            for dependency in MATTY_DESIGN_DEPENDENCIES[wrapper]:
+                nested = old.candidate(workspace, ["get", "skill", "matty:" + dependency, "--surface", host,
+                                                   "--snapshot", report["snapshot_id"], "--json"])
+                require(nested["snapshot_id"] == report["snapshot_id"]
+                        and nested["entry_document"] in prior
+                        and Path(nested["entry_document"]).read_bytes() == prior[nested["entry_document"]],
+                        "nested Matty access lost initiating snapshot/content")
+            require(all(Path(path).read_bytes() == data for path, data in prior.items()), "prior Matty references stopped working")
+        output, _ = old.candidate(workspace, ["get", "skill", "matty:grill-me", "--surface", host, "--json"], failure=True)
+        require(json.loads(output)["error"]["code"] == "incompatible_resource", "new independent access ignored changed selection")
+        retained = workspace / "snapshots" / roots["grill-me"]["snapshot_id"] / "packs/matty"
+        (retained / resources["grilling"]["source"] / "ACCESS.md").unlink()
+        output, diagnostic = old.candidate(workspace, ["get", "skill", "matty:grilling", "--surface", host,
+                                                      "--snapshot", roots["grill-me"]["snapshot_id"], "--json"], failure=True)
+        require("snapshot_unavailable" in output + diagnostic, "missing retained Matty content fell back or failed for unrelated reason")
+        require(protected == {name: tree(workspace / name) for name in protected}, "nested Matty access changed installation/target state")
+        probe.evidence["outcomes"].append({"scenario": "matty-design", "surface": host, "result": "passed",
+                                           "checks": ["wrapper-and-wayfinder-nesting", "changed-selection", "retained-snapshot",
+                                                      "missing-retained-fails", "modified-installed-copy-preserved", "unchanged-target-and-installation"]})
+    require(tree(ROOT / "packs/matty") == authored, "Matty acceptance changed authored immutable content")
+    matty_native(probe, manifest)
+
+
+def matty_native(probe, manifest):
+    """Preserve native contracts and every existing source byte on all three hosts."""
+    baseline_root = Path(probe.evidence["matty_baseline_project"])
+    baseline = json.loads((baseline_root / "packs/matty/pack.json").read_text())
+    previous = {item["id"]: item for item in baseline["resources"]}
+    resources = {item["id"]: item for item in manifest["resources"]}
+    for host in SURFACES:
+        probe.set_context("native-regression", scenario="matty-design", surface=host, scope="project")
+        workspace = probe.prepare("matty-native-" + host)
+        args = ["install", "matty", "--surface", host]
+        for skill in MATTY_DESIGN_DEPENDENCIES:
+            args.extend(["--resource", "skill:" + skill])
+        probe.apply(workspace, args)
+        installed = workspace / "project" / SKILL_DIRECTORIES[host]
+        require({path.name for path in installed.iterdir()} == set(MATTY_DESIGN_DEPENDENCIES), "native Matty selection changed")
+        for skill in MATTY_DESIGN_DEPENDENCIES:
+            before, after = previous[skill], resources[skill]
+            require({key: value for key, value in after.items() if key not in ("origin", "on_demand")}
+                    == {key: value for key, value in before.items() if key != "origin"}, "native Matty contract changed")
+            original = baseline_root / "packs/matty" / before["source"]
+            current = installed / skill
+            for relative, observed in tree(original).items():
+                require(tree(current).get(relative) == observed, "native Matty upstream bytes/modes changed: " + skill + "/" + relative)
+        probe.verify(workspace)
+        probe.evidence["outcomes"].append({"scenario": "matty-design", "surface": host, "result": "passed",
+                                           "checks": ["native-selection", "unchanged-native-contracts", "all-original-bytes-and-modes", "project-verification"]})
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design"), required=True)
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
+    parser.add_argument("--matty-baseline", type=Path, help="clean complete Catalog baseline before Matty on-demand adaptation")
     parser.add_argument("--surface", action="append", choices=SURFACES)
     parser.add_argument("--html-pack", action="store_true", help="optionally execute the installed Claude HTML packer with Node")
     parser.add_argument("--timeout", type=float, default=30, help="lifecycle deadline in seconds (default: 30)")
@@ -598,6 +770,8 @@ def main():
         parser.error("pstack requires --pstack-baseline and all three surfaces")
     if args.pstack_baseline is not None and "pstack" not in scenarios:
         parser.error("--pstack-baseline requires --scenario pstack")
+    if ("matty-design" in scenarios) != (args.matty_baseline is not None):
+        parser.error("matty-design requires --matty-baseline, used only with that scenario")
     evidence = {"schema_version": 1, "report": "catalog-content-probes", "provenance": "local-candidate",
                 "official_publication": False, "scenarios": scenarios, "surfaces": surfaces, "html_pack": args.html_pack,
                 "commands": [], "outcomes": [], "result": "failed"}
@@ -615,6 +789,11 @@ def main():
                 args.pstack_baseline = args.pstack_baseline.resolve(strict=True)
                 probe.set_context("baseline-verification")
                 baseline_commit = checkout_commit(probe, args.pstack_baseline)
+            if args.matty_baseline is not None:
+                args.matty_baseline = args.matty_baseline.resolve(strict=True)
+                probe.set_context("baseline-verification")
+                matty_baseline_commit = checkout_commit(probe, args.matty_baseline)
+                evidence["matty_baseline_project"] = str(args.matty_baseline)
             probe.set_context("acquisition")
             probe.execute([sys.executable, "-B", str(ROOT / "scripts/packy_tool.py"), "--pin",
                            str(ROOT / "packy-release.json"), "--executable-output", str(probe.executable)], timeout=180)
@@ -625,6 +804,10 @@ def main():
             if args.pstack_baseline is not None:
                 probe.set_context("baseline-construction")
                 evidence["pstack_baseline"] = build_catalog(probe, args.pstack_baseline, baseline_commit, root / "baseline-dist")
+            if args.matty_baseline is not None:
+                probe.set_context("baseline-construction")
+                evidence["matty_baseline"] = build_catalog(probe, args.matty_baseline, matty_baseline_commit,
+                                                          root / "matty-baseline-dist")
             ambient = {key: tree(Path(env[key])) for key in ("HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME")}
             for scenario in scenarios:
                 probe.set_context("content-acceptance", scenario=scenario, scope="project")
@@ -636,6 +819,9 @@ def main():
             if args.pstack_baseline is not None:
                 probe.set_context("baseline-verification")
                 require(checkout_commit(probe, args.pstack_baseline) == baseline_commit, "pstack baseline changed during probes")
+            if args.matty_baseline is not None:
+                probe.set_context("baseline-verification")
+                require(checkout_commit(probe, args.matty_baseline) == matty_baseline_commit, "Matty baseline changed during probes")
             evidence["result"] = "passed"
     except (OSError, ValueError, KeyError, RuntimeError, subprocess.SubprocessError, KeyboardInterrupt) as error:
         evidence["error"] = str(error) or "probe interrupted"

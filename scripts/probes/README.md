@@ -287,3 +287,23 @@ No host credentials, model calls, live activation, runtime provisioning or manua
 publication occurs. Ordinary tests/validation/publication do not run this scenario.
 The initial 117-skill compatibility and complete-inventory acceptance remain
 separate follow-up deliveries.
+
+## Matty design and planning acceptance
+
+Run the focused, opt-in `matty-design` scenario with a clean pre-adaptation
+complete Catalog baseline:
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario matty-design \
+  --matty-baseline /path/to/pre-change-catalog > /tmp/matty-design-evidence.json
+```
+
+Both Codex and Claude are required; native regression also covers OpenCode.
+The [reviewed matrix](../../docs/design/matty-design-on-demand.md) records all 19
+entries, required/conditional edges, approvals, output contracts and execution
+prerequisites. The scenario compares all 38 root resources and full supporting/legal
+closure, follows wrapper/wayfinder references across a controlled snapshot
+transition, rejects missing retained content, preserves modified native copies,
+and checks native installation on all three hosts. Content runtimes are absent
+during retrieval. It obtains instructions without executing any Matty procedure,
+script or template. Ordinary checks and publication do not invoke this scenario.
