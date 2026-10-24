@@ -633,9 +633,10 @@ def assert_matty_content(descriptors, manifest):
                     return quote(os.path.relpath(descriptors[target]["entry_document"], destination.parent), safe="/")
                 data = re.sub(r"\{\{packy.access:([^}]+)\}\}", reference, data.decode()).encode()
             require(destination.read_bytes() == data, "Matty content differs: " + identity + "/" + relative)
-        # Check real authored Markdown links, excluding illustrative fenced templates.
+        # Check real Markdown links; fenced/inline code contains illustrative target paths.
         for document in root.glob("*.md"):
             prose = re.sub(r"```.*?```", "", document.read_text(), flags=re.S)
+            prose = re.sub(r"`[^`\n]*`", "", prose)
             for target in re.findall(r"\]\(([^)]+)\)", prose):
                 if "://" in target or target.startswith("#"):
                     continue
