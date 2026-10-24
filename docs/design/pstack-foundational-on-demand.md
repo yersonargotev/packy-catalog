@@ -26,6 +26,11 @@ branch. Descriptive comparisons and routing recommendations remain optional
 qualified advice, resolved only if selected and compatible in the initiating
 snapshot. They add no false blockers or cycles. Native `requires` retains its
 existing installation semantics, including broader background dependencies.
+The released engine prepares their union with `on_demand.dependencies`. Inherited
+background edges additionally prepare redesign for attack-the-premise,
+encode-lessons for build-the-lever, and guard-context for minimize-reader-load.
+These existing resource requirements all resolve within this reviewed slice;
+preparation does not turn the optional prose comparisons into invocations.
 
 Discovery exposes reviewed metadata and unverified prerequisites. Supporting
 references remain separate files read only for the active branch. Retrieval runs

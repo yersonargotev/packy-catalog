@@ -642,8 +642,12 @@ def assert_skill_content(descriptors, manifest, *, pack="matty"):
             for target in re.findall(r"\]\(([^)]+)\)", prose):
                 if "://" in target or target.startswith("#"):
                     continue
+                # The retained why synthesis prompt illustrates an output citation.
+                if pack == "pstack" and document.name == "synthesizer-prompt.md" and target == "url":
+                    continue
                 path = (document.parent / unquote(target.split("#")[0])).resolve()
-                require(path.is_file() and path.stat().st_size > 0, "broken skill-access relative reference: " + target)
+                require(path.is_file() and path.stat().st_size > 0,
+                        "broken skill-access relative reference in " + str(document) + ": " + target)
         pack_root = root
         while not (pack_root / "pack.json").is_file():
             require(pack_root.parent != pack_root, "prepared skill-access manifest missing")
@@ -871,6 +875,14 @@ PSTACK_FOUNDATIONAL_DEPENDENCIES = {
     "setup-pstack": [], "sharpen": [], "swarm": [], "tdd": [], "unslop": [], "why": [],
 }
 
+# The released engine also preserves these pre-existing native requires edges.
+# They prepare background resources without invoking the optional comparisons.
+PSTACK_NATIVE_BACKGROUND_DEPENDENCIES = {
+    "principle-attack-the-premise": ["principle-redesign-from-first-principles"],
+    "principle-build-the-lever": ["principle-encode-lessons-in-structure"],
+    "principle-minimize-reader-load": ["principle-guard-the-context-window"],
+}
+
 
 def pstack_foundational(probe, surfaces):
     """Account for the exact host-effective slice without running its workflows."""
@@ -888,7 +900,7 @@ def pstack_foundational(probe, surfaces):
 
     def closure(skill):
         result = {skill}
-        for dependency in inventory[skill]:
+        for dependency in set(inventory[skill] + PSTACK_NATIVE_BACKGROUND_DEPENDENCIES.get(skill, [])):
             result.update(closure(dependency))
         return result
 
