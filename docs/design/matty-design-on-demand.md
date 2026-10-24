@@ -22,12 +22,14 @@ its own retrieval context without adding a synthetic skill dependency. All origi
 Prototype keeps its original logic/UI guides and capture backlinks; both return
 to the same preserved procedure within the returned resource tree.
 Origins mark the complete changed trees as adaptations, retaining upstream paths
-and the original MIT notice. Other 14 Matty skills and every other Pack remain
-unchanged. OpenCode receives its existing native procedure, without new on-demand
-support. No live installation is updated. The MIT notice resource drops its redundant
-self-notice edge: released on-demand graph validation rejects that cycle. Every
-skill still explicitly includes the unchanged MIT notice; legal and native
-selection closure remain intact.
+and the original MIT notice. The other 14 Matty skill definitions and every other Pack remain
+unchanged; the shared legal closure gains the Catalog adaptation notice. OpenCode receives its existing native procedure, without new on-demand
+support. No live installation is updated. The imported MIT notice points to a terminal,
+Catalog-authored MIT notice for these adaptations instead of referencing itself.
+The released contract requires imported notices to retain a legal reference and
+rejects cycles during on-demand graph validation. Every skill still includes the
+unchanged upstream MIT notice, now with the additional Catalog adaptation notice;
+native skill selection and original source bytes remain intact.
 
 Native `requires` edges retain their original installation semantics. The reviewed
 `on_demand.dependencies` graph below supplies required resource availability;
@@ -89,10 +91,15 @@ supporting-resource, notice and mode comparisons; real relative Markdown targets
 modified installed-copy preservation; and absent content runtimes. Wrapper and
 wayfinder nested requests retain the original snapshot after a digest-bound
 transition to the baseline, while independent requests see baseline incompatibility.
-Missing original retained content fails explicitly. Native installation of all 19
+Missing original retained content fails explicitly, including when the candidate
+integrity guard rejects the altered retained tree before access dispatch. Native installation of all 19
 skills on Codex, Claude and OpenCode preserves original selection, contracts,
 source bytes/modes and project verification. Target/installation and authored
-immutable trees are observed throughout. Ordinary validation/publication remain
+immutable trees are observed throughout. HOME comparison permits only the
+candidate provider's skill-access preparation data, while preserving native
+roots, configuration, and every other HOME entry. Nested preparation may return
+a different location for the same qualified resource; both copies must retain
+identical snapshot/content, and prior references must remain usable. Ordinary validation/publication remain
 inert and never invoke this scenario.
 
 The first public wrapper check was recorded red on committed candidate

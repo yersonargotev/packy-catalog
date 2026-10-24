@@ -634,6 +634,16 @@ def assert_matty_content(descriptors, manifest):
         require(json.loads((pack_root / "pack.json").read_text()) == manifest, "prepared Matty provenance changed")
         require((pack_root / "notices/matty-mit").read_bytes()
                 == (ROOT / "packs/matty/notices/matty-mit").read_bytes(), "Matty MIT notice missing or changed")
+        require((pack_root / "notices/catalog-adaptations-mit").read_bytes()
+                == (ROOT / "packs/matty/notices/catalog-adaptations-mit").read_bytes(), "Catalog adaptation notice missing or changed")
+
+
+def matty_installation_state(workspace):
+    # Candidate preparation is provider-owned data, separate from native installs.
+    prefix = ".local/share/packy/skill-access"
+    home = {name: value for name, value in tree(workspace / "home").items()
+            if name != prefix and not name.startswith(prefix + "/")}
+    return {"project": tree(workspace / "project"), "home": home, "config": tree(workspace / "config")}
 
 
 def matty_design(probe, surfaces):
@@ -658,7 +668,9 @@ def matty_design(probe, surfaces):
         installed = workspace / "project" / SKILL_DIRECTORIES[host] / "grilling"
         installed.mkdir(parents=True)
         (installed / "SKILL.md").write_text("# Locally modified foreign grilling\nDo not use this copy.\n")
-        protected = {name: tree(workspace / name) for name in ("project", "home", "config")}
+        # Seed provider ancestors so only preparation data is excluded below.
+        (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
+        protected = matty_installation_state(workspace)
         snapshots = tree(workspace / "snapshots")
         discovery = access.candidate(workspace, ["show", "matty", "--surface", host, "--json"])
         require(discovery["schema_version"] == 1 and discovery["report"] == "skill-discovery", "wrong discovery contract")
@@ -685,7 +697,7 @@ def matty_design(probe, surfaces):
                                                "snapshot_id": report["snapshot_id"], "result": "passed",
                                                "checks": ["reviewed-discovery", "qualified-closure", "full-source-bytes-and-modes",
                                                           "relative-references", "legal-closure", "absent-content-runtimes"]})
-        require(protected == {name: tree(workspace / name) for name in protected}, "Matty retrieval altered installation/target state")
+        require(protected == matty_installation_state(workspace), "Matty retrieval altered installation/target state")
         require(tree(workspace / "snapshots") == snapshots, "Matty retrieval mutated immutable snapshot")
         # Switch only availability through the existing digest-bound candidate transition.
         baseline = probe.evidence["matty_baseline"]
@@ -701,9 +713,11 @@ def matty_design(probe, surfaces):
             for dependency in MATTY_DESIGN_DEPENDENCIES[wrapper]:
                 nested = old.candidate(workspace, ["get", "skill", "matty:" + dependency, "--surface", host,
                                                    "--snapshot", report["snapshot_id"], "--json"])
-                require(nested["snapshot_id"] == report["snapshot_id"]
-                        and nested["entry_document"] in prior
-                        and Path(nested["entry_document"]).read_bytes() == prior[nested["entry_document"]],
+                expected = next(item for item in report["dependencies"] if item["qualified_skill"] == "matty:" + dependency)
+                require(nested["snapshot_id"] == report["snapshot_id"] and nested["surface"] == host
+                        and nested["qualified_skill"] == expected["qualified_skill"]
+                        and nested["pack_version"] == expected["pack_version"]
+                        and Path(nested["entry_document"]).read_bytes() == prior[expected["entry_document"]],
                         "nested Matty access lost initiating snapshot/content")
             require(all(Path(path).read_bytes() == data for path, data in prior.items()), "prior Matty references stopped working")
         output, _ = old.candidate(workspace, ["get", "skill", "matty:grill-me", "--surface", host, "--json"], failure=True)
@@ -712,8 +726,10 @@ def matty_design(probe, surfaces):
         (retained / resources["grilling"]["source"] / "ACCESS.md").unlink()
         output, diagnostic = old.candidate(workspace, ["get", "skill", "matty:grilling", "--surface", host,
                                                       "--snapshot", roots["grill-me"]["snapshot_id"], "--json"], failure=True)
-        require("snapshot_unavailable" in output + diagnostic, "missing retained Matty content fell back or failed for unrelated reason")
-        require(protected == {name: tree(workspace / name) for name in protected}, "nested Matty access changed installation/target state")
+        require("snapshot_unavailable" in output
+                or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
+                "missing retained Matty content fell back or failed for unrelated reason")
+        require(protected == matty_installation_state(workspace), "nested Matty access changed installation/target state")
         probe.evidence["outcomes"].append({"scenario": "matty-design", "surface": host, "result": "passed",
                                            "checks": ["wrapper-and-wayfinder-nesting", "changed-selection", "retained-snapshot",
                                                       "missing-retained-fails", "modified-installed-copy-preserved", "unchanged-target-and-installation"]})

@@ -24,6 +24,19 @@
   "resources": [
     {
       "kind": "notice",
+      "id": "catalog-adaptations",
+      "source": "notices/catalog-adaptations-mit",
+      "description": "License for Catalog-authored Matty on-demand adaptations",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Yerson Argote",
+      "requires": [],
+      "conflicts": [],
+      "notices": [],
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "notice",
       "id": "mit",
       "source": "notices/matty-mit",
       "description": "Preserves Matt Pocock's MIT license notice",
@@ -31,7 +44,9 @@
       "attribution": "Copyright (c) 2026 Matt Pocock",
       "requires": [],
       "conflicts": [],
-      "notices": [],
+      "notices": [
+        "notice:catalog-adaptations"
+      ],
       "origin": {
         "id": "mattpocock-skills",
         "path": "LICENSE",
