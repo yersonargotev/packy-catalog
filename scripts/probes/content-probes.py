@@ -912,7 +912,14 @@ def pstack_foundational(probe, surfaces):
         native = workspace / "home" / SKILL_DIRECTORIES[host] / "tdd/SKILL.md"
         require(native.read_bytes() == (ROOT / "packs/pstack/skills" / host / "tdd/SKILL.md").read_bytes(),
                 "native pstack TDD activation did not use the effective host body")
+        original_snapshots = tree(workspace / "snapshots")
+        # Personal activation links immutable content; customize an owned copy.
+        if native.parent.is_symlink():
+            original = native.parent.resolve()
+            native.parent.unlink()
+            shutil.copytree(original, native.parent)
         native.write_text("# Modified installed TDD\nPreserve this native copy.\n")
+        require(tree(workspace / "snapshots") == original_snapshots, "native customization changed the immutable snapshot")
         (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
         protected, snapshots = installation_state(workspace), tree(workspace / "snapshots")
         runtime_path = probe.root / ("pstack-no-content-runtimes-" + host)
