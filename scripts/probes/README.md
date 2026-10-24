@@ -254,3 +254,36 @@ host executable, authentication or model execution. The
 accounts for the removed Go probe and its final shared helper. The plan checks,
 helper checks and host-loading probes remain independent opt-in commands; this
 lifecycle run does not claim native skill discovery or model behavior.
+
+## Packy bootstrap acceptance
+
+After reviewing content, run from a clean committed candidate:
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario packy-bootstrap > /tmp/packy-bootstrap-evidence.json
+```
+
+This uses the single verified released-tooling declaration and complete Catalog
+candidate. Both Codex and Claude are required. Each personal and project case
+sets up the hosts sequentially through exact-preview consent, compares actual
+bootstrap bytes/modes with the authored effective definition, and preserves the
+other host, an unrelated active Pack, unmanaged native skills, and inactive scope.
+It then retires only its disposable setup. Global operations are confined to the
+owned candidate HOME/config/data environment; live selections are unchanged.
+
+An inert complete two-Pack authoring fixture exercises deterministic host-effective
+discovery and qualified cross-Pack retrieval through the same released binary.
+Assertions cover the structured contract, identities/versions/host/snapshot,
+usable entry/resource paths, supporting/legal closure, executable bytes/modes,
+rendered dependency references, nested snapshot reuse, an absent declared runtime,
+inert scripts, and unchanged authored resources and target project. Fixture Packs
+are never added to the official catalog or published. These metadata checks do
+not establish natural-language matching or semantic model-backed workflow success.
+The fixture does not depend on pending real-skill adaptations.
+
+The shared runner owns explicit HOME/config/data/cache/project roots, bounded
+child processes, command receipts, progress, clean-candidate checks and cleanup.
+No host credentials, model calls, live activation, runtime provisioning or manual
+publication occurs. Ordinary tests/validation/publication do not run this scenario.
+The initial 117-skill compatibility and complete-inventory acceptance remain
+separate follow-up deliveries.
