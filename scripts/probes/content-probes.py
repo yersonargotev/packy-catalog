@@ -593,67 +593,70 @@ def matty_delivery(probe, surfaces):
     matty_design(probe, surfaces, delivery=True)
 
 
-def matty_descriptors(report, host, version, expected):
+def skill_descriptors(report, host, version, expected, *, pack="matty"):
     require(report["schema_version"] == 1 and report["report"] == "skill-access"
-            and report["result"] == "prepared", "invalid Matty access envelope")
+            and report["result"] == "prepared", "invalid skill-access envelope")
     descriptors = {item["qualified_skill"]: item for item in [report, *report["dependencies"]]}
-    require(set(descriptors) == {"matty:" + name for name in expected}, "wrong Matty dependency closure")
-    require(len(descriptors) == len(report["dependencies"]) + 1, "duplicate Matty dependency descriptor")
+    require(set(descriptors) == {pack + ":" + name for name in expected}, "wrong skill-access dependency closure")
+    require(len(descriptors) == len(report["dependencies"]) + 1, "duplicate skill-access dependency descriptor")
     for descriptor in descriptors.values():
         require(descriptor["pack_version"] == version and descriptor["surface"] == host
-                and descriptor["snapshot_id"] == report["snapshot_id"], "wrong Matty identity/version/host/snapshot")
+                and descriptor["snapshot_id"] == report["snapshot_id"], "wrong skill-access identity/version/host/snapshot")
         entry, root = Path(descriptor["entry_document"]), Path(descriptor["resource_root"])
         require(entry.is_absolute() and root.is_absolute() and entry.parent == root
-                and entry.name == "ACCESS.md" and entry.is_file(), "unusable Matty resource location")
+                and entry.name == "ACCESS.md" and entry.is_file(), "unusable skill-access resource location")
     return descriptors
 
 
-def assert_matty_content(descriptors, manifest):
+def assert_skill_content(descriptors, manifest, *, pack="matty"):
     """Compare every authored byte/mode, rendering only explicitly reviewed tokens."""
     from urllib.parse import quote, unquote
 
     resources = {item["id"]: item for item in manifest["resources"]}
     for identity, descriptor in descriptors.items():
         resource = resources[identity.split(":")[1]]
-        source = ROOT / "packs/matty" / resource["source"]
+        resource = {**resource, **next((v for v in resource.get("variants", []) if v["surface"] == descriptor["surface"]), {})}
+        source = ROOT / "packs" / pack / resource["source"]
         root = Path(descriptor["resource_root"])
         authored = tree(source)
-        require(set(tree(root)) == set(authored), "Matty supporting tree is incomplete: " + identity)
+        require(set(tree(root)) == set(authored), "skill-access supporting tree is incomplete: " + identity)
         for relative, (mode, data, link) in authored.items():
             destination = root / relative
-            require(destination.lstat().st_mode == mode and not link, "Matty resource mode/link changed")
+            require(destination.lstat().st_mode == mode and not link, "skill-access resource mode/link changed")
             if data is None:
                 continue
             if relative in resource["on_demand"]["reference_files"]:
                 def reference(match):
                     target = match[1]
                     if ":" not in target:
-                        target = "matty:" + target
-                    require(target in descriptors, "authored Matty reference lacks declared closure")
+                        target = pack + ":" + target
+                    require(target in descriptors, "authored skill-access reference lacks declared closure")
                     return quote(os.path.relpath(descriptors[target]["entry_document"], destination.parent), safe="/")
                 data = re.sub(r"\{\{packy.access:([^}]+)\}\}", reference, data.decode()).encode()
-            require(destination.read_bytes() == data, "Matty content differs: " + identity + "/" + relative)
+            require(destination.read_bytes() == data, "skill-access content differs: " + identity + "/" + relative)
         # Check real Markdown links; fenced/inline code contains illustrative target paths.
-        for document in root.glob("*.md"):
+        documents = root.glob("*.md") if pack == "matty" else [root / "ACCESS.md", *root.glob("references/**/*.md")]
+        for document in documents:
             prose = re.sub(r"```.*?```", "", document.read_text(), flags=re.S)
             prose = re.sub(r"`[^`\n]*`", "", prose)
             for target in re.findall(r"\]\(([^)]+)\)", prose):
                 if "://" in target or target.startswith("#"):
                     continue
                 path = (document.parent / unquote(target.split("#")[0])).resolve()
-                require(path.is_file() and path.stat().st_size > 0, "broken Matty relative reference: " + target)
+                require(path.is_file() and path.stat().st_size > 0, "broken skill-access relative reference: " + target)
         pack_root = root
         while not (pack_root / "pack.json").is_file():
-            require(pack_root.parent != pack_root, "prepared Matty manifest missing")
+            require(pack_root.parent != pack_root, "prepared skill-access manifest missing")
             pack_root = pack_root.parent
-        require(json.loads((pack_root / "pack.json").read_text()) == manifest, "prepared Matty provenance changed")
-        require((pack_root / "notices/matty-mit").read_bytes()
-                == (ROOT / "packs/matty/notices/matty-mit").read_bytes(), "Matty MIT notice missing or changed")
-        require((pack_root / "notices/catalog-adaptations-mit").read_bytes()
-                == (ROOT / "packs/matty/notices/catalog-adaptations-mit").read_bytes(), "Catalog adaptation notice missing or changed")
+        require(json.loads((pack_root / "pack.json").read_text()) == manifest, "prepared skill-access provenance changed")
+        for notice in (item for item in manifest["resources"] if item["kind"] == "notice"):
+            path = notice["source"]
+            actual, original = pack_root / path, ROOT / "packs" / pack / path
+            require(actual.read_bytes() == original.read_bytes() and actual.stat().st_mode == original.stat().st_mode,
+                    pack + " notice bytes/mode changed: " + path)
 
 
-def matty_installation_state(workspace):
+def installation_state(workspace):
     # Candidate preparation is provider-owned data, separate from native installs.
     prefix = ".local/share/packy/skill-access"
     home = {name: value for name, value in tree(workspace / "home").items()
@@ -695,7 +698,7 @@ def matty_design(probe, surfaces, *, delivery=False):
         (installed / "SKILL.md").write_text("# Locally modified native primitive\nDo not use this copy.\n")
         # Seed provider ancestors so only preparation data is excluded below.
         (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
-        protected = matty_installation_state(workspace)
+        protected = installation_state(workspace)
         snapshots = tree(workspace / "snapshots")
         discovery = access.candidate(workspace, ["show", "matty", "--surface", host, "--json"])
         require(discovery["schema_version"] == 1 and discovery["report"] == "skill-discovery", "wrong discovery contract")
@@ -712,10 +715,10 @@ def matty_design(probe, surfaces, *, delivery=False):
                     "Matty discovery claims missing compatibility or verified runtimes")
             require(all(item["on_demand"].get(key, []) == value for key, value in resource["on_demand"].items())
                     and item["prerequisites"] == resource["on_demand"]["prerequisites"], "Matty discovery lost reviewed declarations")
-            descriptors = matty_descriptors(report, host, manifest["version"], [skill, *dependencies, *sorted({nested for dependency in dependencies
+            descriptors = skill_descriptors(report, host, manifest["version"], [skill, *dependencies, *sorted({nested for dependency in dependencies
                                                           for nested in inventory[dependency]} - set(dependencies))])
             require(report["qualified_skill"] == "matty:" + skill, "wrong Matty root")
-            assert_matty_content(descriptors, manifest)
+            assert_skill_content(descriptors, manifest)
             for identity, descriptor in descriptors.items():
                 require(descriptor["prerequisites"] == resources[identity.split(":")[1]]["on_demand"]["prerequisites"],
                         "Matty access lost known execution prerequisites")
@@ -724,7 +727,7 @@ def matty_design(probe, surfaces, *, delivery=False):
                                                "snapshot_id": report["snapshot_id"], "result": "passed",
                                                "checks": ["reviewed-discovery", "qualified-closure", "full-source-bytes-and-modes",
                                                           "relative-references", "legal-closure", "absent-content-runtimes"]})
-        require(protected == matty_installation_state(workspace), "Matty retrieval altered installation/target state")
+        require(protected == installation_state(workspace), "Matty retrieval altered installation/target state")
         require(tree(workspace / "snapshots") == snapshots, "Matty retrieval mutated immutable snapshot")
         prepared = tree(workspace / "home/.local/share/packy/skill-access")
         # Switch only availability through the existing digest-bound candidate transition.
@@ -768,7 +771,7 @@ def matty_design(probe, surfaces, *, delivery=False):
         require("snapshot_unavailable" in output
                 or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
                 "missing retained Matty content fell back or failed for unrelated reason")
-        require(protected == matty_installation_state(workspace), "nested Matty access changed installation/target state")
+        require(protected == installation_state(workspace), "nested Matty access changed installation/target state")
         if delivery:
             matty_pstack_tdd(probe, access, host, manifest)
         probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "result": "passed",
@@ -787,11 +790,11 @@ def matty_pstack_tdd(probe, access, host, manifest):
     native = workspace / "home" / SKILL_DIRECTORIES[host] / "tdd/SKILL.md"
     require(native.is_file() and native.read_bytes() == (ROOT / "packs/pstack/skills" / host / "tdd/SKILL.md").read_bytes(), "pstack TDD was not actually activated")
     (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
-    protected = matty_installation_state(workspace)
+    protected = installation_state(workspace)
     snapshots = tree(workspace / "snapshots")
     report = access.candidate(workspace, ["get", "skill", "matty:implement-spec", "--surface", host, "--json"])
-    descriptors = matty_descriptors(report, host, manifest["version"], ["implement-spec", "code-review", "tdd", "codebase-design"])
-    assert_matty_content(descriptors, manifest)
+    descriptors = skill_descriptors(report, host, manifest["version"], ["implement-spec", "code-review", "tdd", "codebase-design"])
+    assert_skill_content(descriptors, manifest)
     entry = Path(report["entry_document"])
     text = entry.read_text()
     # Follow the rendered implementation/delegation references, not installed names.
@@ -809,7 +812,7 @@ def matty_pstack_tdd(probe, access, host, manifest):
                 "pstack-active nested retrieval substituted another workflow")
     require("Refactoring is not part of the loop" in Path(descriptors["matty:tdd"]["entry_document"]).read_text(),
             "Matty TDD semantics lost while pstack was active")
-    require(protected == matty_installation_state(workspace) and tree(workspace / "snapshots") == snapshots,
+    require(protected == installation_state(workspace) and tree(workspace / "snapshots") == snapshots,
             "qualified Matty retrieval changed active pstack/target/immutable state")
     probe.evidence["outcomes"].append({"scenario": "matty-delivery", "surface": host, "result": "passed",
                                        "checks": ["pstack-tdd-active", "qualified-Matty-TDD", "delegated-rendered-references",
@@ -845,13 +848,182 @@ def matty_native(probe, manifest, inventory, scenario):
 
 
 
+# Reviewed issue #93 expectations, independent of the candidate manifest.
+PSTACK_FOUNDATIONAL_DEPENDENCIES = {
+    "principle-attack-the-premise": ["principle-build-the-lever", "principle-fix-root-causes", "principle-laziness-protocol"],
+    "principle-boundary-discipline": [],
+    "principle-build-the-lever": ["principle-laziness-protocol", "principle-prove-it-works"],
+    "principle-encode-lessons-in-structure": [], "principle-exhaust-the-design-space": [],
+    "principle-experience-first": [], "principle-explain-the-number": ["benchmark-checklist"],
+    "principle-fix-root-causes": [], "principle-foundational-thinking": [],
+    "principle-guard-the-context-window": [], "principle-laziness-protocol": [],
+    "principle-make-operations-idempotent": [], "principle-migrate-callers-then-delete-legacy-apis": [],
+    "principle-minimize-reader-load": [], "principle-model-the-domain": [],
+    "principle-never-block-on-the-human": [], "principle-outcome-oriented-execution": [],
+    "principle-prove-it-works": [], "principle-redesign-from-first-principles": [],
+    "principle-separate-before-serializing-shared-state": [], "principle-sequence-verifiable-units": [],
+    "principle-subtract-before-you-add": [], "principle-test-behavior-not-implementation": [],
+    "principle-type-system-discipline": [],
+    "arena": ["principle-laziness-protocol", "principle-prove-it-works", "principle-redesign-from-first-principles",
+              "principle-separate-before-serializing-shared-state"],
+    "benchmark-checklist": [], "bro": [], "how": [], "in-your-own-words": [], "interrogate": [],
+    "ketchup": ["bro"], "reflect": ["principle-encode-lessons-in-structure"],
+    "setup-pstack": [], "sharpen": [], "swarm": [], "tdd": [], "unslop": [], "why": [],
+}
+
+
 def pstack_foundational(probe, surfaces):
-    """Obtain a reviewed pstack root through the released public seam."""
+    """Account for the exact host-effective slice without running its workflows."""
+    from urllib.parse import unquote
+
+    inventory = PSTACK_FOUNDATIONAL_DEPENDENCIES
+    manifest = json.loads((ROOT / "packs/pstack/pack.json").read_text())
+    resources = {item["id"]: item for item in manifest["resources"]}
+    baseline_root = Path(probe.evidence["pstack_baseline_project"])
+    baseline = json.loads((baseline_root / "packs/pstack/pack.json").read_text())
+    authored = tree(ROOT / "packs/pstack")
+    require(len(inventory) == 38, "pstack foundational scope changed")
+    require(all(not variant.get("on_demand") for item in baseline["resources"] if item["id"] in inventory
+                for variant in item["variants"]), "pstack baseline must precede foundational adaptation")
+
+    def closure(skill):
+        result = {skill}
+        for dependency in inventory[skill]:
+            result.update(closure(dependency))
+        return result
+
     for host in ("codex", "claude"):
+        probe.set_context("content-acceptance", scenario="pstack-foundational", surface=host, scope="project")
         workspace = probe.prepare("pstack-foundational-" + host)
-        report = probe.candidate(workspace, ["get", "skill", "pstack:arena", "--surface", host, "--json"])
-        require(report["qualified_skill"] == "pstack:arena" and report["result"] == "prepared",
-                "pstack arena is unavailable")
+        # Exercise qualified access while a real pstack native TDD is active and modified.
+        probe.apply(workspace, ["activate", "pstack", "--surface", host, "--resource", "skill:tdd"])
+        native = workspace / "home" / SKILL_DIRECTORIES[host] / "tdd/SKILL.md"
+        require(native.read_bytes() == (ROOT / "packs/pstack/skills" / host / "tdd/SKILL.md").read_bytes(),
+                "native pstack TDD activation did not use the effective host body")
+        native.write_text("# Modified installed TDD\nPreserve this native copy.\n")
+        (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
+        protected, snapshots = installation_state(workspace), tree(workspace / "snapshots")
+        runtime_path = probe.root / ("pstack-no-content-runtimes-" + host)
+        runtime_path.mkdir()
+        (runtime_path / "git").symlink_to(shutil.which("git", path=probe.env["PATH"]))
+        access = Probe(probe.executable, probe.snapshot, probe.root, {**probe.env, "PATH": str(runtime_path)},
+                       probe.evidence, probe.timeout)
+        access.set_context("content-acceptance", scenario="pstack-foundational", surface=host, scope="project")
+        discovery = access.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
+        require(discovery["schema_version"] == 1 and discovery["report"] == "skill-discovery"
+                and not discovery["prerequisites_verified"], "pstack discovery misreports readiness")
+        entries = {item["qualified_skill"]: item for item in discovery["skills"]}
+        require(set(entries) == {"pstack:" + item["id"] for item in manifest["resources"] if item["kind"] == "skill"},
+                "pstack discovery lost logical skills")
+        roots = {}
+        for skill, dependencies in inventory.items():
+            effective = next(variant for variant in resources[skill]["variants"] if variant["surface"] == host)
+            declaration = effective["on_demand"]
+            require(declaration["dependencies"] == [{"type": "skill", "target": "pstack:" + name} for name in dependencies],
+                    "pstack required/optional dependency classification changed: " + skill)
+            item = entries["pstack:" + skill]
+            require(item["compatible"] and item["prerequisites"] == declaration["prerequisites"]
+                    and all(item["on_demand"].get(key, []) == value for key, value in declaration.items()),
+                    "pstack discovery lost effective reviewed metadata: " + skill)
+            report = access.candidate(workspace, ["get", "skill", "pstack:" + skill, "--surface", host, "--json"])
+            descriptors = skill_descriptors(report, host, manifest["version"], closure(skill), pack="pstack")
+            require(report["qualified_skill"] == "pstack:" + skill, "wrong pstack root")
+            assert_skill_content(descriptors, manifest, pack="pstack")
+            for identity, descriptor in descriptors.items():
+                expected = next(v for v in resources[identity.split(":")[1]]["variants"] if v["surface"] == host)
+                require(descriptor["prerequisites"] == expected["on_demand"]["prerequisites"], "pstack prerequisites lost")
+            roots[skill] = report
+            probe.evidence["outcomes"].append({"scenario": "pstack-foundational", "surface": host, "skill": skill,
+                                               "snapshot_id": report["snapshot_id"], "result": "passed",
+                                               "checks": ["effective-discovery", "qualified-required-closure", "full-source-bytes-and-modes",
+                                                          "supporting-references", "legal-closure", "absent-content-runtimes"]})
+        # Discovery carries metadata, never the large investigation/reference bodies.
+        why_root = Path(roots["why"]["resource_root"])
+        require("references/epistemics.md" in Path(roots["why"]["entry_document"]).read_text(), "why confidence pointer lost")
+        for reference in (why_root / "references").rglob("*.md"):
+            require(reference.read_text() not in json.dumps(discovery), "discovery eagerly embeds why supporting bodies")
+        for skill in ("arena", "how", "interrogate", "setup-pstack", "swarm", "why"):
+            require("~/.pstack/" + host + "-models.md" in Path(roots[skill]["entry_document"]).read_text(),
+                    "pstack access substituted a different host's preference contract")
+        matty_manifest = json.loads((ROOT / "packs/matty/pack.json").read_text())
+        matty = access.candidate(workspace, ["get", "skill", "matty:tdd", "--surface", host,
+                                             "--snapshot", roots["tdd"]["snapshot_id"], "--json"])
+        assert_skill_content(skill_descriptors(matty, host, matty_manifest["version"], ["tdd", "codebase-design"]), matty_manifest)
+        pstack_text = Path(roots["tdd"]["entry_document"]).read_text()
+        require("# TDD Bug Fix" in pstack_text and "Do not force a test when it would be impractical" in pstack_text
+                and "Refactoring is not part of the loop" in Path(matty["entry_document"]).read_text(),
+                "qualified TDD identities lost their distinct policies")
+        require(protected == installation_state(workspace) and tree(workspace / "snapshots") == snapshots,
+                "pstack retrieval applied setup or modified native/target/immutable state")
+        prepared = tree(workspace / "home/.local/share/packy/skill-access")
+        old = Probe(probe.executable, probe.root / "baseline-dist", probe.root, access.env, probe.evidence, probe.timeout)
+        old.set_context("snapshot-transition", scenario="pstack-foundational", surface=host, scope="project")
+        transition = old.candidate(workspace, ["transition", "--expect-archive-sha256", probe.evidence["archive_sha256"], "--json"])
+        require(transition["result"] == "transitioned"
+                and transition["archive_sha256"] == probe.evidence["pstack_baseline"]["archive_sha256"], "pstack transition failed")
+        for wrapper in ("arena", "principle-attack-the-premise", "principle-build-the-lever", "principle-explain-the-number", "ketchup", "reflect"):
+            report = roots[wrapper]
+            entry = Path(report["entry_document"])
+            targets = {item["qualified_skill"]: item for item in report["dependencies"]}
+            source = (ROOT / "packs/pstack/skills" / host / wrapper / "ACCESS.md").read_text()
+            tokens = re.findall(r"\{\{packy.access:([^}]+)\}\}", source)
+            links = re.findall(r"\]\(([^)]+)\)", entry.read_text())
+            for dependency in inventory[wrapper]:
+                expected = targets["pstack:" + dependency]
+                require("pstack:" + dependency in tokens and any((entry.parent / unquote(path)).resolve()
+                        == Path(expected["entry_document"]) for path in links), "pstack rendered reference missed declared dependency")
+                nested = old.candidate(workspace, ["get", "skill", "pstack:" + dependency, "--surface", host,
+                                                   "--snapshot", report["snapshot_id"], "--json"])
+                require(nested["snapshot_id"] == report["snapshot_id"] and nested["surface"] == host
+                        and nested["qualified_skill"] == expected["qualified_skill"]
+                        and Path(nested["entry_document"]).read_bytes() == Path(expected["entry_document"]).read_bytes(),
+                        "pstack nested access lost initiating identity/host/snapshot/content")
+        observed = tree(workspace / "home/.local/share/packy/skill-access")
+        require(all(observed.get(path) == value for path, value in prepared.items()), "nested access changed prior prepared resources")
+        retained = tree(workspace / "snapshots")
+        require(all(retained.get(path) == value for path, value in snapshots.items()), "transition mutated retained snapshots")
+        output, _ = old.candidate(workspace, ["get", "skill", "pstack:arena", "--surface", host, "--json"], failure=True)
+        require(json.loads(output)["error"]["code"] == "incompatible_resource", "independent access ignored changed selection")
+        missing = workspace / "snapshots" / roots["arena"]["snapshot_id"] / "packs/pstack/skills" / host / "arena/ACCESS.md"
+        missing.unlink()
+        output, diagnostic = old.candidate(workspace, ["get", "skill", "pstack:arena", "--surface", host,
+                                                      "--snapshot", roots["arena"]["snapshot_id"], "--json"], failure=True)
+        require("snapshot_unavailable" in output or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
+                "missing retained pstack content silently fell back")
+        require(protected == installation_state(workspace), "nested access changed native/target state")
+        probe.evidence["outcomes"].append({"scenario": "pstack-foundational", "surface": host, "result": "passed",
+                                           "checks": ["qualified-distinct-TDD", "modified-active-native-preserved", "setup-remains-inert",
+                                                      "progressive-why-references", "rendered-nested-references", "retained-snapshot",
+                                                      "changed-selection", "missing-retained-fails"]})
+    def native_contract(resource):
+        result = json.loads(json.dumps(resource))
+        for variant in result["variants"]:
+            variant.pop("on_demand", None)
+        return result
+
+    # Original native contracts/bytes/modes survive on all three supported hosts.
+    previous = {item["id"]: item for item in baseline["resources"]}
+    for host in SURFACES:
+        probe.set_context("native-regression", scenario="pstack-foundational", surface=host, scope="project")
+        workspace = probe.prepare("pstack-foundational-native-" + host)
+        args = ["install", "pstack", "--surface", host]
+        for skill in inventory:
+            args.extend(["--resource", "skill:" + skill])
+        probe.apply(workspace, args)
+        installed = workspace / "project" / SKILL_DIRECTORIES[host]
+        require({path.name for path in installed.iterdir()} == set(inventory), "pstack native selection changed")
+        for skill in inventory:
+            before, after = previous[skill], resources[skill]
+            require(native_contract(before) == native_contract(after), "native pstack contract changed: " + skill)
+            effective = next(v for v in before["variants"] if v["surface"] == host)
+            original = tree(baseline_root / "packs/pstack" / effective["source"])
+            observed = tree(installed / skill)
+            require(all(observed.get(path) == value for path, value in original.items()), "native pstack content/mode changed: " + skill)
+        probe.verify(workspace)
+        probe.evidence["outcomes"].append({"scenario": "pstack-foundational", "surface": host, "result": "passed",
+                                           "checks": ["native-selection-and-contracts", "all-original-bytes-and-modes", "project-verification"]})
+    require(tree(ROOT / "packs/pstack") == authored, "pstack acceptance mutated authored content")
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -869,7 +1041,7 @@ def main():
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
     if {"packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
-        parser.error("bootstrap and Matty access require Codex and Claude surfaces")
+        parser.error("on-demand scenarios require Codex and Claude surfaces")
     if "pstack" in scenarios and set(surfaces) != set(SURFACES):
         parser.error("pstack requires --pstack-baseline and all three surfaces")
     if bool({"pstack", "pstack-foundational"}.intersection(scenarios)) != (args.pstack_baseline is not None):
@@ -893,6 +1065,7 @@ def main():
                 args.pstack_baseline = args.pstack_baseline.resolve(strict=True)
                 probe.set_context("baseline-verification")
                 baseline_commit = checkout_commit(probe, args.pstack_baseline)
+                evidence["pstack_baseline_project"] = str(args.pstack_baseline)
             if args.matty_baseline is not None:
                 args.matty_baseline = args.matty_baseline.resolve(strict=True)
                 probe.set_context("baseline-verification")

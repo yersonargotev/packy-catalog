@@ -326,3 +326,23 @@ regression covers all 33 skills on Codex, Claude and OpenCode. Both access hosts
 are required. The existing isolated runner, central release pin and bounded
 process/cleanup receipts apply; no Matty workflow or template is executed and no
 live installation changes. Ordinary checks and publication remain inert.
+
+## pstack principles and foundational acceptance
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario pstack-foundational \
+  --pstack-baseline /path/to/clean-4.5.0-catalog > /tmp/pstack-foundational-evidence.json
+```
+
+The [reviewed 38-skill matrix](../../docs/design/pstack-foundational-on-demand.md)
+accounts for 24 principles and 14 utilities on Codex and Claude Code. The opt-in
+runner checks all 76 effective roots, required qualified closure, complete
+supporting/legal bytes and modes, progressive why references, distinct qualified
+pstack/Matty TDD with a modified active native copy, inert setup and absent content
+runtimes. Representative nested links retain the initiating host/snapshot across
+a controlled selection transition; independent requests follow the new selection
+and missing retained content fails. Native regression preserves the scoped
+selection, original content and contracts on all three hosts. Existing isolated
+state, bounded commands, central released binary, complete candidate/baseline
+builds, receipts and cleanup apply. No agent workflow is executed; ordinary tests,
+validation and publication do not run this scenario.
