@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "matty",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Matty workflow",
   "selectable": true,
   "surfaces": [
@@ -24,6 +24,19 @@
   "resources": [
     {
       "kind": "notice",
+      "id": "catalog-adaptations",
+      "source": "notices/catalog-adaptations-mit",
+      "description": "License for Catalog-authored Matty on-demand adaptations",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Yerson Argote",
+      "requires": [],
+      "conflicts": [],
+      "notices": [],
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "notice",
       "id": "mit",
       "source": "notices/matty-mit",
       "description": "Preserves Matt Pocock's MIT license notice",
@@ -32,7 +45,7 @@
       "requires": [],
       "conflicts": [],
       "notices": [
-        "notice:mit"
+        "notice:catalog-adaptations"
       ],
       "origin": {
         "id": "mattpocock-skills",
@@ -239,7 +252,18 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/codebase-design",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background agents for alternative-interface exploration"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -331,7 +355,18 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/domain-modeling",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "writable target project when recording resolved terms or decisions"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -377,7 +412,24 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/productivity/grill-me",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background agents for environmental fact finding",
+          "user answers and final shared-understanding confirmation"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:grilling"
+          }
+        ]
       }
     },
     {
@@ -423,7 +475,28 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/grill-with-docs",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background agents for environmental fact finding",
+          "writable target project for domain documents"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:domain-modeling"
+          },
+          {
+            "type": "skill",
+            "target": "matty:grilling"
+          }
+        ]
       }
     },
     {
@@ -469,7 +542,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/productivity/grilling",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background agents for environmental fact finding",
+          "user answers and final shared-understanding confirmation"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -515,7 +600,18 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/productivity/handoff",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "writable OS temporary directory"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -653,7 +749,34 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/improve-codebase-architecture",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background agents",
+          "browser and network access for CDN report assets",
+          "target Git repository",
+          "user candidate choice before interviewing"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:codebase-design"
+          },
+          {
+            "type": "skill",
+            "target": "matty:domain-modeling"
+          },
+          {
+            "type": "skill",
+            "target": "matty:grilling"
+          }
+        ]
       }
     },
     {
@@ -699,7 +822,23 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/in-progress/loop-me",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "writable target workspace for workflow specs"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:grilling"
+          }
+        ]
       }
     },
     {
@@ -791,7 +930,20 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/prototype",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "Git repository for throwaway branch capture",
+          "browser",
+          "project runtime for the UI branch"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -837,7 +989,20 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/research",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background-agent capability",
+          "primary-source access",
+          "writable target project for cited Markdown findings"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -929,7 +1094,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/setup-matt-pocock-skills",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "Git and applicable tracker CLI for repository inspection",
+          "user confirmation before configuration writes"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1113,7 +1290,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/productivity/to-questionnaire",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "recipient and knowledge-gap answers from the user",
+          "writable target directory"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1159,7 +1348,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/to-spec",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "configured issue tracker and triage role mapping",
+          "user-confirmed test seams"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1205,7 +1406,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/to-tickets",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "configured issue tracker and triage role mapping",
+          "user-approved breakdown and blocking edges"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1251,7 +1464,28 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/triage",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "configured issue tracker and triage role mapping",
+          "maintainer direction and tracker access"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:domain-modeling"
+          },
+          {
+            "type": "skill",
+            "target": "matty:grilling"
+          }
+        ]
       }
     },
     {
@@ -1297,7 +1531,18 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/productivity/wait-what",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "prior conversation to re-explain"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1343,7 +1588,37 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/wayfinder",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background agents for research tickets",
+          "configured tracker with wayfinding operations",
+          "human participation for HITL tickets"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:domain-modeling"
+          },
+          {
+            "type": "skill",
+            "target": "matty:grilling"
+          },
+          {
+            "type": "skill",
+            "target": "matty:prototype"
+          },
+          {
+            "type": "skill",
+            "target": "matty:research"
+          }
+        ]
       }
     },
     {
@@ -1389,7 +1664,20 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/wizard",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "Bash for the generated wizard",
+          "human-only steps and user-confirmed stages",
+          "procedure-specific tools and service access"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1481,7 +1769,16 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/productivity/writing-for-agents",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
