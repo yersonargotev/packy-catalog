@@ -12,9 +12,7 @@
     "runtime-usability",
     "surface-authorization"
   ],
-  "external_requirements": [
-    "packy"
-  ],
+  "external_requirements": [],
   "origins": [],
   "resources": [
     {
@@ -41,7 +39,9 @@
       ],
       "on_demand": {
         "protocol": "skill-tree-v1",
-        "prerequisites": []
+        "prerequisites": [
+          "packy"
+        ]
       },
       "bindings": [
         {

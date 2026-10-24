@@ -413,6 +413,23 @@ def pstack(probe, surfaces):
                                                      "effective-dependencies", "complete-retirement", "unrelated-state-preservation"]})
 
 
+def bootstrap_state(base):
+    """Preserve content/ownership while allowing lifecycle counters and notice spacing."""
+    state = tree(base)
+    for name in ("PACKY-NOTICES.md", ".packy/packs.json"):
+        if name not in state:
+            continue
+        mode, content, link = state[name]
+        if name.endswith(".json"):
+            document = json.loads(content)
+            document.pop("revision")
+            content = json.dumps(document, sort_keys=True).encode()
+        else:
+            content = content.rstrip(b"\n")
+        state[name] = (mode, content, link)
+    return state
+
+
 def packy_bootstrap(probe, surfaces):
     """Exercise the official two-host bootstrap through the released lifecycle."""
     hosts = ("codex", "claude")
@@ -428,24 +445,31 @@ def packy_bootstrap(probe, surfaces):
             native.mkdir(parents=True)
             (native / "SKILL.md").write_text("# Unmanaged native skill\n")
             probe.apply(workspace, [apply, "emil", "--surface", host, "--resource", "skill:write-swift"])
-        preserved = tree(base)
+        preserved = bootstrap_state(base)
         for host in hosts:
             other = "claude" if host == "codex" else "codex"
             untouched = tree(base / SKILL_DIRECTORIES[other])
+            native_before = tree(base / SKILL_DIRECTORIES[host])
             probe.apply(workspace, [apply, "packy", "--surface", host, "--resource", "skill:packy-cli"])
             installed = base / SKILL_DIRECTORIES[host] / "packy-cli"
             source = ROOT / "packs/packy/skills" / host / "packy-cli"
             require(tree(installed) == tree(source), "bootstrap content/modes differ for " + host)
             require(untouched == tree(base / SKILL_DIRECTORIES[other]), "bootstrap changed other host")
             require((installed / "SKILL.md").is_file(), "bootstrap entry is unusable")
+            native_after = {key: value for key, value in tree(base / SKILL_DIRECTORIES[host]).items()
+                            if key != "packy-cli" and not key.startswith("packy-cli/")}
+            require(native_after == native_before, "bootstrap changed unrelated same-host skills")
             if scope == "project":
+                require("Pack: packy 1.0.0" in (base / "PACKY-NOTICES.md").read_text()
+                        and (ROOT / "packs/packy/notices/MIT").read_text() in (base / "PACKY-NOTICES.md").read_text(),
+                        "bootstrap legal notice missing")
                 probe.verify(workspace)
         for host in hosts:
             other = "claude" if host == "codex" else "codex"
             untouched = tree(base / SKILL_DIRECTORIES[other])
             probe.apply(workspace, [remove, "packy", "--surface", host])
             require(untouched == tree(base / SKILL_DIRECTORIES[other]), "bootstrap removal changed other host")
-        require(tree(base) == preserved, "bootstrap lifecycle changed unrelated active Pack/native state")
+        require(bootstrap_state(base) == preserved, "bootstrap lifecycle changed unrelated active Pack/native state")
         require(inactive == {name: tree(workspace / name) for name in inactive}, "bootstrap changed inactive scope")
         for host in hosts:
             probe.apply(workspace, [remove, "emil", "--surface", host])
@@ -457,12 +481,14 @@ def packy_bootstrap(probe, surfaces):
 
 def reviewed_retrieval(probe):
     """Controlled authoring inputs exercise access without publishing fixture Packs."""
+    probe.set_context("candidate-construction")
     project = probe.root / "retrieval-authoring"
+    fixture_notice = (ROOT / "packs/packy/notices/MIT").read_text().replace("Yerson Argote", "Fixture Authors")
     for pack_id, host_variant in (("access-root", True), ("access-support", False)):
         pack = project / "packs" / pack_id
         (pack / "skills/guide/references").mkdir(parents=True)
         (pack / "notices").mkdir()
-        (pack / "notices/MIT").write_text("MIT License\nCopyright (c) 2026 Fixture Authors\n")
+        (pack / "notices/MIT").write_text(fixture_notice)
         (pack / "skills/guide/references/context.md").write_text("# Controlled supporting reference\n")
         sentinel = pack / "skills/guide/sentinel.sh"
         sentinel.write_text("#!/bin/sh\nprintf executed > should-never-exist\n")
@@ -487,7 +513,7 @@ def reviewed_retrieval(probe):
                   "bindings": [], "surface_exclusions": []}
         manifest = {"schema_version": 3, "id": pack_id, "version": "1.0.0", "description": "Controlled retrieval fixture",
                     "selectable": True, "surfaces": ["claude", "codex"], "readiness_obligations": ["runtime-usability"],
-                    "external_requirements": [], "origins": [], "resources": [resource, notice]}
+                    "external_requirements": [], "origins": [], "resources": [notice, resource]}
         (pack / "pack.json").write_text(json.dumps(manifest, indent=2) + "\n")
     probe.execute(["git", "init", "-q", str(project)])
     probe.execute(["git", "-C", str(project), "add", "."])
@@ -519,7 +545,7 @@ def reviewed_retrieval(probe):
             require((root / "references/context.md").read_text() == "# Controlled supporting reference\n", "reference closure lost")
             require((root / "sentinel.sh").read_bytes() == b"#!/bin/sh\nprintf executed > should-never-exist\n"
                     and (root / "sentinel.sh").stat().st_mode & 0o777 == 0o755, "script bytes/mode lost")
-            require(any(p.read_text() == "MIT License\nCopyright (c) 2026 Fixture Authors\n"
+            require(any(p.read_text() == fixture_notice
                         for p in root.parents[1].rglob("MIT")), "legal closure lost")
         entry = Path(report["entry_document"])
         text = entry.read_text()
