@@ -844,9 +844,18 @@ def matty_native(probe, manifest, inventory, scenario):
                                            "checks": ["native-selection", "unchanged-native-contracts", "all-original-bytes-and-modes", "project-verification"]})
 
 
+
+def pstack_foundational(probe, surfaces):
+    """Obtain a reviewed pstack root through the released public seam."""
+    for host in ("codex", "claude"):
+        workspace = probe.prepare("pstack-foundational-" + host)
+        report = probe.candidate(workspace, ["get", "skill", "pstack:arena", "--surface", host, "--json"])
+        require(report["qualified_skill"] == "pstack:arena" and report["result"] == "prepared",
+                "pstack arena is unavailable")
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery"), required=True)
+    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational"), required=True)
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
     parser.add_argument("--matty-baseline", type=Path, help="clean complete Catalog baseline before Matty on-demand adaptation")
     parser.add_argument("--surface", action="append", choices=SURFACES)
@@ -859,12 +868,12 @@ def main():
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
-    if {"packy-bootstrap", "matty-design", "matty-delivery"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
+    if {"packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
         parser.error("bootstrap and Matty access require Codex and Claude surfaces")
-    if "pstack" in scenarios and (args.pstack_baseline is None or set(surfaces) != set(SURFACES)):
+    if "pstack" in scenarios and set(surfaces) != set(SURFACES):
         parser.error("pstack requires --pstack-baseline and all three surfaces")
-    if args.pstack_baseline is not None and "pstack" not in scenarios:
-        parser.error("--pstack-baseline requires --scenario pstack")
+    if bool({"pstack", "pstack-foundational"}.intersection(scenarios)) != (args.pstack_baseline is not None):
+        parser.error("pstack scenarios require --pstack-baseline, used only with those scenarios")
     if bool({"matty-design", "matty-delivery"}.intersection(scenarios)) != (args.matty_baseline is not None):
         parser.error("Matty scenarios require --matty-baseline, used only with those scenarios")
     evidence = {"schema_version": 1, "report": "catalog-content-probes", "provenance": "local-candidate",
@@ -907,7 +916,7 @@ def main():
             for scenario in scenarios:
                 probe.set_context("content-acceptance", scenario=scenario, scope="project")
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
-                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery}[scenario](probe, surfaces)
+                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
             probe.set_context("candidate-verification")
             require(checkout_commit(probe, ROOT) == commit, "Catalog candidate changed during probes")
