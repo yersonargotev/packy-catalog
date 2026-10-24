@@ -1,0 +1,75 @@
+{
+  "schema_version": 3,
+  "id": "packy",
+  "version": "1.0.0",
+  "description": "Discover and obtain reviewed Catalog skills through the Packy CLI",
+  "selectable": true,
+  "surfaces": [
+    "claude",
+    "codex"
+  ],
+  "readiness_obligations": [
+    "runtime-usability",
+    "surface-authorization"
+  ],
+  "external_requirements": [],
+  "origins": [],
+  "resources": [
+    {
+      "kind": "notice",
+      "id": "mit",
+      "source": "notices/MIT",
+      "description": "Packy CLI bootstrap license",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Yerson Argote",
+      "requires": [],
+      "conflicts": [],
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "packy-cli",
+      "source": "skills/codex/packy-cli",
+      "description": "Discover a requested Catalog skill and obtain its reviewed resources without installing its Pack",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "prerequisites": [
+          "packy"
+        ]
+      },
+      "bindings": [
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "packy-cli",
+          "invocation": "/packy-cli",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "codex",
+          "projection": "skill",
+          "name": "packy-cli",
+          "invocation": "$packy-cli",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/claude/packy-cli"
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # Catalog resource ownership
 
 This context distinguishes reviewed Pack content from its upstream sources and
-the resources made available to a host through installation.
+the resources made available to a host through installation or on-demand access.
 
 ## Language
 
@@ -21,3 +21,11 @@ _Avoid_: Exact copy when referring to an adaptation.
 **Installed Resource**:
 A resource made available to a host through a Pack installation.
 _Avoid_: Catalog Resource when referring to the installed instance.
+
+**On-demand Skill Access**:
+Use of a Catalog Resource of kind skill without installing that resource in the
+target project.
+
+**Packy CLI Skill**:
+The agent-facing skill that explains how to discover and obtain skills through
+the Packy CLI.

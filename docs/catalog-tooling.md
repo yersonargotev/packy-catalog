@@ -8,20 +8,20 @@ duplicate, missing, or malformed fields fail before acquisition.
 
 ## Reviewed engine adoption
 
-The current pin adopts [Packy v0.2.30](https://github.com/yersonargotev/packy/releases/tag/v0.2.30),
-source `65992143121fe33f65d5ac3c98e6a1ed14484874`, to fix immutable-source
-handoff for byte-identical global Claude skills. The previous engine was
-v0.2.28. This change keeps the existing ordinary skill contracts; the optional
-skill-template capability introduced in v0.2.29 is not requested by these Packs.
+The current pin adopts [Packy v0.2.31](https://github.com/yersonargotev/packy/releases/tag/v0.2.31),
+following v0.2.30, for reviewed Codex/Claude discovery, qualified retrieval,
+cross-Pack dependencies, and immutable procedure snapshots. The sole source
+identity and four archive checksums live in `packy-release.json`.
 
-The [release execution](https://github.com/yersonargotev/packy/actions/runs/39175836256)
-passed the complete native executable Catalog contract on Darwin/Linux
-amd64/arm64 before publication. Its four retained `contract-v0.2.30-<platform>`
-artifacts contain matching source/version identities, artifact validation,
-functional test events, and the same `SHA256SUMS` as the published archives.
-All four published archive digests and the local native executable identity were
-verified before changing the pin. Candidate/baseline validation, construction,
-and released-binary lifecycle acceptance must also pass for this Catalog candidate.
+The [immutable release delivery evidence](https://github.com/yersonargotev/packy/issues/865#issuecomment-6387622326)
+links the four native executable contract artifacts from
+[release run 40117071228](https://github.com/yersonargotev/packy/actions/runs/40117071228).
+All four compatible runners passed the same functional cases before publication;
+the published archives are the tested bytes. Adoption reverified the immutable
+release, tag source, all published archive digests, checksum manifest, and native
+embedded identity. Catalog acceptance uses that released executable, independent
+of an engine source checkout. This evidence does not prove completion of the
+117 real-skill adaptations; those remain separately tracked Catalog work.
 
 ## Local commands and prerequisites
 
@@ -37,7 +37,7 @@ python3 -m pip install -r requirements-tooling.txt
 ```
 
 `packy.sh` forwards arguments to the verified released CLI. Its
-[command documentation](https://github.com/yersonargotev/packy/blob/65992143121fe33f65d5ac3c98e6a1ed14484874/docs/catalog-project.md)
+[command documentation](https://github.com/yersonargotev/packy/blob/v0.2.31/docs/catalog-project.md)
 explains versioned JSON reports, optional build baselines, and publication.
 Local construction labels do not certify a clean reviewed commit and do not
 create an attestation or official Catalog Publication. The main-push workflow
@@ -45,7 +45,7 @@ owns official publication; do not manually publish a second release.
 
 No Go runtime, Packy source checkout, global installation, or alternative
 binary on PATH participates. Validation and construction read Pack resources
-as inert data. Adoption, Ponytail, Claude and pstack lifecycle acceptance use the opt-in released-binary
+as inert data. Adoption, Ponytail, Claude, pstack and Packy bootstrap acceptance use the opt-in released-binary
 runner documented in [`scripts/probes/README.md`](../scripts/probes/README.md).
 Independent pstack content and host-loading checks retain their own prerequisites.
 Ordinary validation never invokes these probes.

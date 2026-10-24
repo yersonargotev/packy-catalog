@@ -10,6 +10,7 @@ the manifests, resources, adaptations, provenance, and notices for:
 - HumanLayer
 - Matty
 - Orchestrate
+- Packy
 - Ponytail
 - pstack
 - Thermos
@@ -72,6 +73,16 @@ When a Pack's manifest contract or referenced bytes change, its version must
 increase. Packs whose content is unchanged must retain their versions. A new
 Pack may start at any valid SemVer. Pull-request CI applies the same rules
 against the exact base commit.
+
+## Packy CLI bootstrap
+
+The official `packy` Pack contains only `packy-cli` and its legal closure for
+Codex and Claude Code. [Setup and use](docs/packy-cli.md) cover personal activation
+by default, optional project installation, live local discovery, and qualified
+resource retrieval. The [accepted design](docs/design/on-demand-skills.md) and
+[architecture decision](docs/adr/0002-provide-on-demand-skills-without-executing-workflows.md)
+retain the complete initiative scope; bootstrap availability does not establish
+that all 117 Matty, pstack, and Warp adaptations have shipped.
 
 ## Claude
 
