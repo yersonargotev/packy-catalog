@@ -941,7 +941,8 @@ def pstack_foundational(probe, surfaces):
         why_root = Path(roots["why"]["resource_root"])
         require("references/epistemics.md" in Path(roots["why"]["entry_document"]).read_text(), "why confidence pointer lost")
         for reference in (why_root / "references").rglob("*.md"):
-            require(reference.read_text() not in json.dumps(discovery), "discovery eagerly embeds why supporting bodies")
+            require(json.dumps(reference.read_text())[1:-1] not in json.dumps(discovery),
+                    "discovery eagerly embeds why supporting bodies")
         for skill in ("arena", "how", "interrogate", "setup-pstack", "swarm", "why"):
             require("~/.pstack/" + host + "-models.md" in Path(roots[skill]["entry_document"]).read_text(),
                     "pstack access substituted a different host's preference contract")

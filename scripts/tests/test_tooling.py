@@ -274,6 +274,7 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
                                                   for variant in resource.get("variants", [])]]
             for definition, label in definitions:
                 definition.pop("origin", None)
+                definition.pop("on_demand", None)
                 path = pack / definition.get("source", resource["source"])
                 if resource["kind"] == "notice":
                     path.parent.mkdir(parents=True, exist_ok=True)
