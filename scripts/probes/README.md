@@ -307,3 +307,22 @@ transition, rejects missing retained content, preserves modified native copies,
 and checks native installation on all three hosts. Content runtimes are absent
 during retrieval. It obtains instructions without executing any Matty procedure,
 script or template. Ordinary checks and publication do not invoke this scenario.
+
+
+## Matty delivery and writing acceptance
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario matty-delivery \
+  --matty-baseline /path/to/clean-4.1.0-catalog > /tmp/matty-delivery-evidence.json
+```
+
+The [reviewed 14-skill matrix](../../docs/design/matty-delivery-on-demand.md)
+completes the prior 19-skill slice. This scenario checks all 66 roots, full
+supporting/legal bytes and modes, explicit implementation/delegation references,
+retained-snapshot transitions and missing-content failures, qualified Matty TDD
+with pstack TDD active and separately with a modified installed native copy,
+absent runtimes, and unchanged target/active/immutable/ambient state. Native
+regression covers all 33 skills on Codex, Claude and OpenCode. Both access hosts
+are required. The existing isolated runner, central release pin and bounded
+process/cleanup receipts apply; no Matty workflow or template is executed and no
+live installation changes. Ordinary checks and publication remain inert.

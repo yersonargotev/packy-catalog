@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "matty",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Matty workflow",
   "selectable": true,
   "surfaces": [
@@ -114,7 +114,18 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/ask-matt",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "interactive user choice of workflow; routing does not invoke user-only skills"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -160,7 +171,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/in-progress/claude-handoff",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "Claude CLI with claude --bg --name support in the target working directory",
+          "explicit user invocation; external background-agent handoff"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -206,7 +229,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/code-review",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background agents for two independent parallel review axes",
+          "configured issue tracker access and a valid nonempty fixed-point Git diff"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -309,7 +344,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/diagnosing-bugs",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "a demonstrated tight red-capable feedback loop before hypotheses",
+          "target runtime or human-loop access appropriate to the reported bug"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -657,7 +704,29 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/implement",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "Git target repository and prescribed project checks",
+          "background agents and configured tracker access for final code review",
+          "user-confirmed test seams before writing tests"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:code-review"
+          },
+          {
+            "type": "skill",
+            "target": "matty:tdd"
+          }
+        ]
       }
     },
     {
@@ -703,7 +772,29 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/implement-spec",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background implementer and merger agents with isolated Git worktrees",
+          "configured issue tracker access and a ready specification/task graph",
+          "user-confirmed test seams before writing tests"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:code-review"
+          },
+          {
+            "type": "skill",
+            "target": "matty:tdd"
+          }
+        ]
       }
     },
     {
@@ -884,7 +975,18 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/pr",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "before/after evidence and door/blast-radius assessment for the selected Matty PR template"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1048,7 +1150,23 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/retro",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "access to primary session evidence and target environment checks"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:writing-for-agents"
+          }
+        ]
       }
     },
     {
@@ -1152,7 +1270,24 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/in-progress/setup-ts-deep-modules",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "explicit user invocation; writable target TypeScript project",
+          "target package manager and dependency-cruiser installation during the selected setup procedure"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:codebase-design"
+          }
+        ]
       }
     },
     {
@@ -1198,7 +1333,24 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/engineering/tdd",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "target project runtime/check commands",
+          "user-confirmed public test seams before writing tests"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:codebase-design"
+          }
+        ]
       }
     },
     {
@@ -1244,7 +1396,20 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/productivity/teach",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "browser for interactive HTML lessons",
+          "interactive learner and confirmed mission",
+          "trusted cited sources and a writable target teaching workspace"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1723,7 +1888,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/in-progress/writing-beats",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "interactive audience prerequisites and user choice before each beat",
+          "raw material and a user-selected writable article destination"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1824,7 +2001,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/in-progress/writing-fragments",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "interactive exploratory interview",
+          "user-selected writable fragment destination"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     },
     {
@@ -1870,7 +2059,19 @@
       "origin": {
         "id": "mattpocock-skills",
         "path": "skills/in-progress/writing-shape",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "complete read-only raw material and a separate writable article destination",
+          "interactive audience prerequisites, opening choice and agreed incremental blocks"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
       }
     }
   ]
