@@ -24,7 +24,10 @@ to the same preserved procedure within the returned resource tree.
 Origins mark the complete changed trees as adaptations, retaining upstream paths
 and the original MIT notice. Other 14 Matty skills and every other Pack remain
 unchanged. OpenCode receives its existing native procedure, without new on-demand
-support. No live installation is updated.
+support. No live installation is updated. The MIT notice resource drops its redundant
+self-notice edge: released on-demand graph validation rejects that cycle. Every
+skill still explicitly includes the unchanged MIT notice; legal and native
+selection closure remain intact.
 
 Native `requires` edges retain their original installation semantics. The reviewed
 `on_demand.dependencies` graph below supplies required resource availability;

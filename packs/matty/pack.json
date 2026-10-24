@@ -31,9 +31,7 @@
       "attribution": "Copyright (c) 2026 Matt Pocock",
       "requires": [],
       "conflicts": [],
-      "notices": [
-        "notice:mit"
-      ],
+      "notices": [],
       "origin": {
         "id": "mattpocock-skills",
         "path": "LICENSE",
