@@ -1624,13 +1624,16 @@ def pstack_orchestration(probe, surfaces):
                 "independent request ignored newly selected baseline")
         output, _ = old.candidate(workspace, ["get", "skill", "pstack:poteto-help", "--surface", host, "--json"], failure=True)
         require(json.loads(output)["error"]["code"] == "incompatible_resource", "independent orchestration ignored baseline selection")
+        require(protected == installation_state(workspace), "nested retrieval changed target/native state")
         missing = workspace / "snapshots" / roots["poteto-mode"]["snapshot_id"] / "packs/pstack/skills" / host / "poteto-mode/playbooks/ACCESS-bug-fix.md"
         missing.unlink()
+        # Native links share this retained fixture; observe our deliberate damage before testing rejection.
+        unavailable_state = installation_state(workspace)
         output, diagnostic = old.candidate(workspace, ["get", "skill", "pstack:poteto-mode", "--surface", host,
                                                       "--snapshot", roots["poteto-mode"]["snapshot_id"], "--json"], failure=True)
         require("snapshot_unavailable" in output or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
                 "missing retained supporting content silently fell back")
-        require(protected == installation_state(workspace), "nested retrieval changed target/native state")
+        require(unavailable_state == installation_state(workspace), "failed retained retrieval changed target/native state")
         probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "result": "passed",
                                            "checks": ["all-55-obtainable", "distinct-qualified-TDD", "retained-required-optional-delegated-context",
                                                       "prior-paths-usable", "new-selection", "missing-supporting-content-fails", "inert-retrieval"]})
