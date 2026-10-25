@@ -2151,9 +2151,9 @@
             "entry_document": "ACCESS.md",
             "prerequisites": [
               "Python 3.9+ standard library for collection and rendering; Git for intended-project validation",
-              "runtime-identified supported executing harness, actual scope replies, and authorized local history/skill inputs",
+              "current local scoring process or local-only child agents; optional authorized browser for viewing/PNG export",
               "fresh writable report/scratch directory outside target repositories and immutable resources; Python bytecode suppression",
-              "current local scoring process or local-only child agents; optional authorized browser for viewing/PNG export"
+              "runtime-identified supported executing harness, actual scope replies, and authorized local history/skill inputs"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -2179,9 +2179,9 @@
             "entry_document": "ACCESS.md",
             "prerequisites": [
               "Python 3.9+ standard library for collection and rendering; Git for intended-project validation",
-              "runtime-identified supported executing harness, actual scope replies, and authorized local history/skill inputs",
+              "current local scoring process or local-only child agents; optional authorized browser for viewing/PNG export",
               "fresh writable report/scratch directory outside target repositories and immutable resources; Python bytecode suppression",
-              "current local scoring process or local-only child agents; optional authorized browser for viewing/PNG export"
+              "runtime-identified supported executing harness, actual scope replies, and authorized local history/skill inputs"
             ],
             "reference_files": [
               "ACCESS.md"
