@@ -24,6 +24,19 @@
   "resources": [
     {
       "kind": "notice",
+      "id": "catalog-adaptations",
+      "source": "notices/catalog-adaptations-mit",
+      "description": "License for Catalog-authored Warp on-demand adaptations",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Yerson Argote",
+      "requires": [],
+      "conflicts": [],
+      "notices": [],
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "notice",
       "id": "mit",
       "source": "notices/warp-mit",
       "description": "Preserve the Warp common-skills MIT license and attribution",
@@ -32,7 +45,7 @@
       "requires": [],
       "conflicts": [],
       "notices": [
-        "notice:mit"
+        "notice:catalog-adaptations"
       ],
       "origin": {
         "id": "warp-common-skills",

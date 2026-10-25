@@ -18,6 +18,9 @@ the access entry only for retrieval. Native bindings, invocation names, notices,
 dependencies and original procedure bytes remain intact on Codex, Claude and
 OpenCode. OpenCode has no on-demand declaration. Trees with added adaptations
 are marked `adapted`, retaining the original upstream path and Warp MIT notice.
+The MIT resource's pre-existing self-reference becomes a reference to the
+Catalog adaptation MIT notice, following Matty/pstack's acyclic legal closure.
+The original upstream notice bytes and provenance remain unchanged.
 
 Every entry carries the initiating surface and immutable `snapshot_id`, including
 in delegate briefs and nested requests. Required calls use declared
@@ -82,7 +85,8 @@ prerequisites or guidance, rather than imaginary compatible Catalog skills.
   are retained inputs, not model-backed results.
 - Every entry: original frontmatter and the complete unmodified Warp MIT notice
   with Denver Technologies attribution. The manifest preserves the pinned
-  upstream identity and marks the changed complete trees as adaptations.
+  upstream identity and marks the changed complete trees as adaptations. The
+  Catalog adaptation MIT notice retains Yerson Argote attribution separately.
 
 ## Acceptance
 

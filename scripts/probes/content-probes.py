@@ -1845,11 +1845,15 @@ def warp_specification(probe, surfaces):
     previous = {item["id"]: item for item in baseline["resources"]}
     authored = tree(ROOT / "packs/warp")
     graph = WARP_SPECIFICATION_DEPENDENCIES
-    require(set(resources) == set(previous) and manifest["origins"] == baseline["origins"]
+    require(set(resources) == set(previous) | {"catalog-adaptations"} and manifest["origins"] == baseline["origins"]
             and manifest["surfaces"] == baseline["surfaces"],
             "Warp provenance or native host support changed")
-    require(all(resource == previous[name] for name, resource in resources.items() if name not in graph),
+    require(all(resource == previous[name] for name, resource in resources.items() if name not in graph
+                and name not in ("mit", "catalog-adaptations")),
             "Warp adaptation changed unrelated resources")
+    require({**resources["mit"], "notices": previous["mit"]["notices"]} == previous["mit"]
+            and resources["mit"]["notices"] == ["notice:catalog-adaptations"]
+            and resources["catalog-adaptations"]["notices"] == [], "Warp legal closure must be complete and acyclic")
     require(all(not previous[name].get("on_demand") and not previous[name].get("variants") for name in graph),
             "Warp baseline must precede the reviewed slice")
 
