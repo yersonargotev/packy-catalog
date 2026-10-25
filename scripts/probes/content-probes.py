@@ -1980,6 +1980,19 @@ def warp_access(probe, surfaces, *, scenario, graph, policies, routes, damaged_s
                                                           "substantive-policy", "unverified-prerequisites", "absent-content-runtimes"]})
         require(protected == installation_state(workspace) and snapshots == tree(workspace / "snapshots"),
                 "Warp retrieval executed content or changed target/native/snapshot state")
+        if scenario == "warp-repository" and probe.evidence.get("warp_helpers"):
+            prepared_before = tree(workspace / "home/.local/share/packy/skill-access")
+            resource_file = probe.root / ("warp-helper-resources-" + host + ".json")
+            resource_file.write_text(json.dumps({name: report["resource_root"] for name, report in roots.items()}))
+            helper_output, _ = probe.execute([sys.executable, "-B", str(ROOT / "scripts/probes/fixtures/warp-repository.py"),
+                                              "--resources", str(resource_file), "--workspace",
+                                              str(probe.root / ("warp-helper-workspace-" + host))], timeout=60)
+            helper_result = json.loads(helper_output)
+            require(helper_result["result"] == "passed", "Warp helper acceptance failed")
+            require(prepared_before == tree(workspace / "home/.local/share/packy/skill-access")
+                    and snapshots == tree(workspace / "snapshots") and protected == installation_state(workspace),
+                    "Warp helpers changed immutable resources or target/native state")
+            probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "helpers": helper_result})
         prepared_root = workspace / "home/.local/share/packy/skill-access"
         prepared = tree(prepared_root)
         old = Probe(probe.executable, probe.root / "warp-baseline-dist", probe.root, access.env, probe.evidence, probe.timeout)
@@ -2065,6 +2078,7 @@ def warp_access(probe, surfaces, *, scenario, graph, policies, routes, damaged_s
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration", "warp-specification", "warp-repository"), required=True)
+    parser.add_argument("--warp-helpers", action="store_true", help="opt-in reviewed offline Warp resolver/report helper execution")
     parser.add_argument("--warp-baseline", type=Path, help="clean complete Catalog baseline before Warp on-demand adaptation")
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
     parser.add_argument("--matty-baseline", type=Path, help="clean complete Catalog baseline before Matty on-demand adaptation")
@@ -2077,6 +2091,10 @@ def main():
     scenarios = list(dict.fromkeys(args.scenario))
     if bool({"warp-specification", "warp-repository"}.intersection(scenarios)) != (args.warp_baseline is not None):
         parser.error("Warp scenarios require --warp-baseline, used only with those scenarios")
+    if {"warp-specification", "warp-repository"}.issubset(scenarios):
+        parser.error("select one Warp slice per run: their reviewed baselines differ")
+    if args.warp_helpers and "warp-repository" not in scenarios:
+        parser.error("--warp-helpers requires --scenario warp-repository")
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
@@ -2088,7 +2106,7 @@ def main():
         parser.error("Matty scenarios require --matty-baseline, used only with those scenarios")
     evidence = {"schema_version": 1, "report": "catalog-content-probes", "provenance": "local-candidate",
                 "official_publication": False, "scenarios": scenarios, "surfaces": surfaces, "html_pack": args.html_pack,
-                "commands": [], "outcomes": [], "result": "failed"}
+                "warp_helpers": args.warp_helpers, "commands": [], "outcomes": [], "result": "failed"}
     root = None
     previous_handler = signal.signal(signal.SIGTERM, interrupted)
     try:

@@ -434,3 +434,30 @@ and rejection, orchestration bookkeeping, safe watcher failures and the actual
 bootstrap's temporary dependency staging, cwd, failure propagation and cleanup.
 No real forge mutation, message, scheduler, worktree deletion or model execution
 participates. See the [review matrix](../../docs/design/pstack-orchestration-on-demand.md).
+
+## Warp repository and reporting acceptance
+
+After reviewing the exact 13-skill repository/reporting slice, run from a clean
+committed candidate with its clean Warp 2.3.0 baseline:
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario warp-repository \
+  --warp-baseline /path/to/clean-2.3.0-catalog > /tmp/warp-repository-evidence.json
+```
+
+This retrieves all 13 entries on Codex and Claude, verifies complete effective
+resources/legal closure and independent dependencies, preserves native copies
+and installed state, checks retained nested calls across a selection transition,
+and installs the exact inventory on all three native hosts. Content runtimes
+are absent during retrieval. The preceding specification slice stays unchanged.
+
+Add `--warp-helpers` only after reviewing the bundled helpers. This executes the
+cached review resolver with explicit fictional repository context and a fake HTTP
+transport, validates positive/invalid annotated review locations, embeds fictional
+pinned source and regenerates an index in explicit disposable output. Meaningful
+decoy/missing-input negatives and full byte/mode observations detect cache lookup,
+input/resource mutation and personal-output regressions. Python networking is
+prohibited; no submission, credential store, real API, browser, hosting, cloud
+repro, live Factory, worker or model workflow runs. Without the flag, helper
+content is read only. Ordinary tests/validation/build/publication remain inert.
+See the [review matrix and limits](../../docs/design/warp-repository-on-demand.md).
