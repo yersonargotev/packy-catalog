@@ -1554,7 +1554,7 @@ def pstack_orchestration(probe, surfaces):
                     "babysit": ["Declare a mode", "Babysitting never authorizes merging"],
                     "shipping": ["Only a verdict from an agent that did not write the code counts"],
                     "worktree-cleanup": ["The bucket is advice, not permission", "Verify usage before deleting"],
-                    "eval": ["one judge scores both", "never by model name", "mark chain-following evidence unknown"],
+                    "eval": ["one judge scores both", "never by model name", "mark chain-following evidence unknown", "`candidate`, or `arena` in any directory"],
                     "bug-fix": ["Confirm the surviving", "cheap local test path", "pstack:tdd"],
                 }
                 for playbook, fragments in supporting.items():
@@ -1592,7 +1592,8 @@ def pstack_orchestration(probe, surfaces):
                   ("figure-it-out", "principle-sequence-verifiable-units", "ACCESS.md"),
                   ("automate-me", "poteto-mode", "ACCESS.md"), ("automate-me", "unslop", "ACCESS.md")]
         for wrapper, dependency, relative in routes:
-            report, expected = roots[wrapper], roots[dependency]
+            report = roots[wrapper]
+            expected = next(item for item in report["dependencies"] if item["qualified_skill"] == "pstack:" + dependency)
             document = Path(report["resource_root"]) / relative
             links = re.findall(r"\[pstack:" + dependency + r"\]\(([^)]+)\)", document.read_text())
             require(links and all((document.parent / unquote(path)).resolve() == Path(expected["entry_document"]) for path in links),
