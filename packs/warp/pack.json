@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "warp",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "Warp common engineering and agent workflows",
   "selectable": true,
   "surfaces": [
@@ -2100,7 +2100,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/skill-doctor",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -2131,7 +2131,65 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/skill-doctor",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/skill-doctor",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Grades agent skills by scoring agent conversations for efficiency, code quality, procedure compliance, and verbosity, then drafts concrete skill edits and a shareable report. Use when the user wants their agent setup graded from real conversation history, or asks which of their installed skills are actually working.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3.9+ standard library for collection and rendering; Git for intended-project validation",
+              "runtime-identified supported executing harness, actual scope replies, and authorized local history/skill inputs",
+              "fresh writable report/scratch directory outside target repositories and immutable resources; Python bytecode suppression",
+              "current local scoring process or local-only child agents; optional authorized browser for viewing/PNG export"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/skill-doctor",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/skill-doctor",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Grades agent skills by scoring agent conversations for efficiency, code quality, procedure compliance, and verbosity, then drafts concrete skill edits and a shareable report. Use when the user wants their agent setup graded from real conversation history, or asks which of their installed skills are actually working.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3.9+ standard library for collection and rendering; Git for intended-project validation",
+              "runtime-identified supported executing harness, actual scope replies, and authorized local history/skill inputs",
+              "fresh writable report/scratch directory outside target repositories and immutable resources; Python bytecode suppression",
+              "current local scoring process or local-only child agents; optional authorized browser for viewing/PNG export"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",

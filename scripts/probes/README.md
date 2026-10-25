@@ -461,3 +461,25 @@ prohibited; no submission, credential store, real API, browser, hosting, cloud
 repro, live Factory, worker or model workflow runs. Without the flag, helper
 content is read only. Ordinary tests/validation/build/publication remain inert.
 See the [review matrix and limits](../../docs/design/warp-repository-on-demand.md).
+
+## Warp skill-doctor acceptance
+
+After reviewing the collector, decoder, renderer and bundled tests, run from a
+clean committed candidate against the complete Warp 2.4.0 Catalog baseline:
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario warp-skill-doctor \
+  --warp-baseline /path/to/clean-2.4.0-catalog \
+  --warp-helpers > /tmp/warp-skill-doctor-evidence.json
+```
+
+The scenario retrieves this one skill on Codex and Claude, checks full byte/mode
+and legal closure, absent runtimes, inert access, modified native-copy preservation,
+retained-snapshot re-entry and failure, and native installation on all three hosts.
+`--warp-helpers` opts into the prepared helpers and 37 bundled tests with fictional
+histories/skills, 15 source/scope combinations and predetermined renderer data.
+Children use owned state, bounded execution, prohibited network/browser calls,
+and audited resource/input reads and output writes. Every real installed skill
+and live history remains untouched. Omit the flag for retrieval-only acceptance.
+Ordinary tests/validation/build/publication remain inert. See the
+[reviewed contract, evidence and limits](../../docs/design/warp-skill-doctor-on-demand.md).

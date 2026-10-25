@@ -1989,11 +1989,12 @@ def warp_access(probe, surfaces, *, scenario, graph, policies, routes, damaged_s
                                                           "substantive-policy", "unverified-prerequisites", "absent-content-runtimes"]})
         require(protected == installation_state(workspace) and snapshots == tree(workspace / "snapshots"),
                 "Warp retrieval executed content or changed target/native/snapshot state")
-        if scenario == "warp-repository" and probe.evidence.get("warp_helpers"):
+        if scenario in ("warp-repository", "warp-skill-doctor") and probe.evidence.get("warp_helpers"):
             prepared_before = tree(workspace / "home/.local/share/packy/skill-access")
             resource_file = probe.root / ("warp-helper-resources-" + host + ".json")
             resource_file.write_text(json.dumps({name: report["resource_root"] for name, report in roots.items()}))
-            helper_output, _ = probe.execute([sys.executable, "-B", str(ROOT / "scripts/probes/fixtures/warp-repository.py"),
+            fixture = "warp-skill-doctor.py" if scenario == "warp-skill-doctor" else "warp-repository.py"
+            helper_output, _ = probe.execute([sys.executable, "-B", str(ROOT / "scripts/probes/fixtures" / fixture),
                                               "--resources", str(resource_file), "--workspace",
                                               str(probe.root / ("warp-helper-workspace-" + host))], timeout=60)
             helper_result = json.loads(helper_output)
@@ -2022,6 +2023,11 @@ def warp_access(probe, surfaces, *, scenario, graph, policies, routes, damaged_s
                     and nested["qualified_skill"] == "warp:" + dependency
                     and Path(nested["entry_document"]).read_bytes() == Path(expected["entry_document"]).read_bytes(),
                     "Warp nested/delegated route followed new selection")
+        if scenario == "warp-skill-doctor":
+            root = roots["skill-doctor"]
+            retained_report = old.candidate(workspace, ["get", "skill", "warp:skill-doctor", "--surface", host,
+                                                       "--snapshot", root["snapshot_id"], "--json"])
+            require(retained_report == root, "skill-doctor re-entry changed initiating identity or paths")
         observed, retained = tree(prepared_root), tree(workspace / "snapshots")
         require(all(observed.get(path) == value for path, value in prepared.items())
                 and all(retained.get(path) == value for path, value in snapshots.items()),
@@ -2087,7 +2093,7 @@ def warp_access(probe, surfaces, *, scenario, graph, policies, routes, damaged_s
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration", "warp-specification", "warp-repository", "warp-skill-doctor"), required=True)
-    parser.add_argument("--warp-helpers", action="store_true", help="opt-in reviewed offline Warp resolver/report helper execution")
+    parser.add_argument("--warp-helpers", action="store_true", help="opt-in reviewed offline helpers for the selected Warp slice")
     parser.add_argument("--warp-baseline", type=Path, help="clean complete Catalog baseline before Warp on-demand adaptation")
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
     parser.add_argument("--matty-baseline", type=Path, help="clean complete Catalog baseline before Matty on-demand adaptation")
@@ -2102,8 +2108,8 @@ def main():
         parser.error("Warp scenarios require --warp-baseline, used only with those scenarios")
     if len({"warp-specification", "warp-repository", "warp-skill-doctor"}.intersection(scenarios)) > 1:
         parser.error("select one Warp slice per run: their reviewed baselines differ")
-    if args.warp_helpers and "warp-repository" not in scenarios:
-        parser.error("--warp-helpers requires --scenario warp-repository")
+    if args.warp_helpers and not {"warp-repository", "warp-skill-doctor"}.intersection(scenarios):
+        parser.error("--warp-helpers requires --scenario warp-repository or warp-skill-doctor")
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
