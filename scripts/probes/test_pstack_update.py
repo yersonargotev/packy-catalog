@@ -37,7 +37,7 @@ class PstackUpdateProbeTest(unittest.TestCase):
                 'notices': [], 'variants': variants,
                 'bindings': [{'surface': host, 'name': name} for host in ('claude', 'codex', 'opencode')],
             })
-        self.manifest = {'version': '1.0.0', 'origins': [{'commit': 'old'}], 'resources': resources}
+        self.manifest = {'version': '1.0.0', 'surfaces': ['claude', 'codex', 'opencode'], 'origins': [{'commit': 'old'}], 'resources': resources}
         (pack / 'pack.json').write_text(json.dumps(self.manifest), encoding='utf-8')
         shutil.copytree(self.baseline, self.candidate)
 
@@ -67,6 +67,19 @@ class PstackUpdateProbeTest(unittest.TestCase):
         self.assertIn('claude: preserved', result.stdout)
         self.assertIn('opencode: preserved', result.stdout)
 
+
+    def test_accepts_retirement_of_an_unselected_host(self):
+        self.manifest['surfaces'].remove('opencode')
+        for resource in self.manifest['resources']:
+            for key in ('bindings', 'variants'):
+                resource[key] = [item for item in resource[key] if item['surface'] != 'opencode']
+        self.write_manifest()
+        result = self.run_probe('contracts', '--project', str(self.candidate),
+                                '--baseline', str(self.baseline), '--preserve-surface', 'claude')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        result = self.contracts()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn('opencode: Pack contract drift', result.stderr)
 
     def test_rejects_preserved_host_content_drift(self):
         (self.candidate / 'packs/pstack/skills/claude/sample/SKILL.md').write_text('changed\n')

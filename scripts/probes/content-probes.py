@@ -424,7 +424,7 @@ def pstack_withdrawal(probe, surfaces):
     def unsupported(workspace, args):
         before = tree(workspace)
         output, diagnostic = probe.candidate(workspace, [*args, "--json"], failure=True)
-        require("opencode" in (output + diagnostic).lower() and "support" in (output + diagnostic).lower(),
+        require("does not support CLI surface" in output + diagnostic,
                 "OpenCode rejection did not identify unsupported surface")
         require(tree(workspace) == before, "unsupported OpenCode request mutated workspace")
 
@@ -440,7 +440,8 @@ def pstack_withdrawal(probe, surfaces):
             if key in resource:
                 resource[key] = [item for item in resource[key] if item["surface"] != "opencode"]
     require(manifest == expected, "withdrawal changed more than version and OpenCode support")
-    for args in (["show", "pstack"], ["get", "skill", "pstack:architect"], ["activate", "pstack", "--dry-run"]):
+    for args in (["show", "pstack"], ["get", "skill", "pstack:architect"], ["activate", "pstack", "--dry-run"],
+                 ["install", "pstack"], ["activate", "pstack"]):
         unsupported(workspace, [*args, "--surface", "opencode"])
 
     for host in ("codex", "claude"):
@@ -450,13 +451,18 @@ def pstack_withdrawal(probe, surfaces):
         discovery = probe.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
         old_workspace = old.prepare("pstack-baseline-access-" + host)
         old_discovery = old.candidate(old_workspace, ["show", "pstack", "--surface", host, "--json"])
-        require(discovery["skills"] == old_discovery["skills"], "withdrawal changed effective discovery metadata")
+        require(discovery["skills"] == old_discovery["skills"], "withdrawal changed effective discovery metadata: "
+                + json.dumps({"before": old_discovery["skills"], "after": discovery["skills"]}))
         for resource in manifest["resources"]:
             effective = {**resource, **next((v for v in resource.get("variants", []) if v["surface"] == host), {})}
             if not effective.get("on_demand"):
                 continue
             report = probe.candidate(workspace, ["get", "skill", "pstack:" + resource["id"], "--surface", host, "--json"])
             descriptors = {item["qualified_skill"]: item for item in [report, *report["dependencies"]]}
+            require(report["qualified_skill"] == "pstack:" + resource["id"] and all(
+                item["surface"] == host and item["pack_version"] == "5.0.0"
+                and item["snapshot_id"] == report["snapshot_id"] for item in descriptors.values()),
+                "withdrawal changed qualified access identity")
             assert_skill_content(descriptors, manifest, pack="pstack")
         require(tree(workspace / "project") == target, "preserved access changed target project")
         for scope in ("project", "global"):
