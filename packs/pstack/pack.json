@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -129,7 +129,86 @@
             "skill:principle-subtract-before-you-add",
             "skill:why"
           ],
-          "description": "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape."
+          "description": "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized host subagents and independent candidate/review capability; confirmed host model preferences when present",
+              "target project/source access and separate writable grounding, sketch, candidate and output locations"
+            ],
+            "reference_files": [
+              "ACCESS.md",
+              "references/ACCESS-rationale-template.md",
+              "references/ACCESS-runner-prompt.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:how"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:interrogate"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-boundary-discipline"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-encode-lessons-in-structure"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-exhaust-the-design-space"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-fix-root-causes"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-foundational-thinking"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-laziness-protocol"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-make-operations-idempotent"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-minimize-reader-load"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-outcome-oriented-execution"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-redesign-from-first-principles"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-separate-before-serializing-shared-state"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-subtract-before-you-add"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -154,7 +233,86 @@
             "skill:principle-subtract-before-you-add",
             "skill:why"
           ],
-          "description": "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape."
+          "description": "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized host subagents and independent candidate/review capability; confirmed host model preferences when present",
+              "target project/source access and separate writable grounding, sketch, candidate and output locations"
+            ],
+            "reference_files": [
+              "ACCESS.md",
+              "references/ACCESS-rationale-template.md",
+              "references/ACCESS-runner-prompt.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:how"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:interrogate"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-boundary-discipline"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-encode-lessons-in-structure"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-exhaust-the-design-space"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-fix-root-causes"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-foundational-thinking"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-laziness-protocol"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-make-operations-idempotent"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-minimize-reader-load"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-outcome-oriented-execution"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-redesign-from-first-principles"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-separate-before-serializing-shared-state"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-subtract-before-you-add"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         }
       ]
     },
@@ -531,7 +689,32 @@
             "skill:unslop",
             "skill:why"
           ],
-          "description": "Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. Use for 'blast radius of X', 'what could this break', or reviewing a small diff you don't trust."
+          "description": "Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. Use for 'blast radius of X', 'what could this break', or reviewing a small diff you don't trust.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target source, Git/PR history and pinned library source access",
+              "project runtime, real test/app harness and writable disposable proof locations; model diversity when required"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -549,7 +732,32 @@
             "skill:unslop",
             "skill:why"
           ],
-          "description": "Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. Use for 'blast radius of X', 'what could this break', or reviewing a small diff you don't trust."
+          "description": "Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. Use for 'blast radius of X', 'what could this break', or reviewing a small diff you don't trust.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target source, Git/PR history and pinned library source access",
+              "project runtime, real test/app harness and writable disposable proof locations; model diversity when required"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         }
       ]
     },
@@ -693,7 +901,19 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
+          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target repository, recent commits/reverts/review evidence of recurring mistakes",
+              "project compiler/lint/test and CI interfaces; approval for documented exceptions"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         },
         {
           "surface": "codex",
@@ -707,7 +927,19 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
+          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target repository, recent commits/reverts/review evidence of recurring mistakes",
+              "project compiler/lint/test and CI interfaces; approval for documented exceptions"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         }
       ]
     },
@@ -763,7 +995,19 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for /create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests."
+          "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for /create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target project and writable host-specific project skill directory",
+              "suitable reproducible verifier/toolchain and owned broken-variant scratch; actual counterexample and bounds evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         },
         {
           "surface": "codex",
@@ -777,7 +1021,19 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for $create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests."
+          "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for $create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target project and writable host-specific project skill directory",
+              "suitable reproducible verifier/toolchain and owned broken-variant scratch; actual counterexample and bounds evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         }
       ]
     },
@@ -833,7 +1089,19 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Generate a project-local verification skill that drives your app the way a user does \u2014 any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior."
+          "description": "Generate a project-local verification skill that drives your app the way a user does \u2014 any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual app runtime, drive harness, auth/seed prerequisites, isolated instances and durable evidence output",
+              "authorized buildable target app and writable host-specific project skill directory"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         },
         {
           "surface": "codex",
@@ -847,7 +1115,19 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Generate a project-local verification skill that drives your app the way a user does \u2014 any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior."
+          "description": "Generate a project-local verification skill that drives your app the way a user does \u2014 any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual app runtime, drive harness, auth/seed prerequisites, isolated instances and durable evidence output",
+              "authorized buildable target app and writable host-specific project skill directory"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         }
       ]
     },
@@ -1383,7 +1663,20 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Periodic pass that keeps a project's verification skill and feature map honest: parallel source readers per feature, one live session driving every feature, at most one PR of proven corrections. Use for /maintain-verification-skill or \"audit the verify skill\"."
+          "description": "Periodic pass that keeps a project's verification skill and feature map honest: parallel source readers per feature, one live session driving every feature, at most one PR of proven corrections. Use for /maintain-verification-skill or \"audit the verify skill\".",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "explicit writable target verification skill in the user project; never the immutable prepared Catalog resource",
+              "read-only source subagents, coordinator live-driving tools, app/doctor/auth prerequisites and evidence surviving cleanup",
+              "repository/PR access for proven corrections within the target skill only"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         },
         {
           "surface": "codex",
@@ -1397,7 +1690,20 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Periodic pass that keeps a project's verification skill and feature map honest: parallel source readers per feature, one live session driving every feature, at most one PR of proven corrections. Use for /maintain-verification-skill or \"audit the verify skill\"."
+          "description": "Periodic pass that keeps a project's verification skill and feature map honest: parallel source readers per feature, one live session driving every feature, at most one PR of proven corrections. Use for /maintain-verification-skill or \"audit the verify skill\".",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "explicit writable target verification skill in the user project; never the immutable prepared Catalog resource",
+              "read-only source subagents, coordinator live-driving tools, app/doctor/auth prerequisites and evidence surviving cleanup",
+              "repository/PR access for proven corrections within the target skill only"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         }
       ]
     },
@@ -1453,7 +1759,20 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Use when building a custom UI (page, dashboard, buttons) that should wake a Grok Bot over a webhook, when the user must provide a webhook sender key, or when exposing that UI on Tailscale."
+          "description": "Use when building a custom UI (page, dashboard, buttons) that should wake a Grok Bot over a webhook, when the user must provide a webhook sender key, or when exposing that UI on Tailscale.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized external Grok Bot provider/webhook routine or exposed routine-provisioning connector",
+              "authorized network/Tailscale access, current platform setup and user machine approval when needed",
+              "server runtime and server-side secret configuration; secret values never supplied through chat"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         },
         {
           "surface": "codex",
@@ -1467,7 +1786,20 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Use when building a custom UI (page, dashboard, buttons) that should wake a Grok Bot over a webhook, when the user must provide a webhook sender key, or when exposing that UI on Tailscale."
+          "description": "Use when building a custom UI (page, dashboard, buttons) that should wake a Grok Bot over a webhook, when the user must provide a webhook sender key, or when exposing that UI on Tailscale.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized external Grok Bot provider/webhook routine or exposed routine-provisioning connector",
+              "authorized network/Tailscale access, current platform setup and user machine approval when needed",
+              "server runtime and server-side secret configuration; secret values never supplied through chat"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
         }
       ]
     },
@@ -1535,7 +1867,40 @@
             "skill:principle-redesign-from-first-principles",
             "skill:why"
           ],
-          "description": "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
+          "description": "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "caller diff/files and available independent comment reviewer or disclosed direct-audit fallback",
+              "project tools for root-cause fixes; interactive approval or caller pre-approval for constraint encodings"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:architect"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:how"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-fix-root-causes"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-redesign-from-first-principles"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -1555,7 +1920,40 @@
             "skill:principle-redesign-from-first-principles",
             "skill:why"
           ],
-          "description": "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
+          "description": "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "caller diff/files and available independent comment reviewer or disclosed direct-audit fallback",
+              "project tools for root-cause fixes; interactive approval or caller pre-approval for constraint encodings"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:architect"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:how"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-fix-root-causes"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-redesign-from-first-principles"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         }
       ]
     },
@@ -4079,7 +4477,28 @@
             "skill:unslop",
             "skill:why"
           ],
-          "description": "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work."
+          "description": "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Git/GitHub live-state access and actual source identifiers; default seven-day scoped window",
+              "accessible current-workspace history or explicitly reported history gap; authorized shared-record connectors"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -4096,7 +4515,28 @@
             "skill:unslop",
             "skill:why"
           ],
-          "description": "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work."
+          "description": "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Git/GitHub live-state access and actual source identifiers; default seven-day scoped window",
+              "accessible current-workspace history or explicitly reported history gap; authorized shared-record connectors"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         }
       ]
     },
@@ -4452,7 +4892,29 @@
           "requires": [
             "skill:unslop"
           ],
-          "description": "Keep a reviewable decision trail for long-running or unattended work: a TSV log with one row per decision (what, why, evidence, result). Local by default; commit it when a reviewer needs the trail to trust the result. Use for /show-me-your-work, autonomous or multi-phase runs, or work a human reviews after stepping away."
+          "description": "Keep a reviewable decision trail for long-running or unattended work: a TSV log with one row per decision (what, why, evidence, result). Local by default; commit it when a reviewer needs the trail to trust the result. Use for /show-me-your-work, autonomous or multi-phase runs, or work a human reviews after stepping away.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Bash, date, dirname, mkdir and tr for optional log helper execution; explicit writable log destination",
+              "accessible active-session record or labeled conversation/artifact evidence",
+              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:principle-encode-lessons-in-structure"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -4468,7 +4930,29 @@
           "requires": [
             "skill:unslop"
           ],
-          "description": "Keep a reviewable decision trail for long-running or unattended work: a TSV log with one row per decision (what, why, evidence, result). Local by default; commit it when a reviewer needs the trail to trust the result. Use for /show-me-your-work, autonomous or multi-phase runs, or work a human reviews after stepping away."
+          "description": "Keep a reviewable decision trail for long-running or unattended work: a TSV log with one row per decision (what, why, evidence, result). Local by default; commit it when a reviewer needs the trail to trust the result. Use for /show-me-your-work, autonomous or multi-phase runs, or work a human reviews after stepping away.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Bash, date, dirname, mkdir and tr for optional log helper execution; explicit writable log destination",
+              "accessible active-session record or labeled conversation/artifact evidence",
+              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:principle-encode-lessons-in-structure"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              }
+            ]
+          }
         }
       ]
     },
@@ -4720,7 +5204,32 @@
             "skill:unslop",
             "skill:why"
           ],
-          "description": "Explain a body of work plainly so a person actually understands it. Runs the `how` and `why` skills and weaves what they find into one clear explanation. Use for 'teach me this', 'help me really understand X', 'explain this change or subsystem to me'."
+          "description": "Explain a body of work plainly so a person actually understands it. Runs the `how` and `why` skills and weaves what they find into one clear explanation. Use for 'teach me this', 'help me really understand X', 'explain this change or subsystem to me'.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target source and available how/why investigation tools or explicitly reported gaps",
+              "host subagents and image/diagram tools where the procedure requires them"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:how"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -4738,7 +5247,32 @@
             "skill:unslop",
             "skill:why"
           ],
-          "description": "Explain a body of work plainly so a person actually understands it. Runs the `how` and `why` skills and weaves what they find into one clear explanation. Use for 'teach me this', 'help me really understand X', 'explain this change or subsystem to me'."
+          "description": "Explain a body of work plainly so a person actually understands it. Runs the `how` and `why` skills and weaves what they find into one clear explanation. Use for 'teach me this', 'help me really understand X', 'explain this change or subsystem to me'.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target source and available how/why investigation tools or explicitly reported gaps",
+              "host subagents and image/diagram tools where the procedure requires them"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:how"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         }
       ]
     },
@@ -4798,7 +5332,23 @@
           "requires": [
             "skill:unslop"
           ],
-          "description": "Layered technical-writing standard: Di\u00e1taxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages."
+          "description": "Layered technical-writing standard: Di\u00e1taxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "target document, actual project vocabulary and applicable product copy standards"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -4814,7 +5364,23 @@
           "requires": [
             "skill:unslop"
           ],
-          "description": "Layered technical-writing standard: Di\u00e1taxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages."
+          "description": "Layered technical-writing standard: Di\u00e1taxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "target document, actual project vocabulary and applicable product copy standards"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              }
+            ]
+          }
         }
       ]
     },
@@ -4876,7 +5442,28 @@
             "skill:principle-boundary-discipline",
             "skill:principle-type-system-discipline"
           ],
-          "description": "TypeScript best practices. Use when reading or editing any .ts or .tsx file."
+          "description": "TypeScript best practices. Use when reading or editing any .ts or .tsx file.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "target TypeScript project, its schema library and compiler/test/runtime tools for actual verification"
+            ],
+            "reference_files": [
+              "ACCESS.md",
+              "references/ACCESS-patterns.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:principle-boundary-discipline"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-type-system-discipline"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -4893,7 +5480,28 @@
             "skill:principle-boundary-discipline",
             "skill:principle-type-system-discipline"
           ],
-          "description": "TypeScript best practices. Use when reading or editing any .ts or .tsx file."
+          "description": "TypeScript best practices. Use when reading or editing any .ts or .tsx file.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "target TypeScript project, its schema library and compiler/test/runtime tools for actual verification"
+            ],
+            "reference_files": [
+              "ACCESS.md",
+              "references/ACCESS-patterns.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:principle-boundary-discipline"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-type-system-discipline"
+              }
+            ]
+          }
         }
       ]
     },

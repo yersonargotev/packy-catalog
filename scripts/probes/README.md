@@ -374,3 +374,27 @@ shared bounded child runner.
 transport with a deterministic localhost provider and removes its temporary
 state after emitting the result. It does not establish model inference.
 See [retirement instructions](../../docs/pstack-opencode-retirement.md).
+
+## pstack engineering and verification acceptance
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario pstack-engineering \
+  --pstack-baseline /path/to/clean-5.0.0-catalog > /tmp/pstack-engineering-evidence.json
+```
+
+The [reviewed 13-skill matrix](../../docs/design/pstack-engineering-on-demand.md)
+accounts for all 26 effective Codex/Claude roots and their foundational closure.
+Checks cover actual supporting/legal content and modes, host workflow policies,
+rendered nested and runner references, absent content runtimes, a modified active
+native architect, retained-snapshot selection transitions and explicit missing-
+content failure. Native regression preserves the scoped selection and inherited
+contracts/original content on Codex and Claude under the accepted two-host policy. Both access hosts are required.
+
+After content review, this scenario executes only the decision-log helper, using
+an explicit disposable output path. It verifies header, append, six-column and
+escaping behavior, source/target preservation and cleanup. Bash and the helper's
+standard Unix tools are needed for that opt-in execution. This is not proof of
+cross-model review, app/formal verification or provider/network workflow success.
+The shared central release pin, clean candidate/baseline requirements, isolated
+HOME/config/data/cache/project roots, bounded commands, receipts and cleanup apply.
+Ordinary validation, tests and publication never run this scenario.
