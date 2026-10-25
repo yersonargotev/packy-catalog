@@ -1996,8 +1996,14 @@ def warp_specification(probe, surfaces):
             original, actual = tree(baseline_root / "packs/warp" / before["source"]), tree(installed / skill)
             require(all(actual.get(path) == value for path, value in original.items()), "Warp original native bytes/modes changed")
         if host == "opencode":
-            discovery = probe.candidate(workspace, ["show", "warp", "--surface", host, "--json"])
-            require(all(not item["compatible"] for item in discovery["skills"]), "Warp added OpenCode on-demand access")
+            require(all(not resources[skill].get("on_demand")
+                        and {v["surface"] for v in resources[skill]["variants"]} == {"codex", "claude"}
+                        for skill in graph), "Warp added OpenCode on-demand declarations")
+            before = installation_state(workspace)
+            output, diagnostic = probe.candidate(workspace, ["show", "warp", "--surface", host, "--json"], failure=True)
+            require('unsupported on-demand discovery surface "opencode"' in output + diagnostic,
+                    "OpenCode discovery failed for an unrelated reason")
+            require(before == installation_state(workspace), "unsupported discovery changed OpenCode native state")
         probe.verify(workspace)
         probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "result": "passed",
                                            "checks": ["native-installation", "original-contracts-bytes-modes", "opencode-contract-preserved"]})
