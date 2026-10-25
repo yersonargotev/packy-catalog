@@ -1541,6 +1541,27 @@ def pstack_orchestration(probe, surfaces):
                         and ".claude/skills" in entry and "do not invoke them through the Skill tool" in entry,
                         "orchestration host invocation contract lost")
                 require("~/.pstack/" + host + "-models.md" in entry, "orchestration model preference host changed")
+            if skill == "poteto-help":
+                require("$skill-name" not in entry and "/skill-name" not in entry
+                        and "$principle-<name>" not in entry and "/principle-<name>" not in entry,
+                        "help retains unqualified native routing")
+            if skill == "poteto-mode":
+                supporting = {
+                    "autopilot-full": ["initiating Catalog Snapshot", "nothing merges until", "hourly audit"],
+                    "autopilot-stack": ["initiating Catalog Snapshot", "never the landing", "Only you rebase or retarget"],
+                    "multi-phase-plan": ["Do not implement", "live block is mandatory", "operator's explicit go", "ACCESS-<execution playbook>"],
+                    "orchestrate": ["The CLI never spawns", "Every file has exactly one writer", "A new head SHA voids the row"],
+                    "babysit": ["Declare a mode", "Babysitting never authorizes merging"],
+                    "shipping": ["Only a verdict from an agent that did not write the code counts"],
+                    "worktree-cleanup": ["The bucket is advice, not permission", "Verify usage before deleting"],
+                    "eval": ["one judge scores both", "never by model name", "mark chain-following evidence unknown"],
+                    "bug-fix": ["Confirm the surviving", "cheap local test path", "pstack:tdd"],
+                }
+                for playbook, fragments in supporting.items():
+                    body = (Path(report["resource_root"]) / ("playbooks/ACCESS-" + playbook + ".md")).read_text()
+                    require(all(fragment in body for fragment in fragments), "supporting policy lost: " + playbook)
+                    require("playbook from trunk" not in body and "playbooks from trunk" not in body,
+                            "autopilot substitutes latest playbooks for retained content")
             for reference in (Path(report["resource_root"]) / "references").glob("*.md"):
                 require(json.dumps(reference.read_text())[1:-1] not in json.dumps(discovery), "discovery embeds supporting bodies")
             roots[skill] = report
@@ -1712,7 +1733,7 @@ def orchestration_helpers(probe, report, host):
         help_text, _ = runner.execute([*watcher, "--help"], timeout=180)
         require("--status-only" in help_text and "--queued-stack" in help_text, "watcher help lost modes")
         runner.execute([*watcher, "--pr", "0"], failure=True)
-        rejected, _ = runner.execute([*watcher, "--owner", "fixture", "--repo", "fixture", "--pr", "1", "--status-only"], failure=True)
+        rejected, _ = runner.execute([*watcher, "--owner", "fixture", "--repo", "fixture", "--pr", "1", "--status-only", "--max-query-errors", "1", "--timeout", "5"], failure=True)
         verdict = json.loads(rejected.splitlines()[-1])
         require(verdict["kind"] == "BLOCKER" and verdict["blocker"]["kind"] == "status-query" and verdict["terminal"] and (output / "forge-calls.jsonl").is_file(),
                 "watcher did not expose the external query failure")

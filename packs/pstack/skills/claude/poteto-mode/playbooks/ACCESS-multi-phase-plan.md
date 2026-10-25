@@ -31,7 +31,7 @@
 
 One box is one unit of work. Every box names the evidence that checks it. A nested box is a sub-step of the box above it. Check a box only when its evidence exists, a file, a log line, a screenshot, a test run, or a SHA. The body is a how-to. The appendices explain and record.
 
-The program runs `<prepared-poteto-mode-resource-root>/playbooks/<execution playbook>.md`. <Who merges, and which PR ids are the operator's items that stop at merge-ready.>
+The program runs `<prepared-poteto-mode-resource-root>/playbooks/ACCESS-<execution playbook>.md`. <Who merges, and which PR ids are the operator's items that stop at merge-ready.>
 
 Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
 
@@ -41,7 +41,7 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
 
 - [ ] State the protocol and this plan to the operator, then stop. Start execution only on the operator's explicit go.
 - [ ] Read these from their prepared locations at program start. Re-read them at every tick.
-  - [ ] Read `<prepared-poteto-mode-resource-root>/playbooks/<execution playbook>.md`
+  - [ ] Read `<prepared-poteto-mode-resource-root>/playbooks/ACCESS-<execution playbook>.md`
   - [ ] Read the prepared pstack:swarm entry
   - [ ] `git show origin/main:<control skill path>`
   - [ ] `cat <prepared-poteto-mode-resource-root>/playbooks/ACCESS-opening-a-pr.md`

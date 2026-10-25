@@ -155,7 +155,7 @@ Read the Playbooks section of [pstack:poteto-mode]({{packy.access:pstack:poteto-
 
 For a multi-phase plan, read the [pstack:poteto-mode]({{packy.access:pstack:poteto-mode}}) `playbooks/ACCESS-multi-phase-plan.md`. A planning-only request produces a plan without implementation. For an unresolved design question, consider Prototype or `pstack:architect` within the user's requested scope.
 
-Principles are sibling `principle-*` skills read by the relevant workflow. The user can name a principle to steer a run or explicitly invoke `/principle-<name>`. Read the relevant principle before explaining the decision it changes.
+Principles are qualified `pstack:principle-*` resources read by the relevant workflow. When the user selects a principle, obtain `pstack:principle-<name>` with the initiating surface/snapshot and read its returned entry before explaining the decision it changes.
 
 ## Fix a run that went wrong
 
@@ -164,7 +164,7 @@ Principles are sibling `principle-*` skills read by the relevant workflow. The u
 | The workflow stopped applying | Explicitly select `pstack:poteto-mode` and restate the active goal and completed steps. |
 | A question continued the previous task | State that this is a help question or a new task. |
 | A model preference had no effect | Check the host marker, role name, and live Agent tool parameters; report rejected or unsupported overrides. |
-| A skill did not activate automatically | Inspect its `disable-model-invocation` frontmatter; most pstack workflows are manual-only in Claude Code. Select it with `/skill-name`, or read it as a dependency of the requested workflow. |
+| A skill did not activate automatically | For native installation questions, inspect its `disable-model-invocation` frontmatter; most pstack workflows are manual-only in Claude Code. For on-demand work, obtain `pstack:<skill>` with the initiating surface/snapshot and read the returned entry as a file; manual-only dependencies remain file reads, never Skill-tool invocations. |
 | Parallel workers overwrote each other | Give each worker an isolated worktree or output directory before retrying. |
 | An overnight run stopped | Check whether the session remained active or a supported scheduler actually ran; define observable completion checks. |
 | A green build was called proof | Ask for evidence from the real command, flow, stored value, or profile. |
