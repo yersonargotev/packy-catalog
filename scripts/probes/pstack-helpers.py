@@ -4,6 +4,7 @@ import hashlib
 import os
 from pathlib import Path
 import signal
+import shutil
 import subprocess
 import tempfile
 
@@ -23,19 +24,24 @@ def run(command):
     assert process.returncode == 0, (command, process.returncode, out, err)
     return out
 
-for host in ("codex", "claude", "opencode"):
-    skills = root / host
-    before = inventory(skills)
-    scripts = skills / "poteto-mode/scripts"
-    assert "Usage: orch" in run(["bun", str(scripts / "orch/orch.ts"), "--help"])
-    assert "usage:" in run(["bun", str(scripts / "watch-pr/watch-pr"), "--help"]).lower()
-    with tempfile.TemporaryDirectory(prefix="pstack-log-") as directory:
-        log = Path(directory) / "decisions.tsv"
-        command = ["bash", str(skills / "show-me-your-work/scripts/log.sh"), str(log)]
-        run(command + ["probe", "=unsafe", "reason\nnext", "source\tpath", "pass"])
-        run(command + ["probe", "second", "reason", "source", "pass"])
-        rows = log.read_text().splitlines()
-        assert len(rows) == 3 and all(len(row.split("\t")) == 6 for row in rows)
-        assert "'=unsafe" in rows[1]
-    assert before == inventory(skills), f"{host} runtime changed installed skill closure"
-    print(f"{host}: orch/watch-pr execute; log appends and escapes cells; installed closure unchanged", flush=True)
+for host in ("codex", "claude"):
+    source = root / host
+    original = inventory(source)
+    with tempfile.TemporaryDirectory(prefix="pstack-helpers-") as directory:
+        skills = Path(directory) / host
+        shutil.copytree(source, skills)
+        before = inventory(skills)
+        scripts = skills / "poteto-mode/scripts"
+        assert "Usage: orch" in run(["bun", str(scripts / "orch/orch.ts"), "--help"])
+        assert "usage:" in run(["bun", str(scripts / "watch-pr/watch-pr"), "--help"]).lower()
+        with tempfile.TemporaryDirectory(prefix="pstack-log-") as directory:
+            log = Path(directory) / "decisions.tsv"
+            command = ["bash", str(skills / "show-me-your-work/scripts/log.sh"), str(log)]
+            run(command + ["probe", "=unsafe", "reason\nnext", "source\tpath", "pass"])
+            run(command + ["probe", "second", "reason", "source", "pass"])
+            rows = log.read_text().splitlines()
+            assert len(rows) == 3 and all(len(row.split("\t")) == 6 for row in rows)
+            assert "'=unsafe" in rows[1]
+        assert before == inventory(skills), f"{host} runtime changed installed skill closure"
+        print(f"{host}: orch/watch-pr execute; log appends and escapes cells; installed closure unchanged", flush=True)
+    assert original == inventory(source), f"{host} authored closure changed"

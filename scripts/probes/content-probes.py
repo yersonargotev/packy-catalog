@@ -371,7 +371,7 @@ def pstack(probe, surfaces):
             require(untouched == tree(targets[other]), "pstack update changed other surface")
         before = tree(workspace)
         out, diagnostic = probe.candidate(workspace, [apply, "pstack", "--surface", "opencode", "--dry-run", "--json"], failure=True)
-        require("deterministic coexistence is not verified" in out + diagnostic, "OpenCode coexistence failed for unrelated reason")
+        require("support" in out + diagnostic, "withdrawn OpenCode request failed for unrelated reason")
         require(tree(workspace) == before, "OpenCode coexistence rejection changed workspace")
         helper = targets["codex"] / "poteto-mode/scripts/bootstrap.ts"
         original_helper = helper.read_bytes()
@@ -390,10 +390,6 @@ def pstack(probe, surfaces):
         probe.apply(workspace, [remove, "pstack", "--surface", "codex"])
         require(claude_before == tree(targets["claude"]), "Codex removal changed Claude tree")
         probe.apply(workspace, [remove, "pstack", "--surface", "claude"])
-        probe.apply(workspace, [apply, "pstack", "--surface", "opencode"])
-        require("## OpenCode execution" in (targets["opencode"] / "reflect/SKILL.md").read_text(),
-                "wrong pstack OpenCode definition")
-        probe.apply(workspace, [remove, "pstack", "--surface", "opencode"])
         probe.apply(workspace, [apply, "pstack", "--surface", "codex", "--resource", "skill:architect"])
         for name in ("principle-exhaust-the-design-space", "principle-fix-root-causes", "principle-prove-it-works",
                      "principle-redesign-from-first-principles"):
@@ -409,7 +405,7 @@ def pstack(probe, surfaces):
             require((workspace / name / "personal-sentinel").read_bytes() == contents, "pstack changed unrelated personal file")
         probe.evidence["outcomes"].append({"scenario": "pstack", "scope": scope, "result": "passed",
                                           "checks": ["baseline-transition", "targeted-updates", "other-surface-preservation",
-                                                     "opencode-coexistence-rejection", "helper-drift-rejection",
+                                                     "unsupported-opencode-rejection", "helper-drift-rejection",
                                                      "effective-dependencies", "complete-retirement", "unrelated-state-preservation"]})
 
 
@@ -452,7 +448,8 @@ def pstack_withdrawal(probe, surfaces):
         workspace = probe.prepare("pstack-preserved-access-" + host)
         target = tree(workspace / "project")
         discovery = probe.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
-        old_discovery = old.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
+        old_workspace = old.prepare("pstack-baseline-access-" + host)
+        old_discovery = old.candidate(old_workspace, ["show", "pstack", "--surface", host, "--json"])
         require(discovery["skills"] == old_discovery["skills"], "withdrawal changed effective discovery metadata")
         for resource in manifest["resources"]:
             effective = {**resource, **next((v for v in resource.get("variants", []) if v["surface"] == host), {})}
@@ -1138,13 +1135,15 @@ def pstack_foundational(probe, surfaces):
                                                       "changed-selection", "missing-retained-fails"]})
     def native_contract(resource):
         result = json.loads(json.dumps(resource))
+        result["bindings"] = [b for b in result["bindings"] if b["surface"] in ("codex", "claude")]
+        result["variants"] = [v for v in result["variants"] if v["surface"] in ("codex", "claude")]
         for variant in result["variants"]:
             variant.pop("on_demand", None)
         return result
 
-    # Original native contracts/bytes/modes survive on all three supported hosts.
+    # Original native contracts/bytes/modes survive on the two supported hosts.
     previous = {item["id"]: item for item in baseline["resources"]}
-    for host in SURFACES:
+    for host in ("codex", "claude"):
         probe.set_context("native-regression", scenario="pstack-foundational", surface=host, scope="project")
         workspace = probe.prepare("pstack-foundational-native-" + host)
         args = ["install", "pstack", "--surface", host]

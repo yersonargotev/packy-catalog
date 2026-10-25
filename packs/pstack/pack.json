@@ -1,13 +1,12 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "4.6.0",
+  "version": "5.0.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
     "claude",
-    "codex",
-    "opencode"
+    "codex"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -103,15 +102,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "architect",
-          "invocation": "architect",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -144,31 +134,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/architect",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/architect",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:arena",
-            "skill:how",
-            "skill:interrogate",
-            "skill:principle-exhaust-the-design-space",
-            "skill:principle-fix-root-causes",
-            "skill:principle-foundational-thinking",
-            "skill:principle-outcome-oriented-execution",
-            "skill:principle-redesign-from-first-principles",
-            "skill:principle-subtract-before-you-add",
-            "skill:why"
-          ],
-          "description": "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/architect",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/architect",
@@ -228,15 +193,6 @@
           "projection": "skill",
           "name": "arena",
           "invocation": "$arena",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "arena",
-          "invocation": "arena",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -341,25 +297,6 @@
               }
             ]
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/arena",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/arena",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:principle-laziness-protocol",
-            "skill:principle-prove-it-works",
-            "skill:principle-redesign-from-first-principles",
-            "skill:principle-separate-before-serializing-shared-state"
-          ],
-          "description": "Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. Use for /arena, 'arena this', 'throw it in the arena', or when one attempt at a non-trivial artifact would lock in the wrong shape."
         }
       ]
     },
@@ -402,15 +339,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "automate-me",
-          "invocation": "automate-me",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -435,23 +363,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/automate-me",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/automate-me",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:poteto-mode",
-            "skill:unslop"
-          ],
-          "description": "Use for \"automate me\", \"create/update/refresh my -mode skill\", \"turn/capture my preferences or working style into a skill\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via create-skill + unslop, optionally pulling fresh evidence from recent transcripts."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/automate-me",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/automate-me",
@@ -501,15 +412,6 @@
           "projection": "skill",
           "name": "benchmark-checklist",
           "invocation": "$benchmark-checklist",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "benchmark-checklist",
-          "invocation": "benchmark-checklist",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -566,20 +468,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/benchmark-checklist",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/benchmark-checklist",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Vet a perf measurement (limiter, tuning, limits, errors, repeatability, relevance, and whether the work happened) before you report or act on it. Use when you run a benchmark or report a speedup or regression you measured."
         }
       ]
     },
@@ -623,15 +511,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "blast-radius",
-          "invocation": "blast-radius",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -657,24 +536,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/blast-radius",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/blast-radius",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:arena",
-            "skill:unslop",
-            "skill:why"
-          ],
-          "description": "Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. Use for 'blast radius of X', 'what could this break', or reviewing a small diff you don't trust."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/blast-radius",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/blast-radius",
@@ -728,15 +589,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "bro",
-          "invocation": "bro",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -786,20 +638,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/bro",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/bro",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Restate the last message in plain human language, with no jargon."
         }
       ]
     },
@@ -839,15 +677,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "correct",
-          "invocation": "correct",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -869,20 +698,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/correct",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/correct",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/correct",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/correct",
@@ -932,15 +747,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "create-formal-verification-skill",
-          "invocation": "create-formal-verification-skill",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -972,20 +778,6 @@
           ],
           "requires": [],
           "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for $create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/create-formal-verification-skill",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/create-formal-verification-skill",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for /create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests."
         }
       ]
     },
@@ -1025,15 +817,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "create-verification-skill",
-          "invocation": "create-verification-skill",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -1055,20 +838,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/create-verification-skill",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/create-verification-skill",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Generate a project-local verification skill that drives your app the way a user does \u2014 any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/create-verification-skill",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/create-verification-skill",
@@ -1126,15 +895,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "figure-it-out",
-          "invocation": "figure-it-out",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -1164,28 +924,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/figure-it-out",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/figure-it-out",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:architect",
-            "skill:poteto-mode",
-            "skill:principle-laziness-protocol",
-            "skill:principle-never-block-on-the-human",
-            "skill:principle-prove-it-works",
-            "skill:principle-separate-before-serializing-shared-state",
-            "skill:show-me-your-work"
-          ],
-          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/figure-it-out",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/figure-it-out",
@@ -1240,15 +978,6 @@
           "projection": "skill",
           "name": "how",
           "invocation": "$how",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "how",
-          "invocation": "how",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1309,20 +1038,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/how",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/how",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Use for \"how does X work\", code walkthroughs before changing something, and placement / ownership / layering questions (\"where should this live\", \"which package owns this\", \"is this the right layer\"). Explains subsystem architecture, runtime flow, onboarding mental models. Use why for motivation."
         }
       ]
     },
@@ -1359,15 +1074,6 @@
           "projection": "skill",
           "name": "in-your-own-words",
           "invocation": "$in-your-own-words",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "in-your-own-words",
-          "invocation": "in-your-own-words",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1420,20 +1126,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/in-your-own-words",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/in-your-own-words",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for /in-your-own-words."
         }
       ]
     },
@@ -1470,15 +1162,6 @@
           "projection": "skill",
           "name": "interrogate",
           "invocation": "$interrogate",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "interrogate",
-          "invocation": "interrogate",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1539,20 +1222,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/interrogate",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/interrogate",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles."
         }
       ]
     },
@@ -1589,15 +1258,6 @@
           "projection": "skill",
           "name": "ketchup",
           "invocation": "$ketchup",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "ketchup",
-          "invocation": "ketchup",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1668,22 +1328,6 @@
               }
             ]
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/ketchup",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/ketchup",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:bro"
-          ],
-          "description": "Catch the user up on what changed in this chat since their last message, in plain words and small visuals. List every item waiting on them with what they need to decide it from the reply alone. Use for /ketchup."
         }
       ]
     },
@@ -1723,15 +1367,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "maintain-verification-skill",
-          "invocation": "maintain-verification-skill",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -1753,20 +1388,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/maintain-verification-skill",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/maintain-verification-skill",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Periodic pass that keeps a project's verification skill and feature map honest: parallel source readers per feature, one live session driving every feature, at most one PR of proven corrections. Use for /maintain-verification-skill or \"audit the verify skill\"."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/maintain-verification-skill",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/maintain-verification-skill",
@@ -1816,15 +1437,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "make-bot-ui",
-          "invocation": "make-bot-ui",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -1846,20 +1458,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/make-bot-ui",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/make-bot-ui",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Use when building a custom UI (page, dashboard, buttons) that should wake a Grok Bot over a webhook, when the user must provide a webhook sender key, or when exposing that UI on Tailscale."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/make-bot-ui",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/make-bot-ui",
@@ -1915,15 +1513,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "no-comments",
-          "invocation": "no-comments",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -1951,26 +1540,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/no-comments",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/no-comments",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:architect",
-            "skill:how",
-            "skill:principle-fix-root-causes",
-            "skill:principle-redesign-from-first-principles",
-            "skill:why"
-          ],
-          "description": "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/no-comments",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/no-comments",
@@ -2026,15 +1595,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "poteto-help",
-          "invocation": "poteto-help",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -2072,23 +1632,6 @@
             "skill:setup-pstack"
           ],
           "description": "Help users configure pstack, start a task with $poteto-mode, choose a workflow or principle, and troubleshoot a run in Codex. Use $poteto-help with a question."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/poteto-help",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/poteto-help",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:poteto-mode",
-            "skill:setup-pstack"
-          ],
-          "description": "Help users configure pstack, start a task with /poteto-mode, choose a workflow or principle, and troubleshoot a run in OpenCode. Use /poteto-help with a question."
         }
       ]
     },
@@ -2162,15 +1705,6 @@
           "projection": "skill",
           "name": "poteto-mode",
           "invocation": "$poteto-mode",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "poteto-mode",
-          "invocation": "poteto-mode",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2281,58 +1815,6 @@
             "skill:unslop"
           ],
           "description": "poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/poteto-mode",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/poteto-mode",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:architect",
-            "skill:arena",
-            "skill:benchmark-checklist",
-            "skill:how",
-            "skill:interrogate",
-            "skill:ketchup",
-            "skill:no-comments",
-            "skill:principle-attack-the-premise",
-            "skill:principle-boundary-discipline",
-            "skill:principle-build-the-lever",
-            "skill:principle-encode-lessons-in-structure",
-            "skill:principle-exhaust-the-design-space",
-            "skill:principle-experience-first",
-            "skill:principle-explain-the-number",
-            "skill:principle-fix-root-causes",
-            "skill:principle-foundational-thinking",
-            "skill:principle-guard-the-context-window",
-            "skill:principle-laziness-protocol",
-            "skill:principle-make-operations-idempotent",
-            "skill:principle-migrate-callers-then-delete-legacy-apis",
-            "skill:principle-minimize-reader-load",
-            "skill:principle-model-the-domain",
-            "skill:principle-never-block-on-the-human",
-            "skill:principle-outcome-oriented-execution",
-            "skill:principle-prove-it-works",
-            "skill:principle-redesign-from-first-principles",
-            "skill:principle-separate-before-serializing-shared-state",
-            "skill:principle-sequence-verifiable-units",
-            "skill:principle-subtract-before-you-add",
-            "skill:principle-test-behavior-not-implementation",
-            "skill:principle-type-system-discipline",
-            "skill:reflect",
-            "skill:setup-pstack",
-            "skill:show-me-your-work",
-            "skill:swarm",
-            "skill:technical-writing",
-            "skill:unslop"
-          ],
-          "description": "poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style."
         }
       ]
     },
@@ -2374,15 +1856,6 @@
           "projection": "skill",
           "name": "principle-attack-the-premise",
           "invocation": "$principle-attack-the-premise",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-attack-the-premise",
-          "invocation": "principle-attack-the-premise",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2471,25 +1944,6 @@
               }
             ]
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-attack-the-premise",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-attack-the-premise",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:principle-build-the-lever",
-            "skill:principle-fix-root-causes",
-            "skill:principle-laziness-protocol",
-            "skill:principle-redesign-from-first-principles"
-          ],
-          "description": "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it."
         }
       ]
     },
@@ -2526,15 +1980,6 @@
           "projection": "skill",
           "name": "principle-boundary-discipline",
           "invocation": "$principle-boundary-discipline",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-boundary-discipline",
-          "invocation": "principle-boundary-discipline",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2587,20 +2032,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-boundary-discipline",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-boundary-discipline",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when wiring validation, error handling, or framework adapters. Concentrate guards at system boundaries (CLI, config, network, external APIs); trust internal types and keep business logic in pure functions."
         }
       ]
     },
@@ -2641,15 +2072,6 @@
           "projection": "skill",
           "name": "principle-build-the-lever",
           "invocation": "$principle-build-the-lever",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-build-the-lever",
-          "invocation": "principle-build-the-lever",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2728,24 +2150,6 @@
               }
             ]
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-build-the-lever",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-build-the-lever",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:principle-encode-lessons-in-structure",
-            "skill:principle-laziness-protocol",
-            "skill:principle-prove-it-works"
-          ],
-          "description": "Apply to any non-trivial work, not just bulk work: edits, migrations, analyses, checks. Build the tool that does it or proves it (codemod, script, generator, or a skill your subagents follow) instead of working by hand. The tool is the artifact a reviewer can rerun."
         }
       ]
     },
@@ -2782,15 +2186,6 @@
           "projection": "skill",
           "name": "principle-encode-lessons-in-structure",
           "invocation": "$principle-encode-lessons-in-structure",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-encode-lessons-in-structure",
-          "invocation": "principle-encode-lessons-in-structure",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2843,20 +2238,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-encode-lessons-in-structure",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-encode-lessons-in-structure",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when you catch yourself writing the same instruction a second time, or notice a recurring correction. Encode the rule as a lint, metadata flag, runtime check, or script instead of more text."
         }
       ]
     },
@@ -2893,15 +2274,6 @@
           "projection": "skill",
           "name": "principle-exhaust-the-design-space",
           "invocation": "$principle-exhaust-the-design-space",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-exhaust-the-design-space",
-          "invocation": "principle-exhaust-the-design-space",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2954,20 +2326,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-exhaust-the-design-space",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-exhaust-the-design-space",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when facing a novel UI interaction or architectural decision with no precedent in the codebase. Build 2-3 competing prototypes and compare side by side before committing."
         }
       ]
     },
@@ -3004,15 +2362,6 @@
           "projection": "skill",
           "name": "principle-experience-first",
           "invocation": "$principle-experience-first",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-experience-first",
-          "invocation": "principle-experience-first",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -3065,20 +2414,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-experience-first",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-experience-first",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when product, UX, or feature-scope tradeoffs come up. Choose user delight over implementation convenience; ship fewer polished features over more rough ones."
         }
       ]
     },
@@ -3115,15 +2450,6 @@
           "projection": "skill",
           "name": "principle-explain-the-number",
           "invocation": "$principle-explain-the-number",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-explain-the-number",
-          "invocation": "principle-explain-the-number",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -3190,22 +2516,6 @@
               }
             ]
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-explain-the-number",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-explain-the-number",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:benchmark-checklist"
-          ],
-          "description": "Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think."
         }
       ]
     },
@@ -3242,15 +2552,6 @@
           "projection": "skill",
           "name": "principle-fix-root-causes",
           "invocation": "$principle-fix-root-causes",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-fix-root-causes",
-          "invocation": "principle-fix-root-causes",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -3303,20 +2604,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-fix-root-causes",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-fix-root-causes",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate."
         }
       ]
     },
@@ -3353,15 +2640,6 @@
           "projection": "skill",
           "name": "principle-foundational-thinking",
           "invocation": "$principle-foundational-thinking",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-foundational-thinking",
-          "invocation": "principle-foundational-thinking",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -3414,20 +2692,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-foundational-thinking",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-foundational-thinking",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply before writing logic: choosing core types and data structures, sequencing scaffold-vs-feature work, asking what concurrent actors share. Get the data structures right so downstream code becomes obvious."
         }
       ]
     },
@@ -3464,15 +2728,6 @@
           "projection": "skill",
           "name": "principle-guard-the-context-window",
           "invocation": "$principle-guard-the-context-window",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-guard-the-context-window",
-          "invocation": "principle-guard-the-context-window",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -3525,20 +2780,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-guard-the-context-window",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-guard-the-context-window",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when context is filling up: large outputs, long files, repeated reads, fan-out planning. Route bulk to subagents; keep summaries in the main thread, not raw payloads."
         }
       ]
     },
@@ -3575,15 +2816,6 @@
           "projection": "skill",
           "name": "principle-laziness-protocol",
           "invocation": "$principle-laziness-protocol",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-laziness-protocol",
-          "invocation": "principle-laziness-protocol",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -3636,20 +2868,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-laziness-protocol",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-laziness-protocol",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when refactoring, evaluating diff size, or tempted to add abstractions, layers, or signal threading. Bias toward deletion and the smallest change that solves the problem."
         }
       ]
     },
@@ -3686,15 +2904,6 @@
           "projection": "skill",
           "name": "principle-make-operations-idempotent",
           "invocation": "$principle-make-operations-idempotent",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-make-operations-idempotent",
-          "invocation": "principle-make-operations-idempotent",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -3747,20 +2956,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-make-operations-idempotent",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-make-operations-idempotent",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when designing commands, lifecycle steps, or processing loops that run amid crashes, restarts, and retries. Converge to the same end state regardless of partial prior runs."
         }
       ]
     },
@@ -3797,15 +2992,6 @@
           "projection": "skill",
           "name": "principle-migrate-callers-then-delete-legacy-apis",
           "invocation": "$principle-migrate-callers-then-delete-legacy-apis",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-migrate-callers-then-delete-legacy-apis",
-          "invocation": "principle-migrate-callers-then-delete-legacy-apis",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -3858,20 +3044,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-migrate-callers-then-delete-legacy-apis",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-migrate-callers-then-delete-legacy-apis",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when introducing a new internal API while old callers still exist. Migrate callers and delete the old API in the same wave instead of preserving compatibility layers."
         }
       ]
     },
@@ -3910,15 +3082,6 @@
           "projection": "skill",
           "name": "principle-minimize-reader-load",
           "invocation": "$principle-minimize-reader-load",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-minimize-reader-load",
-          "invocation": "principle-minimize-reader-load",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -3975,22 +3138,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-minimize-reader-load",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-minimize-reader-load",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:principle-guard-the-context-window"
-          ],
-          "description": "Apply when reviewing or shaping code that's hard to trace. Count layers between question and answer, and hidden state in the reader's head; collapse one-caller wrappers and shrink mutable scope."
         }
       ]
     },
@@ -4027,15 +3174,6 @@
           "projection": "skill",
           "name": "principle-model-the-domain",
           "invocation": "$principle-model-the-domain",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-model-the-domain",
-          "invocation": "principle-model-the-domain",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -4088,20 +3226,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-model-the-domain",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-model-the-domain",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files."
         }
       ]
     },
@@ -4138,15 +3262,6 @@
           "projection": "skill",
           "name": "principle-never-block-on-the-human",
           "invocation": "$principle-never-block-on-the-human",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-never-block-on-the-human",
-          "invocation": "principle-never-block-on-the-human",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -4199,20 +3314,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-never-block-on-the-human",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-never-block-on-the-human",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when tempted to ask 'should I do X?' on reversible work."
         }
       ]
     },
@@ -4249,15 +3350,6 @@
           "projection": "skill",
           "name": "principle-outcome-oriented-execution",
           "invocation": "$principle-outcome-oriented-execution",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-outcome-oriented-execution",
-          "invocation": "principle-outcome-oriented-execution",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -4310,20 +3402,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-outcome-oriented-execution",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-outcome-oriented-execution",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply during planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture; don't preserve smooth intermediate states with throwaway compatibility code."
         }
       ]
     },
@@ -4360,15 +3438,6 @@
           "projection": "skill",
           "name": "principle-prove-it-works",
           "invocation": "$principle-prove-it-works",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-prove-it-works",
-          "invocation": "principle-prove-it-works",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -4421,20 +3490,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-prove-it-works",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-prove-it-works",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply after completing a task, before declaring done. Verify against the real artifact (run the feature, read the actual value, inspect the diff), not a proxy, self-report, or 'it compiles.'"
         }
       ]
     },
@@ -4471,15 +3526,6 @@
           "projection": "skill",
           "name": "principle-redesign-from-first-principles",
           "invocation": "$principle-redesign-from-first-principles",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-redesign-from-first-principles",
-          "invocation": "principle-redesign-from-first-principles",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -4532,20 +3578,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-redesign-from-first-principles",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-redesign-from-first-principles",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when integrating a new requirement into an existing design."
         }
       ]
     },
@@ -4582,15 +3614,6 @@
           "projection": "skill",
           "name": "principle-separate-before-serializing-shared-state",
           "invocation": "$principle-separate-before-serializing-shared-state",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-separate-before-serializing-shared-state",
-          "invocation": "principle-separate-before-serializing-shared-state",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -4643,20 +3666,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-separate-before-serializing-shared-state",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-separate-before-serializing-shared-state",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when concurrent actors might write to the same file, branch, key, or state object. Eliminate the sharing first; serialize structurally only when one shared writer is a real invariant."
         }
       ]
     },
@@ -4693,15 +3702,6 @@
           "projection": "skill",
           "name": "principle-sequence-verifiable-units",
           "invocation": "$principle-sequence-verifiable-units",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-sequence-verifiable-units",
-          "invocation": "principle-sequence-verifiable-units",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -4754,20 +3754,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-sequence-verifiable-units",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-sequence-verifiable-units",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply to multi-step work (sweeps, migrations, runs of similar edits) and to how you stack commits and PRs. Break work into small units that each end in a verifiable state, check each before the next, and order delivery so the sequence proves itself to a reviewer."
         }
       ]
     },
@@ -4804,15 +3790,6 @@
           "projection": "skill",
           "name": "principle-subtract-before-you-add",
           "invocation": "$principle-subtract-before-you-add",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-subtract-before-you-add",
-          "invocation": "principle-subtract-before-you-add",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -4865,20 +3842,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-subtract-before-you-add",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-subtract-before-you-add",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when sequencing an addition, refactor, or rewrite. Remove dead code, redundant validators, and stub references first, then build on the simpler base."
         }
       ]
     },
@@ -4915,15 +3878,6 @@
           "projection": "skill",
           "name": "principle-test-behavior-not-implementation",
           "invocation": "$principle-test-behavior-not-implementation",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-test-behavior-not-implementation",
-          "invocation": "principle-test-behavior-not-implementation",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -4976,20 +3930,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-test-behavior-not-implementation",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-test-behavior-not-implementation",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when you write, change, or keep a test. Assert what the code's users can observe, so that the test fails when that behavior breaks and keeps passing when only the internals change."
         }
       ]
     },
@@ -5026,15 +3966,6 @@
           "projection": "skill",
           "name": "principle-type-system-discipline",
           "invocation": "$principle-type-system-discipline",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "principle-type-system-discipline",
-          "invocation": "principle-type-system-discipline",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -5087,20 +4018,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/principle-type-system-discipline",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/principle-type-system-discipline",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas."
         }
       ]
     },
@@ -5143,15 +4060,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "recall",
-          "invocation": "recall",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -5176,23 +4084,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/recall",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/recall",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:unslop",
-            "skill:why"
-          ],
-          "description": "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/recall",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/recall",
@@ -5242,15 +4133,6 @@
           "projection": "skill",
           "name": "reflect",
           "invocation": "$reflect",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "reflect",
-          "invocation": "reflect",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -5327,22 +4209,6 @@
               }
             ]
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/reflect",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/reflect",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:principle-encode-lessons-in-structure"
-          ],
-          "description": "Spawn three parallel review subagents over the active transcript, surface learnings, and route each to a concrete edit on an existing skill. Use when the user says reflect."
         }
       ]
     },
@@ -5379,15 +4245,6 @@
           "projection": "skill",
           "name": "setup-pstack",
           "invocation": "$setup-pstack",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "setup-pstack",
-          "invocation": "setup-pstack",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -5448,20 +4305,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/setup-pstack",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/setup-pstack",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Configure the models and reasoning budget used by pstack roles on the active agent host. Use for /setup-pstack, \"configure pstack models\", or \"pstack budget\"."
         }
       ]
     },
@@ -5498,15 +4341,6 @@
           "projection": "skill",
           "name": "sharpen",
           "invocation": "$sharpen",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "sharpen",
-          "invocation": "sharpen",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -5559,20 +4393,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/sharpen",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/sharpen",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen."
         }
       ]
     },
@@ -5614,15 +4434,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "show-me-your-work",
-          "invocation": "show-me-your-work",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -5646,22 +4457,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/show-me-your-work",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/show-me-your-work",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:unslop"
-          ],
-          "description": "Keep a reviewable decision trail for long-running or unattended work: a TSV log with one row per decision (what, why, evidence, result). Local by default; commit it when a reviewer needs the trail to trust the result. Use for /show-me-your-work, autonomous or multi-phase runs, or work a human reviews after stepping away."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/show-me-your-work",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/show-me-your-work",
@@ -5710,15 +4505,6 @@
           "projection": "skill",
           "name": "swarm",
           "invocation": "$swarm",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "swarm",
-          "invocation": "swarm",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -5779,20 +4565,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/swarm",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/swarm",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Fan out N parallel workers, drain them, and return one report. Use for /swarm, 'swarm this', or parallel coverage, races, gauntlets, and exploration."
         }
       ]
     },
@@ -5829,15 +4601,6 @@
           "projection": "skill",
           "name": "tdd",
           "invocation": "$tdd",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "tdd",
-          "invocation": "tdd",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -5894,20 +4657,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/tdd",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/tdd",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Use only when the user explicitly asks for TDD, a failing test, or a regression test, OR when the bug has an obvious cheap local test target. Skip when the test path is unclear, expensive, integration-heavy, or not requested."
         }
       ]
     },
@@ -5951,15 +4700,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "teach",
-          "invocation": "teach",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -5985,24 +4725,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/teach",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/teach",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:how",
-            "skill:unslop",
-            "skill:why"
-          ],
-          "description": "Explain a body of work plainly so a person actually understands it. Runs the `how` and `why` skills and weaves what they find into one clear explanation. Use for 'teach me this', 'help me really understand X', 'explain this change or subsystem to me'."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/teach",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/teach",
@@ -6058,15 +4780,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "technical-writing",
-          "invocation": "technical-writing",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -6090,22 +4803,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/technical-writing",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/technical-writing",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:unslop"
-          ],
-          "description": "Layered technical-writing standard: Di\u00e1taxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/technical-writing",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/technical-writing",
@@ -6160,15 +4857,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "typescript-best-practices",
-          "invocation": "typescript-best-practices",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -6193,23 +4881,6 @@
         {
           "surface": "codex",
           "source": "skills/codex/typescript-best-practices",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/typescript-best-practices",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [
-            "skill:principle-boundary-discipline",
-            "skill:principle-type-system-discipline"
-          ],
-          "description": "TypeScript best practices. Use when reading or editing any .ts or .tsx file."
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/typescript-best-practices",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/typescript-best-practices",
@@ -6262,15 +4933,6 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "unslop",
-          "invocation": "unslop",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
       "surface_exclusions": [],
@@ -6320,20 +4982,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/unslop",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/unslop",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Cut AI tells from any writing."
         }
       ]
     },
@@ -6370,15 +5018,6 @@
           "projection": "skill",
           "name": "why",
           "invocation": "$why",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "why",
-          "invocation": "why",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -6439,20 +5078,6 @@
             ],
             "dependencies": []
           }
-        },
-        {
-          "surface": "opencode",
-          "source": "skills/opencode/why",
-          "origin": {
-            "id": "cursor-plugins",
-            "path": "pstack/skills/why",
-            "relationship": "adapted"
-          },
-          "notices": [
-            "notice:pstack-mit"
-          ],
-          "requires": [],
-          "description": "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCPs and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior."
         }
       ]
     }

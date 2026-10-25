@@ -90,7 +90,7 @@ Catalog owns the actual pstack content assertions above. Controlled ordinary
 fixtures contain inert replacement skill/helper text and no upstream origins;
 they exercise both scopes and reject an omitted effective dependency. They
 never execute shipped resources. Independent `pstack-update.py`, its opt-in
-tests, `pstack-helpers.py` and `pstack-host-loading.py` are retained unchanged;
+tests, `pstack-helpers.py` and `pstack-host-loading.py` remain opt-in;
 they already require no Packy source and are not part of ordinary CI.
 
 Controlled runner-boundary fixtures live in
@@ -99,3 +99,14 @@ children and Git/prerequisite fixtures, covering exact and repeated/unexpected
 prompts, structured preview, child failure, timeout/descendant cleanup,
 interruption cleanup, stripped credentials, dirty candidates and missing
 prerequisites. They are safe for the ordinary inert suite.
+
+## pstack OpenCode withdrawal (#104)
+
+The `pstack` lifecycle scenario now rejects new OpenCode installation and retains
+Codex/Claude coexistence, drift and retirement checks. `pstack-withdrawal` adds
+complete two-host preservation and legacy OpenCode project/personal retirement
+through the released public CLI. It proves unsupported new requests, failed
+updates without mutation, installed/retained ownership, drift, missing personal
+retained content, explicit retirement and unrelated-state preservation. Native
+foundational coverage follows the accepted two-host policy. Other Packs retain
+all their host coverage. No ordinary check executes these real-content probes.

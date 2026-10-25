@@ -225,3 +225,11 @@ GitHub to report the result as immutable. Retrying the same commit accepts only
 the same target and byte-identical assets. An interrupted draft can upload
 missing expected assets; a published mutable release, unexpected asset, or
 changed byte is rejected.
+
+### pstack host support
+
+pstack 5.0.0 supports Codex and Claude Code under one Pack identity. Common
+exact-copy upstream originals, provenance and notices remain included. OpenCode
+is withdrawn; existing installations are preserved until explicit retirement.
+Follow the [OpenCode retirement instructions](docs/pstack-opencode-retirement.md)
+before removing old retained content. Other Packs keep their declared hosts.
