@@ -398,3 +398,24 @@ cross-model review, app/formal verification or provider/network workflow success
 The shared central release pin, clean candidate/baseline requirements, isolated
 HOME/config/data/cache/project roots, bounded commands, receipts and cleanup apply.
 Ordinary validation, tests and publication never run this scenario.
+
+## Complete pstack orchestration access
+
+After reviewing both effective host bodies and their complete supporting trees,
+run from a clean committed candidate with the integrated pre-change 5.1.0 baseline:
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario pstack-orchestration \
+  --pstack-baseline /path/to/clean-5.1.0-catalog > /tmp/pstack-orchestration-evidence.json
+```
+
+This opt-in scenario verifies all 55 skills on Codex and Claude through the same
+pinned released CLI, including the four new roots, complete closure/content,
+qualified optional routes, retained snapshots and native regressions. Retrieval
+runs without content runtimes. Separate reviewed helper execution requires Node,
+Bun and package-network access; it uses disposable targets, outputs, stores,
+HOME/config/data/cache/temp state and bounded children. It checks plan acceptance
+and rejection, orchestration bookkeeping, safe watcher failures and the actual
+bootstrap's temporary dependency staging, cwd, failure propagation and cleanup.
+No real forge mutation, message, scheduler, worktree deletion or model execution
+participates. See the [review matrix](../../docs/design/pstack-orchestration-on-demand.md).

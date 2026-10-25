@@ -112,6 +112,9 @@ Claude manual-only dependencies must be read as files; do not invoke them throug
 
 Put this prepared entry's absolute path, resource root and initiating context in every delegate brief.
 
+For a follow-up, preserve the active task and completed work. An explicit new
+task selects a fresh playbook. Read the matched access playbook before acting.
+
 ## Non-negotiables
 
 On Packy hosts, check that a named external skill or agent is available before

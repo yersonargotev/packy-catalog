@@ -56,7 +56,7 @@ requests; read the selected entry as a file under its invocation policy.
 
 Answer the user's question about pstack, give a prompt they can send, and link the prepared file the answer came from. A help question calls for an explanation. A request for action, such as "use pstack to fix this bug", authorizes the work: read [pstack:poteto-mode]({{packy.access:pstack:poteto-mode}}) and follow it within the user's scope.
 
-Read the selected qualified Codex entry before recommending it. Those files own the workflow details and take precedence over this map. Use the returned entry/resource locations; native authoring directories remain project skills live under `.agents/skills`, personal skills under `~/.agents/skills`. The upstream Cursor guide describes a different host. Cite the prepared adaptation for Codex behavior.
+Read the selected qualified Codex entry before recommending it. Those files own the workflow details and take precedence over this map. Use the returned entry/resource locations; project skills are authored under `.agents/skills`, personal skills under `~/.agents/skills`. The upstream Cursor guide describes a different host. Cite the prepared adaptation for Codex behavior.
 
 ## Find out what they need
 

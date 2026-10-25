@@ -1248,9 +1248,9 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "target repository/artifacts and writable workflow, scratch, evidence and decision-trail destinations",
               "authorized supported independent reviewers and model diversity where required; confirmed host model preferences",
-              "real project runtime/harness for falsifiable predicates; multi-hour run checkpoint and source approval gates"
+              "real project runtime/harness for falsifiable predicates; multi-hour run checkpoint and source approval gates",
+              "target repository/artifacts and writable workflow, scratch, evidence and decision-trail destinations"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -1328,9 +1328,9 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "target repository/artifacts and writable workflow, scratch, evidence and decision-trail destinations",
               "authorized supported independent reviewers and model diversity where required; confirmed host model preferences",
-              "real project runtime/harness for falsifiable predicates; multi-hour run checkpoint and source approval gates"
+              "real project runtime/harness for falsifiable predicates; multi-hour run checkpoint and source approval gates",
+              "target repository/artifacts and writable workflow, scratch, evidence and decision-trail destinations"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -2177,9 +2177,9 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
+              "accessible host preferences/history/tools only when relevant; unavailable capabilities are reported",
               "current local CLI/catalog evidence before installation advice; explicit authority before setup writes",
-              "selected optional resource compatibility on the initiating host/snapshot",
-              "accessible host preferences/history/tools only when relevant; unavailable capabilities are reported"
+              "selected optional resource compatibility on the initiating host/snapshot"
             ],
             "reference_files": [
               "ACCESS.md",
@@ -2218,9 +2218,9 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
+              "accessible host preferences/history/tools only when relevant; unavailable capabilities are reported",
               "current local CLI/catalog evidence before installation advice; explicit authority before setup writes",
-              "selected optional resource compatibility on the initiating host/snapshot",
-              "accessible host preferences/history/tools only when relevant; unavailable capabilities are reported"
+              "selected optional resource compatibility on the initiating host/snapshot"
             ],
             "reference_files": [
               "ACCESS.md",
@@ -2373,11 +2373,11 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "Node for plan checks; Bun and package/network access for orchestration/watcher dependency installation",
               "Git, Bash/shell utilities and selected gh or Origin CLI for project/forge/worktree helpers; credentials only for authorized queries",
+              "Node for plan checks; Bun and package/network access for orchestration/watcher dependency installation",
+              "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority",
               "explicit intended target, owned temporary execution/dependency space and separate writable store/output/evidence destinations",
-              "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence",
-              "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority"
+              "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence"
             ],
             "reference_files": [
               "ACCESS.md",
@@ -2621,11 +2621,11 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "Node for plan checks; Bun and package/network access for orchestration/watcher dependency installation",
               "Git, Bash/shell utilities and selected gh or Origin CLI for project/forge/worktree helpers; credentials only for authorized queries",
+              "Node for plan checks; Bun and package/network access for orchestration/watcher dependency installation",
+              "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority",
               "explicit intended target, owned temporary execution/dependency space and separate writable store/output/evidence destinations",
-              "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence",
-              "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority"
+              "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence"
             ],
             "reference_files": [
               "ACCESS.md",

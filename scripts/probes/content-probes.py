@@ -772,7 +772,8 @@ def assert_skill_content(descriptors, manifest, *, pack="matty"):
                 data = re.sub(r"\{\{packy.access:([^}]+)\}\}", reference, data.decode()).encode()
             require(destination.read_bytes() == data, "skill-access content differs: " + identity + "/" + relative)
         # Check real Markdown links; fenced/inline code contains illustrative target paths.
-        documents = root.glob("*.md") if pack == "matty" else [root / "ACCESS.md", *root.glob("references/**/*.md")]
+        documents = root.glob("*.md") if pack == "matty" else sorted({root / "ACCESS.md", *root.glob("references/**/*.md"),
+                                                                                         *(root / path for path in resource["on_demand"]["reference_files"])})
         for document in documents:
             prose = re.sub(r"```.*?```", "", document.read_text(), flags=re.S)
             prose = re.sub(r"`[^`\n]*`", "", prose)
@@ -1429,13 +1430,337 @@ def decision_log_helper(probe, report, host):
                                                   "formula-tab-newline-escaping", "source-target-preservation", "helper-state-cleanup"]})
 
 
+# Independently reviewed issue #95 edges. Optional routes are deliberately absent.
+PSTACK_ORCHESTRATION_DEPENDENCIES = {
+    "automate-me": ["poteto-mode", "unslop"],
+    "figure-it-out": ["architect", "arena", "poteto-mode", "principle-encode-lessons-in-structure",
+                      "principle-foundational-thinking", "principle-laziness-protocol", "principle-never-block-on-the-human",
+                      "principle-prove-it-works", "principle-separate-before-serializing-shared-state",
+                      "principle-sequence-verifiable-units", "show-me-your-work"],
+    "poteto-help": ["poteto-mode", "setup-pstack"],
+    "poteto-mode": ["architect", "arena", "benchmark-checklist", "how", "interrogate", "ketchup", "no-comments",
+                    "principle-attack-the-premise", "principle-boundary-discipline", "principle-build-the-lever",
+                    "principle-encode-lessons-in-structure", "principle-exhaust-the-design-space", "principle-experience-first",
+                    "principle-explain-the-number", "principle-fix-root-causes", "principle-foundational-thinking",
+                    "principle-guard-the-context-window", "principle-laziness-protocol", "principle-make-operations-idempotent",
+                    "principle-migrate-callers-then-delete-legacy-apis", "principle-minimize-reader-load", "principle-model-the-domain",
+                    "principle-never-block-on-the-human", "principle-outcome-oriented-execution", "principle-prove-it-works",
+                    "principle-redesign-from-first-principles", "principle-separate-before-serializing-shared-state",
+                    "principle-sequence-verifiable-units", "principle-subtract-before-you-add", "principle-test-behavior-not-implementation",
+                    "principle-type-system-discipline", "reflect", "setup-pstack", "show-me-your-work", "swarm", "tdd",
+                    "technical-writing", "unslop", "why"],
+}
+
+PSTACK_ORCHESTRATION_POLICIES = {
+    "automate-me": ["unless the user already asked", "since the skill was last edited", "current project",
+                    "what's changed or missing", "Don't copy its content", "Show the draft to the user",
+                    "explicit writable destination", "does not activate its workflow", "author and validate"],
+    "figure-it-out": ["before any code", "falsifiable predicate", "Scope, quantified", "multi-hour run earns one checkpoint",
+                      "independently-landable units", "State the hypothesis", "never a self-report",
+                      "VERIFIED, NOT VERIFIED, or INCONCLUSIVE", "show-me-your-work", "independent/diverse-review gate"],
+    "poteto-help": ["packy show pstack", "selected optional recommendation", "actual returned host entry",
+                    "Never substitute Matty TDD", "does not authorize", "Missing preferences alone",
+                    "A help question calls for an explanation", "Playbooks are files", "current CLI help and catalog version"],
+    "poteto-mode": ["optional host integrations", "follow-up", "always pause", "required independent-review gate remains incomplete",
+                    "Same-model reviewers are not a multi-model panel", "PSTACK_HELPER_WORKSPACE", "original target working directory",
+                    "scripts/", "separate temporary execution/dependency space"],
+}
+
+
 def pstack_orchestration(probe, surfaces):
-    """Exercise the four orchestration access roots through the released CLI."""
+    """Complete 55-skill access, pinned nested routes, native contracts and safe helpers."""
+    from urllib.parse import unquote
+
+    scenario = "pstack-orchestration"
+    graph = {**PSTACK_FOUNDATIONAL_DEPENDENCIES, **PSTACK_ENGINEERING_DEPENDENCIES,
+             **PSTACK_ORCHESTRATION_DEPENDENCIES}
+    manifest = json.loads((ROOT / "packs/pstack/pack.json").read_text())
+    resources = {item["id"]: item for item in manifest["resources"]}
+    baseline_root = Path(probe.evidence["pstack_baseline_project"])
+    baseline = json.loads((baseline_root / "packs/pstack/pack.json").read_text())
+    previous = {item["id"]: item for item in baseline["resources"]}
+    authored = tree(ROOT / "packs/pstack")
+    require(len(graph) == 55 and {r["id"] for r in manifest["resources"] if r["kind"] == "skill"} == set(graph),
+            "pstack complete inventory changed")
+    require(manifest["surfaces"] == baseline["surfaces"] and set(manifest["surfaces"]) == {"codex", "claude"},
+            "orchestration restored withdrawn host support")
+    require(all(not v.get("on_demand") for name in PSTACK_ORCHESTRATION_DEPENDENCIES for v in previous[name]["variants"]),
+            "orchestration baseline must precede this adaptation")
+
+    def closure(skill):
+        result = {skill}
+        for dependency in set(graph[skill] + PSTACK_NATIVE_BACKGROUND_DEPENDENCIES.get(skill, [])):
+            result.update(closure(dependency))
+        return result
+
     for host in ("codex", "claude"):
-        workspace = probe.prepare("pstack-orchestration-" + host)
-        for skill in ("automate-me", "figure-it-out", "poteto-help", "poteto-mode"):
-            report = probe.candidate(workspace, ["get", "skill", "pstack:" + skill, "--surface", host, "--json"])
-            require(report["qualified_skill"] == "pstack:" + skill, "wrong orchestration identity")
+        probe.set_context("content-acceptance", scenario=scenario, surface=host, scope="project")
+        workspace = probe.prepare(scenario + "-" + host)
+        probe.apply(workspace, ["activate", "pstack", "--surface", host, "--resource", "skill:poteto-help"])
+        native = workspace / "home" / SKILL_DIRECTORIES[host] / "poteto-help"
+        if native.is_symlink():
+            original = native.resolve()
+            native.unlink()
+            shutil.copytree(original, native)
+        (native / "SKILL.md").write_text("# Preserve this modified native help.\n")
+        (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
+        protected, snapshots = installation_state(workspace), tree(workspace / "snapshots")
+        runtime_path = probe.root / (scenario + "-no-runtimes-" + host)
+        runtime_path.mkdir()
+        (runtime_path / "git").symlink_to(shutil.which("git", path=probe.env["PATH"]))
+        access = Probe(probe.executable, probe.snapshot, probe.root, {**probe.env, "PATH": str(runtime_path)},
+                       probe.evidence, probe.timeout)
+        access.set_context("content-acceptance", scenario=scenario, surface=host, scope="project")
+        discovery = access.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
+        entries = {item["qualified_skill"]: item for item in discovery["skills"]}
+        require(discovery["schema_version"] == 1 and discovery["report"] == "skill-discovery"
+                and not discovery["prerequisites_verified"] and len(entries) == 55
+                and all(item["compatible"] for item in entries.values()), "complete pstack discovery is not compatible")
+        roots = {}
+        for skill, dependencies in graph.items():
+            report = access.candidate(workspace, ["get", "skill", "pstack:" + skill, "--surface", host, "--json"])
+            require(report["qualified_skill"] == "pstack:" + skill, "wrong complete-inventory identity")
+            effective = next(v for v in resources[skill]["variants"] if v["surface"] == host)
+            declaration = effective["on_demand"]
+            require(declaration["dependencies"] == [{"type": "skill", "target": "pstack:" + d} for d in dependencies],
+                    "pstack required/optional classification changed: " + skill)
+            item = entries["pstack:" + skill]
+            require(item["prerequisites"] == declaration["prerequisites"]
+                    and all(item["on_demand"].get(key, []) == value for key, value in declaration.items()),
+                    "complete discovery lost effective declarations")
+            descriptors = skill_descriptors(report, host, manifest["version"], closure(skill), pack="pstack")
+            assert_skill_content(descriptors, manifest, pack="pstack")
+            for identity, descriptor in descriptors.items():
+                expected = next(v for v in resources[identity.split(":")[1]]["variants"] if v["surface"] == host)
+                require(descriptor["prerequisites"] == expected["on_demand"]["prerequisites"], "pstack prerequisites changed")
+            entry = Path(report["entry_document"]).read_text()
+            if skill in PSTACK_ORCHESTRATION_POLICIES:
+                require(all(fragment.lower() in entry.lower() for fragment in PSTACK_ORCHESTRATION_POLICIES[skill]),
+                        "orchestration substantive policy lost: " + skill)
+                require(".agents/skills" in entry if host == "codex" else "disable-model-invocation: true" in entry
+                        and ".claude/skills" in entry and "do not invoke them through the Skill tool" in entry,
+                        "orchestration host invocation contract lost")
+                require("~/.pstack/" + host + "-models.md" in entry, "orchestration model preference host changed")
+            for reference in (Path(report["resource_root"]) / "references").glob("*.md"):
+                require(json.dumps(reference.read_text())[1:-1] not in json.dumps(discovery), "discovery embeds supporting bodies")
+            roots[skill] = report
+            probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "skill": skill,
+                                               "snapshot_id": report["snapshot_id"], "result": "passed",
+                                               "checks": ["qualified-identity-version-surface-snapshot", "complete-required-closure",
+                                                          "full-tree-bytes-modes-notices", "rendered-references", "absent-content-runtimes"]})
+        # Exercise the colliding name at the same public boundary.
+        matty = access.candidate(workspace, ["get", "skill", "matty:tdd", "--surface", host, "--json"])
+        require("# TDD Bug Fix" in Path(roots["tdd"]["entry_document"]).read_text()
+                and "Refactoring is not part of the loop" in Path(matty["entry_document"]).read_text(),
+                "help can substitute another Pack's TDD")
+        require(protected == installation_state(workspace) and snapshots == tree(workspace / "snapshots"),
+                "retrieval ran content or changed native/target/snapshot state")
+        prepared_root = workspace / "home/.local/share/packy/skill-access"
+        prepared = tree(prepared_root)
+        orchestration_helpers(probe, roots["poteto-mode"], host)
+        decision_log_helper(probe, roots["show-me-your-work"], host)
+        require(prepared == tree(prepared_root) and snapshots == tree(workspace / "snapshots"),
+                "helpers changed prepared/retained resources")
+        old = Probe(probe.executable, probe.root / "baseline-dist", probe.root, access.env, probe.evidence, probe.timeout)
+        old.set_context("snapshot-transition", scenario=scenario, surface=host, scope="project")
+        transition = old.candidate(workspace, ["transition", "--expect-archive-sha256", probe.evidence["archive_sha256"], "--json"])
+        require(transition["result"] == "transitioned"
+                and transition["archive_sha256"] == probe.evidence["pstack_baseline"]["archive_sha256"], "orchestration transition failed")
+        routes = [("poteto-mode", "tdd", "playbooks/ACCESS-bug-fix.md"),
+                  ("figure-it-out", "show-me-your-work", "ACCESS.md"),
+                  ("figure-it-out", "principle-sequence-verifiable-units", "ACCESS.md"),
+                  ("automate-me", "poteto-mode", "ACCESS.md"), ("automate-me", "unslop", "ACCESS.md")]
+        for wrapper, dependency, relative in routes:
+            report, expected = roots[wrapper], roots[dependency]
+            document = Path(report["resource_root"]) / relative
+            links = re.findall(r"\[pstack:" + dependency + r"\]\(([^)]+)\)", document.read_text())
+            require(links and all((document.parent / unquote(path)).resolve() == Path(expected["entry_document"]) for path in links),
+                    "nested playbook/entry reference points outside qualified closure")
+            nested = old.candidate(workspace, ["get", "skill", "pstack:" + dependency, "--surface", host,
+                                               "--snapshot", report["snapshot_id"], "--json"])
+            require(nested["snapshot_id"] == report["snapshot_id"] and nested["surface"] == host
+                    and nested["qualified_skill"] == "pstack:" + dependency
+                    and Path(nested["entry_document"]).read_bytes() == Path(expected["entry_document"]).read_bytes(),
+                    "nested route lost initiating context")
+        # Help's TDD and mode's bespoke route remain optional and pinned, including delegated context.
+        for wrapper, selected in [("poteto-help", "tdd"), ("poteto-help", "figure-it-out"), ("poteto-mode", "figure-it-out")]:
+            report = roots[wrapper]
+            require(selected not in PSTACK_ORCHESTRATION_DEPENDENCIES[wrapper], "selected optional route became required")
+            text = Path(report["entry_document"]).read_text()
+            require("pstack:" + selected in text and "delegat" in text and "scratch/output" in text,
+                    "optional/delegated route lacks qualified context")
+            nested = old.candidate(workspace, ["get", "skill", "pstack:" + selected, "--surface", host,
+                                               "--snapshot", report["snapshot_id"], "--json"])
+            require(nested["snapshot_id"] == report["snapshot_id"] and nested["surface"] == host
+                    and nested["qualified_skill"] == "pstack:" + selected
+                    and nested["pack_version"] == manifest["version"], "optional route followed new selection")
+        observed, retained = tree(prepared_root), tree(workspace / "snapshots")
+        require(all(observed.get(p) == value for p, value in prepared.items())
+                and all(retained.get(p) == value for p, value in snapshots.items()), "transition invalidated prior resource paths")
+        independent = old.candidate(workspace, ["get", "skill", "pstack:tdd", "--surface", host, "--json"])
+        require(independent["snapshot_id"] == transition["snapshot_id"] and independent["pack_version"] == baseline["version"],
+                "independent request ignored newly selected baseline")
+        output, _ = old.candidate(workspace, ["get", "skill", "pstack:poteto-help", "--surface", host, "--json"], failure=True)
+        require(json.loads(output)["error"]["code"] == "incompatible_resource", "independent orchestration ignored baseline selection")
+        missing = workspace / "snapshots" / roots["poteto-mode"]["snapshot_id"] / "packs/pstack/skills" / host / "poteto-mode/playbooks/ACCESS-bug-fix.md"
+        missing.unlink()
+        output, diagnostic = old.candidate(workspace, ["get", "skill", "pstack:poteto-mode", "--surface", host,
+                                                      "--snapshot", roots["poteto-mode"]["snapshot_id"], "--json"], failure=True)
+        require("snapshot_unavailable" in output or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
+                "missing retained supporting content silently fell back")
+        require(protected == installation_state(workspace), "nested retrieval changed target/native state")
+        probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "result": "passed",
+                                           "checks": ["all-55-obtainable", "distinct-qualified-TDD", "retained-required-optional-delegated-context",
+                                                      "prior-paths-usable", "new-selection", "missing-supporting-content-fails", "inert-retrieval"]})
+        orchestration_native(probe, host, manifest, baseline_root, previous)
+    require(authored == tree(ROOT / "packs/pstack"), "acceptance mutated authored pstack sources")
+
+
+def orchestration_native(probe, host, manifest, baseline_root, previous):
+    resources = {item["id"]: item for item in manifest["resources"]}
+    def native_closure(skill):
+        resource = {**previous[skill], **next(v for v in previous[skill]["variants"] if v["surface"] == host)}
+        result = {skill}
+        for dependency in resource["requires"]:
+            if dependency.startswith("skill:"):
+                result.update(native_closure(dependency.split(":")[1]))
+        return result
+    probe.set_context("native-regression", scenario="pstack-orchestration", surface=host, scope="project")
+    workspace = probe.prepare("pstack-orchestration-native-" + host)
+    probe.apply(workspace, ["install", "emil", "--surface", host, "--resource", "skill:write-swift"])
+    unrelated = tree(workspace / "project" / SKILL_DIRECTORIES[host] / "write-swift")
+    inactive = {name: tree(workspace / name) for name in ("home", "config")}
+    guidance = {name: (workspace / "project" / name).read_bytes() for name in ("AGENTS.md", "CLAUDE.md", "unrelated.txt")}
+    args = ["install", "pstack", "--surface", host]
+    for skill in PSTACK_ORCHESTRATION_DEPENDENCIES:
+        args.extend(["--resource", "skill:" + skill])
+    probe.apply(workspace, args)
+    installed = workspace / "project" / SKILL_DIRECTORIES[host]
+    expected = set().union(*(native_closure(skill) for skill in PSTACK_ORCHESTRATION_DEPENDENCIES))
+    require({p.name for p in installed.iterdir()} == expected | {"write-swift"}, "native scoped selection changed")
+    require(unrelated == tree(installed / "write-swift") and inactive == {name: tree(workspace / name) for name in inactive}
+            and all((workspace / "project" / name).read_bytes() == data for name, data in guidance.items()),
+            "native regression changed unrelated/inactive state")
+    for skill in expected:
+        def native_contract(resource):
+            result = json.loads(json.dumps(resource))
+            for variant in result["variants"]:
+                variant.pop("on_demand", None)
+            return result
+        require(native_contract(previous[skill]) == native_contract(resources[skill]), "native contract changed: " + skill)
+        source = next(v["source"] for v in previous[skill]["variants"] if v["surface"] == host)
+        original, actual = tree(baseline_root / "packs/pstack" / source), tree(installed / skill)
+        require(all(actual.get(path) == value for path, value in original.items()), "original native bytes/modes changed: " + skill)
+    probe.verify(workspace)
+    probe.evidence["outcomes"].append({"scenario": "pstack-orchestration", "surface": host, "result": "passed",
+                                       "checks": ["native-scoped-selection", "all-original-contracts-bytes-modes", "unrelated-inactive-preserved"]})
+
+
+def orchestration_helpers(probe, report, host):
+    """Opt-in public helper checks; no live forge, merge, message or deletion fixtures."""
+    source = Path(report["resource_root"])
+    original = tree(source)
+    with tempfile.TemporaryDirectory(prefix="orchestration-helpers-", dir=probe.root) as directory:
+        owned = Path(directory)
+        env = isolated_environment(owned)
+        for name in ("BUN_INSTALL_CACHE_DIR",):
+            destination = owned / name.lower()
+            destination.mkdir()
+            env[name] = str(destination)
+        target, output = owned / "target", owned / "output"
+        target.mkdir()
+        output.mkdir()
+        (target / "unrelated.txt").write_bytes(b"Keep target bytes.\n")
+        runner = Probe(probe.executable, probe.snapshot, target, env, probe.evidence, probe.timeout)
+        runner.set_context("helper-execution", scenario="pstack-orchestration", surface=host, scope="disposable")
+        node, bun = (shutil.which(name, path=env["PATH"]) for name in ("node", "bun"))
+        require(node is not None and bun is not None, "helper probes require reviewed Node and Bun")
+        versions = {}
+        for name, executable in (("node", node), ("bun", bun)):
+            versions[name] = runner.execute([executable, "--version"])[0].strip()
+        fixture = (ROOT / "scripts/probes/fixtures/pstack-plan.md").read_text().replace("@AUDIT@", "hourly audit")
+        for name, content, diagnostic in (
+                ("valid", fixture, "0 problems"),
+                ("obsolete-cadence", fixture.replace("hourly audit", "five-minute audit"), "hourly audit"),
+                ("missing-live-lane", re.sub(r"^- \[ \] Lane 10\..*\n", "", fixture, flags=re.M), "expected 1 to 10")):
+            plan = output / (name + ".md")
+            plan.write_text(content)
+            stdout, stderr = runner.execute([node, str(source / "scripts/check-plan.mjs"), str(plan)], failure=name != "valid")
+            require(diagnostic in stdout + stderr, "plan fixture did not exercise expected rejection: " + name)
+        # A fake forge at the external process boundary prevents real authenticated queries.
+        tools_path = owned / "bin"
+        tools_path.mkdir()
+        forge = tools_path / "gh"
+        forge.write_text("#!" + sys.executable + "\nimport json,sys\nfrom pathlib import Path\n"
+                         "Path(" + repr(str(output / "forge-calls.jsonl")) + ").open('a').write(json.dumps(sys.argv[1:])+'\\n')\n"
+                         "print('fixture forge deliberately unavailable', file=sys.stderr)\nsys.exit(1)\n")
+        forge.chmod(0o755)
+        env["PATH"] = str(tools_path) + os.pathsep + env["PATH"]
+        store = output / "store"
+        orch = [bun, str(source / "scripts/orch/orch.ts"), "--store", str(store), "--json"]
+        initialized, _ = runner.execute([*orch, "init"], timeout=180)
+        require(json.loads(initialized)["store"] == str(store), "orchestration ignored explicit store")
+        runner.execute([*orch, "unit", "add", "fixture-unit", "--track", "fixture"])
+        observed, _ = runner.execute([*orch, "unit", "get", "fixture-unit"])
+        require(json.loads(observed)["id"] == "fixture-unit" and json.loads(observed)["track"] == "fixture",
+                "orchestration unit roundtrip failed")
+        runner.execute([*orch, "ledger", "record", "1", "a" * 40, "unit-test-verified", "--evidence", str(output / "proof.txt")])
+        verdict, _ = runner.execute([*orch, "ledger", "check", "1", "a" * 40])
+        require(json.loads(verdict)["verdict"] == "unit-test-verified", "orchestration lost exact-head ledger verdict")
+        runner.execute([*orch, "unit", "set", "missing", "--state", "done"], failure=True)
+        watcher = [bun, str(source / "scripts/watch-pr/watch-pr")]
+        help_text, _ = runner.execute([*watcher, "--help"], timeout=180)
+        require("--status-only" in help_text and "--queued-stack" in help_text, "watcher help lost modes")
+        runner.execute([*watcher, "--pr", "0"], failure=True)
+        rejected, _ = runner.execute([*watcher, "--owner", "fixture", "--repo", "fixture", "--pr", "1", "--status-only"], failure=True)
+        verdict = json.loads(rejected.splitlines()[-1])
+        require(verdict["kind"] == "BLOCKER" and verdict["blocker"]["kind"] == "status-query" and verdict["terminal"] and (output / "forge-calls.jsonl").is_file(),
+                "watcher did not expose the external query failure")
+        require(not any("merge" in json.loads(line) or "send" in json.loads(line)
+                        for line in (output / "forge-calls.jsonl").read_text().splitlines()), "helper attempted an external mutation")
+        require(not list(Path(env["TMPDIR"]).iterdir()), "bootstrap leaked temporary execution/dependency state")
+        # The actual exported bootstrap is exercised with a harmless disposable entry.
+        scripts = owned / "bootstrap-input"
+        shutil.copytree(source / "scripts", scripts)
+        entry = scripts / "cwd-probe.ts"
+        marker = output / "bootstrap.json"
+        entry.write_text('import { ensureDependenciesInstalled } from "./bootstrap.ts";\n'
+                         'import { existsSync, writeFileSync } from "node:fs";\n'
+                         'ensureDependenciesInstalled();\n'
+                         'writeFileSync(process.env.PSTACK_PROBE_OUTPUT!, JSON.stringify({cwd:process.cwd(),'
+                         'directory:import.meta.dir, dependency:existsSync(import.meta.dir+"/node_modules/commander/package.json")}));\n'
+                         'process.exitCode=Number(process.env.PSTACK_PROBE_EXIT ?? "0");\n')
+        copied = tree(scripts)
+        runner.env = {**env, "PSTACK_PROBE_OUTPUT": str(marker)}
+        runner.execute([bun, str(entry)], timeout=180)
+        details = json.loads(marker.read_text())
+        require(Path(details["cwd"]).resolve() == target.resolve() and details["dependency"]
+                and Path(details["directory"]).is_relative_to(Path(env["TMPDIR"]))
+                and not Path(details["directory"]).exists(), "bootstrap lost target cwd, staged dependencies or cleanup")
+        runner.env = {**runner.env, "PSTACK_PROBE_EXIT": "7"}
+        runner.execute([bun, str(entry)], failure=True, timeout=180)
+        require(probe.evidence["commands"][-1]["exit_status"] == 7 and not list(Path(env["TMPDIR"]).iterdir())
+                and copied == tree(scripts), "bootstrap failure lost status, cleanup or input preservation")
+        # Bound an interrupted entry and remove all its owned state through the outer lifecycle.
+        entry.write_text(entry.read_text().replace('process.exitCode=Number(process.env.PSTACK_PROBE_EXIT ?? "0");',
+                                                   'await new Promise(() => {setInterval(() => {}, 1000);});'))
+        runner.env = {**env, "PSTACK_PROBE_OUTPUT": str(marker)}
+        try:
+            runner.execute([bun, str(entry)], timeout=10)
+        except RuntimeError as error:
+            require("deadline" in str(error).lower() or "timed out" in str(error).lower(), "unexpected interruption failure")
+        else:
+            raise RuntimeError("interruption fixture did not reach its deadline")
+        require(tree(target) == {"unrelated.txt": ((target / "unrelated.txt").stat().st_mode, b"Keep target bytes.\n", None)},
+                "helper changed target project content")
+        require(original == tree(source), "helpers modified immutable prepared resources")
+    require(not Path(directory).exists(), "helper success/failure/interruption owned state remains")
+    probe.evidence["outcomes"].append({"scenario": "pstack-orchestration", "surface": host, "result": "passed",
+                                       "runtime_versions": versions,
+                                       "checks": ["plan-positive-and-two-rejections", "owned-store-roundtrip-and-exact-head-ledger",
+                                                  "watcher-help-usage-and-controlled-query-failure", "real-bootstrap-dependency-staging",
+                                                  "target-cwd-preserved", "success-failure-interruption-cleanup", "sources-unchanged"]})
+
 
 
 def main():

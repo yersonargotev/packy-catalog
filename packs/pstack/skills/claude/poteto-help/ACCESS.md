@@ -63,7 +63,7 @@ Claude manual-only dependencies must be read as files; do not invoke them throug
 
 Answer the user's question about pstack, give a prompt they can send, and link the prepared file the answer came from. A help question calls for an explanation. A request for action, such as "use pstack to fix this bug", authorizes the work: read [pstack:poteto-mode]({{packy.access:pstack:poteto-mode}}) and follow it within the user's scope.
 
-Read the selected qualified Claude Code entry before recommending it. Those files own the workflow details and take precedence over this map. Use the returned entry/resource locations; native authoring directories remain project skills live under `.claude/skills`, personal skills under `~/.claude/skills`. The upstream Cursor guide describes a different host. Cite the prepared adaptation for Claude Code behavior.
+Read the selected qualified Claude Code entry before recommending it. Those files own the workflow details and take precedence over this map. Use the returned entry/resource locations; project skills are authored under `.claude/skills`, personal skills under `~/.claude/skills`. The upstream Cursor guide describes a different host. Cite the prepared adaptation for Claude Code behavior.
 
 ## Find out what they need
 
