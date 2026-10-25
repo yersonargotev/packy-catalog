@@ -294,7 +294,7 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
             resource.pop("variants", None)
             resource["requires"] = []
         (baseline / "packs/pstack/pack.json").write_text(json.dumps(manifest))
-        for surface in ("codex", "claude", "opencode"):
+        for surface in manifest["surfaces"]:
             shutil.rmtree(baseline / "packs/pstack/skills" / surface)
         for checkout in (self.project, baseline):
             for label, args in (("git init", ("init", "-q")), ("git add", ("add", ".")),

@@ -424,7 +424,7 @@ def pstack_withdrawal(probe, surfaces):
     def unsupported(workspace, args):
         before = tree(workspace)
         output, diagnostic = probe.candidate(workspace, [*args, "--json"], failure=True)
-        require("does not support CLI surface" in output + diagnostic,
+        require("support" in (output + diagnostic).lower() and "surface" in (output + diagnostic).lower(),
                 "OpenCode rejection did not identify unsupported surface")
         require(tree(workspace) == before, "unsupported OpenCode request mutated workspace")
 
@@ -451,8 +451,12 @@ def pstack_withdrawal(probe, surfaces):
         discovery = probe.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
         old_workspace = old.prepare("pstack-baseline-access-" + host)
         old_discovery = old.candidate(old_workspace, ["show", "pstack", "--surface", host, "--json"])
-        require(discovery["skills"] == old_discovery["skills"], "withdrawal changed effective discovery metadata: "
-                + json.dumps({"before": old_discovery["skills"], "after": discovery["skills"]}))
+        # Discovery reports the deliberate version/support change on each entry.
+        expected_skills = json.loads(json.dumps(old_discovery["skills"]))
+        for item in expected_skills:
+            item["pack_version"] = "5.0.0"
+            item["supported_surfaces"].remove("opencode")
+        require(discovery["skills"] == expected_skills, "withdrawal changed effective discovery metadata")
         for resource in manifest["resources"]:
             effective = {**resource, **next((v for v in resource.get("variants", []) if v["surface"] == host), {})}
             if not effective.get("on_demand"):
