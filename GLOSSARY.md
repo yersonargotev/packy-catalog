@@ -18,6 +18,11 @@ Resource may be copied or adapted.
 A Catalog Resource maintained as a deliberate variation of an Upstream Resource.
 _Avoid_: Exact copy when referring to an adaptation.
 
+**Surface Variant**:
+A reviewed definition of a Catalog Resource for a particular host that retains
+the resource's logical identity within its Pack.
+_Avoid_: Separate Pack when referring to a host-specific definition of the same resource.
+
 **Installed Resource**:
 A resource made available to a host through a Pack installation.
 _Avoid_: Catalog Resource when referring to the installed instance.

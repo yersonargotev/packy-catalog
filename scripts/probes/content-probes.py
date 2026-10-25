@@ -413,6 +413,127 @@ def pstack(probe, surfaces):
                                                      "effective-dependencies", "complete-retirement", "unrelated-state-preservation"]})
 
 
+def pstack_withdrawal(probe, surfaces):
+    """Prove support withdrawal and legacy retirement through the public CLI."""
+    baseline_root = Path(probe.evidence["pstack_baseline_project"])
+    previous = json.loads((baseline_root / "packs/pstack/pack.json").read_text())
+    manifest = json.loads((ROOT / "packs/pstack/pack.json").read_text())
+    old = Probe(probe.executable, probe.root / "baseline-dist", probe.root, probe.env, probe.evidence, probe.timeout)
+
+    def content(path):
+        # Global native directories link to a different retained snapshot after update.
+        return {name: (mode & 0o777, data) for name, (mode, data, link) in tree(path).items()
+                if data is not None}
+
+    def unsupported(workspace, args):
+        before = tree(workspace)
+        output, diagnostic = probe.candidate(workspace, [*args, "--json"], failure=True)
+        require("opencode" in (output + diagnostic).lower() and "support" in (output + diagnostic).lower(),
+                "OpenCode rejection did not identify unsupported surface")
+        require(tree(workspace) == before, "unsupported OpenCode request mutated workspace")
+
+    # First observable assertion deliberately fails while the old support contract remains.
+    workspace = probe.prepare("pstack-unsupported")
+    unsupported(workspace, ["install", "pstack", "--surface", "opencode", "--dry-run"])
+    require(previous["surfaces"] == ["claude", "codex", "opencode"], "withdrawal requires the reviewed three-host baseline")
+    expected = json.loads(json.dumps(previous))
+    expected["version"] = "5.0.0"
+    expected["surfaces"].remove("opencode")
+    for resource in expected["resources"]:
+        for key in ("bindings", "variants", "surface_exclusions"):
+            if key in resource:
+                resource[key] = [item for item in resource[key] if item["surface"] != "opencode"]
+    require(manifest == expected, "withdrawal changed more than version and OpenCode support")
+    for args in (["show", "pstack"], ["get", "skill", "pstack:architect"], ["activate", "pstack", "--dry-run"]):
+        unsupported(workspace, [*args, "--surface", "opencode"])
+
+    for host in ("codex", "claude"):
+        probe.set_context("content-acceptance", scenario="pstack-withdrawal", surface=host, scope="project")
+        workspace = probe.prepare("pstack-preserved-access-" + host)
+        target = tree(workspace / "project")
+        discovery = probe.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
+        old_discovery = old.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
+        require(discovery["skills"] == old_discovery["skills"], "withdrawal changed effective discovery metadata")
+        for resource in manifest["resources"]:
+            effective = {**resource, **next((v for v in resource.get("variants", []) if v["surface"] == host), {})}
+            if not effective.get("on_demand"):
+                continue
+            report = probe.candidate(workspace, ["get", "skill", "pstack:" + resource["id"], "--surface", host, "--json"])
+            descriptors = {item["qualified_skill"]: item for item in [report, *report["dependencies"]]}
+            assert_skill_content(descriptors, manifest, pack="pstack")
+        require(tree(workspace / "project") == target, "preserved access changed target project")
+        for scope in ("project", "global"):
+            for runner in (probe, old):
+                runner.set_context("content-acceptance", scenario="pstack-withdrawal", surface=host,
+                                   scope="project" if scope == "project" else "disposable-global")
+            workspace = old.prepare("pstack-preserved-" + host + "-" + scope)
+            apply, remove = ("install", "uninstall") if scope == "project" else ("activate", "deactivate")
+            old.apply(workspace, [apply, "pstack", "--surface", host])
+            native = workspace / ("project" if scope == "project" else "home") / SKILL_DIRECTORIES[host]
+            before = content(native)
+            probe.candidate(workspace, ["transition", "--expect-archive-sha256", probe.evidence["pstack_baseline"]["archive_sha256"], "--json"])
+            probe.apply(workspace, ["update", "pstack", "--surface", host, *(["--project"] if scope == "project" else [])])
+            require(content(native) == before, "withdrawal changed native bytes or modes: " + host)
+            probe.apply(workspace, [remove, "pstack", "--surface", host])
+            require(not native.exists() or not list(native.iterdir()), "supported host retirement left skills")
+        probe.evidence["outcomes"].append({"scenario": "pstack-withdrawal", "surface": host, "result": "passed",
+                                           "checks": ["discovery-and-access-preserved", "complete-native-bytes-modes", "both-scopes-update-retirement"]})
+
+    for scope in ("project", "global"):
+        for runner in (probe, old):
+            runner.set_context("content-acceptance", scenario="pstack-withdrawal", surface="opencode",
+                               scope="project" if scope == "project" else "disposable-global")
+        workspace = old.prepare("pstack-legacy-opencode-" + scope)
+        apply, remove = ("install", "uninstall") if scope == "project" else ("activate", "deactivate")
+        original_project = tree(workspace / "project")
+        inactive = {name: tree(workspace / name) for name in (("home", "config") if scope == "project" else ("project",))}
+        old.apply(workspace, [apply, "pstack", "--surface", "opencode"])
+        native = workspace / ("project/.opencode/skills" if scope == "project" else "config/opencode/skills")
+        require("## OpenCode execution" in (native / "reflect/SKILL.md").read_text(), "legacy OpenCode installation is missing")
+        installed = {name: tree(workspace / name) for name in ("home", "config", "project")}
+        probe.candidate(workspace, ["transition", "--expect-archive-sha256", probe.evidence["pstack_baseline"]["archive_sha256"], "--json"])
+        require(installed == {name: tree(workspace / name) for name in installed}, "withdrawal transition changed legacy installation")
+        args = ["update", "pstack", "--surface", "opencode", *(["--project"] if scope == "project" else [])]
+        before = tree(workspace)
+        if scope == "project":
+            unsupported(workspace, [*args, "--dry-run"])
+        else:
+            plan = probe.candidate(workspace, [*args, "--dry-run", "--json"])
+            require(plan["disposition"] != "applicable", "unsupported personal update became actionable")
+        probe.candidate(workspace, [*args, "--json"], failure=True)
+        require(tree(workspace) == before, "failed legacy update changed state")
+        for guard in ("drift", "missing-retained-content"):
+            path = (native / "reflect/SKILL.md") if guard == "drift" else (native / "reflect/SKILL.md").resolve()
+            if guard == "missing-retained-content" and scope == "project":
+                # Project uninstall uses installed ownership, not retained content.
+                continue
+            data, mode = path.read_bytes(), path.stat().st_mode
+            try:
+                if guard == "drift":
+                    path.write_bytes(data + b"\nDrift probe.\n")
+                else:
+                    path.unlink()
+                before = tree(workspace)
+                output, diagnostic = probe.candidate(workspace, [remove, "pstack", "--surface", "opencode", "--dry-run", "--json"], failure=True)
+                require(any(word in (output + diagnostic).lower() for word in ("drift", "identity", "missing", "no such file")),
+                        "legacy retirement guard failed for unrelated reason")
+                require(tree(workspace) == before, "rejected legacy retirement changed state")
+            finally:
+                path.write_bytes(data)
+                path.chmod(mode)
+        probe.apply(workspace, [remove, "pstack", "--surface", "opencode"])
+        require(not native.exists() or not list(native.iterdir()), "legacy retirement left skills")
+        if scope == "project":
+            assert_retired(workspace / "project", original_project, "opencode")
+        require(inactive == {name: tree(workspace / name) for name in inactive}, "legacy retirement changed inactive scope")
+        require(all((workspace / name / "personal-sentinel").read_text() == "Preserve personal state.\n"
+                    for name in ("home", "config")), "legacy retirement changed unrelated personal state")
+        probe.evidence["outcomes"].append({"scenario": "pstack-withdrawal", "surface": "opencode", "scope": scope, "result": "passed",
+                                           "checks": ["unsupported-new-requests", "failed-update-preserves-state", "drift-rejection",
+                                                      "explicit-legacy-retirement", "unrelated-state-preserved"],
+                                           "missing_retained_guard": scope == "global"})
+
+
 def bootstrap_state(base):
     """Preserve content/ownership while allowing lifecycle counters and notice spacing."""
     state = tree(base)
@@ -1047,7 +1168,7 @@ def pstack_foundational(probe, surfaces):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational"), required=True)
+    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal"), required=True)
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
     parser.add_argument("--matty-baseline", type=Path, help="clean complete Catalog baseline before Matty on-demand adaptation")
     parser.add_argument("--surface", action="append", choices=SURFACES)
@@ -1064,7 +1185,7 @@ def main():
         parser.error("on-demand scenarios require Codex and Claude surfaces")
     if "pstack" in scenarios and set(surfaces) != set(SURFACES):
         parser.error("pstack requires --pstack-baseline and all three surfaces")
-    if bool({"pstack", "pstack-foundational"}.intersection(scenarios)) != (args.pstack_baseline is not None):
+    if bool({"pstack", "pstack-foundational", "pstack-withdrawal"}.intersection(scenarios)) != (args.pstack_baseline is not None):
         parser.error("pstack scenarios require --pstack-baseline, used only with those scenarios")
     if bool({"matty-design", "matty-delivery"}.intersection(scenarios)) != (args.matty_baseline is not None):
         parser.error("Matty scenarios require --matty-baseline, used only with those scenarios")
@@ -1109,7 +1230,7 @@ def main():
             for scenario in scenarios:
                 probe.set_context("content-acceptance", scenario=scenario, scope="project")
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
-                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational}[scenario](probe, surfaces)
+                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
             probe.set_context("candidate-verification")
             require(checkout_commit(probe, ROOT) == commit, "Catalog candidate changed during probes")
