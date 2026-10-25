@@ -15,10 +15,12 @@ with fresh acceptance against integrated baseline
 
 Each `ACCESS.md` derives from that host's actual adapted `SKILL.md`, preserving
 manual invocation, supported tools, model preferences, limitations, approvals and
-workflow evidence gates. Original native bodies, supporting files, notices, executable
-modes, bindings, descriptions and `requires` remain unchanged. Common sources retain their exact-copy originals. OpenCode remains withdrawn
-under the [accepted two-host policy](../adr/0003-limit-pstack-host-support.md). All changed sources retain their existing
-adapted origin and complete, acyclic upstream/adaptation legal closure.
+workflow evidence gates. Original native bodies, supporting files, notices,
+executable modes, bindings, descriptions and `requires` remain unchanged. Common
+sources retain their exact-copy originals. OpenCode remains withdrawn under the
+[accepted two-host policy](../adr/0003-limit-pstack-host-support.md). All changed
+sources retain their existing adapted origin and complete, acyclic
+upstream/adaptation legal closure.
 
 The initiating explicit surface and immutable snapshot accompany nested retrieval
 and delegated work, along with the target directory, prepared entry/resource
@@ -62,15 +64,14 @@ guard-the-context-window, remain in the closure.
 
 ## Acceptance and limits
 
-The public CLI is the pre-agreed test seam. A disposable baseline snapshot of
-`52ce7cc0bb4f0657d20dd92123c95e8ac0de3ca9` reproduced architect's
-`incompatible_resource` error through the pinned released executable. Its first
-adapted retrieval passed at the same public boundary. Descriptive policy
-preservation additionally requires content review; executing arbitrary app,
-formal-proof, external-provider or model-driven workflows is outside retrieval
-acceptance.
+The public CLI is the pre-agreed test seam. Acceptance uses the complete clean
+5.0.0 baseline at `694b98d7d204b79cb2886388fdfa6504e295f484`, after protected
+integration of the support withdrawal. The earlier candidate is source work;
+its receipts do not qualify this delivery. Descriptive policy preservation
+additionally requires content review; executing arbitrary app, formal-proof,
+external-provider or model-driven workflows is outside retrieval acceptance.
 
-From a clean committed candidate and clean complete 4.6.0 baseline:
+From a clean committed candidate and that complete 5.0.0 baseline:
 
 ```sh
 python3 -B scripts/probes/content-probes.py --scenario pstack-engineering \
