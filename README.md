@@ -81,8 +81,11 @@ Codex and Claude Code. [Setup and use](docs/packy-cli.md) cover personal activat
 by default, optional project installation, live local discovery, and qualified
 resource retrieval. The [accepted design](docs/design/on-demand-skills.md) and
 [architecture decision](docs/adr/0002-provide-on-demand-skills-without-executing-workflows.md)
-retain the complete initiative scope; bootstrap availability does not establish
-that all 117 Matty, pstack, and Warp adaptations have shipped.
+record the provider/agent boundary. All 117 Matty, pstack and Warp logical skills
+have reviewed Codex/Claude access entries. The [complete coverage inventory and
+opt-in acceptance](docs/on-demand-coverage.md) account for 234 host cases and
+distinguish resource access from semantic workflow execution. Matty/Warp retain
+native OpenCode installation; pstack keeps its accepted OpenCode withdrawal.
 
 ## Claude
 

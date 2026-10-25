@@ -567,7 +567,7 @@ def bootstrap_state(base):
     return state
 
 
-def packy_bootstrap(probe, surfaces):
+def packy_bootstrap(probe, surfaces, *, fixtures=True):
     """Exercise the official two-host bootstrap through the released lifecycle."""
     hosts = ("codex", "claude")
     for scope in ("project", "global"):
@@ -613,94 +613,164 @@ def packy_bootstrap(probe, surfaces):
         probe.evidence["outcomes"].append({"scenario": "packy-bootstrap", "scope": scope, "result": "passed",
                                            "checks": ["two-host-content", "preview-consent", "other-host-preservation",
                                                       "unrelated-pack-and-native-preservation", "inactive-scope-preservation"]})
-    reviewed_retrieval(probe)
+    if fixtures:
+        reviewed_retrieval(probe)
 
 
-def reviewed_retrieval(probe):
-    """Controlled authoring inputs exercise access without publishing fixture Packs."""
-    probe.set_context("candidate-construction")
+def reviewed_retrieval(probe, *, integrated=False):
+    """Complete inert authoring fixtures; never part of official publication inputs."""
+    from urllib.parse import quote
+
+    probe.set_context("candidate-construction", scenario="integrated-on-demand" if integrated else "packy-bootstrap")
     project = probe.root / "retrieval-authoring"
-    fixture_notice = (ROOT / "packs/packy/notices/MIT").read_text().replace("Yerson Argote", "Fixture Authors")
-    for pack_id, host_variant in (("access-root", True), ("access-support", False)):
+    notice_text = (ROOT / "packs/packy/notices/MIT").read_text().replace("Yerson Argote", "Fixture Authors")
+    manifests = {}
+    for pack_id in ("access-root", "access-support"):
         pack = project / "packs" / pack_id
-        (pack / "skills/guide/references").mkdir(parents=True)
-        (pack / "notices").mkdir()
-        (pack / "notices/MIT").write_text(fixture_notice)
-        (pack / "skills/guide/references/context.md").write_text("# Controlled supporting reference\n")
-        sentinel = pack / "skills/guide/sentinel.sh"
-        sentinel.write_text("#!/bin/sh\nprintf executed > should-never-exist\n")
-        sentinel.chmod(0o755)
-        entry = "# Support fixture\n" if not host_variant else "# Codex fixture\n[Dependency]({{packy.access:access-support:guide}})\n"
-        (pack / "skills/guide/SKILL.md").write_text(entry)
-        resource = {"kind": "skill", "id": "guide", "source": "skills/guide", "description": "Controlled access fixture",
-                    "requires": [], "conflicts": [], "notices": ["notice:mit"],
-                    "on_demand": {"protocol": "skill-tree-v1", "prerequisites": ["packy-fixture-missing-runtime"]},
-                    "bindings": [{"surface": host, "projection": "skill", "name": "guide", "invocation": "guide",
-                                  "mode": "native", "sharing": "exclusive", "capabilities": []}
-                                 for host in ("claude", "codex")], "surface_exclusions": []}
-        if host_variant:
-            resource["on_demand"].update(reference_files=["SKILL.md"], dependencies=[{"type": "skill", "target": "access-support:guide"}])
-            (pack / "skills/claude-guide").mkdir()
-            (pack / "skills/claude-guide/SKILL.md").write_text(entry.replace("Codex", "Claude"))
-            shutil.copytree(pack / "skills/guide/references", pack / "skills/claude-guide/references")
-            shutil.copy2(sentinel, pack / "skills/claude-guide/sentinel.sh")
-            resource["variants"] = [{"surface": "claude", "source": "skills/claude-guide"}]
-        notice = {"kind": "notice", "id": "mit", "source": "notices/MIT", "description": "Controlled legal fixture",
-                  "license": "MIT", "attribution": "Copyright (c) 2026 Fixture Authors", "requires": [], "conflicts": [],
-                  "bindings": [], "surface_exclusions": []}
-        manifest = {"schema_version": 3, "id": pack_id, "version": "1.0.0", "description": "Controlled retrieval fixture",
-                    "selectable": True, "surfaces": ["claude", "codex"], "readiness_obligations": ["runtime-usability"],
-                    "external_requirements": [], "origins": [], "resources": [notice, resource]}
-        (pack / "pack.json").write_text(json.dumps(manifest, indent=2) + "\n")
+        (pack / "notices").mkdir(parents=True)
+        (pack / "notices/MIT").write_text(notice_text)
+        resources = [{"kind": "notice", "id": "mit", "source": "notices/MIT", "description": "Fixture legal notice",
+                      "license": "MIT", "attribution": "Copyright (c) 2026 Fixture Authors", "requires": [],
+                      "conflicts": [], "bindings": [], "surface_exclusions": []}]
+        for skill in (("guide", "local") if pack_id == "access-root" else ("guide",)):
+            resource = {"kind": "skill", "id": skill, "source": "skills/" + skill,
+                        "description": "Controlled complete access fixture", "requires": [], "conflicts": [],
+                        "notices": ["notice:mit"], "bindings": [], "surface_exclusions": [], "variants": []}
+            dependencies = ["access-root:local", "access-support:guide"] if pack_id == "access-root" and skill == "guide" else []
+            for host in ("codex", "claude"):
+                source = "skills/" + skill + ("-claude" if host == "claude" else "")
+                directory = pack / source
+                (directory / "references").mkdir(parents=True)
+                (directory / "assets").mkdir()
+                (directory / "references/context.md").write_text("# Reference v1\nUse the fictional widget rules, never submit a workflow.\n")
+                (directory / "assets/rules.json").write_text('{"revision":1,"widget_limit":7}\n')
+                sentinel = directory / "sentinel.sh"
+                sentinel.write_text("#!/bin/sh\nprintf executed > should-never-exist\n")
+                sentinel.chmod(0o755)
+                (directory / "SKILL.md").write_text(
+                    "# " + host + " " + pack_id + ":" + skill + "\n"
+                    "[Rules](references/context.md) [Asset](assets/rules.json)\n" +
+                    "".join("[" + name + "]({{packy.access:" + name + "}})\n" for name in dependencies))
+                declaration = {"protocol": "skill-tree-v1", "reference_files": ["SKILL.md"],
+                               "dependencies": [{"type": "skill", "target": name} for name in dependencies],
+                               "prerequisites": ["packy-fixture-missing-runtime"]}
+                if host == "codex":
+                    resource["on_demand"] = declaration
+                else:
+                    resource["variants"].append({"surface": host, "source": source, "on_demand": declaration})
+                resource["bindings"].append({"surface": host, "projection": "skill", "name": skill,
+                                             "invocation": skill, "mode": "native", "sharing": "exclusive", "capabilities": []})
+            resources.append(resource)
+        manifests[pack_id] = {"schema_version": 3, "id": pack_id, "version": "1.0.0", "description": "Complete inert fixture",
+                              "selectable": True, "surfaces": ["claude", "codex"], "readiness_obligations": ["runtime-usability"],
+                              "external_requirements": [], "origins": [], "resources": resources}
+        (pack / "pack.json").write_text(json.dumps(manifests[pack_id], indent=2) + "\n")
     probe.execute(["git", "init", "-q", str(project)])
-    probe.execute(["git", "-C", str(project), "add", "."])
-    probe.execute(["git", "-C", str(project), "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
-                   "commit", "-qm", "Controlled retrieval inputs"])
-    fixture_commit = checkout_commit(probe, project)
-    fixture_snapshot = probe.root / "retrieval-dist"
-    build_catalog(probe, project, fixture_commit, fixture_snapshot)
-    runner = Probe(probe.executable, fixture_snapshot, probe.root, probe.env, probe.evidence, probe.timeout)
+
+    def commit_fixture(message, destination):
+        probe.execute(["git", "-C", str(project), "add", "."])
+        probe.execute(["git", "-C", str(project), "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                       "commit", "-qm", message])
+        return build_catalog(probe, project, checkout_commit(probe, project), destination)
+
+    snapshot = probe.root / "retrieval-dist"
+    first = commit_fixture("Complete inert access fixtures", snapshot)
+    original = tree(project / "packs")
+    newer = None
+    if integrated:
+        for pack_id, manifest in manifests.items():
+            manifest["version"] = "1.1.0"
+            (project / "packs" / pack_id / "pack.json").write_text(json.dumps(manifest, indent=2) + "\n")
+        for path in (project / "packs").rglob("context.md"):
+            path.write_text(path.read_text().replace("v1", "v2"))
+        for path in (project / "packs").rglob("rules.json"):
+            path.write_text('{"revision":2,"widget_limit":11}\n')
+        newer = commit_fixture("Advance fixture rules explicitly", probe.root / "retrieval-next-dist")
     authored = tree(project)
+    probe.evidence["retrieval_fixtures"] = {"original": first, "next": newer}
+    executable = offline_executable(probe) if integrated else probe.executable
+    runtime_path = probe.root / "fixture-no-runtimes"
+    runtime_path.mkdir()
+    (runtime_path / "git").symlink_to(shutil.which("git", path=probe.env["PATH"]))
+    runner = Probe(executable, snapshot, probe.root, {**probe.env, "PATH": str(runtime_path)}, probe.evidence, probe.timeout)
+
+    def verify_content(report, host):
+        require(report["schema_version"] == 1 and report["report"] == "skill-access" and report["result"] == "prepared",
+                "invalid fixture access envelope")
+        descriptors = {item["qualified_skill"]: item for item in [report, *report["dependencies"]]}
+        require(set(descriptors) == {"access-root:guide", "access-root:local", "access-support:guide"}
+                and len(report["dependencies"]) == 2, "fixture same/cross-Pack closure incomplete")
+        for identity, item in descriptors.items():
+            require(item["pack_version"] == "1.0.0" and item["surface"] == host
+                    and item["snapshot_id"] == report["snapshot_id"]
+                    and item["prerequisites"] == ["packy-fixture-missing-runtime"], "fixture identity/prerequisites lost")
+            pack_id, skill = identity.split(":")
+            prefix = pack_id + "/skills/" + skill + ("-claude" if host == "claude" else "") + "/"
+            expected = {name[len(prefix):]: value for name, value in original.items() if name.startswith(prefix)}
+            root, entry = Path(item["resource_root"]), Path(item["entry_document"])
+            require(root.is_absolute() and entry == root / "SKILL.md" and set(tree(root)) == set(expected),
+                    "fixture resource paths/tree unusable")
+            for name, (mode, data, link) in expected.items():
+                path = root / name
+                if data is not None:
+                    def render(match):
+                        return quote(os.path.relpath(descriptors[match[1]]["entry_document"], path.parent), safe="/")
+                    expected_bytes = re.sub(r"\{\{packy.access:([^}]+)\}\}", render, data.decode()).encode()
+                    require(path.read_bytes() == expected_bytes, "fixture supporting/asset/reference bytes differ")
+                require(path.lstat().st_mode == mode and not link, "fixture supporting modes/links differ")
+            require(any(p.read_text() == notice_text for p in root.parents[1].rglob("MIT")), "fixture legal content missing")
+        return descriptors
+
     for host in ("codex", "claude"):
-        runner.set_context("content-acceptance", scenario="packy-bootstrap", surface=host, scope="project")
+        runner.set_context("content-acceptance", scenario="integrated-on-demand" if integrated else "packy-bootstrap", surface=host)
         workspace = runner.prepare("retrieval-" + host, pack_ids=["access-root", "access-support"])
-        target = tree(workspace / "project")
-        require(shutil.which("packy-fixture-missing-runtime", path=probe.env["PATH"]) is None, "fixture runtime unexpectedly exists")
-        discovery = runner.candidate(workspace, ["show", "access-root", "--surface", host, "--json"])
-        require(discovery["schema_version"] == 1 and discovery["report"] == "skill-discovery", "invalid discovery envelope")
+        # Use the fixture runner for native setup; no official Pack is activated.
+        runner.apply(workspace, ["install", "access-support", "--surface", host, "--resource", "skill:guide"])
+        native = workspace / "project" / SKILL_DIRECTORIES[host] / "guide/SKILL.md"
+        native.write_text("# Modified installed fixture. Never replace this copy.\n")
+        (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True, exist_ok=True)
+        protected, snapshots = installation_state(workspace), tree(workspace / "snapshots")
         report = runner.candidate(workspace, ["get", "skill", "access-root:guide", "--surface", host, "--json"])
-        require(report["schema_version"] == 1 and report["report"] == "skill-access" and report["result"] == "prepared", "invalid access envelope")
-        require(len(report["dependencies"]) == 1, "cross-Pack dependency missing")
-        for descriptor, identity in ((report, "access-root:guide"), (report["dependencies"][0], "access-support:guide")):
-            require(descriptor["qualified_skill"] == identity and descriptor["pack_version"] == "1.0.0"
-                    and descriptor["surface"] == host and descriptor["snapshot_id"] == report["snapshot_id"]
-                    and isinstance(descriptor["snapshot_id"], str) and bool(descriptor["snapshot_id"]), "wrong access identity")
-            require(descriptor["prerequisites"] == ["packy-fixture-missing-runtime"], "known prerequisite lost")
-            entry, root = Path(descriptor["entry_document"]), Path(descriptor["resource_root"])
-            require(entry.is_absolute() and root.is_absolute() and entry.is_file() and entry.parent == root,
-                    "unusable entry/resource paths")
-            require((root / "references/context.md").read_text() == "# Controlled supporting reference\n", "reference closure lost")
-            require((root / "sentinel.sh").read_bytes() == b"#!/bin/sh\nprintf executed > should-never-exist\n"
-                    and (root / "sentinel.sh").stat().st_mode & 0o777 == 0o755, "script bytes/mode lost")
-            require(any(p.read_text() == fixture_notice
-                        for p in root.parents[1].rglob("MIT")), "legal closure lost")
-        entry = Path(report["entry_document"])
-        text = entry.read_text()
-        require(text.startswith("# " + ("Codex" if host == "codex" else "Claude") + " fixture\n"), "wrong effective entry")
-        reference = re.search(r"\[Dependency\]\(([^)]+)\)", text)
-        require(reference is not None and (entry.parent / reference[1]).resolve() == Path(report["dependencies"][0]["entry_document"]),
-                "reviewed dependency reference is unusable")
-        nested = runner.candidate(workspace, ["get", "skill", "access-support:guide", "--surface", host,
-                                             "--snapshot", report["snapshot_id"], "--json"])
-        require(nested["snapshot_id"] == report["snapshot_id"] and Path(nested["entry_document"]).read_bytes() == Path(report["dependencies"][0]["entry_document"]).read_bytes(),
-                "nested retrieval changed snapshot or dependency content")
-        require(tree(workspace / "project") == target, "retrieval changed target project")
-        require(not list(workspace.rglob("should-never-exist")), "retrieval executed a script")
-        require(tree(project) == authored, "retrieval changed authored resources")
-        probe.evidence["outcomes"].append({"scenario": "packy-bootstrap", "surface": host, "result": "passed",
-                                           "checks": ["reviewed-cross-pack-retrieval", "effective-host", "structured-contract",
-                                                      "supporting-legal-closure", "executable-mode", "nested-snapshot",
-                                                      "absent-runtime", "inert-scripts", "unchanged-target-and-sources"]})
+        descriptors = verify_content(report, host)
+        prepared = tree(workspace / "home/.local/share/packy/skill-access")
+        if integrated:
+            next_runner = Probe(executable, probe.root / "retrieval-next-dist", probe.root, runner.env, probe.evidence, probe.timeout)
+            next_runner.set_context("snapshot-transition", scenario="integrated-on-demand", surface=host)
+            transition = next_runner.candidate(workspace, ["transition", "--expect-archive-sha256", first["archive_sha256"], "--json"])
+            require(transition["result"] == "transitioned" and transition["archive_sha256"] == newer["archive_sha256"],
+                    "fixture selection transition failed")
+            independent = next_runner.candidate(workspace, ["get", "skill", "access-root:guide", "--surface", host, "--json"])
+            require(independent["snapshot_id"] != report["snapshot_id"] and independent["snapshot_id"] == transition["snapshot_id"]
+                    and independent["pack_version"] == "1.1.0"
+                    and (Path(independent["resource_root"]) / "assets/rules.json").read_text() == '{"revision":2,"widget_limit":11}\n',
+                    "independent request ignored changed fixture selection/content")
+        else:
+            next_runner = runner
+        for identity in ("access-root:local", "access-support:guide"):
+            nested = next_runner.candidate(workspace, ["get", "skill", identity, "--surface", host,
+                                                       "--snapshot", report["snapshot_id"], "--json"])
+            require(nested["snapshot_id"] == report["snapshot_id"] and nested["surface"] == host
+                    and nested["pack_version"] == "1.0.0" and nested["qualified_skill"] == identity
+                    and tree(Path(nested["resource_root"])) == tree(Path(descriptors[identity]["resource_root"])),
+                    "nested fixture access lost original host/snapshot/content")
+        observed = tree(workspace / "home/.local/share/packy/skill-access")
+        require(all(observed.get(name) == value for name, value in prepared.items()), "earlier fixture paths changed")
+        observed = tree(workspace / "snapshots")
+        require(all(observed.get(name) == value for name, value in snapshots.items()), "original retained fixture changed")
+        if integrated:
+            retained = workspace / "snapshots" / report["snapshot_id"] / "packs/access-support/skills/guide/SKILL.md"
+            retained.unlink()
+            output, diagnostic = next_runner.candidate(workspace, ["get", "skill", "access-support:guide", "--surface", host,
+                                                                  "--snapshot", report["snapshot_id"], "--json"], failure=True)
+            require("snapshot_unavailable" in output or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
+                    "missing retained fixture substituted latest/native content or failed for unrelated reason")
+        require(protected == installation_state(workspace) and authored == tree(project), "fixture access changed native/target/source state")
+        require(not list(workspace.rglob("should-never-exist")), "retrieval executed fixture content")
+        probe.evidence["outcomes"].append({"scenario": "integrated-fixtures" if integrated else "packy-bootstrap", "surface": host,
+                                           "result": "passed", "checks": ["same-and-cross-pack", "complete-effective-trees",
+                                           "meaningful-assets-references-notices", "script-modes-nonexecution", "missing-runtimes",
+                                           "nested-host-snapshot", "modified-installed-copy-preserved"] +
+                                           (["offline", "selection-transition", "old-paths-retained", "independent-new-content", "missing-retained-rejected"] if integrated else [])})
 
 
 # Reviewed expectations from issue #91, independent of the manifest under test.
@@ -2090,9 +2160,193 @@ def warp_access(probe, surfaces, *, scenario, graph, policies, routes, damaged_s
     require(authored == tree(ROOT / "packs/warp"), "acceptance changed Warp sources")
 
 
+def offline_executable(probe):
+    """Apply an OS network boundary to the real binary after acquisition."""
+    import shlex
+
+    wrapper = probe.root / "offline-packy"
+    if wrapper.exists():
+        return wrapper
+    if sys.platform == "darwin":
+        launcher = ["/usr/bin/sandbox-exec", "-p", "(version 1)(allow default)(deny network*)"]
+    else:
+        unshare = shutil.which("unshare", path=probe.env["PATH"])
+        require(sys.platform.startswith("linux") and unshare, "offline acceptance requires sandbox-exec or Linux unshare")
+        launcher = [unshare, "--user", "--map-root-user", "--net", "--"]
+    # EPERM/EACCES is the required canary result, not mere connection refusal.
+    canary = ("import errno,socket; s=socket.socket(); "
+              "status=s.connect_ex(('127.0.0.1',9)); "
+              "assert status in (errno.EPERM,errno.EACCES,errno.ENETUNREACH),status; print('network-denied')")
+    output, _ = probe.execute([*launcher, sys.executable, "-B", "-c", canary])
+    require(output.strip() == "network-denied", "offline network boundary not demonstrated")
+    wrapper.write_text("#!/bin/sh\nexec " + " ".join(shlex.quote(str(v)) for v in [*launcher, probe.executable]) + ' "$@"\n')
+    wrapper.chmod(0o755)
+    probe.evidence["offline_boundary"] = launcher
+    return wrapper
+
+
+def reviewed_scope():
+    """Frozen review expectations must not follow whatever a candidate contains."""
+    inventory = json.loads((ROOT / "docs/on-demand-coverage.json").read_text())
+    rows = inventory["skills"]
+    by_identity = {row["qualified_skill"]: row for row in rows}
+    require(inventory["schema_version"] == 1 and inventory["hosts"] == ["codex", "claude"]
+            and len(rows) == len(by_identity) == 117, "duplicate/unassigned integrated scope entry")
+    require(inventory["counts"] == {"matty": 33, "pstack": 55, "warp": 29}, "integrated scope counts changed")
+    for pack, count in inventory["counts"].items():
+        expected = {name.split(":")[1] for name in by_identity if name.startswith(pack + ":")}
+        manifest = json.loads((ROOT / "packs" / pack / "pack.json").read_text())
+        require(len(expected) == count and expected == {r["id"] for r in manifest["resources"] if r["kind"] == "skill"},
+                "integrated scope missing/extra skill in " + pack)
+        require(set(manifest["surfaces"]) == ({"codex", "claude"} if pack == "pstack" else set(SURFACES)),
+                "native host support changed")
+        for notice in inventory["legal"][pack]:
+            path = ROOT / "packs" / pack / notice["source"]
+            require(path.stat().st_mode & 0o777 == notice["mode"]
+                    and hashlib.sha256(path.read_bytes()).hexdigest() == notice["sha256"], "reviewed legal closure changed")
+    for identity, row in by_identity.items():
+        require(set(row["hosts"]) == {"codex", "claude"} and (ROOT / row["review"]).is_file()
+                and row["preserved_workflow_and_support"] and row["reference_classification"], "unassigned host/review: " + identity)
+        pack, skill = identity.split(":")
+        manifest = json.loads((ROOT / "packs" / pack / "pack.json").read_text())
+        resource = next(r for r in manifest["resources"] if r["id"] == skill)
+        for host, expected in row["hosts"].items():
+            effective = {**resource, **next((v for v in resource.get("variants", []) if v["surface"] == host), {})}
+            require(effective["source"] == expected["source"] and effective["on_demand"] == expected["on_demand"]
+                    and effective["requires"] == expected["native_requires"], "reviewed effective contract changed: " + identity)
+            entries = [[str(p.relative_to(ROOT / "packs" / pack / effective["source"])), p.lstat().st_mode & 0o777,
+                        hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None]
+                       for p in sorted((ROOT / "packs" / pack / effective["source"]).rglob("*"))]
+            require(hashlib.sha256(json.dumps(entries, separators=(",", ":")).encode()).hexdigest() == expected["source_tree_sha256"],
+                    "reviewed full resource bytes/modes changed: " + identity + " " + host)
+    return inventory, by_identity
+
+
+def integrated_on_demand(probe, surfaces):
+    """One current-content contract; historical transition probes keep their own baselines."""
+    inventory, scope = reviewed_scope()
+    probe.evidence["coverage_inventory"] = {"path": "docs/on-demand-coverage.json",
+        "sha256": hashlib.sha256((ROOT / "docs/on-demand-coverage.json").read_bytes()).hexdigest(),
+        "reviewed_catalog_commit": inventory["reviewed_catalog_commit"], "logical_skills": 117, "host_cases": 234,
+        "limits": inventory["evidence_limits"]}
+    # Reuse sequential setup/retirement; the complete fixture runs separately below.
+    packy_bootstrap(probe, surfaces, fixtures=False)
+    executable = offline_executable(probe)
+    authored = {pack: tree(ROOT / "packs" / pack) for pack in inventory["counts"]}
+    manifests = {pack: json.loads((ROOT / "packs" / pack / "pack.json").read_text()) for pack in authored}
+
+    def closure(identity, host):
+        expected = scope[identity]["hosts"][host]
+        pack = identity.split(":")[0]
+        result = {identity}
+        dependencies = scope[identity]["direct_access_dependencies"] + [pack + ":" + name.split(":", 1)[1]
+                                    for name in expected["native_requires"] if name.startswith("skill:")]
+        for dependency in dependencies:
+            result.update(closure(dependency, host))
+        return result
+
+    for host in ("codex", "claude"):
+        probe.set_context("content-acceptance", scenario="integrated-on-demand", surface=host)
+        workspace = probe.prepare("integrated-" + host)
+        probe.apply(workspace, ["install", "matty", "--surface", host, "--resource", "skill:tdd"])
+        native = workspace / "project" / SKILL_DIRECTORIES[host] / "tdd/SKILL.md"
+        native.write_text("# Keep modified native TDD. Never substitute this for Catalog resources.\n")
+        (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True, exist_ok=True)
+        protected, snapshots = installation_state(workspace), tree(workspace / "snapshots")
+        runtime_path = probe.root / ("integrated-no-runtimes-" + host)
+        runtime_path.mkdir()
+        (runtime_path / "git").symlink_to(shutil.which("git", path=probe.env["PATH"]))
+        access = Probe(executable, probe.snapshot, probe.root, {**probe.env, "PATH": str(runtime_path)}, probe.evidence, probe.timeout)
+        access.set_context("offline-resource-access", scenario="integrated-on-demand", surface=host)
+        listing = access.candidate(workspace, ["list", "--json"])
+        require({p["id"] for p in listing["packs"]} == set(probe.evidence["pack_ids"]), "offline discovery lost Packs")
+        roots, discovery = {}, {}
+        for pack in inventory["counts"]:
+            report = access.candidate(workspace, ["show", pack, "--surface", host, "--json"])
+            items = {item["qualified_skill"]: item for item in report["skills"]}
+            require(report["schema_version"] == 1 and report["report"] == "skill-discovery"
+                    and not report["prerequisites_verified"] and len(items) == len(report["skills"])
+                    and set(items) == {name for name in scope if name.startswith(pack + ":")}, "wrong effective discovery coverage")
+            discovery.update(items)
+        # Deterministic metadata establishes ambiguity; the bootstrap must ask the user.
+        matches = {name for name in discovery if name.split(":")[1] == "tdd"}
+        require(matches == {"matty:tdd", "pstack:tdd"}, "duplicate-name discovery lost qualified choices")
+        output, _ = access.candidate(workspace, ["get", "skill", "tdd", "--surface", host, "--json"], failure=True)
+        require(json.loads(output)["result"] != "prepared", "unqualified identity silently selected a Pack")
+        for identity, row in scope.items():
+            pack, skill = identity.split(":")
+            expected = row["hosts"][host]
+            item = discovery[identity]
+            require(item["compatible"] and item["prerequisites"] == expected["on_demand"]["prerequisites"]
+                    and all(item["on_demand"].get(k, []) == v for k, v in expected["on_demand"].items()),
+                    "discovery lost independently reviewed declarations")
+            report = access.candidate(workspace, ["get", "skill", identity, "--surface", host, "--json"])
+            require(report["qualified_skill"] == identity, "integrated root identity changed")
+            descriptors = skill_descriptors(report, host, manifests[pack]["version"],
+                                             [name.split(":")[1] for name in closure(identity, host)], pack=pack)
+            assert_skill_content(descriptors, manifests[pack], pack=pack)
+            for name, descriptor in descriptors.items():
+                require(descriptor["prerequisites"] == scope[name]["hosts"][host]["on_demand"]["prerequisites"],
+                        "retrieval lost known prerequisites")
+            roots[identity] = report
+            probe.evidence["outcomes"].append({"scenario": "integrated-on-demand", "surface": host, "qualified_skill": identity,
+                "snapshot_id": report["snapshot_id"], "result": "passed", "checks": ["reviewed-independent-scope",
+                "versioned-identity-host-snapshot", "effective-full-bytes-modes-references-assets", "dependency-and-legal-closure",
+                "offline", "absent-content-runtimes"]})
+        require(len({r["snapshot_id"] for r in roots.values()}) == 1, "integrated retrieval mixed snapshots")
+        require("Refactoring is not part of the loop" in Path(roots["matty:tdd"]["entry_document"]).read_text()
+                and "# TDD Bug Fix" in Path(roots["pstack:tdd"]["entry_document"]).read_text(), "qualified TDD policies were merged")
+        matty_pstack_tdd(probe, access, host, manifests["matty"])
+        # Candidate routing must continue to expose the public non-Git retrieval behavior.
+        git_directory = workspace / "project/.git"
+        git_directory.rename(workspace / "held-git")
+        try:
+            non_git = access.candidate(workspace, ["get", "skill", "matty:grill-with-docs", "--surface", host, "--json"])
+            require(non_git["snapshot_id"] == roots["matty:grill-with-docs"]["snapshot_id"], "non-Git access changed snapshot")
+        finally:
+            (workspace / "held-git").rename(git_directory)
+        require(protected == installation_state(workspace) and snapshots == tree(workspace / "snapshots"),
+                "retrieval changed target/native/activation/immutable state")
+        prepared = tree(workspace / "home/.local/share/packy/skill-access")
+        if probe.evidence["integrated_helpers"]:
+            orchestration_helpers(probe, roots["pstack:poteto-mode"], host)
+            decision_log_helper(probe, roots["pstack:show-me-your-work"], host)
+            for family, names in (("warp-repository", ["review-pr", "readout"]), ("warp-skill-doctor", ["skill-doctor"])):
+                resources = probe.root / (family + "-integrated-" + host + ".json")
+                resources.write_text(json.dumps({name: roots["warp:" + name]["resource_root"] for name in names}))
+                output, _ = probe.execute([sys.executable, "-B", str(ROOT / "scripts/probes/fixtures" / (family + ".py")),
+                    "--resources", str(resources), "--workspace", str(probe.root / (family + "-integrated-workspace-" + host))], timeout=90)
+                result = json.loads(output)
+                require(result["result"] == "passed", "integrated real-content helper failed")
+                probe.evidence["outcomes"].append({"scenario": "integrated-on-demand", "surface": host, "helpers": result})
+        require(prepared == tree(workspace / "home/.local/share/packy/skill-access")
+                and protected == installation_state(workspace) and snapshots == tree(workspace / "snapshots"),
+                "helpers changed resources or target/native state")
+        probe.evidence["outcomes"].append({"scenario": "integrated-on-demand", "surface": host, "result": "passed",
+            "checks": ["ambiguous-metadata-user-choice-required", "qualified-distinct-TDD", "Matty-nested-wrapper",
+                       "non-Git", "managed-modified-copy-preserved", "target-installation-snapshot-prepared-preservation"],
+            "model_matching": "not exercised", "native_host_loading": "not exercised"})
+    # No candidate initialization: the public CLI must explain explicit acquisition.
+    absent = probe.root / "absent-catalog"
+    absent.mkdir()
+    env = isolated_environment(absent)
+    missing = Probe(executable, probe.snapshot, absent, env, probe.evidence, probe.timeout)
+    missing.set_context("absent-catalog", scenario="integrated-on-demand")
+    before = tree(absent)
+    output, diagnostic = missing.execute([str(executable), "get", "skill", "matty:tdd", "--surface", "codex", "--json"], failure=True)
+    require("packy init" in output + diagnostic or "catalog refresh" in output + diagnostic, "missing catalog lacks acquisition guidance")
+    require(tree(absent) == before, "absent-catalog retrieval mutated target or user state")
+    reviewed_retrieval(probe, integrated=True)
+    require(authored == {pack: tree(ROOT / "packs" / pack) for pack in authored}, "integrated acceptance changed authored Packs")
+    probe.evidence["outcomes"].append({"scenario": "integrated-on-demand", "result": "passed",
+        "checks": ["117-unique-logical-identities", "234-host-root-cases", "explicit-acquisition-error", "no-authored-content-mutation"],
+        "helpers": "passed" if probe.evidence["integrated_helpers"] else "not selected; full acceptance requires --integrated-helpers"})
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration", "warp-specification", "warp-repository", "warp-skill-doctor"), required=True)
+    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration", "warp-specification", "warp-repository", "warp-skill-doctor", "integrated-on-demand"), required=True)
+    parser.add_argument("--integrated-helpers", action="store_true", help="opt-in reviewed pstack/Warp helpers with integrated acceptance")
     parser.add_argument("--warp-helpers", action="store_true", help="opt-in reviewed offline helpers for the selected Warp slice")
     parser.add_argument("--warp-baseline", type=Path, help="clean complete Catalog baseline before Warp on-demand adaptation")
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
@@ -2104,6 +2358,8 @@ def main():
     if not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error("timeout must be finite and positive")
     scenarios = list(dict.fromkeys(args.scenario))
+    if args.integrated_helpers and "integrated-on-demand" not in scenarios:
+        parser.error("--integrated-helpers requires --scenario integrated-on-demand")
     if bool({"warp-specification", "warp-repository", "warp-skill-doctor"}.intersection(scenarios)) != (args.warp_baseline is not None):
         parser.error("Warp scenarios require --warp-baseline, used only with those scenarios")
     if len({"warp-specification", "warp-repository", "warp-skill-doctor"}.intersection(scenarios)) > 1:
@@ -2113,7 +2369,7 @@ def main():
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
-    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering", "pstack-orchestration", "warp-specification", "warp-repository", "warp-skill-doctor"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
+    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering", "pstack-orchestration", "warp-specification", "warp-repository", "warp-skill-doctor", "integrated-on-demand"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
         parser.error("on-demand scenarios require Codex and Claude surfaces")
     if bool({"pstack", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration"}.intersection(scenarios)) != (args.pstack_baseline is not None):
         parser.error("pstack scenarios require --pstack-baseline, used only with those scenarios")
@@ -2121,7 +2377,7 @@ def main():
         parser.error("Matty scenarios require --matty-baseline, used only with those scenarios")
     evidence = {"schema_version": 1, "report": "catalog-content-probes", "provenance": "local-candidate",
                 "official_publication": False, "scenarios": scenarios, "surfaces": surfaces, "html_pack": args.html_pack,
-                "warp_helpers": args.warp_helpers, "commands": [], "outcomes": [], "result": "failed"}
+                "warp_helpers": args.warp_helpers, "integrated_helpers": args.integrated_helpers, "commands": [], "outcomes": [], "result": "failed"}
     root = None
     previous_handler = signal.signal(signal.SIGTERM, interrupted)
     try:
@@ -2169,7 +2425,7 @@ def main():
             for scenario in scenarios:
                 probe.set_context("content-acceptance", scenario=scenario, scope="project")
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
-                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal, "pstack-engineering": pstack_engineering, "pstack-orchestration": pstack_orchestration, "warp-specification": warp_specification, "warp-repository": warp_repository, "warp-skill-doctor": warp_skill_doctor}[scenario](probe, surfaces)
+                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal, "pstack-engineering": pstack_engineering, "pstack-orchestration": pstack_orchestration, "warp-specification": warp_specification, "warp-repository": warp_repository, "warp-skill-doctor": warp_skill_doctor, "integrated-on-demand": integrated_on_demand}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
             probe.set_context("candidate-verification")
             require(checkout_commit(probe, ROOT) == commit, "Catalog candidate changed during probes")

@@ -2,9 +2,10 @@
 
 Status: accepted design. The user confirmed all sixteen decisions and the final
 shared understanding on 2026-10-23. This document records agreed requirements and
-constraints from the dated interview. The engine is now released; Catalog delivery
-proceeds through [#90](https://github.com/yersonargotev/packy-catalog/issues/90)
-and its follow-up adaptations, rather than claiming the whole initiative is complete.
+constraints from the dated interview. The engine and all eight Catalog content slices are now integrated. The
+[complete inventory and acceptance](../on-demand-coverage.md) consolidate all
+117 logical skills and 234 host cases; resource access is distinct from semantic
+workflow success.
 
 ## Agreed requirements
 
@@ -38,7 +39,9 @@ and its follow-up adaptations, rather than claiming the whole initiative is comp
   Reviewed adaptations must address supporting files, scripts, and nested calls.
 - Initial host coverage is Codex (`.agents/skills`) and Claude Code
   (`.claude/skills`). OpenCode is outside the initial on-demand delivery scope;
-  its existing installation behavior remains supported.
+  Matty/Warp's native installation remains supported. pstack's separately accepted
+  [OpenCode withdrawal](../adr/0003-limit-pstack-host-support.md) preserves legacy
+  installations and explicit retirement; it does not restore new OpenCode support.
 - The Packy CLI Skill is personal/user-scoped by default, with project-scoped
   installation available for shared project configuration. Personal roots are
   `~/.agents/skills` for Codex and `~/.claude/skills` for Claude Code.
@@ -78,8 +81,9 @@ The architectural direction is recorded in
 The following observations describe the pre-release checkout inspected during the
 interview. They are retained as dated evidence. Packy v0.2.31 now provides
 `get skill`, explicit cross-Pack access dependencies, and retained snapshot
-propagation; see [released tooling](../catalog-tooling.md). The real-skill
-adaptations and complete-inventory acceptance remain Catalog follow-up work.
+propagation; see [released tooling](../catalog-tooling.md). The observations below predate the integrated adaptations and
+[complete-inventory contract](../on-demand-coverage.md); they are not current
+capability or support claims.
 
 - The engine already exposes `packy list --json` and `packy show <pack> --json`.
   There is no on-demand `get` command in the inspected engine checkout.
@@ -121,8 +125,7 @@ adaptations and complete-inventory acceptance remain Catalog follow-up work.
 
 ## Bootstrap usage
 
-The official `packy` Pack is authored by this Catalog slice. After its protected
-main publication, use the [setup instructions](../packy-cli.md). Each host is
+The official `packy` Pack is integrated. Use the [setup instructions](../packy-cli.md). Each host is
 optional; personal activation is the default:
 
 ```sh
@@ -147,10 +150,10 @@ the agreed boundaries, rather than additional unresolved product alternatives.
 
 ## Engineering delivery within the agreed contract
 
-The released engine implements the first five items below. Catalog compatibility
-review and acceptance of all 117 logical skills (33 Matty, 55 pstack, 29 Warp)
-on both hosts remain the initiative scope; this bootstrap slice does not claim
-those adaptations are complete.
+The released engine implements the first five items below. Eight reviewed
+Catalog slices supply all 117 logical skills (33 Matty, 55 pstack, 29 Warp) on
+both hosts. The [inventory](../on-demand-coverage.md) records reviewed applicability,
+complete resource-access acceptance and the limits of representative helper proof.
 
 - Exact discovery metadata and the versioned JSON result and error schemas.
 - Resource preparation layout and preservation of relative references.

@@ -483,3 +483,24 @@ and audited resource/input reads and output writes. Every real installed skill
 and live history remains untouched. Omit the flag for retrieval-only acceptance.
 Ordinary tests/validation/build/publication remain inert. See the
 [reviewed contract, evidence and limits](../../docs/design/warp-skill-doctor-on-demand.md).
+
+## Integrated on-demand acceptance
+
+Use the [complete contract and independently specified inventory](../../docs/on-demand-coverage.md)
+from a clean committed candidate:
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario integrated-on-demand \
+  --integrated-helpers > /tmp/integrated-on-demand-evidence.json
+```
+
+This composes both-scope/both-host bootstrap checks, all 234 real-content root
+retrievals, complete same-/cross-Pack transition fixtures and explicit offline,
+non-Git, absent-catalog, ambiguity, modified-native and missing-retained cases.
+The optional flag runs the existing reviewed pstack bootstraps and Warp fictional
+repository/report/collector/rendering checks. Read the linked contract for runtime,
+network-isolation prerequisites and evidence limitations. Historical slice probes
+still require their separate documented pre-adaptation baselines; this scenario
+uses the current integrated content and two independently committed inert fixture
+revisions. It does not repurpose one baseline for every historical slice.
+Ordinary validation and publication remain inert and main-owned.

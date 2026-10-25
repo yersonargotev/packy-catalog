@@ -80,7 +80,8 @@ has satisfied that prerequisite through
 [Packy #834](https://github.com/yersonargotev/packy/issues/834#issuecomment-6104158748).
 [Catalog #54](https://github.com/yersonargotev/packy-catalog/issues/54) tracks
 adoption. The Catalog entry points and connected publication workflow now
-consume that immutable release through `packy-release.json`.
+consume the single current immutable release declared in `packy-release.json`;
+the v0.2.27 identity above records the initial adoption prerequisite.
 
 Evidence and alternatives: [Versioned Catalog tooling research](../research/versioned-catalog-tooling.md).
 

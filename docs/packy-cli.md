@@ -9,8 +9,7 @@ independent of the engine release selected by `packy-release.json`.
 
 Install Packy explicitly if unavailable. Use the released CLI supporting the
 [on-demand protocol](https://github.com/yersonargotev/packy/blob/v0.2.31/docs/on-demand-skills.md).
-After this Catalog revision is published by the existing protected-main workflow,
-explicitly acquire with `packy init` when there is no local catalog, or update
+Explicitly acquire with `packy init` when there is no local catalog, or update
 availability with `packy catalog refresh`. Discovery/retrieval never refresh
 implicitly.
 
@@ -74,17 +73,57 @@ behavior, including local modifications.
 
 Retrieval works outside Git after acquisition and does not execute scripts,
 change target projects or install/activate requested Packs. On-demand scope is
-Codex and Claude Code; OpenCode's existing native installation remains supported.
-The approved initiative covers all 117 logical Matty/pstack/Warp skills. This
-slice supplies the bootstrap and controlled retrieval acceptance; #91–#98 own
-real-skill adaptations and #99 owns complete-inventory acceptance. File/metadata
+Codex and Claude Code. Matty and Warp retain native OpenCode installation;
+pstack withdrew OpenCode in 5.0.0 under [ADR 0003](adr/0003-limit-pstack-host-support.md).
+Retained pstack installations require [explicit retirement](pstack-opencode-retirement.md);
+retrieval never migrates or removes them. All 117 logical Matty/pstack/Warp skills
+have reviewed entries for both access hosts; the [coverage inventory](on-demand-coverage.md)
+records applicability, dependencies, prerequisites and workflow limits. File/metadata
 checks do not prove model-driven matching, native loading, runtime readiness or
 semantic workflow success.
 
 ## Verify a candidate
 
-After content review, run the [opt-in released-binary acceptance](../scripts/probes/README.md#packy-bootstrap-acceptance).
-It uses owned disposable state for both scopes/hosts and a controlled reviewed
-cross-Pack fixture. Ordinary validation, snapshot construction and publication
+After content review, run the [integrated released-binary acceptance](on-demand-coverage.md#run-the-integrated-contract).
+It uses owned disposable state for both scopes/hosts, all 234 roots, controlled
+same-/cross-Pack selection transitions and optional safe real-content helpers. Ordinary validation, snapshot construction and publication
 remain inert. Only the existing successful-main workflow publishes official
 Catalog Snapshots; do not manually publish a second release.
+
+## Concrete requests and recovery
+
+For a TDD request, inspect both matching Packs before selecting. A request for
+“Matty TDD” selects `matty:tdd`; an unspecified “TDD” request requires the user's
+choice between the qualified matches. The CLI does not perform natural-language
+ranking or resolve that product choice:
+
+```sh
+packy list --json
+packy show matty --surface codex --json
+packy show pstack --surface codex --json
+packy get skill matty:implement --surface codex --json
+packy get skill matty:tdd --surface codex --snapshot <implement-snapshot-id> --json
+```
+
+For Claude Code, use `--surface claude` on both discovery and every nested request.
+Keep `entry_document`, `resource_root` and `snapshot_id` from the successful
+report. Read supporting files relative to their document locations. Tell helpers
+the intended target explicitly (for example Warp review's `OZ_REPO_ROOT`), and
+choose a different writable scratch/output directory. Do not run commands from
+the resource cache merely to infer the target project.
+
+| Observation | Explicit response |
+| --- | --- |
+| Packy is unavailable | Install the supporting released CLI explicitly; no substitute development binary. |
+| No local catalog | Acquire with `packy init` or `packy catalog refresh` after authorization. |
+| Several matching names | Ask the user to choose a qualified identity; do not prefer an installed copy. |
+| Incompatible host/resource | Correct the explicit host/identity or request a reviewed adaptation. |
+| Missing retained content | Restore that exact retained revision; do not retry against latest or native copies. |
+| Missing runtime, tool, model or service | Read resources normally; report/check prerequisites before the relevant procedure, preserving its stop/fallback policy. |
+| Modified installed copy | Leave it unchanged; Packy retrieval supplies the selected Catalog Resource and native invocation still uses the installed copy. |
+
+After acquisition, discovery/retrieval use local data offline and outside Git.
+They do not refresh, provision runtimes/dependencies, execute scripts or expire/
+clean resources. Explicit refresh changes only subsequent independent requests;
+carry the earlier snapshot into nested calls and keep earlier paths while their
+procedure is active. Manual deletion can invalidate them and yields an error.
