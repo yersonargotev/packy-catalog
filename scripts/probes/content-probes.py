@@ -1803,7 +1803,7 @@ WARP_SPECIFICATION_POLICIES = {
     "check-impl-against-spec": ["spec_context.md", "pr_diff.txt", "review.json", "Do not post to GitHub directly"],
     "council": ["model diversity", "perspective-only diversity", "wait for approval", "valid model IDs",
                 "read-only", "own git worktree", "evidence quality, not by vote count"],
-    "cross-critique": ["independent proposals first", "genuinely divergent", "same subagents", "both* pros and cons",
+    "cross-critique": ["independent proposals first", "genuinely divergent", "same subagents", "*both* pros and cons",
                        "evidence quality, not vote count"],
     "implement-specs": ["reviewed and approved", "optional aids", "same PR", "keep specs and code synchronized"],
     "merge-risk": ["Impact = 2x", "Verification = 2x", "Rollback cost = 1.5x", "high: ≥ 2.25",
@@ -1845,6 +1845,13 @@ def warp_specification(probe, surfaces):
     previous = {item["id"]: item for item in baseline["resources"]}
     authored = tree(ROOT / "packs/warp")
     graph = WARP_SPECIFICATION_DEPENDENCIES
+    require(set(resources) == set(previous) and manifest["origins"] == baseline["origins"]
+            and manifest["surfaces"] == baseline["surfaces"],
+            "Warp provenance or native host support changed")
+    require(all(resource == previous[name] for name, resource in resources.items() if name not in graph),
+            "Warp adaptation changed unrelated resources")
+    require(all(not previous[name].get("on_demand") and not previous[name].get("variants") for name in graph),
+            "Warp baseline must precede the reviewed slice")
 
     def closure(skill):
         result = {skill}
@@ -1893,6 +1900,17 @@ def warp_specification(probe, surfaces):
                     "Warp substantive policy lost: " + skill)
             require("initiating" in entry and "snapshot_id" in entry and "scratch/output" in entry
                     and "unverified" in entry and "delegate" in entry, "Warp access context lost: " + skill)
+            if skill == "write-feature-docs":
+                require(entry.index("## Step 3:") < entry.index("## Step 4:") < entry.index("## Step 5:"),
+                        "feature documentation reordered its two human checkpoints")
+            if skill == "saga":
+                for reference in ("continuing-a-saga", "saga-spec-template", "validation-strategies"):
+                    relative = "references/ACCESS-" + reference + ".md"
+                    require(relative in entry and (Path(report["resource_root"]) / relative).is_file(),
+                            "saga lost an adapted supporting route")
+                resume = (Path(report["resource_root"]) / "references/ACCESS-continuing-a-saga.md").read_text()
+                require("../ACCESS.md" in resume and "worker_run_id" in resume and "Reconcile" in resume,
+                        "saga resume lost context or durable reconciliation")
             for identity, descriptor in descriptors.items():
                 resource = resources[identity.split(":")[1]]
                 expected = next(v for v in resource["variants"] if v["surface"] == host)
@@ -1927,8 +1945,9 @@ def warp_specification(probe, surfaces):
                     and nested["qualified_skill"] == "warp:" + dependency
                     and Path(nested["entry_document"]).read_bytes() == Path(expected["entry_document"]).read_bytes(),
                     "Warp nested/delegated route followed new selection")
-        require(all(tree(prepared_root).get(path) == value for path, value in prepared.items())
-                and all(tree(workspace / "snapshots").get(path) == value for path, value in snapshots.items()),
+        observed, retained = tree(prepared_root), tree(workspace / "snapshots")
+        require(all(observed.get(path) == value for path, value in prepared.items())
+                and all(retained.get(path) == value for path, value in snapshots.items()),
                 "Warp transition invalidated prior resource paths")
         independent = old.candidate(workspace, ["show", "warp", "--surface", host, "--json"])
         require(independent["snapshot_id"] == transition["snapshot_id"]
@@ -1951,12 +1970,20 @@ def warp_specification(probe, surfaces):
     for host in SURFACES:
         probe.set_context("native-regression", scenario=scenario, surface=host, scope="project")
         workspace = probe.prepare(scenario + "-native-" + host)
+        probe.apply(workspace, ["install", "emil", "--surface", host, "--resource", "skill:write-swift"])
+        unrelated = tree(workspace / "project" / SKILL_DIRECTORIES[host] / "write-swift")
+        personal = {name: tree(workspace / name) for name in ("home", "config")}
+        guidance = {name: (workspace / "project" / name).read_bytes() for name in ("AGENTS.md", "CLAUDE.md", "unrelated.txt")}
         args = ["install", "warp", "--surface", host]
         for skill in graph:
             args.extend(["--resource", "skill:" + skill])
         probe.apply(workspace, args)
         installed = workspace / "project" / SKILL_DIRECTORIES[host]
-        require({p.name for p in installed.iterdir()} == set(graph), "Warp native selection changed")
+        require({p.name for p in installed.iterdir()} == set(graph) | {"write-swift"}, "Warp native selection changed")
+        require(unrelated == tree(installed / "write-swift")
+                and personal == {name: tree(workspace / name) for name in personal}
+                and all((workspace / "project" / name).read_bytes() == data for name, data in guidance.items()),
+                "Warp native installation changed unrelated/personal state")
         for skill in graph:
             before, after = previous[skill], resources[skill]
             require({k: v for k, v in after.items() if k not in ("origin", "variants")}
@@ -1990,7 +2017,7 @@ def main():
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
-    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering", "pstack-orchestration"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
+    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering", "pstack-orchestration", "warp-specification"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
         parser.error("on-demand scenarios require Codex and Claude surfaces")
     if bool({"pstack", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration"}.intersection(scenarios)) != (args.pstack_baseline is not None):
         parser.error("pstack scenarios require --pstack-baseline, used only with those scenarios")

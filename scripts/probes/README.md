@@ -73,6 +73,21 @@ The other probes in this directory retain their documented requirements in
 
 ## Released-binary content acceptance
 
+Warp's 15 specification and coordination skills have a focused two-host scenario:
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario warp-specification \
+  --warp-baseline /path/to/clean-2.2.0-catalog > /tmp/warp-specification-evidence.json
+```
+
+It retrieves every entry on Codex and Claude with full tree/mode/legal and
+independent dependency expectations, verifies retained nested spec calls across
+a disposable selection change and missing retained content, and checks native
+installation on all three hosts. It preserves modified native copies and target
+state with content runtimes absent. The retired scanner is only read; no skill
+procedure, model, worker, scheduler or external publication runs. See the
+[reviewed matrix and limits](../../docs/design/warp-specification-on-demand.md).
+
 After reviewing content, run from a clean committed Catalog checkout:
 
 ```sh
