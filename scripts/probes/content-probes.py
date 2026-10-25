@@ -1954,7 +1954,8 @@ def warp_specification(probe, surfaces):
                 and all(retained.get(path) == value for path, value in snapshots.items()),
                 "Warp transition invalidated prior resource paths")
         independent = old.candidate(workspace, ["show", "warp", "--surface", host, "--json"])
-        require(independent["snapshot_id"] == transition["snapshot_id"]
+        selected = old.candidate(workspace, ["get", "skill", "matty:grilling", "--surface", host, "--json"])
+        require(selected["snapshot_id"] == transition["snapshot_id"]
                 and all(not item["compatible"] for item in independent["skills"] if item["qualified_skill"].split(":")[1] in graph),
                 "Warp independent discovery ignored baseline selection")
         output, _ = old.candidate(workspace, ["get", "skill", "warp:write-tech-spec", "--surface", host, "--json"], failure=True)
