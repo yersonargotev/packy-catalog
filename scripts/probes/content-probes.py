@@ -1788,9 +1788,194 @@ def orchestration_helpers(probe, report, host):
 
 
 
+# Reviewed issue #96 routes. Related lists, attribution, and retired alternatives
+# are not required edges; first-round generation is conditional in cross-critique.
+WARP_SPECIFICATION_DEPENDENCIES = {
+    "check-impl-against-spec": [], "council": [],
+    "cross-critique": ["council", "research"], "implement-specs": [],
+    "merge-risk": [], "research": [], "saga": [], "scan-new-specs": [],
+    "spec-driven-implementation": ["implement-specs", "write-product-spec", "write-tech-spec"],
+    "update-skill": [], "validate-changes-match-specs": [], "write-feature-docs": [],
+    "write-pr-description": [], "write-product-spec": ["write-tech-spec"], "write-tech-spec": [],
+}
+
+WARP_SPECIFICATION_POLICIES = {
+    "check-impl-against-spec": ["spec_context.md", "pr_diff.txt", "review.json", "Do not post to GitHub directly"],
+    "council": ["model diversity", "perspective-only diversity", "wait for approval", "valid model IDs",
+                "read-only", "own git worktree", "evidence quality, not by vote count"],
+    "cross-critique": ["independent proposals first", "genuinely divergent", "same subagents", "both* pros and cons",
+                       "evidence quality, not vote count"],
+    "implement-specs": ["reviewed and approved", "optional aids", "same PR", "keep specs and code synchronized"],
+    "merge-risk": ["Impact = 2x", "Verification = 2x", "Rollback cost = 1.5x", "high: ≥ 2.25",
+                   "Keep the numerical score and its calculations internal"],
+    "research": ["Always spawn research subagents as **local**", "Pick the model for the search task",
+                 "Anything where you need the raw material", "distilled answer plus its supporting evidence"],
+    "saga": ["Confirm the exact path with the user", "Do not begin Phase 2 until the user approves",
+             "Delegate, don't implement", "durable handoff before cleanup", "Never commit or open PRs unless the user asks",
+             "Only consider the saga complete when the user confirms acceptance"],
+    "scan-new-specs": ["Do not invoke this skill and do not schedule it", "is paused and stays paused",
+                       "warpdotdev/docs", "missing_docs"],
+    "spec-driven-implementation": ["create one before writing specs", "Do not create engineer-named",
+                                   "After the specs are approved", "tech spec may be unnecessary"],
+    "update-skill": ["references/best-practices.md", "Must be non-empty", "When to Split Content"],
+    "validate-changes-match-specs": ["no relevant spec, stop", "untrusted data", "Resolve one-by-one",
+                                   "Collect all decisions", "If two mismatch decisions conflict, stop",
+                                   "Do not post GitHub comments without explicit approval", "Commit and push prompt"],
+    "write-feature-docs": ["two separate confirmations, in that order", "Do not include anything marked confidential",
+                           "Wait for the engineer's reply", "there is no unattended mode", "Gate 0",
+                           "content-design-plan.md", "Maximum attempts per screenshot: 2"],
+    "write-pr-description": ["template's own instructions outrank", "Never write intent as though it were a result",
+                             "references/plain-language.md", "references/review-guide.md"],
+    "write-product-spec": ["Only create a new Linear ticket or GitHub issue when the user explicitly asks",
+                           "Do not include Validation, Success criteria, or Testing sections", "Figma: none provided"],
+    "write-tech-spec": ["Only create a new Linear ticket or GitHub issue when the user explicitly asks",
+                        "Research before writing", "commit-pinned references", "Parallelization"],
+}
+
+
+def warp_specification(probe, surfaces):
+    """Retrieve the reviewed 15-skill slice without running any skill procedure."""
+    from urllib.parse import unquote
+
+    scenario = "warp-specification"
+    manifest = json.loads((ROOT / "packs/warp/pack.json").read_text())
+    resources = {item["id"]: item for item in manifest["resources"]}
+    baseline_root = Path(probe.evidence["warp_baseline_project"])
+    baseline = json.loads((baseline_root / "packs/warp/pack.json").read_text())
+    previous = {item["id"]: item for item in baseline["resources"]}
+    authored = tree(ROOT / "packs/warp")
+    graph = WARP_SPECIFICATION_DEPENDENCIES
+
+    def closure(skill):
+        result = {skill}
+        for dependency in graph[skill]:
+            result.update(closure(dependency))
+        return result
+
+    for host in ("codex", "claude"):
+        probe.set_context("content-acceptance", scenario=scenario, surface=host, scope="project")
+        workspace = probe.prepare(scenario + "-" + host)
+        probe.apply(workspace, ["activate", "warp", "--surface", host, "--resource", "skill:write-product-spec"])
+        native = workspace / "home" / SKILL_DIRECTORIES[host] / "write-product-spec"
+        if native.is_symlink():
+            original = native.resolve()
+            native.unlink()
+            shutil.copytree(original, native)
+        (native / "SKILL.md").write_text("# Preserve this locally modified native copy.\n")
+        (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
+        protected, snapshots = installation_state(workspace), tree(workspace / "snapshots")
+        runtime_path = probe.root / (scenario + "-no-runtimes-" + host)
+        runtime_path.mkdir()
+        (runtime_path / "git").symlink_to(shutil.which("git", path=probe.env["PATH"]))
+        access = Probe(probe.executable, probe.snapshot, probe.root, {**probe.env, "PATH": str(runtime_path)},
+                       probe.evidence, probe.timeout)
+        access.set_context("content-acceptance", scenario=scenario, surface=host, scope="project")
+        discovery = access.candidate(workspace, ["show", "warp", "--surface", host, "--json"])
+        entries = {item["qualified_skill"]: item for item in discovery["skills"]}
+        require(discovery["schema_version"] == 1 and discovery["report"] == "skill-discovery"
+                and not discovery["prerequisites_verified"], "Warp discovery claims runtime readiness")
+        roots = {}
+        for skill, dependencies in graph.items():
+            report = access.candidate(workspace, ["get", "skill", "warp:" + skill, "--surface", host, "--json"])
+            require(report["qualified_skill"] == "warp:" + skill, "wrong Warp root identity")
+            effective = {**resources[skill], **next(v for v in resources[skill]["variants"] if v["surface"] == host)}
+            declaration = effective["on_demand"]
+            require(declaration["dependencies"] == [{"type": "skill", "target": "warp:" + name} for name in dependencies],
+                    "Warp required/optional classification changed: " + skill)
+            item = entries["warp:" + skill]
+            require(item["compatible"] and item["prerequisites"] == declaration["prerequisites"]
+                    and declaration["prerequisites"] and all(item["on_demand"].get(k, []) == v for k, v in declaration.items()),
+                    "Warp discovery lost reviewed declarations")
+            descriptors = skill_descriptors(report, host, manifest["version"], closure(skill), pack="warp")
+            assert_skill_content(descriptors, manifest, pack="warp")
+            entry = Path(report["entry_document"]).read_text()
+            require(all(fragment.lower() in entry.lower() for fragment in WARP_SPECIFICATION_POLICIES[skill]),
+                    "Warp substantive policy lost: " + skill)
+            require("initiating" in entry and "snapshot_id" in entry and "scratch/output" in entry
+                    and "unverified" in entry and "delegate" in entry, "Warp access context lost: " + skill)
+            for identity, descriptor in descriptors.items():
+                resource = resources[identity.split(":")[1]]
+                expected = next(v for v in resource["variants"] if v["surface"] == host)
+                require(descriptor["prerequisites"] == expected["on_demand"]["prerequisites"], "Warp prerequisites lost")
+            roots[skill] = report
+            probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "skill": skill, "result": "passed",
+                                               "snapshot_id": report["snapshot_id"],
+                                               "checks": ["full-tree-bytes-modes-notices", "qualified-required-closure",
+                                                          "substantive-policy", "unverified-prerequisites", "absent-content-runtimes"]})
+        require(protected == installation_state(workspace) and snapshots == tree(workspace / "snapshots"),
+                "Warp retrieval executed content or changed target/native/snapshot state")
+        prepared_root = workspace / "home/.local/share/packy/skill-access"
+        prepared = tree(prepared_root)
+        old = Probe(probe.executable, probe.root / "warp-baseline-dist", probe.root, access.env, probe.evidence, probe.timeout)
+        old.set_context("snapshot-transition", scenario=scenario, surface=host, scope="project")
+        transition = old.candidate(workspace, ["transition", "--expect-archive-sha256", probe.evidence["archive_sha256"], "--json"])
+        require(transition["result"] == "transitioned"
+                and transition["archive_sha256"] == probe.evidence["warp_baseline"]["archive_sha256"], "Warp transition failed")
+        for wrapper, dependency in [("spec-driven-implementation", "write-product-spec"),
+                                    ("spec-driven-implementation", "write-tech-spec"),
+                                    ("spec-driven-implementation", "implement-specs"),
+                                    ("write-product-spec", "write-tech-spec"), ("cross-critique", "council")]:
+            root = roots[wrapper]
+            expected = next(d for d in root["dependencies"] if d["qualified_skill"] == "warp:" + dependency)
+            document = Path(root["entry_document"])
+            links = re.findall(r"\[warp:" + dependency + r"\]\(([^)]+)\)", document.read_text())
+            require(links and all((document.parent / unquote(path)).resolve() == Path(expected["entry_document"]) for path in links),
+                    "Warp rendered route leaves its qualified closure")
+            nested = old.candidate(workspace, ["get", "skill", "warp:" + dependency, "--surface", host,
+                                               "--snapshot", root["snapshot_id"], "--json"])
+            require(nested["snapshot_id"] == root["snapshot_id"] and nested["surface"] == host
+                    and nested["qualified_skill"] == "warp:" + dependency
+                    and Path(nested["entry_document"]).read_bytes() == Path(expected["entry_document"]).read_bytes(),
+                    "Warp nested/delegated route followed new selection")
+        require(all(tree(prepared_root).get(path) == value for path, value in prepared.items())
+                and all(tree(workspace / "snapshots").get(path) == value for path, value in snapshots.items()),
+                "Warp transition invalidated prior resource paths")
+        independent = old.candidate(workspace, ["show", "warp", "--surface", host, "--json"])
+        require(independent["snapshot_id"] == transition["snapshot_id"]
+                and all(not item["compatible"] for item in independent["skills"] if item["qualified_skill"].split(":")[1] in graph),
+                "Warp independent discovery ignored baseline selection")
+        output, _ = old.candidate(workspace, ["get", "skill", "warp:write-tech-spec", "--surface", host, "--json"], failure=True)
+        require(json.loads(output)["error"]["code"] == "incompatible_resource", "Warp independent request ignored new selection")
+        require(protected == installation_state(workspace), "Warp transition changed target/native state")
+        missing = workspace / "snapshots" / roots["saga"]["snapshot_id"] / "packs/warp/skills/saga/references/validation-strategies.md"
+        missing.unlink()
+        damaged = installation_state(workspace)
+        output, diagnostic = old.candidate(workspace, ["get", "skill", "warp:saga", "--surface", host,
+                                                      "--snapshot", roots["saga"]["snapshot_id"], "--json"], failure=True)
+        require("snapshot_unavailable" in output or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
+                "Warp missing retained content silently fell back")
+        require(damaged == installation_state(workspace), "failed Warp retrieval changed target/native state")
+        probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "result": "passed",
+                                           "checks": ["retained-nested-specification-context", "prior-paths-usable", "new-selection",
+                                                      "missing-retained-content-fails", "inert-retrieval"]})
+    for host in SURFACES:
+        probe.set_context("native-regression", scenario=scenario, surface=host, scope="project")
+        workspace = probe.prepare(scenario + "-native-" + host)
+        args = ["install", "warp", "--surface", host]
+        for skill in graph:
+            args.extend(["--resource", "skill:" + skill])
+        probe.apply(workspace, args)
+        installed = workspace / "project" / SKILL_DIRECTORIES[host]
+        require({p.name for p in installed.iterdir()} == set(graph), "Warp native selection changed")
+        for skill in graph:
+            before, after = previous[skill], resources[skill]
+            require({k: v for k, v in after.items() if k not in ("origin", "variants")}
+                    == {k: v for k, v in before.items() if k not in ("origin", "variants")}, "Warp native contract changed")
+            original, actual = tree(baseline_root / "packs/warp" / before["source"]), tree(installed / skill)
+            require(all(actual.get(path) == value for path, value in original.items()), "Warp original native bytes/modes changed")
+        if host == "opencode":
+            discovery = probe.candidate(workspace, ["show", "warp", "--surface", host, "--json"])
+            require(all(not item["compatible"] for item in discovery["skills"]), "Warp added OpenCode on-demand access")
+        probe.verify(workspace)
+        probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "result": "passed",
+                                           "checks": ["native-installation", "original-contracts-bytes-modes", "opencode-contract-preserved"]})
+    require(authored == tree(ROOT / "packs/warp"), "acceptance changed Warp sources")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration"), required=True)
+    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration", "warp-specification"), required=True)
+    parser.add_argument("--warp-baseline", type=Path, help="clean complete Catalog baseline before Warp on-demand adaptation")
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
     parser.add_argument("--matty-baseline", type=Path, help="clean complete Catalog baseline before Matty on-demand adaptation")
     parser.add_argument("--surface", action="append", choices=SURFACES)
@@ -1800,6 +1985,8 @@ def main():
     if not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error("timeout must be finite and positive")
     scenarios = list(dict.fromkeys(args.scenario))
+    if ("warp-specification" in scenarios) != (args.warp_baseline is not None):
+        parser.error("warp-specification requires --warp-baseline, used only with that scenario")
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
@@ -1822,6 +2009,11 @@ def main():
             for name in ("git", "curl", "uname", *(("node",) if args.html_pack else ())):
                 require(shutil.which(name, path=env["PATH"]) is not None, "missing prerequisite: " + name)
             commit = checkout_commit(probe, ROOT)
+            if args.warp_baseline is not None:
+                args.warp_baseline = args.warp_baseline.resolve(strict=True)
+                probe.set_context("baseline-verification")
+                warp_baseline_commit = checkout_commit(probe, args.warp_baseline)
+                evidence["warp_baseline_project"] = str(args.warp_baseline)
             if args.pstack_baseline is not None:
                 args.pstack_baseline = args.pstack_baseline.resolve(strict=True)
                 probe.set_context("baseline-verification")
@@ -1839,6 +2031,10 @@ def main():
             evidence["verified_packy_identity"] = json.loads(version)
             probe.set_context("candidate-construction")
             evidence.update(build_catalog(probe, ROOT, commit, probe.snapshot))
+            if args.warp_baseline is not None:
+                probe.set_context("baseline-construction")
+                evidence["warp_baseline"] = build_catalog(probe, args.warp_baseline, warp_baseline_commit,
+                                                         root / "warp-baseline-dist")
             if args.pstack_baseline is not None:
                 probe.set_context("baseline-construction")
                 evidence["pstack_baseline"] = build_catalog(probe, args.pstack_baseline, baseline_commit, root / "baseline-dist")
@@ -1850,10 +2046,13 @@ def main():
             for scenario in scenarios:
                 probe.set_context("content-acceptance", scenario=scenario, scope="project")
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
-                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal, "pstack-engineering": pstack_engineering, "pstack-orchestration": pstack_orchestration}[scenario](probe, surfaces)
+                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal, "pstack-engineering": pstack_engineering, "pstack-orchestration": pstack_orchestration, "warp-specification": warp_specification}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
             probe.set_context("candidate-verification")
             require(checkout_commit(probe, ROOT) == commit, "Catalog candidate changed during probes")
+            if args.warp_baseline is not None:
+                probe.set_context("baseline-verification")
+                require(checkout_commit(probe, args.warp_baseline) == warp_baseline_commit, "Warp baseline changed during probes")
             if args.pstack_baseline is not None:
                 probe.set_context("baseline-verification")
                 require(checkout_commit(probe, args.pstack_baseline) == baseline_commit, "pstack baseline changed during probes")
