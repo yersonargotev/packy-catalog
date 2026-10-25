@@ -165,6 +165,25 @@ class ProbeCommandTests(unittest.TestCase):
                 else:
                     self.assertIn(diagnostic, receipt["error"])
 
+    def test_integrated_receipt_selects_only_its_two_access_hosts(self):
+        self.command[-1] = "integrated-on-demand"
+        (self.bin / "git").unlink()
+        evidence = self.invoke()
+        self.assertEqual(evidence["surfaces"], ["codex", "claude"])
+        self.assertEqual(evidence["scenarios"], ["integrated-on-demand"])
+
+    def test_integrated_rejects_unsupported_or_conflicting_coverage(self):
+        self.command[-1] = "integrated-on-demand"
+        for extra in (["--surface", "codex", "--surface", "claude", "--surface", "opencode"],
+                      ["--scenario", "packy-bootstrap"]):
+            with self.subTest(arguments=extra):
+                result = subprocess.run([*self.command, *extra], env=self.env,
+                                        capture_output=True, text=True, timeout=10)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("integrated-on-demand", result.stderr)
+                self.assertEqual(result.stdout, "")
+                self.assertEqual(list(self.temp.iterdir()), [])
+
     def test_missing_prerequisite_fails_and_cleans_owned_state(self):
         (self.bin / "git").unlink()
         evidence = self.invoke()

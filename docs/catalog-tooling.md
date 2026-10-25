@@ -20,8 +20,9 @@ All four compatible runners passed the same functional cases before publication;
 the published archives are the tested bytes. Adoption reverified the immutable
 release, tag source, all published archive digests, checksum manifest, and native
 embedded identity. Catalog acceptance uses that released executable, independent
-of an engine source checkout. This evidence does not prove completion of the
-117 real-skill adaptations; those remain separately tracked Catalog work.
+of an engine source checkout. Engine release evidence is separate from Catalog content evidence. The
+[integrated inventory and opt-in acceptance](on-demand-coverage.md) now account
+for all 117 reviewed logical skills on both access hosts.
 
 ## Local commands and prerequisites
 

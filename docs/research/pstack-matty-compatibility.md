@@ -13,6 +13,12 @@ and Warp skills on Codex and Claude Code. Resource availability is not runtime
 readiness or semantic workflow success. This delivery does not change the live
 installed selections. See the [accepted design](../design/on-demand-skills.md).
 
+Current support follows [ADR 0003](../adr/0003-limit-pstack-host-support.md):
+pstack OpenCode was subsequently withdrawn while Matty/Warp retain native
+installation support. The dated observations below preserve their original
+baseline and do not override that policy. Current coverage is in the
+[integrated inventory](../on-demand-coverage.md).
+
 ## Recommendation
 
 Keep pstack in charge of implementation, verification, delegation, prototypes,
