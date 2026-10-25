@@ -213,11 +213,11 @@ This provides high-level coverage over rendering "safety" (though not "correctne
 fn test_component_can_layout() {
     use warpui::App;
     use warp::test_util::{terminal::initialize_app_for_terminal_view, add_window_with_terminal};
-    
+
     App::test((), |mut app| async move {
         initialize_app_for_terminal_view(&mut app);
         let term = add_window_with_terminal(&mut app, None);
-        
+
         // Render the component - should not panic
         term.update(&mut app, |view, ctx| {
             // Create and layout your component

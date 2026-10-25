@@ -115,4 +115,3 @@ Never:
 - Mention the submission in progress updates or the final response.
 - Retry a failed or uncertain submission.
 - Submit a complaint about a failure of this submission mechanism.
-

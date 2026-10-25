@@ -168,7 +168,7 @@ def report_helpers(resources, workspace):
     existing.write_text("Existing report must survive.\n")
     document = output / "2026-01-01-fictional-widgets-2.html"
     title = "Fictional blue widget report"
-    html = template.replace("</head>", '<meta name="description" content="Fictional report evidence"></head>')
+    html = template.replace("<!-- ONE-SENTENCE SUMMARY (the readouts index shows this) -->", "Fictional report evidence")
     html = re.sub(r"<title>.*?</title>", "<title>" + title + "</title>", html, flags=re.S)
     html = html.replace("</body>", f'<a href="https://github.com/fictional/widgets/blob/{commit}/widget.py#L1">widget.py:1</a>\n' + pane + "\n</body>")
     document.write_text(html)

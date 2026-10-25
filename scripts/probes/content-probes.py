@@ -1889,7 +1889,7 @@ def warp_specification(probe, surfaces):
 
 
 def warp_access(probe, surfaces, *, scenario, graph, policies, routes, damaged_skill, damaged_path):
-    """Retrieve the reviewed 15-skill slice without running any skill procedure."""
+    """Retrieve one reviewed Warp slice without running its skill procedures."""
     from urllib.parse import unquote
 
     manifest = json.loads((ROOT / "packs/warp/pack.json").read_text())

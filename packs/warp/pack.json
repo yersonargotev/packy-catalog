@@ -1242,8 +1242,8 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "intended PR checkout, base/head/diff/spec/review context; Git/GitHub read access and hosted Warp branding source",
-              "Python 3 and bundled rendering/validation helpers, real browser validation runtime; explicit writable output and separate scratch; hosting account/tools only for user-requested publication"
+              "Python 3 and bundled rendering/validation helpers, real browser validation runtime; explicit writable output and separate scratch; hosting account/tools only for user-requested publication",
+              "intended PR checkout, base/head/diff/spec/review context; Git/GitHub read access and hosted Warp branding source"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -1273,8 +1273,8 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "intended PR checkout, base/head/diff/spec/review context; Git/GitHub read access and hosted Warp branding source",
-              "Python 3 and bundled rendering/validation helpers, real browser validation runtime; explicit writable output and separate scratch; hosting account/tools only for user-requested publication"
+              "Python 3 and bundled rendering/validation helpers, real browser validation runtime; explicit writable output and separate scratch; hosting account/tools only for user-requested publication",
+              "intended PR checkout, base/head/diff/spec/review context; Git/GitHub read access and hosted Warp branding source"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -1352,8 +1352,8 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "specific scope/audience and conversation findings or repository research inputs; actual local child/history controls or documented source fallbacks",
-              "Python 3 and Git for source embedding; explicit writable readout/index destination, separate scratch, canonical bundled assets/guide; browser opening only when available"
+              "Python 3 and Git for source embedding; explicit writable readout/index destination, separate scratch, canonical bundled assets/guide; browser opening only when available",
+              "specific scope/audience and conversation findings or repository research inputs; actual local child/history controls or documented source fallbacks"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -1378,8 +1378,8 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "specific scope/audience and conversation findings or repository research inputs; actual local child/history controls or documented source fallbacks",
-              "Python 3 and Git for source embedding; explicit writable readout/index destination, separate scratch, canonical bundled assets/guide; browser opening only when available"
+              "Python 3 and Git for source embedding; explicit writable readout/index destination, separate scratch, canonical bundled assets/guide; browser opening only when available",
+              "specific scope/audience and conversation findings or repository research inputs; actual local child/history controls or documented source fallbacks"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -1848,8 +1848,8 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "intended PR checkout, explicit annotated diff/description/spec artifact paths and local companion guidance where applicable; separate writable review output and scratch",
-              "Python 3; explicit OZ_REPO_ROOT/workspace context; authorized existing GitHub read token only when remote resolver is requested; mandatory final exact-diff review validator"
+              "Python 3; explicit OZ_REPO_ROOT/workspace context; authorized existing GitHub read token only when remote resolver is requested; mandatory final exact-diff review validator",
+              "intended PR checkout, explicit annotated diff/description/spec artifact paths and local companion guidance where applicable; separate writable review output and scratch"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -1874,8 +1874,8 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "intended PR checkout, explicit annotated diff/description/spec artifact paths and local companion guidance where applicable; separate writable review output and scratch",
-              "Python 3; explicit OZ_REPO_ROOT/workspace context; authorized existing GitHub read token only when remote resolver is requested; mandatory final exact-diff review validator"
+              "Python 3; explicit OZ_REPO_ROOT/workspace context; authorized existing GitHub read token only when remote resolver is requested; mandatory final exact-diff review validator",
+              "intended PR checkout, explicit annotated diff/description/spec artifact paths and local companion guidance where applicable; separate writable review output and scratch"
             ],
             "reference_files": [
               "ACCESS.md"

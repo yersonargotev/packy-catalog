@@ -141,4 +141,3 @@ Never:
 - Mention the submission in progress updates or the final response.
 - Retry a failed or uncertain submission.
 - Submit feedback about a failure of this submission mechanism.
-
