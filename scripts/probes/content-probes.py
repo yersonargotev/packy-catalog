@@ -660,6 +660,7 @@ def reviewed_retrieval(probe, *, integrated=False):
                     resource["variants"].append({"surface": host, "source": source, "on_demand": declaration})
                 resource["bindings"].append({"surface": host, "projection": "skill", "name": skill,
                                              "invocation": skill, "mode": "native", "sharing": "exclusive", "capabilities": []})
+            resource["bindings"].sort(key=lambda binding: binding["surface"])
             resources.append(resource)
         manifests[pack_id] = {"schema_version": 3, "id": pack_id, "version": "1.0.0", "description": "Complete inert fixture",
                               "selectable": True, "surfaces": ["claude", "codex"], "readiness_obligations": ["runtime-usability"],
@@ -2272,7 +2273,7 @@ def integrated_on_demand(probe, surfaces):
         matches = {name for name in discovery if name.split(":")[1] == "tdd"}
         require(matches == {"matty:tdd", "pstack:tdd"}, "duplicate-name discovery lost qualified choices")
         output, _ = access.candidate(workspace, ["get", "skill", "tdd", "--surface", host, "--json"], failure=True)
-        require(json.loads(output)["result"] != "prepared", "unqualified identity silently selected a Pack")
+        require(json.loads(output)["error"]["code"] == "invalid_identity", "unqualified identity silently selected a Pack")
         for identity, row in scope.items():
             pack, skill = identity.split(":")
             expected = row["hosts"][host]
@@ -2334,7 +2335,9 @@ def integrated_on_demand(probe, surfaces):
     missing.set_context("absent-catalog", scenario="integrated-on-demand")
     before = tree(absent)
     output, diagnostic = missing.execute([str(executable), "get", "skill", "matty:tdd", "--surface", "codex", "--json"], failure=True)
-    require("packy init" in output + diagnostic or "catalog refresh" in output + diagnostic, "missing catalog lacks acquisition guidance")
+    require(json.loads(output)["error"]["code"] == "catalog_unavailable"
+            and ("packy init" in output + diagnostic or "catalog refresh" in output + diagnostic),
+            "missing catalog lacks explicit acquisition error/guidance")
     require(tree(absent) == before, "absent-catalog retrieval mutated target or user state")
     reviewed_retrieval(probe, integrated=True)
     require(authored == {pack: tree(ROOT / "packs" / pack) for pack in authored}, "integrated acceptance changed authored Packs")
@@ -2368,7 +2371,12 @@ def main():
         parser.error("--warp-helpers requires --scenario warp-repository or warp-skill-doctor")
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
-    surfaces = list(dict.fromkeys(args.surface or SURFACES))
+    integrated = "integrated-on-demand" in scenarios
+    if integrated and len(scenarios) != 1:
+        parser.error("integrated-on-demand runs independently; historical scenarios retain their own baselines")
+    surfaces = list(dict.fromkeys(args.surface or (("codex", "claude") if integrated else SURFACES)))
+    if integrated and set(surfaces) != {"codex", "claude"}:
+        parser.error("integrated-on-demand exercises exactly Codex and Claude; OpenCode access is outside scope")
     if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering", "pstack-orchestration", "warp-specification", "warp-repository", "warp-skill-doctor", "integrated-on-demand"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
         parser.error("on-demand scenarios require Codex and Claude surfaces")
     if bool({"pstack", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration"}.intersection(scenarios)) != (args.pstack_baseline is not None):

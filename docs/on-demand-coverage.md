@@ -93,6 +93,8 @@ credentials, paid inference, real forge writes or arbitrary skill workflows.
 Without that flag, the report explicitly marks helper evidence unselected; that
 run alone is not full acceptance of #99.
 
+The integrated scenario runs independently and reports exactly Codex and Claude;
+combining it with historical scenarios or selecting OpenCode access is rejected.
 Historical slice transition/native regression scenarios remain independently
 runnable with their documented pre-adaptation baselines. Do not pass the current
 integrated baseline to every historical scenario: their availability preconditions
