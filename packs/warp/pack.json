@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "warp",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Warp common engineering and agent workflows",
   "selectable": true,
   "surfaces": [
@@ -24,6 +24,19 @@
   "resources": [
     {
       "kind": "notice",
+      "id": "catalog-adaptations",
+      "source": "notices/catalog-adaptations-mit",
+      "description": "License for Catalog-authored Warp on-demand adaptations",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Yerson Argote",
+      "requires": [],
+      "conflicts": [],
+      "notices": [],
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "notice",
       "id": "mit",
       "source": "notices/warp-mit",
       "description": "Preserve the Warp common-skills MIT license and attribution",
@@ -32,7 +45,7 @@
       "requires": [],
       "conflicts": [],
       "notices": [
-        "notice:mit"
+        "notice:catalog-adaptations"
       ],
       "origin": {
         "id": "warp-common-skills",
@@ -101,7 +114,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/check-impl-against-spec",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -132,7 +145,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/check-impl-against-spec",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/check-impl-against-spec",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Compare a pull request's implementation against spec context in spec_context.md and feed any material mismatches into review.json. Use during PR review when approved or repository spec context is available.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "existing spec_context.md and PR-review inputs pr_diff.txt, optional pr_description.md, checked-out PR files and writable existing review.json"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/check-impl-against-spec",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/check-impl-against-spec",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Compare a pull request's implementation against spec context in spec_context.md and feed any material mismatches into review.json. Use during PR review when approved or repository spec context is available.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "existing spec_context.md and PR-review inputs pr_diff.txt, optional pr_description.md, checked-out PR files and writable existing review.json"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -193,7 +258,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/council",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -224,7 +289,61 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/council",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/council",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Run a model-diverse subagent council to investigate the same problem from multiple perspectives, compare findings, and produce a final recommendation. Use this skill whenever the user asks for a council, second opinions, multiple agents/models to evaluate one question, parallel investigation, red-team/blue-team comparison, or help deciding between competing technical approaches.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "explicit orchestration approval before launching; read-only ownership or isolated editing worktrees",
+              "host subagent launch, follow-up and wait controls with available model identifiers; model diversity or disclosed source-defined perspective-only fallback"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/council",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/council",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Run a model-diverse subagent council to investigate the same problem from multiple perspectives, compare findings, and produce a final recommendation. Use this skill whenever the user asks for a council, second opinions, multiple agents/models to evaluate one question, parallel investigation, red-team/blue-team comparison, or help deciding between competing technical approaches.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "explicit orchestration approval before launching; read-only ownership or isolated editing worktrees",
+              "host subagent launch, follow-up and wait controls with available model identifiers; model diversity or disclosed source-defined perspective-only fallback"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -276,7 +395,7 @@
       "kind": "skill",
       "id": "cross-critique",
       "source": "skills/cross-critique",
-      "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision — architecture tradeoffs, code review disagreements, design choices, competing root-cause theories — and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
+      "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision \u2014 architecture tradeoffs, code review disagreements, design choices, competing root-cause theories \u2014 and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -285,7 +404,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/cross-critique",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -316,7 +435,79 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/cross-critique",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/cross-critique",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision \u2014 architecture tradeoffs, code review disagreements, design choices, competing root-cause theories \u2014 and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "genuinely divergent independent first-round proposals and reachable original authors for follow-up critique",
+              "host subagent controls and evidence for read-only pros/cons synthesis"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:council"
+              },
+              {
+                "type": "skill",
+                "target": "warp:research"
+              }
+            ]
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/cross-critique",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/cross-critique",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision \u2014 architecture tradeoffs, code review disagreements, design choices, competing root-cause theories \u2014 and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "genuinely divergent independent first-round proposals and reachable original authors for follow-up critique",
+              "host subagent controls and evidence for read-only pros/cons synthesis"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:council"
+              },
+              {
+                "type": "skill",
+                "target": "warp:research"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -423,7 +614,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/implement-specs",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -454,7 +645,61 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/implement-specs",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/implement-specs",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Implement an approved feature from PRODUCT.md and TECH.md, keeping specs and code aligned in the same PR as implementation evolves. Use after the product and tech specs are approved and the next step is building the feature.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "target Warp repository, PRODUCT.md and TECH.md when warranted; reviewed and approved specs",
+              "target runtime, tests and validation artifacts; user choice of optional implementation aids"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/implement-specs",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/implement-specs",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Implement an approved feature from PRODUCT.md and TECH.md, keeping specs and code aligned in the same PR as implementation evolves. Use after the product and tech specs are approved and the next step is building the feature.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "target Warp repository, PRODUCT.md and TECH.md when warranted; reviewed and approved specs",
+              "target runtime, tests and validation artifacts; user choice of optional implementation aids"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -469,7 +714,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/merge-risk",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -500,7 +745,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/merge-risk",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/merge-risk",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Use when assessing the risk of merging a PR",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual PR diff, description, source issue when present, and verification/rollback/monitoring evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/merge-risk",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/merge-risk",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Use when assessing the risk of merging a PR",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual PR diff, description, source issue when present, and verification/rollback/monitoring evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -598,7 +895,7 @@
       "kind": "skill",
       "id": "readout",
       "source": "skills/readout",
-      "description": "Produce a polished, self-contained HTML \"readout\" document under ~/.readouts (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or — when invoked fresh, e.g. \"/readout on how github webhook events are processed\" — by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
+      "description": "Produce a polished, self-contained HTML \"readout\" document under ~/.readouts (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or \u2014 when invoked fresh, e.g. \"/readout on how github webhook events are processed\" \u2014 by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -690,7 +987,7 @@
       "kind": "skill",
       "id": "research",
       "source": "skills/research",
-      "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys — i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
+      "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys \u2014 i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -699,7 +996,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/research",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -730,7 +1027,61 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/research",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/research",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys \u2014 i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "accessible target files, logs or search sources; delegation useful only when a distilled conclusion suffices",
+              "local host subagent launch and follow-up controls with an available search-appropriate model"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/research",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/research",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys \u2014 i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "accessible target files, logs or search sources; delegation useful only when a distilled conclusion suffices",
+              "local host subagent launch and follow-up controls with an available search-appropriate model"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -883,7 +1234,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/saga",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -914,7 +1265,63 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/saga",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/saga",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Run an autonomous, spec-driven development \"saga\" for medium-to-large features using an orchestrator agent and a fleet of worker subagents. Use this skill whenever the user invokes /saga, asks to autonomously build a sizable feature end-to-end with minimal human intervention, wants a comprehensive spec broken into milestones and tasks with airtight validation criteria before parallelized implementation, or wants an orchestrator to delegate implementation to worker agents while preserving its own context window. Trigger on phrases like \"run a saga\", \"autonomously implement this feature\", \"spec it out then build it with subagents\", \"orchestrate this big feature end-to-end\", or \"build this with workers and validate each step\". Also use this skill when asked to continue, resume, or pick up an existing saga from its saga directory (e.g. under ~/.sagas).",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual host worker launch/follow-up/wait and validation capabilities; isolated worktrees and durable writable state outside immutable resources",
+              "explicit version-control authorization under target repository rules; remote workers only when actually supported",
+              "interactive user for confirmed external saga directory, collaborative planning, spec approval and final human acceptance"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/saga",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/saga",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Run an autonomous, spec-driven development \"saga\" for medium-to-large features using an orchestrator agent and a fleet of worker subagents. Use this skill whenever the user invokes /saga, asks to autonomously build a sizable feature end-to-end with minimal human intervention, wants a comprehensive spec broken into milestones and tasks with airtight validation criteria before parallelized implementation, or wants an orchestrator to delegate implementation to worker agents while preserving its own context window. Trigger on phrases like \"run a saga\", \"autonomously implement this feature\", \"spec it out then build it with subagents\", \"orchestrate this big feature end-to-end\", or \"build this with workers and validate each step\". Also use this skill when asked to continue, resume, or pick up an existing saga from its saga directory (e.g. under ~/.sagas).",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual host worker launch/follow-up/wait and validation capabilities; isolated worktrees and durable writable state outside immutable resources",
+              "explicit version-control authorization under target repository rules; remote workers only when actually supported",
+              "interactive user for confirmed external saga directory, collaborative planning, spec approval and final human acceptance"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -929,7 +1336,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/scan-new-specs",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -960,7 +1367,61 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/scan-new-specs",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/scan-new-specs",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "DEPRECATED and retired as of 2026-08-20. Do not invoke, and do not schedule. This skill scanned for merged PRODUCT.md specs and auto-drafted docs PRs, which produced documentation for features that had not shipped. Docs for newly shipped features are now triggered by the weekly release and gated on documentation-worthiness by the missing_docs skill in warpdotdev/docs. If you were about to run this skill to find docs gaps, run missing_docs in drift-watch mode instead.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "missing_docs is external guidance in warpdotdev/docs, not a prepared Catalog dependency",
+              "retired inventory only: do not invoke or schedule; existing scheduled agent must stay paused"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/scan-new-specs",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/scan-new-specs",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "DEPRECATED and retired as of 2026-08-20. Do not invoke, and do not schedule. This skill scanned for merged PRODUCT.md specs and auto-drafted docs PRs, which produced documentation for features that had not shipped. Docs for newly shipped features are now triggered by the weekly release and gated on documentation-worthiness by the missing_docs skill in warpdotdev/docs. If you were about to run this skill to find docs gaps, run missing_docs in drift-watch mode instead.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "missing_docs is external guidance in warpdotdev/docs, not a prepared Catalog dependency",
+              "retired inventory only: do not invoke or schedule; existing scheduled agent must stay paused"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1021,7 +1482,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/spec-driven-implementation",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1052,7 +1513,87 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/spec-driven-implementation",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/spec-driven-implementation",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Drive a spec-first workflow for substantial features by writing PRODUCT.md before implementation, writing TECH.md when warranted, and keeping both specs updated as implementation evolves. Use when starting a significant feature, planning agent-driven implementation, or when the user wants product and tech specs checked into source control.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "interactive clarification of ticket team/labels; approved specs before implementation; conditional technical spec",
+              "target Warp repository and substantial-feature context; Linear MCP access for the source-required ticket workflow"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:implement-specs"
+              },
+              {
+                "type": "skill",
+                "target": "warp:write-product-spec"
+              },
+              {
+                "type": "skill",
+                "target": "warp:write-tech-spec"
+              }
+            ]
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/spec-driven-implementation",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/spec-driven-implementation",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Drive a spec-first workflow for substantial features by writing PRODUCT.md before implementation, writing TECH.md when warranted, and keeping both specs updated as implementation evolves. Use when starting a significant feature, planning agent-driven implementation, or when the user wants product and tech specs checked into source control.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "interactive clarification of ticket team/labels; approved specs before implementation; conditional technical spec",
+              "target Warp repository and substantial-feature context; Linear MCP access for the source-required ticket workflow"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:implement-specs"
+              },
+              {
+                "type": "skill",
+                "target": "warp:write-product-spec"
+              },
+              {
+                "type": "skill",
+                "target": "warp:write-tech-spec"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1113,7 +1654,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/update-skill",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1144,7 +1685,61 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/update-skill",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/update-skill",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Create or update skills by generating, editing, or refining SKILL.md files in this repository. Use when authoring new skills or revising the structure, frontmatter, or guidance for existing ones.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "explicit writable target skill-authoring repository/destination; host frontmatter and invocation rules",
+              "optional skills-ref runtime or available web search for validation guidance; no automatic runtime installation"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/update-skill",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/update-skill",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Create or update skills by generating, editing, or refining SKILL.md files in this repository. Use when authoring new skills or revising the structure, frontmatter, or guidance for existing ones.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "explicit writable target skill-authoring repository/destination; host frontmatter and invocation rules",
+              "optional skills-ref runtime or available web search for validation guidance; no automatic runtime installation"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1159,7 +1754,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/validate-changes-match-specs",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1190,7 +1785,63 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/validate-changes-match-specs",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/validate-changes-match-specs",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Validate that a branch or pull request implementation matches introduced product, technical, security, and related specs. Use when reviewing or finishing a spec-driven change and resolving mismatches between checked-in specs and implementation.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "interactive per-mismatch decisions and resolution-mode selection; explicit approval for follow-up posting or commit/push",
+              "optional visual sources/computer use and authorized remote workers only when available",
+              "target branch/base, relevant existing specs and actual code/tests/review evidence; stop if no relevant spec"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/validate-changes-match-specs",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/validate-changes-match-specs",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Validate that a branch or pull request implementation matches introduced product, technical, security, and related specs. Use when reviewing or finishing a spec-driven change and resolving mismatches between checked-in specs and implementation.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "interactive per-mismatch decisions and resolution-mode selection; explicit approval for follow-up posting or commit/push",
+              "optional visual sources/computer use and authorized remote workers only when available",
+              "target branch/base, relevant existing specs and actual code/tests/review evidence; stop if no relevant spec"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1205,7 +1856,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/write-feature-docs",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1236,7 +1887,63 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/write-feature-docs",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/write-feature-docs",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Draft a complete documentation page for a new Warp feature from its PRODUCT.md and/or TECH.md spec. Use when an engineer has written a spec and needs to produce a first-pass MDX draft for the warpdotdev/docs repo. Also handles features without specs by researching the codebase first. Invoke this skill whenever an engineer mentions writing docs for a feature, drafting a docs page, creating feature documentation, starting the eng-docs workflow, or converting a spec into documentation. Requires an interactive session with the engineer present - it confirms a content design plan, then an outline, before drafting, and cannot run unattended. For automated, release-triggered docs, use the missing_docs skill in warpdotdev/docs instead. Works from warp-internal or warp-server.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "GitHub CLI and repository access for research; separate authorization for external draft PR publication; optional Warp UI/computer-use launch guidance",
+              "Warp source repository context (warp-internal or warp-server), accessible warpdotdev/docs templates and content-design/worthiness references",
+              "present engineer in an interactive session; confidentiality review and separate ordered content-plan then outline confirmations"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/write-feature-docs",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/write-feature-docs",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Draft a complete documentation page for a new Warp feature from its PRODUCT.md and/or TECH.md spec. Use when an engineer has written a spec and needs to produce a first-pass MDX draft for the warpdotdev/docs repo. Also handles features without specs by researching the codebase first. Invoke this skill whenever an engineer mentions writing docs for a feature, drafting a docs page, creating feature documentation, starting the eng-docs workflow, or converting a spec into documentation. Requires an interactive session with the engineer present - it confirms a content design plan, then an outline, before drafting, and cannot run unattended. For automated, release-triggered docs, use the missing_docs skill in warpdotdev/docs instead. Works from warp-internal or warp-server.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "GitHub CLI and repository access for research; separate authorization for external draft PR publication; optional Warp UI/computer-use launch guidance",
+              "Warp source repository context (warp-internal or warp-server), accessible warpdotdev/docs templates and content-design/worthiness references",
+              "present engineer in an interactive session; confidentiality review and separate ordered content-plan then outline confirmations"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1251,7 +1958,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/write-pr-description",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1282,7 +1989,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/write-pr-description",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/write-pr-description",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Writes the body of a pull request - the summary, the repository template sections, and reviewer guidance such as a recommended reading order and focus areas. Use whenever drafting or revising a PR description, filling in a repository's PR template, refreshing a description that no longer matches the branch, or preparing a branch for review. Use it even when the user only says \"open a PR\", \"put this up for review\", or \"write this up\" without naming the description.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual target branch or PR, commit/diff facts, target repository PR template and truthful validation evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/write-pr-description",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/write-pr-description",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Writes the body of a pull request - the summary, the repository template sections, and reviewer guidance such as a recommended reading order and focus areas. Use whenever drafting or revising a PR description, filling in a repository's PR template, refreshing a description that no longer matches the branch, or preparing a branch for review. Use it even when the user only says \"open a PR\", \"put this up for review\", or \"write this up\" without naming the description.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual target branch or PR, commit/diff facts, target repository PR template and truthful validation evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1297,7 +2056,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/write-product-spec",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1328,7 +2087,71 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/write-product-spec",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/write-product-spec",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Write a PRODUCT.md spec for a significant user-facing feature in Warp, focused on detailed behavior and validation. Use when the user asks for a product spec, desired behavior doc, or PRD, wants to define feature behavior before implementation, or when the feature is substantial or behaviorally ambiguous enough that a written spec would improve implementation or review.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Linear MCP or GitHub CLI only if explicitly asked to create a ticket; writable target specs directory",
+              "target Warp feature context, interactive missing-context and Figma decisions; selected spec directory identifier"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:write-tech-spec"
+              }
+            ]
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/write-product-spec",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/write-product-spec",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Write a PRODUCT.md spec for a significant user-facing feature in Warp, focused on detailed behavior and validation. Use when the user asks for a product spec, desired behavior doc, or PRD, wants to define feature behavior before implementation, or when the feature is substantial or behaviorally ambiguous enough that a written spec would improve implementation or review.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Linear MCP or GitHub CLI only if explicitly asked to create a ticket; writable target specs directory",
+              "target Warp feature context, interactive missing-context and Figma decisions; selected spec directory identifier"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:write-tech-spec"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1343,7 +2166,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/write-tech-spec",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1374,7 +2197,63 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/write-tech-spec",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/write-tech-spec",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Write a TECH.md spec for a significant Warp feature after researching the current codebase and implementation constraints. Use when the user asks for a technical spec, implementation plan, or architecture doc tied to a product spec.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "interactive directory/team clarification; Linear MCP or GitHub CLI only for explicitly requested ticket creation",
+              "optional host worker capability for parallelization planning; writable target specs directory",
+              "target Warp feature context, product spec when present and accessible current codebase for commit-pinned research"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/write-tech-spec",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/write-tech-spec",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Write a TECH.md spec for a significant Warp feature after researching the current codebase and implementation constraints. Use when the user asks for a technical spec, implementation plan, or architecture doc tied to a product spec.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "interactive directory/team clarification; Linear MCP or GitHub CLI only for explicitly requested ticket creation",
+              "optional host worker capability for parallelization planning; writable target specs directory",
+              "target Warp feature context, product spec when present and accessible current codebase for commit-pinned research"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     }
   ]
 }
