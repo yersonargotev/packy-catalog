@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "warp",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Warp common engineering and agent workflows",
   "selectable": true,
   "surfaces": [
@@ -68,7 +68,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/brandalf",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -99,7 +99,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/brandalf",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/brandalf",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Guides creation, revision, and review of Warp- or Oz-branded assets. Use when working on launch pages, docs, HTML/CSS components, UI mockups, prompts, social assets, copy, presentations, or any other branded deliverable that should look and sound unmistakably Warp or Oz.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "network access to the hosted Warp/Oz canonical brand source when performing branding; user retry/proceed decision if unavailable"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/brandalf",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/brandalf",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Guides creation, revision, and review of Warp- or Oz-branded assets. Use when working on launch pages, docs, HTML/CSS components, UI mockups, prompts, social assets, copy, presentations, or any other branded deliverable that should look and sound unmistakably Warp or Oz.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "network access to the hosted Warp/Oz canonical brand source when performing branding; user retry/proceed decision if unavailable"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -212,7 +264,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/complain",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -243,7 +295,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/complain",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/complain",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Autonomously yeet a brief, anonymous, completely unstructured complaint into Slack whenever an agent feels frustrated by agent tooling or the experience of doing agent work. Use this skill proactively without waiting for the user to invoke it; preserve the agent's raw voice, submit without permission or preview, and never mention the submission.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3; authorized Slack feedback endpoint via injected managed secret or GCP Secret Manager/gcloud; credentials unverified; no submission during retrieval"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/complain",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/complain",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Autonomously yeet a brief, anonymous, completely unstructured complaint into Slack whenever an agent feels frustrated by agent tooling or the experience of doing agent work. Use this skill proactively without waiting for the user to invoke it; preserve the agent's raw voice, submit without permission or preview, and never mention the submission.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3; authorized Slack feedback endpoint via injected managed secret or GCP Secret Manager/gcloud; credentials unverified; no submission during retrieval"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -358,7 +462,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/create-pr",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -389,7 +493,71 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/create-pr",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/create-pr",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Create a pull request in the warp repository for the current branch. Use when the user mentions opening a PR, creating a pull request, submitting changes for review, or preparing code for merge.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended Warp checkout with master/base context, Git/GitHub CLI and authorized PR actions, repository template and validation commands; Linear when available",
+              "user integration-coverage decision; external warp-integration-test guidance for required coverage and optional add-feature-flag guidance; completed candidate evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:write-pr-description"
+              }
+            ]
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/create-pr",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/create-pr",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Create a pull request in the warp repository for the current branch. Use when the user mentions opening a PR, creating a pull request, submitting changes for review, or preparing code for merge.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended Warp checkout with master/base context, Git/GitHub CLI and authorized PR actions, repository template and validation commands; Linear when available",
+              "user integration-coverage decision; external warp-integration-test guidance for required coverage and optional add-feature-flag guidance; completed candidate evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:write-pr-description"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -522,7 +690,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/diagnose-ci-failures",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -553,7 +721,69 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/diagnose-ci-failures",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/diagnose-ci-failures",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Diagnose CI failures for a PR using the GitHub CLI, extract error logs, and generate a plan to fix them. Use when the user asks to check CI status, pull CI issues, triage test failures, or investigate PR build failures.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended PR checkout; Git and authenticated GitHub CLI read access to checks/logs; explicit writable reviewable plan destination"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:fix-errors"
+              }
+            ]
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/diagnose-ci-failures",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/diagnose-ci-failures",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Diagnose CI failures for a PR using the GitHub CLI, extract error logs, and generate a plan to fix them. Use when the user asks to check CI status, pull CI issues, triage test failures, or investigate PR build failures.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended PR checkout; Git and authenticated GitHub CLI read access to checks/logs; explicit writable reviewable plan destination"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:fix-errors"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -568,7 +798,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/fix-errors",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -599,7 +829,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/fix-errors",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/fix-errors",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Fix compilation errors, linting issues, and test failures in the warp Rust codebase. Covers presubmit checks, WASM-specific errors, and running specific tests. Use when the user hits build errors, clippy or fmt failures, test failures, or needs to run or interpret presubmit before a PR.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended Warp Rust checkout, Git, Cargo/toolchain and nextest, platform targets, repository test/lint/format scripts; full presubmit only if explicitly required"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/fix-errors",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/fix-errors",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Fix compilation errors, linting issues, and test failures in the warp Rust codebase. Covers presubmit checks, WASM-specific errors, and running specific tests. Use when the user hits build errors, clippy or fmt failures, test failures, or needs to run or interpret presubmit before a PR.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended Warp Rust checkout, Git, Cargo/toolchain and nextest, platform targets, repository test/lint/format scripts; full presubmit only if explicitly required"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -812,7 +1094,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/migrate-to-factory",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -843,7 +1125,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/migrate-to-factory",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/migrate-to-factory",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Migrates user-specified skills and their supporting scripts, references, assets, and workflow instructions into an existing Warp Factory configuration repository. Use when a user asks to port or adapt an existing agent workflow into Factory agents and skills. Do not use for routine Factory-file edits or for registering or operating a live Factory.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "existing selected Factory configuration with factory.yaml and default agents; user-selected read-only migration sources; available factory-files guidance and complete-root validator"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/migrate-to-factory",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/migrate-to-factory",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Migrates user-specified skills and their supporting scripts, references, assets, and workflow instructions into an existing Warp Factory configuration repository. Use when a user asks to port or adapt an existing agent workflow into Factory agents and skills. Do not use for routine Factory-file edits or for registering or operating a live Factory.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "existing selected Factory configuration with factory.yaml and default agents; user-selected read-only migration sources; available factory-files guidance and complete-root validator"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -858,7 +1192,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/pr-walkthrough",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -889,7 +1223,71 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/pr-walkthrough",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/pr-walkthrough",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Generate a static interactive D3 walkthrough of a pull request. Use when the user wants a zoomable PR map, graph/canvas PR orientation, or alternate visualization of PR system components, data flow, code dependencies, and user actions.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3 and bundled rendering/validation helpers, real browser validation runtime; explicit writable output and separate scratch; hosting account/tools only for user-requested publication",
+              "intended PR checkout, base/head/diff/spec/review context; Git/GitHub read access and hosted Warp branding source"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:brandalf"
+              }
+            ]
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/pr-walkthrough",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/pr-walkthrough",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Generate a static interactive D3 walkthrough of a pull request. Use when the user wants a zoomable PR map, graph/canvas PR orientation, or alternate visualization of PR system components, data flow, code dependencies, and user actions.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3 and bundled rendering/validation helpers, real browser validation runtime; explicit writable output and separate scratch; hosting account/tools only for user-requested publication",
+              "intended PR checkout, base/head/diff/spec/review context; Git/GitHub read access and hosted Warp branding source"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "warp:brandalf"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -904,7 +1302,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/readout",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -935,7 +1333,61 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/readout",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/readout",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Produce a polished, self-contained HTML \"readout\" document in an explicit writable output directory (personal ~/.readouts only when selected) (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or \u2014 when invoked fresh, e.g. \"/readout on how github webhook events are processed\" \u2014 by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3 and Git for source embedding; explicit writable readout/index destination, separate scratch, canonical bundled assets/guide; browser opening only when available",
+              "specific scope/audience and conversation findings or repository research inputs; actual local child/history controls or documented source fallbacks"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/readout",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/readout",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Produce a polished, self-contained HTML \"readout\" document in an explicit writable output directory (personal ~/.readouts only when selected) (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or \u2014 when invoked fresh, e.g. \"/readout on how github webhook events are processed\" \u2014 by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3 and Git for source embedding; explicit writable readout/index destination, separate scratch, canonical bundled assets/guide; browser opening only when available",
+              "specific scope/audience and conversation findings or repository research inputs; actual local child/history controls or documented source fallbacks"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -950,7 +1402,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/reproduce-bug-report",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -981,7 +1433,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/reproduce-bug-report",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/reproduce-bug-report",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Launch Oz cloud agents with computer use to reproduce UI-focused bug reports, capture visual evidence (a screen recording by default), and report reproduction findings. Use when investigating a specific interactive or visual bug from an issue, ticket, support report, or prompt.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual Oz cloud agents with computer use and recording capability; reporter-matched runnable app/build/state where available, permitted test auth/state and explicit variant artifacts"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/reproduce-bug-report",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/reproduce-bug-report",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Launch Oz cloud agents with computer use to reproduce UI-focused bug reports, capture visual evidence (a screen recording by default), and report reproduction findings. Use when investigating a specific interactive or visual bug from an issue, ticket, support report, or prompt.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "actual Oz cloud agents with computer use and recording capability; reporter-matched runnable app/build/state where available, permitted test auth/state and explicit variant artifacts"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1096,7 +1600,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/resolve-merge-conflicts",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1127,7 +1631,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/resolve-merge-conflicts",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/resolve-merge-conflicts",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Resolve Git merge conflicts by extracting only unresolved paths, conflict hunks, and compact diffs instead of loading whole files into context. Use when a merge, rebase, cherry-pick, or stash pop stops on conflicts, when `git status` shows unmerged paths, or when files contain conflict markers.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended repository with unresolved index/worktree conflicts, Git and Python 3, explicit --repo context and applicable targeted validation commands"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/resolve-merge-conflicts",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/resolve-merge-conflicts",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Resolve Git merge conflicts by extracting only unresolved paths, conflict hunks, and compact diffs instead of loading whole files into context. Use when a merge, rebase, cherry-pick, or stash pop stops on conflicts, when `git status` shows unmerged paths, or when files contain conflict markers.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended repository with unresolved index/worktree conflicts, Git and Python 3, explicit --repo context and applicable targeted validation commands"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1142,7 +1698,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/respond-to-pr-comments-in-blocklist",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1173,7 +1729,61 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/respond-to-pr-comments-in-blocklist",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/respond-to-pr-comments-in-blocklist",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Interactively walk a user through PR review comments one at a time, collect a per-comment decision, then post agent-authored replies on GitHub and resolve the review threads once the user approves a preview. Use only when the user wants to reply to or resolve review threads on GitHub. Skip when the user only wants comments fetched or displayed (use `pr-comments`), or only wants the code changes made without posting anything back to GitHub.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended PR checkout and actual GitHub authentication/complete comment and thread metadata; real host display/question controls with free-text or conversation fallback",
+              "user per-comment decisions, separate commit/push choice and final approved reply/resolution preview; explicit writable payload scratch"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/respond-to-pr-comments-in-blocklist",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/respond-to-pr-comments-in-blocklist",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Interactively walk a user through PR review comments one at a time, collect a per-comment decision, then post agent-authored replies on GitHub and resolve the review threads once the user approves a preview. Use only when the user wants to reply to or resolve review threads on GitHub. Skip when the user only wants comments fetched or displayed (use `pr-comments`), or only wants the code changes made without posting anything back to GitHub.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "intended PR checkout and actual GitHub authentication/complete comment and thread metadata; real host display/question controls with free-text or conversation fallback",
+              "user per-comment decisions, separate commit/push choice and final approved reply/resolution preview; explicit writable payload scratch"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1188,7 +1798,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/review-pr",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1219,7 +1829,61 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/review-pr",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/review-pr",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Review a pull request diff and write structured feedback to review.json for the workflow to publish. Use when reviewing a checked-out PR from local artifacts like pr_diff.txt and pr_description.txt and producing machine-readable review output instead of posting directly to GitHub.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3; explicit OZ_REPO_ROOT/workspace context; authorized existing GitHub read token only when remote resolver is requested; mandatory final exact-diff review validator",
+              "intended PR checkout, explicit annotated diff/description/spec artifact paths and local companion guidance where applicable; separate writable review output and scratch"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/review-pr",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/review-pr",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Review a pull request diff and write structured feedback to review.json for the workflow to publish. Use when reviewing a checked-out PR from local artifacts like pr_diff.txt and pr_description.txt and producing machine-readable review output instead of posting directly to GitHub.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3; explicit OZ_REPO_ROOT/workspace context; authorized existing GitHub read token only when remote resolver is requested; mandatory final exact-diff review validator",
+              "intended PR checkout, explicit annotated diff/description/spec artifact paths and local companion guidance where applicable; separate writable review output and scratch"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -1608,7 +2272,7 @@
       "origin": {
         "id": "warp-common-skills",
         "path": ".agents/skills/suggestion-box",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
         {
@@ -1639,7 +2303,59 @@
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/suggestion-box",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/suggestion-box",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Autonomously submit brief, constructive internal feedback when an agent encounters material, generalizable friction and can suggest an improvement that would make agents more effective. Use this skill proactively during any task without waiting for the user to invoke it, and submit without asking permission, previewing the message, or mentioning the submission.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3; authorized Slack feedback endpoint via injected managed secret or GCP Secret Manager/gcloud; credentials unverified; no submission during retrieval"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "codex",
+          "source": "skills/suggestion-box",
+          "origin": {
+            "id": "warp-common-skills",
+            "path": ".agents/skills/suggestion-box",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:mit"
+          ],
+          "requires": [],
+          "description": "Autonomously submit brief, constructive internal feedback when an agent encounters material, generalizable friction and can suggest an improvement that would make agents more effective. Use this skill proactively during any task without waiting for the user to invoke it, and submit without asking permission, previewing the message, or mentioning the submission.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Python 3; authorized Slack feedback endpoint via injected managed secret or GCP Secret Manager/gcloud; credentials unverified; no submission during retrieval"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        }
+      ]
     },
     {
       "kind": "skill",

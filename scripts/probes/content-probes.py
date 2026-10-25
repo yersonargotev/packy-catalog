@@ -1833,18 +1833,71 @@ WARP_SPECIFICATION_POLICIES = {
 }
 
 
+# Issue #97: these are independently reviewed call edges, not parsed prompt mentions.
+WARP_REPOSITORY_DEPENDENCIES = {
+    "brandalf": [], "complain": [], "create-pr": ["write-pr-description"],
+    "diagnose-ci-failures": ["fix-errors"], "fix-errors": [], "migrate-to-factory": [],
+    "pr-walkthrough": ["brandalf"], "readout": [], "reproduce-bug-report": [],
+    "resolve-merge-conflicts": [], "respond-to-pr-comments-in-blocklist": [],
+    "review-pr": [], "suggestion-box": [],
+}
+WARP_REPOSITORY_POLICIES = {
+    "brandalf": ["https://warp-brand-site.vercel.app/brand/skill", "ask the user whether to proceed"],
+    "complain": ["under 1,200 characters", "Preserve anonymity", "Do not forward user-provided text",
+                 "do not retry", "submit.py", "evals/evals.json"],
+    "create-pr": ["Always merge master", "candidate has not changed", "Do not rerun tests or lint after formatting",
+                  "--draft", "ask before skipping integration coverage", "Co-Authored-By", "warp-integration-test"],
+    "diagnose-ci-failures": ["plan (not code changes)", "Generate a plan for user review", "GH_PAGER=cat"],
+    "fix-errors": ["narrowest useful command", "only when the user, task, or approved spec explicitly requires",
+                   "Run `./script/format` once", "Do not rerun tests or Clippy after formatting"],
+    "migrate-to-factory": ["factory.yaml", "factory-files", "untrusted migration data", "read-only inputs",
+                           "Do not add schedules", "inside the Factory root"],
+    "pr-walkthrough": ["system-overview", "data-flow", "code-dependency", "user-action", "d3@7.9.0",
+                       "--require-browser", "rendering as unverified", "unless the user explicitly accepts"],
+    "readout": ["Snapshot mode", "Research mode", "depth and audience", "ACCESS-doc-guide.md",
+                "chrome blocks must be copied verbatim", "suffix -2, -3", "update_index.py", "distilled dump"],
+    "reproduce-bug-report": ["Oz cloud", "remote.computer_use_enabled", "screen recording", "at most two",
+                             "Do not silently substitute", "blocked", "Do not ask the public reporter for credentials"],
+    "resolve-merge-conflicts": ["--repo", "one file at a time", "index stages", "Run targeted tests"],
+    "respond-to-pr-comments-in-blocklist": ["Comment filtering", "Collect all decisions", "explanation loop",
+                                           "Do not commit changes unless", "final preview is approved",
+                                           "[Warp Agent]", "If commit or push fails, stop"],
+    "review-pr": ["OZ_REPO_ROOT", "annotated diff", "only source of truth", "review-pr-local",
+                  "security-review-pr", "check-impl-against-spec", "Pre-Verdict Audit", "validate_review_json.py",
+                  "Do not post comments or reviews to GitHub directly"],
+    "suggestion-box": ["under 1,200 characters", "More than three suggestions", "Include useful context safely",
+                       "Do not include", "do not retry", "submit.py", "evals/evals.json"],
+}
+
+
+def warp_repository(probe, surfaces):
+    warp_access(probe, surfaces, scenario="warp-repository", graph=WARP_REPOSITORY_DEPENDENCIES,
+                policies=WARP_REPOSITORY_POLICIES,
+                routes=[("create-pr", "write-pr-description"), ("pr-walkthrough", "brandalf"),
+                        ("diagnose-ci-failures", "fix-errors")],
+                damaged_skill="review-pr", damaged_path="scripts/resolve_spec_context.py")
+
+
 def warp_specification(probe, surfaces):
-    """Retrieve the reviewed 15-skill slice without running any skill procedure."""
+    warp_access(probe, surfaces, scenario="warp-specification", graph=WARP_SPECIFICATION_DEPENDENCIES,
+                policies=WARP_SPECIFICATION_POLICIES,
+                routes=[("spec-driven-implementation", "write-product-spec"),
+                        ("spec-driven-implementation", "write-tech-spec"),
+                        ("spec-driven-implementation", "implement-specs"),
+                        ("write-product-spec", "write-tech-spec"), ("cross-critique", "council")],
+                damaged_skill="saga", damaged_path="references/validation-strategies.md")
+
+
+def warp_access(probe, surfaces, *, scenario, graph, policies, routes, damaged_skill, damaged_path):
+    """Retrieve one reviewed Warp slice without running its skill procedures."""
     from urllib.parse import unquote
 
-    scenario = "warp-specification"
     manifest = json.loads((ROOT / "packs/warp/pack.json").read_text())
     resources = {item["id"]: item for item in manifest["resources"]}
     baseline_root = Path(probe.evidence["warp_baseline_project"])
     baseline = json.loads((baseline_root / "packs/warp/pack.json").read_text())
     previous = {item["id"]: item for item in baseline["resources"]}
     authored = tree(ROOT / "packs/warp")
-    graph = WARP_SPECIFICATION_DEPENDENCIES
     require(set(resources) == set(previous) | {"catalog-adaptations"} and manifest["origins"] == baseline["origins"]
             and manifest["surfaces"] == baseline["surfaces"],
             "Warp provenance or native host support changed")
@@ -1859,7 +1912,8 @@ def warp_specification(probe, surfaces):
 
     def closure(skill):
         result = {skill}
-        for dependency in graph[skill]:
+        dependencies = {**WARP_SPECIFICATION_DEPENDENCIES, **graph}[skill]
+        for dependency in dependencies:
             result.update(closure(dependency))
         return result
 
@@ -1900,7 +1954,7 @@ def warp_specification(probe, surfaces):
             descriptors = skill_descriptors(report, host, manifest["version"], closure(skill), pack="warp")
             assert_skill_content(descriptors, manifest, pack="warp")
             entry = Path(report["entry_document"]).read_text()
-            require(all(fragment.lower() in entry.lower() for fragment in WARP_SPECIFICATION_POLICIES[skill]),
+            require(all(fragment.lower() in entry.lower() for fragment in policies[skill]),
                     "Warp substantive policy lost: " + skill)
             require("initiating" in entry and "snapshot_id" in entry and "scratch/output" in entry
                     and "unverified" in entry and "delegate" in entry, "Warp access context lost: " + skill)
@@ -1926,6 +1980,19 @@ def warp_specification(probe, surfaces):
                                                           "substantive-policy", "unverified-prerequisites", "absent-content-runtimes"]})
         require(protected == installation_state(workspace) and snapshots == tree(workspace / "snapshots"),
                 "Warp retrieval executed content or changed target/native/snapshot state")
+        if scenario == "warp-repository" and probe.evidence.get("warp_helpers"):
+            prepared_before = tree(workspace / "home/.local/share/packy/skill-access")
+            resource_file = probe.root / ("warp-helper-resources-" + host + ".json")
+            resource_file.write_text(json.dumps({name: report["resource_root"] for name, report in roots.items()}))
+            helper_output, _ = probe.execute([sys.executable, "-B", str(ROOT / "scripts/probes/fixtures/warp-repository.py"),
+                                              "--resources", str(resource_file), "--workspace",
+                                              str(probe.root / ("warp-helper-workspace-" + host))], timeout=60)
+            helper_result = json.loads(helper_output)
+            require(helper_result["result"] == "passed", "Warp helper acceptance failed")
+            require(prepared_before == tree(workspace / "home/.local/share/packy/skill-access")
+                    and snapshots == tree(workspace / "snapshots") and protected == installation_state(workspace),
+                    "Warp helpers changed immutable resources or target/native state")
+            probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "helpers": helper_result})
         prepared_root = workspace / "home/.local/share/packy/skill-access"
         prepared = tree(prepared_root)
         old = Probe(probe.executable, probe.root / "warp-baseline-dist", probe.root, access.env, probe.evidence, probe.timeout)
@@ -1933,10 +2000,7 @@ def warp_specification(probe, surfaces):
         transition = old.candidate(workspace, ["transition", "--expect-archive-sha256", probe.evidence["archive_sha256"], "--json"])
         require(transition["result"] == "transitioned"
                 and transition["archive_sha256"] == probe.evidence["warp_baseline"]["archive_sha256"], "Warp transition failed")
-        for wrapper, dependency in [("spec-driven-implementation", "write-product-spec"),
-                                    ("spec-driven-implementation", "write-tech-spec"),
-                                    ("spec-driven-implementation", "implement-specs"),
-                                    ("write-product-spec", "write-tech-spec"), ("cross-critique", "council")]:
+        for wrapper, dependency in routes:
             root = roots[wrapper]
             expected = next(d for d in root["dependencies"] if d["qualified_skill"] == "warp:" + dependency)
             document = Path(root["entry_document"])
@@ -1958,14 +2022,15 @@ def warp_specification(probe, surfaces):
         require(selected["snapshot_id"] == transition["snapshot_id"]
                 and all(not item["compatible"] for item in independent["skills"] if item["qualified_skill"].split(":")[1] in graph),
                 "Warp independent discovery ignored baseline selection")
-        output, _ = old.candidate(workspace, ["get", "skill", "warp:write-tech-spec", "--surface", host, "--json"], failure=True)
+        output, _ = old.candidate(workspace, ["get", "skill", "warp:" + damaged_skill, "--surface", host, "--json"], failure=True)
         require(json.loads(output)["error"]["code"] == "incompatible_resource", "Warp independent request ignored new selection")
         require(protected == installation_state(workspace), "Warp transition changed target/native state")
-        missing = workspace / "snapshots" / roots["saga"]["snapshot_id"] / "packs/warp/skills/saga/references/validation-strategies.md"
+        missing = (workspace / "snapshots" / roots[damaged_skill]["snapshot_id"]
+                   / "packs/warp/skills" / damaged_skill / damaged_path)
         missing.unlink()
         damaged = installation_state(workspace)
-        output, diagnostic = old.candidate(workspace, ["get", "skill", "warp:saga", "--surface", host,
-                                                      "--snapshot", roots["saga"]["snapshot_id"], "--json"], failure=True)
+        output, diagnostic = old.candidate(workspace, ["get", "skill", "warp:" + damaged_skill, "--surface", host,
+                                                      "--snapshot", roots[damaged_skill]["snapshot_id"], "--json"], failure=True)
         require("snapshot_unavailable" in output or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
                 "Warp missing retained content silently fell back")
         require(damaged == installation_state(workspace), "failed Warp retrieval changed target/native state")
@@ -2012,7 +2077,8 @@ def warp_specification(probe, surfaces):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration", "warp-specification"), required=True)
+    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration", "warp-specification", "warp-repository"), required=True)
+    parser.add_argument("--warp-helpers", action="store_true", help="opt-in reviewed offline Warp resolver/report helper execution")
     parser.add_argument("--warp-baseline", type=Path, help="clean complete Catalog baseline before Warp on-demand adaptation")
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
     parser.add_argument("--matty-baseline", type=Path, help="clean complete Catalog baseline before Matty on-demand adaptation")
@@ -2023,12 +2089,16 @@ def main():
     if not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error("timeout must be finite and positive")
     scenarios = list(dict.fromkeys(args.scenario))
-    if ("warp-specification" in scenarios) != (args.warp_baseline is not None):
-        parser.error("warp-specification requires --warp-baseline, used only with that scenario")
+    if bool({"warp-specification", "warp-repository"}.intersection(scenarios)) != (args.warp_baseline is not None):
+        parser.error("Warp scenarios require --warp-baseline, used only with those scenarios")
+    if {"warp-specification", "warp-repository"}.issubset(scenarios):
+        parser.error("select one Warp slice per run: their reviewed baselines differ")
+    if args.warp_helpers and "warp-repository" not in scenarios:
+        parser.error("--warp-helpers requires --scenario warp-repository")
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
-    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering", "pstack-orchestration", "warp-specification"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
+    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering", "pstack-orchestration", "warp-specification", "warp-repository"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
         parser.error("on-demand scenarios require Codex and Claude surfaces")
     if bool({"pstack", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration"}.intersection(scenarios)) != (args.pstack_baseline is not None):
         parser.error("pstack scenarios require --pstack-baseline, used only with those scenarios")
@@ -2036,7 +2106,7 @@ def main():
         parser.error("Matty scenarios require --matty-baseline, used only with those scenarios")
     evidence = {"schema_version": 1, "report": "catalog-content-probes", "provenance": "local-candidate",
                 "official_publication": False, "scenarios": scenarios, "surfaces": surfaces, "html_pack": args.html_pack,
-                "commands": [], "outcomes": [], "result": "failed"}
+                "warp_helpers": args.warp_helpers, "commands": [], "outcomes": [], "result": "failed"}
     root = None
     previous_handler = signal.signal(signal.SIGTERM, interrupted)
     try:
@@ -2084,7 +2154,7 @@ def main():
             for scenario in scenarios:
                 probe.set_context("content-acceptance", scenario=scenario, scope="project")
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
-                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal, "pstack-engineering": pstack_engineering, "pstack-orchestration": pstack_orchestration, "warp-specification": warp_specification}[scenario](probe, surfaces)
+                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal, "pstack-engineering": pstack_engineering, "pstack-orchestration": pstack_orchestration, "warp-specification": warp_specification, "warp-repository": warp_repository}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
             probe.set_context("candidate-verification")
             require(checkout_commit(probe, ROOT) == commit, "Catalog candidate changed during probes")
