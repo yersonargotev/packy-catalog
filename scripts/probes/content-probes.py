@@ -1429,9 +1429,18 @@ def decision_log_helper(probe, report, host):
                                                   "formula-tab-newline-escaping", "source-target-preservation", "helper-state-cleanup"]})
 
 
+def pstack_orchestration(probe, surfaces):
+    """Exercise the four orchestration access roots through the released CLI."""
+    for host in ("codex", "claude"):
+        workspace = probe.prepare("pstack-orchestration-" + host)
+        for skill in ("automate-me", "figure-it-out", "poteto-help", "poteto-mode"):
+            report = probe.candidate(workspace, ["get", "skill", "pstack:" + skill, "--surface", host, "--json"])
+            require(report["qualified_skill"] == "pstack:" + skill, "wrong orchestration identity")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering"), required=True)
+    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration"), required=True)
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
     parser.add_argument("--matty-baseline", type=Path, help="clean complete Catalog baseline before Matty on-demand adaptation")
     parser.add_argument("--surface", action="append", choices=SURFACES)
@@ -1444,9 +1453,9 @@ def main():
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
-    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
+    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering", "pstack-orchestration"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
         parser.error("on-demand scenarios require Codex and Claude surfaces")
-    if bool({"pstack", "pstack-foundational", "pstack-withdrawal", "pstack-engineering"}.intersection(scenarios)) != (args.pstack_baseline is not None):
+    if bool({"pstack", "pstack-foundational", "pstack-withdrawal", "pstack-engineering", "pstack-orchestration"}.intersection(scenarios)) != (args.pstack_baseline is not None):
         parser.error("pstack scenarios require --pstack-baseline, used only with those scenarios")
     if bool({"matty-design", "matty-delivery"}.intersection(scenarios)) != (args.matty_baseline is not None):
         parser.error("Matty scenarios require --matty-baseline, used only with those scenarios")
@@ -1491,7 +1500,7 @@ def main():
             for scenario in scenarios:
                 probe.set_context("content-acceptance", scenario=scenario, scope="project")
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
-                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal, "pstack-engineering": pstack_engineering}[scenario](probe, surfaces)
+                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal, "pstack-engineering": pstack_engineering, "pstack-orchestration": pstack_orchestration}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
             probe.set_context("candidate-verification")
             require(checkout_commit(probe, ROOT) == commit, "Catalog candidate changed during probes")
