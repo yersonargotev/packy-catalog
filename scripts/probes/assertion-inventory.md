@@ -75,12 +75,12 @@ The documented baseline is `7a8597e6f0c3867540e342070fed46f97a2e1bfb`
 | Acquire candidate while retaining baseline installations | Supported digest-bound `transition --json`; require candidate/baseline archive identities and local provenance, with home/config/project bytes/modes/links unchanged |
 | Targeted Codex update selects Codex definition and preserves Claude | Real `update` (with `--project` for project scope); require `## Codex execution` in installed `reflect`, compare complete Claude tree including link targets and linked file bytes/modes |
 | Targeted Claude update selects Claude definition and preserves Codex | Require `## Claude Code execution`; compare complete Codex tree |
-| OpenCode divergent coexistence rejection without state changes | Applicable operation's dry-run fails with coexistence diagnostic; entire prepared workspace unchanged, so rejection cannot pass merely because consent is absent |
+| OpenCode divergent coexistence rejection without state changes | Superseded by #104: `pstack-withdrawal` rejects unsupported new requests in an otherwise empty workspace, preserving complete state |
 | Bootstrap helper drift blocks removal | Mutate only disposable installed `bootstrap.ts`; removal preview must fail for projection drift or retained index identity, workspace unchanged; restore exact bytes/mode before removal |
 | Remove Codex without affecting Claude, then remove Claude | Exact-preview approved uninstall/deactivate; complete Claude tree unchanged after Codex removal |
-| OpenCode installs its own definition after conflicting projections retire | Real install/activate, require `## OpenCode execution`, then approved uninstall/deactivate |
+| OpenCode installs its own definition after conflicting projections retire | Superseded by #104 for new requests: withdrawal acceptance installs the old three-host baseline, verifies its OpenCode definition, then explicitly retires installed/retained legacy evidence after transition |
 | Architect selection includes variant-only dependencies | Architect-only install/activate requires exhaust-the-design-space, fix-root-causes, prove-it-works, redesign-from-first-principles; unrelated reflect absent |
-| Scope isolation, original files and complete retirement | All three skill roots empty/absent; inactive project or personal roots unchanged, sentinel files retained, project final contract/lock/notices absent; ambient state preserved by common runner |
+| Scope isolation, original files and complete retirement | Both supported skill roots empty/absent (legacy OpenCode separately checked by withdrawal acceptance); inactive project or personal roots unchanged, sentinel files retained, project final contract/lock/notices absent; ambient state preserved by common runner |
 | Injected fake source, host and terminal | Real released candidate route and controlled ordered single-use preview/plan PTY approvals; official trust, no host execution and isolated global roots remain Packy-owned contracts |
 
 Packy v0.2.28 (`eed834cb34dbcc15cdb6164caaa94083392f51f6`) owns
@@ -90,7 +90,7 @@ Catalog owns the actual pstack content assertions above. Controlled ordinary
 fixtures contain inert replacement skill/helper text and no upstream origins;
 they exercise both scopes and reject an omitted effective dependency. They
 never execute shipped resources. Independent `pstack-update.py`, its opt-in
-tests, `pstack-helpers.py` and `pstack-host-loading.py` are retained unchanged;
+tests, `pstack-helpers.py` and `pstack-host-loading.py` remain opt-in;
 they already require no Packy source and are not part of ordinary CI.
 
 Controlled runner-boundary fixtures live in
@@ -99,3 +99,14 @@ children and Git/prerequisite fixtures, covering exact and repeated/unexpected
 prompts, structured preview, child failure, timeout/descendant cleanup,
 interruption cleanup, stripped credentials, dirty candidates and missing
 prerequisites. They are safe for the ordinary inert suite.
+
+## pstack OpenCode withdrawal (#104)
+
+The `pstack` lifecycle scenario retains Codex/Claude coexistence, drift and
+retirement checks; OpenCode assertions move to the withdrawal scenario. `pstack-withdrawal` adds
+complete two-host preservation and legacy OpenCode project/personal retirement
+through the released public CLI. It proves unsupported new requests, failed
+updates without mutation, installed/retained ownership, drift, missing personal
+retained content, explicit retirement and unrelated-state preservation. Native
+foundational coverage follows the accepted two-host policy. Other Packs retain
+all their host coverage. No ordinary check executes these real-content probes.

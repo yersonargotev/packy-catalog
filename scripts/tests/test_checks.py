@@ -278,7 +278,7 @@ class Fixture(unittest.TestCase):
     def test_ordinary_tests_pass_without_changing_pack_helpers(self):
         result = self.run_checks()
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("ordinary suite passed with 4 Pack helper execution sentinels", result.stdout)
+        self.assertIn("ordinary suite passed with 3 Pack helper execution sentinels", result.stdout)
 
     def test_ordinary_test_failure_is_preserved(self):
         self.fixture.write_text("import unittest\nclass Fixture(unittest.TestCase):\n    def test_fail(self):\n        self.fail('controlled failure')\n")

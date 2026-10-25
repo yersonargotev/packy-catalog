@@ -25,7 +25,7 @@ update must preserve:
 ```sh
 python3 scripts/probes/pstack-update.py contracts \
   --baseline /path/to/clean-baseline \
-  --preserve-surface claude --preserve-surface opencode
+  --preserve-surface claude --preserve-surface codex
 ```
 
 `--project /path/to/candidate` selects another Catalog Project; it defaults to
@@ -229,19 +229,18 @@ inventories and archive digests. Another reviewed baseline can be supplied
 explicitly; it must support an actual update to this candidate. Builds validate
 every Pack and provenance; neither snapshot is an attested publication.
 
-Every invocation exercises project and isolated global scope with all three
-surfaces; a partial `--surface` selection is rejected because the assertions
-depend on Codex/Claude coexistence and subsequent OpenCode retirement. It
-installs baseline Codex and Claude, transitions snapshot availability without
+Every invocation exercises project and isolated global scope with Codex and
+Claude; both hosts are required for coexistence checks. The separate withdrawal
+scenario covers legacy OpenCode retirement. The lifecycle scenario installs
+baseline Codex and Claude, transitions snapshot availability without
 changing installed state, then updates each surface while preserving the
-other's complete bytes, modes and links. OpenCode coexistence is rejected
-without mutation. Drifting an installed bootstrap helper blocks removal: the
-project copy fails projection checks; the global link exposes retained-source
+other's complete bytes, modes and links. Drifting an installed bootstrap helper
+blocks removal: the project copy fails projection checks; the global link exposes retained-source
 integrity failure. The helper is restored before successful retirement.
 
-Codex removal preserves Claude, then both retire before OpenCode installs and
-removes its own variant. Architect-only selection must include the four
-surface-effective principle dependencies and exclude unrelated `reflect`.
+Codex removal preserves Claude, then both retire. OpenCode legacy retirement is
+covered separately by the withdrawal scenario below. Architect-only selection
+must include the four surface-effective principle dependencies and exclude unrelated `reflect`.
 Final checks require no managed skill roots, preservation of unrelated files
 and the inactive scope, and project contract/lock/notices retirement. Ambient
 home/config/data state and both source checkouts remain unchanged. All writes,
@@ -342,7 +341,36 @@ pstack/Matty TDD with a modified active native copy, inert setup and absent cont
 runtimes. Representative nested links retain the initiating host/snapshot across
 a controlled selection transition; independent requests follow the new selection
 and missing retained content fails. Native regression preserves the scoped
-selection, original content and contracts on all three hosts. Existing isolated
+selection, original content and contracts on Codex and Claude. Existing isolated
 state, bounded commands, central released binary, complete candidate/baseline
 builds, receipts and cleanup apply. No agent workflow is executed; ordinary tests,
 validation and publication do not run this scenario.
+
+## pstack 5.0.0 support withdrawal
+
+```sh
+python3 -B scripts/probes/content-probes.py --scenario pstack-withdrawal \
+  --pstack-baseline /path/to/clean-4.6.0-catalog > /tmp/pstack-withdrawal-evidence.json
+```
+
+Use the complete pre-withdrawal baseline at
+`52ce7cc0bb4f0657d20dd92123c95e8ac0de3ca9`. This scenario is specific to the
+4.6.0 → 5.0.0 migration. It compares the complete declared contract, all existing
+Codex/Claude access content and native bytes/modes in both scopes. Identical
+personal projections may yield a converged update with no action phases or
+approvals; the runner applies that no-op without answering prompts. New OpenCode
+requests fail without mutation. Existing OpenCode project installations and
+personal activations survive selecting the new snapshot and failed updates.
+Explicit uninstall/deactivation then use installed or retained old evidence.
+Drift blocks both paths; missing retained content blocks personal retirement.
+The old content is restored before successful retirement. Unrelated files and
+the inactive scope survive. Acquisition, complete builds, receipts, bounded
+children and cleanup use the shared released-binary runner. No workflow runs.
+
+`pstack-helpers.py` now executes only Codex/Claude helpers, from disposable copies
+with owned HOME, configuration, data, temporary files and Bun cache, using the
+shared bounded child runner.
+`pstack-host-loading.py claude [global|project]` checks the supported Claude
+transport with a deterministic localhost provider and removes its temporary
+state after emitting the result. It does not establish model inference.
+See [retirement instructions](../../docs/pstack-opencode-retirement.md).

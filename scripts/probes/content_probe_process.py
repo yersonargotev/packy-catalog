@@ -19,6 +19,7 @@ class ChildSpawnFailed(RuntimeError):
 
 
 def run_child(command, *, cwd, env, timeout, approval=None, check_approval=True):
+    # None closes stdin; an explicit empty sequence requests a terminal with no approvals.
     master, slave = pty.openpty()
     child = None
     output = {"stdout": bytearray(), "stderr": bytearray()}
@@ -26,7 +27,7 @@ def run_child(command, *, cwd, env, timeout, approval=None, check_approval=True)
     answered = 0
     try:
         try:
-            child = subprocess.Popen(command, cwd=cwd, env=env, stdin=slave if approval else subprocess.DEVNULL,
+            child = subprocess.Popen(command, cwd=cwd, env=env, stdin=slave if approval is not None else subprocess.DEVNULL,
                                      stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
         except OSError as error:
             raise ChildSpawnFailed(f"spawn failed (errno {error.errno}: {error.strerror})") from None
