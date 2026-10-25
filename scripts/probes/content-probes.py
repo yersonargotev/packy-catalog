@@ -1184,9 +1184,254 @@ def pstack_foundational(probe, surfaces):
     require(tree(ROOT / "packs/pstack") == authored, "pstack acceptance mutated authored content")
 
 
+# Reviewed issue #94 graph, including principles used by architect's runner.
+PSTACK_ENGINEERING_DEPENDENCIES = {
+    "architect": ["arena", "how", "interrogate", "principle-boundary-discipline",
+                  "principle-encode-lessons-in-structure", "principle-exhaust-the-design-space",
+                  "principle-fix-root-causes", "principle-foundational-thinking", "principle-laziness-protocol",
+                  "principle-make-operations-idempotent", "principle-minimize-reader-load",
+                  "principle-outcome-oriented-execution", "principle-redesign-from-first-principles",
+                  "principle-separate-before-serializing-shared-state", "principle-subtract-before-you-add", "why"],
+    "blast-radius": ["arena", "unslop", "why"], "correct": [],
+    "create-formal-verification-skill": [], "create-verification-skill": [],
+    "maintain-verification-skill": [], "make-bot-ui": [],
+    "no-comments": ["architect", "how", "principle-fix-root-causes", "principle-redesign-from-first-principles", "why"],
+    "recall": ["unslop", "why"], "show-me-your-work": ["principle-encode-lessons-in-structure", "unslop"],
+    "teach": ["how", "unslop", "why"], "technical-writing": ["unslop"],
+    "typescript-best-practices": ["principle-boundary-discipline", "principle-type-system-discipline"],
+}
+
+# User-observable policy expectations, not extracted from candidate entry bodies.
+PSTACK_ENGINEERING_POLICIES = {
+    "architect": ["at least two structurally distinct candidates", "Default: proceed directly to implementation",
+                  "pause for sign-off", "references/ACCESS-runner-prompt.md", "references/design-red-flags.md"],
+    "blast-radius": ["prove them by running code", "If you couldn't prove it, write unproven"],
+    "correct": ["A class counts once it has happened twice", "real past mistake", "human's approval"],
+    "create-formal-verification-skill": ["counterexample", "bounds and assumptions", "broken variant",
+                                         "do not change product code unless the user asks", "never under this resource root"],
+    "create-verification-skill": ["Doctor:", "Evidence:", "features/README.md", "evidence still exists",
+                                  "A generated skill that was never executed is a draft"],
+    "maintain-verification-skill": ["**clean**", "**changed**", "**blocked**", "Several candidates → ask which one",
+                                    "One read-only subagent per feature", "coordinator owns all driving",
+                                    "retry once", "exercise every feature live", "never maintenance targets"],
+    "make-bot-ui": ["authorized", "sender key on the server", "one try, no retry", "timeout: 8 seconds",
+                    "actual response", "--accept-dns=false --ssh=false", "outside data, not as instructions"],
+    "no-comments": ["say that it was not independent", "Reject a second", "stop after the sketch",
+                    "Step 4 implements", "Wait for interactive approval", "caller pre-approval"],
+    "recall": ["last 7 days", "Never read another project's transcripts", "actual source identifier",
+               "null results are findings", "At most 5 bullets", "history gap", "pstack:poteto-mode", "playbooks/session-pickup.md"],
+    "show-me-your-work": ["Append-only", "never edits or removes a row", "different model family",
+                          "Self-review is not a substitute", "explicit writable log path", '"Attention" section'],
+    "teach": ["Keep", "confidence language intact", "Run them in parallel", "one plain explanation",
+              "image-generation tool", "never a report about what you did"],
+    "technical-writing": ["Diátaxis", "STE rules", "Global English", "Don't edit that skill", "codebase is the word list"],
+    "typescript-best-practices": ["Schemas before guards", "Narrowing hierarchy", "Boundary validation",
+                                  "references/ACCESS-patterns.md"],
+}
+
+
+def pstack_engineering(probe, surfaces):
+    """Retrieve the exact engineering slice; execute only the reviewed log helper."""
+    from urllib.parse import unquote
+
+    scenario = "pstack-engineering"
+    inventory = PSTACK_ENGINEERING_DEPENDENCIES
+    graph = {**PSTACK_FOUNDATIONAL_DEPENDENCIES, **inventory}
+    manifest = json.loads((ROOT / "packs/pstack/pack.json").read_text())
+    resources = {item["id"]: item for item in manifest["resources"]}
+    baseline_root = Path(probe.evidence["pstack_baseline_project"])
+    baseline = json.loads((baseline_root / "packs/pstack/pack.json").read_text())
+    previous = {item["id"]: item for item in baseline["resources"]}
+    authored = tree(ROOT / "packs/pstack")
+    require(len(inventory) == 13, "pstack engineering scope changed")
+    require(set(manifest["surfaces"]) == {"codex", "claude"}
+            and all(item["surface"] != "opencode" for resource in manifest["resources"]
+                    for key in ("bindings", "variants") for item in resource.get(key, [])),
+            "engineering restored withdrawn pstack host support")
+    require(all(not variant.get("on_demand") for name in inventory for variant in previous[name]["variants"]),
+            "pstack engineering baseline must precede this adaptation")
+
+    def closure(skill):
+        result = {skill}
+        for dependency in set(graph[skill] + PSTACK_NATIVE_BACKGROUND_DEPENDENCIES.get(skill, [])):
+            result.update(closure(dependency))
+        return result
+
+    for host in ("codex", "claude"):
+        probe.set_context("content-acceptance", scenario=scenario, surface=host, scope="project")
+        workspace = probe.prepare(scenario + "-" + host)
+        probe.apply(workspace, ["activate", "pstack", "--surface", host, "--resource", "skill:architect"])
+        native = workspace / "home" / SKILL_DIRECTORIES[host] / "architect"
+        if native.is_symlink():
+            original = native.resolve()
+            native.unlink()
+            shutil.copytree(original, native)
+        (native / "SKILL.md").write_text("# Modified native architect. Preserve this copy.\n")
+        (workspace / "home/.local/share/packy/skill-access").mkdir(parents=True)
+        protected, snapshots = installation_state(workspace), tree(workspace / "snapshots")
+        runtime_path = probe.root / (scenario + "-no-runtimes-" + host)
+        runtime_path.mkdir()
+        (runtime_path / "git").symlink_to(shutil.which("git", path=probe.env["PATH"]))
+        access = Probe(probe.executable, probe.snapshot, probe.root, {**probe.env, "PATH": str(runtime_path)},
+                       probe.evidence, probe.timeout)
+        access.set_context("content-acceptance", scenario=scenario, surface=host, scope="project")
+        discovery = access.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
+        require(discovery["schema_version"] == 1 and discovery["report"] == "skill-discovery"
+                and not discovery["prerequisites_verified"], "engineering discovery misreports readiness")
+        entries = {item["qualified_skill"]: item for item in discovery["skills"]}
+        roots = {}
+        for skill, dependencies in inventory.items():
+            # The public retrieval is the primary assertion, including its red baseline.
+            report = access.candidate(workspace, ["get", "skill", "pstack:" + skill, "--surface", host, "--json"])
+            effective = next(v for v in resources[skill]["variants"] if v["surface"] == host)
+            declaration = effective["on_demand"]
+            require(declaration["dependencies"] == [{"type": "skill", "target": "pstack:" + dep} for dep in dependencies],
+                    "engineering required/optional dependency classification changed: " + skill)
+            item = entries["pstack:" + skill]
+            require(item["compatible"] and item["prerequisites"] == declaration["prerequisites"]
+                    and all(item["on_demand"].get(key, []) == value for key, value in declaration.items()),
+                    "engineering discovery lost reviewed declarations")
+            descriptors = skill_descriptors(report, host, manifest["version"], closure(skill), pack="pstack")
+            require(report["qualified_skill"] == "pstack:" + skill, "wrong engineering root")
+            assert_skill_content(descriptors, manifest, pack="pstack")
+            for identity, descriptor in descriptors.items():
+                expected = next(v for v in resources[identity.split(":")[1]]["variants"] if v["surface"] == host)
+                require(descriptor["prerequisites"] == expected["on_demand"]["prerequisites"], "engineering prerequisites lost")
+            for reference in (ROOT / "packs/pstack" / effective["source"] / "references").rglob("*.md"):
+                require(json.dumps(reference.read_text())[1:-1] not in json.dumps(discovery),
+                        "engineering discovery eagerly embeds supporting bodies")
+            text = Path(report["entry_document"]).read_text()
+            require(all(fragment in text for fragment in PSTACK_ENGINEERING_POLICIES[skill]),
+                    "engineering policy lost: " + skill)
+            require(".agents/skills" in text if host == "codex" else "disable-model-invocation: true" in text
+                    and ".claude/skills" in text and "do not invoke them through the Skill tool" in text,
+                    "engineering host invocation contract lost")
+            require(skill == "correct" or "~/.pstack/" + host + "-models.md" in text,
+                    "engineering model preference host changed")
+            roots[skill] = report
+            probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "skill": skill,
+                                               "snapshot_id": report["snapshot_id"], "result": "passed",
+                                               "checks": ["effective-discovery", "qualified-required-closure", "full-source-bytes-and-modes",
+                                                          "supporting-and-legal-content", "host-workflow-policy", "absent-content-runtimes"]})
+        require(protected == installation_state(workspace) and tree(workspace / "snapshots") == snapshots,
+                "engineering retrieval executed a procedure or changed native/target/immutable state")
+        prepared_root = workspace / "home/.local/share/packy/skill-access"
+        prepared = tree(prepared_root)
+        decision_log_helper(probe, roots["show-me-your-work"], host)
+        require(tree(prepared_root) == prepared and tree(workspace / "snapshots") == snapshots
+                and protected == installation_state(workspace), "log helper changed prepared/native/target resources")
+        old = Probe(probe.executable, probe.root / "baseline-dist", probe.root, access.env, probe.evidence, probe.timeout)
+        old.set_context("snapshot-transition", scenario=scenario, surface=host, scope="project")
+        transition = old.candidate(workspace, ["transition", "--expect-archive-sha256", probe.evidence["archive_sha256"], "--json"])
+        require(transition["result"] == "transitioned"
+                and transition["archive_sha256"] == probe.evidence["pstack_baseline"]["archive_sha256"], "engineering transition failed")
+        for wrapper in ("architect", "no-comments", "recall", "teach", "technical-writing", "typescript-best-practices", "show-me-your-work"):
+            report = roots[wrapper]
+            targets = {item["qualified_skill"]: item for item in report["dependencies"]}
+            effective = next(v for v in resources[wrapper]["variants"] if v["surface"] == host)
+            for dependency in inventory[wrapper]:
+                expected = targets["pstack:" + dependency]
+                references = []
+                for relative in effective["on_demand"]["reference_files"]:
+                    document = Path(report["resource_root"]) / relative
+                    references.extend((document.parent / unquote(path)).resolve()
+                                      for path in re.findall(r"\[pstack:" + dependency + r"\]\(([^)]+)\)", document.read_text()))
+                require(references and all(path == Path(expected["entry_document"]) for path in references),
+                        "engineering prepared reference missed dependency: " + wrapper + " -> " + dependency)
+                nested = old.candidate(workspace, ["get", "skill", "pstack:" + dependency, "--surface", host,
+                                                   "--snapshot", report["snapshot_id"], "--json"])
+                require(nested["snapshot_id"] == report["snapshot_id"] and nested["surface"] == host
+                        and nested["qualified_skill"] == expected["qualified_skill"]
+                        and nested["pack_version"] == expected["pack_version"]
+                        and Path(nested["entry_document"]).read_bytes() == Path(expected["entry_document"]).read_bytes(),
+                        "engineering nested retrieval changed initiating identity/snapshot/content")
+        observed = tree(prepared_root)
+        require(all(observed.get(path) == value for path, value in prepared.items()), "engineering prior prepared paths changed")
+        retained = tree(workspace / "snapshots")
+        require(all(retained.get(path) == value for path, value in snapshots.items()), "engineering transition mutated snapshots")
+        output, _ = old.candidate(workspace, ["get", "skill", "pstack:architect", "--surface", host, "--json"], failure=True)
+        require(json.loads(output)["error"]["code"] == "incompatible_resource", "engineering independent call ignored new selection")
+        missing = workspace / "snapshots" / roots["architect"]["snapshot_id"] / "packs/pstack/skills" / host / "architect/ACCESS.md"
+        missing.unlink()
+        output, diagnostic = old.candidate(workspace, ["get", "skill", "pstack:architect", "--surface", host,
+                                                      "--snapshot", roots["architect"]["snapshot_id"], "--json"], failure=True)
+        require("snapshot_unavailable" in output or diagnostic.strip() == "Catalog Snapshot extracted files do not exactly match the index",
+                "engineering missing retained content silently fell back")
+        require(protected == installation_state(workspace), "engineering nested retrieval changed target/native state")
+        probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "result": "passed",
+                                           "checks": ["rendered-nested-and-supporting-references", "retained-snapshot", "changed-selection",
+                                                      "missing-retained-fails", "modified-active-native-preserved", "inert-workflows"]})
+
+    def native_closure(skill, host):
+        resource = {**previous[skill], **next(v for v in previous[skill]["variants"] if v["surface"] == host)}
+        result = {skill}
+        for dependency in resource["requires"]:
+            if dependency.startswith("skill:"):
+                result.update(native_closure(dependency.split(":")[1], host))
+        return result
+
+    for host in ("codex", "claude"):
+        probe.set_context("native-regression", scenario=scenario, surface=host, scope="project")
+        workspace = probe.prepare(scenario + "-native-" + host)
+        probe.apply(workspace, ["install", "emil", "--surface", host, "--resource", "skill:write-swift"])
+        unrelated = tree(workspace / "project" / SKILL_DIRECTORIES[host] / "write-swift")
+        inactive = {name: tree(workspace / name) for name in ("home", "config")}
+        guidance = {name: (workspace / "project" / name).read_bytes() for name in ("AGENTS.md", "CLAUDE.md", "unrelated.txt")}
+        args = ["install", "pstack", "--surface", host]
+        for skill in inventory:
+            args.extend(["--resource", "skill:" + skill])
+        probe.apply(workspace, args)
+        installed = workspace / "project" / SKILL_DIRECTORIES[host]
+        expected = set().union(*(native_closure(skill, host) for skill in inventory))
+        require({path.name for path in installed.iterdir()} == expected | {"write-swift"}, "engineering native scoped selection changed")
+        require(tree(installed / "write-swift") == unrelated and inactive == {name: tree(workspace / name) for name in inactive}
+                and all((workspace / "project" / name).read_bytes() == data for name, data in guidance.items()),
+                "engineering native regression changed unrelated resources or inactive state")
+        for skill in expected:
+            def native_contract(resource):
+                result = json.loads(json.dumps(resource))
+                for variant in result["variants"]:
+                    variant.pop("on_demand", None)
+                return result
+            require(native_contract(previous[skill]) == native_contract(resources[skill]), "engineering native contract changed")
+            source = next(v["source"] for v in previous[skill]["variants"] if v["surface"] == host)
+            original, actual = tree(baseline_root / "packs/pstack" / source), tree(installed / skill)
+            require(all(actual.get(path) == value for path, value in original.items()), "engineering original native bytes/modes changed")
+        probe.verify(workspace)
+        probe.evidence["outcomes"].append({"scenario": scenario, "surface": host, "result": "passed",
+                                           "checks": ["native-scoped-selection-and-contracts", "original-bytes-and-modes", "project-verification"]})
+    require(tree(ROOT / "packs/pstack") == authored, "engineering acceptance mutated authored sources")
+
+
+def decision_log_helper(probe, report, host):
+    """Execute only the reviewed six-argument helper into explicitly owned output."""
+    with tempfile.TemporaryDirectory(prefix="decision-log-", dir=probe.root) as directory:
+        output = Path(directory) / "output/decisions.tsv"
+        unrelated = Path(directory) / "unrelated.txt"
+        unrelated.write_bytes(b"Preserve unrelated target content.\n")
+        helper = Path(report["resource_root"]) / "scripts/log.sh"
+        before = tree(Path(report["resource_root"]))
+        probe.execute([str(helper), str(output), "frame", "chose the public CLI", "real user boundary", "issue #94", "open"])
+        first = output.read_bytes()
+        probe.execute([str(helper), str(output), "=formula", "+decision\tcell", "-why\nline", "@evidence\rvalue", "done"])
+        require(output.read_bytes().startswith(first), "decision log did not preserve append history")
+        rows = output.read_text().splitlines()
+        require(rows[0] == "ts\tphase\tdecision\twhy\tevidence\tresult" and rows.count(rows[0]) == 1
+                and len(rows) == 3 and all(len(row.split("\t")) == 6 for row in rows), "decision log row/header contract changed")
+        require(rows[1].split("\t")[1:] == ["frame", "chose the public CLI", "real user boundary", "issue #94", "open"]
+                and rows[2].split("\t")[1:] == ["'=formula", "'+decision cell", "'-why line", "'@evidence value", "done"],
+                "decision log failed formula/tab/newline escaping")
+        require(before == tree(Path(report["resource_root"])) and unrelated.read_bytes() == b"Preserve unrelated target content.\n",
+                "decision helper changed resources or unrelated target")
+    require(not Path(directory).exists(), "decision helper owned execution state was not removed")
+    probe.evidence["outcomes"].append({"scenario": "pstack-engineering", "surface": host, "result": "passed",
+                                       "checks": ["explicit-disposable-log-output", "single-header", "append-preservation", "six-columns",
+                                                  "formula-tab-newline-escaping", "source-target-preservation", "helper-state-cleanup"]})
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal"), required=True)
+    parser.add_argument("--scenario", action="append", choices=("adoption", "ponytail", "claude", "pstack", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-withdrawal", "pstack-engineering"), required=True)
     parser.add_argument("--pstack-baseline", type=Path, help="clean committed complete Catalog baseline for pstack transitions")
     parser.add_argument("--matty-baseline", type=Path, help="clean complete Catalog baseline before Matty on-demand adaptation")
     parser.add_argument("--surface", action="append", choices=SURFACES)
@@ -1199,9 +1444,9 @@ def main():
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
-    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
+    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational", "pstack-engineering"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
         parser.error("on-demand scenarios require Codex and Claude surfaces")
-    if bool({"pstack", "pstack-foundational", "pstack-withdrawal"}.intersection(scenarios)) != (args.pstack_baseline is not None):
+    if bool({"pstack", "pstack-foundational", "pstack-withdrawal", "pstack-engineering"}.intersection(scenarios)) != (args.pstack_baseline is not None):
         parser.error("pstack scenarios require --pstack-baseline, used only with those scenarios")
     if bool({"matty-design", "matty-delivery"}.intersection(scenarios)) != (args.matty_baseline is not None):
         parser.error("Matty scenarios require --matty-baseline, used only with those scenarios")
@@ -1246,7 +1491,7 @@ def main():
             for scenario in scenarios:
                 probe.set_context("content-acceptance", scenario=scenario, scope="project")
                 print("Running reviewed content scenario: " + scenario, file=sys.stderr, flush=True)
-                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal}[scenario](probe, surfaces)
+                {"adoption": adoption, "ponytail": ponytail, "claude": claude, "pstack": pstack, "packy-bootstrap": packy_bootstrap, "matty-design": matty_design, "matty-delivery": matty_delivery, "pstack-foundational": pstack_foundational, "pstack-withdrawal": pstack_withdrawal, "pstack-engineering": pstack_engineering}[scenario](probe, surfaces)
             require(ambient == {key: tree(Path(env[key])) for key in ambient}, "candidate changed ambient user state")
             probe.set_context("candidate-verification")
             require(checkout_commit(probe, ROOT) == commit, "Catalog candidate changed during probes")
