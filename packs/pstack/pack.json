@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -516,7 +516,29 @@
             "skill:poteto-mode",
             "skill:unslop"
           ],
-          "description": "Use for \"automate me\", \"create/update/refresh my -mode skill\", \"turn/capture my preferences or working style into a skill\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via create-skill + unslop, optionally pulling fresh evidence from recent transcripts."
+          "description": "Use for \"automate me\", \"create/update/refresh my -mode skill\", \"turn/capture my preferences or working style into a skill\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via create-skill + unslop, optionally pulling fresh evidence from recent transcripts.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "accessible authorized current-workspace history or explicit preference answers; honest history gaps",
+              "explicit writable project/personal skill destination and optional host authoring guide",
+              "supported host delegation controls when mining history; required review remains incomplete when unavailable"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:poteto-mode"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -533,7 +555,29 @@
             "skill:poteto-mode",
             "skill:unslop"
           ],
-          "description": "Use for \"automate me\", \"create/update/refresh my -mode skill\", \"turn/capture my preferences or working style into a skill\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via create-skill + unslop, optionally pulling fresh evidence from recent transcripts."
+          "description": "Use for \"automate me\", \"create/update/refresh my -mode skill\", \"turn/capture my preferences or working style into a skill\", or wanting agents to follow how the user works. Drafts or revises a personal -mode skill via create-skill + unslop, optionally pulling fresh evidence from recent transcripts.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "accessible authorized current-workspace history or explicit preference answers; honest history gaps",
+              "explicit writable project/personal skill destination and optional host authoring guide",
+              "supported host delegation controls when mining history; required review remains incomplete when unavailable"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:poteto-mode"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              }
+            ]
+          }
         }
       ]
     },
@@ -1199,7 +1243,65 @@
             "skill:principle-separate-before-serializing-shared-state",
             "skill:show-me-your-work"
           ],
-          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'."
+          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized supported independent reviewers and model diversity where required; confirmed host model preferences",
+              "real project runtime/harness for falsifiable predicates; multi-hour run checkpoint and source approval gates",
+              "target repository/artifacts and writable workflow, scratch, evidence and decision-trail destinations"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:architect"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:poteto-mode"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-encode-lessons-in-structure"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-foundational-thinking"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-laziness-protocol"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-never-block-on-the-human"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-prove-it-works"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-separate-before-serializing-shared-state"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-sequence-verifiable-units"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:show-me-your-work"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -1221,7 +1323,65 @@
             "skill:principle-separate-before-serializing-shared-state",
             "skill:show-me-your-work"
           ],
-          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'."
+          "description": "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized supported independent reviewers and model diversity where required; confirmed host model preferences",
+              "real project runtime/harness for falsifiable predicates; multi-hour run checkpoint and source approval gates",
+              "target repository/artifacts and writable workflow, scratch, evidence and decision-trail destinations"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:architect"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:poteto-mode"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-encode-lessons-in-structure"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-foundational-thinking"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-laziness-protocol"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-never-block-on-the-human"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-prove-it-works"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-separate-before-serializing-shared-state"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-sequence-verifiable-units"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:show-me-your-work"
+              }
+            ]
+          }
         }
       ]
     },
@@ -2012,7 +2172,31 @@
             "skill:poteto-mode",
             "skill:setup-pstack"
           ],
-          "description": "Help users configure pstack, start a task with /poteto-mode, choose a workflow or principle, and troubleshoot a run in Claude Code. Use /poteto-help with a question."
+          "description": "Help users configure pstack, start a task with /poteto-mode, choose a workflow or principle, and troubleshoot a run in Claude Code. Use /poteto-help with a question.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "accessible host preferences/history/tools only when relevant; unavailable capabilities are reported",
+              "current local CLI/catalog evidence before installation advice; explicit authority before setup writes",
+              "selected optional resource compatibility on the initiating host/snapshot"
+            ],
+            "reference_files": [
+              "ACCESS.md",
+              "references/ACCESS-prompting.md",
+              "references/ACCESS-recipes.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:poteto-mode"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:setup-pstack"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -2029,7 +2213,31 @@
             "skill:poteto-mode",
             "skill:setup-pstack"
           ],
-          "description": "Help users configure pstack, start a task with $poteto-mode, choose a workflow or principle, and troubleshoot a run in Codex. Use $poteto-help with a question."
+          "description": "Help users configure pstack, start a task with $poteto-mode, choose a workflow or principle, and troubleshoot a run in Codex. Use $poteto-help with a question.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "accessible host preferences/history/tools only when relevant; unavailable capabilities are reported",
+              "current local CLI/catalog evidence before installation advice; explicit authority before setup writes",
+              "selected optional resource compatibility on the initiating host/snapshot"
+            ],
+            "reference_files": [
+              "ACCESS.md",
+              "references/ACCESS-prompting.md",
+              "references/ACCESS-recipes.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:poteto-mode"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:setup-pstack"
+              }
+            ]
+          }
         }
       ]
     },
@@ -2160,7 +2368,203 @@
             "skill:technical-writing",
             "skill:unslop"
           ],
-          "description": "poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style."
+          "description": "poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Git, Bash/shell utilities and selected gh or Origin CLI for project/forge/worktree helpers; credentials only for authorized queries",
+              "Node for plan checks; Bun and package/network access for orchestration/watcher dependency installation",
+              "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority",
+              "explicit intended target, owned temporary execution/dependency space and separate writable store/output/evidence destinations",
+              "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md",
+              "playbooks/ACCESS-authoring-a-skill.md",
+              "playbooks/ACCESS-autonomous-run.md",
+              "playbooks/ACCESS-autopilot-full.md",
+              "playbooks/ACCESS-autopilot-stack.md",
+              "playbooks/ACCESS-babysit.md",
+              "playbooks/ACCESS-bug-fix.md",
+              "playbooks/ACCESS-eval.md",
+              "playbooks/ACCESS-feature.md",
+              "playbooks/ACCESS-hillclimb.md",
+              "playbooks/ACCESS-investigation.md",
+              "playbooks/ACCESS-multi-phase-plan.md",
+              "playbooks/ACCESS-opening-a-pr.md",
+              "playbooks/ACCESS-orchestrate.md",
+              "playbooks/ACCESS-pause-safely.md",
+              "playbooks/ACCESS-perf-issue.md",
+              "playbooks/ACCESS-prototype.md",
+              "playbooks/ACCESS-refactoring.md",
+              "playbooks/ACCESS-runtime-forensics.md",
+              "playbooks/ACCESS-session-pickup.md",
+              "playbooks/ACCESS-shipping.md",
+              "playbooks/ACCESS-trace-forensics.md",
+              "playbooks/ACCESS-visual-parity.md",
+              "playbooks/ACCESS-worktree-cleanup.md",
+              "references/ACCESS-bugbot-triage.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:architect"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:benchmark-checklist"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:how"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:interrogate"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:ketchup"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:no-comments"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-attack-the-premise"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-boundary-discipline"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-build-the-lever"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-encode-lessons-in-structure"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-exhaust-the-design-space"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-experience-first"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-explain-the-number"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-fix-root-causes"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-foundational-thinking"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-guard-the-context-window"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-laziness-protocol"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-make-operations-idempotent"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-migrate-callers-then-delete-legacy-apis"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-minimize-reader-load"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-model-the-domain"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-never-block-on-the-human"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-outcome-oriented-execution"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-prove-it-works"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-redesign-from-first-principles"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-separate-before-serializing-shared-state"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-sequence-verifiable-units"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-subtract-before-you-add"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-test-behavior-not-implementation"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-type-system-discipline"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:reflect"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:setup-pstack"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:show-me-your-work"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:swarm"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:tdd"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:technical-writing"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         },
         {
           "surface": "codex",
@@ -2212,7 +2616,203 @@
             "skill:technical-writing",
             "skill:unslop"
           ],
-          "description": "poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style."
+          "description": "poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Git, Bash/shell utilities and selected gh or Origin CLI for project/forge/worktree helpers; credentials only for authorized queries",
+              "Node for plan checks; Bun and package/network access for orchestration/watcher dependency installation",
+              "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority",
+              "explicit intended target, owned temporary execution/dependency space and separate writable store/output/evidence destinations",
+              "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence"
+            ],
+            "reference_files": [
+              "ACCESS.md",
+              "playbooks/ACCESS-authoring-a-skill.md",
+              "playbooks/ACCESS-autonomous-run.md",
+              "playbooks/ACCESS-autopilot-full.md",
+              "playbooks/ACCESS-autopilot-stack.md",
+              "playbooks/ACCESS-babysit.md",
+              "playbooks/ACCESS-bug-fix.md",
+              "playbooks/ACCESS-eval.md",
+              "playbooks/ACCESS-feature.md",
+              "playbooks/ACCESS-hillclimb.md",
+              "playbooks/ACCESS-investigation.md",
+              "playbooks/ACCESS-multi-phase-plan.md",
+              "playbooks/ACCESS-opening-a-pr.md",
+              "playbooks/ACCESS-orchestrate.md",
+              "playbooks/ACCESS-pause-safely.md",
+              "playbooks/ACCESS-perf-issue.md",
+              "playbooks/ACCESS-prototype.md",
+              "playbooks/ACCESS-refactoring.md",
+              "playbooks/ACCESS-runtime-forensics.md",
+              "playbooks/ACCESS-session-pickup.md",
+              "playbooks/ACCESS-shipping.md",
+              "playbooks/ACCESS-trace-forensics.md",
+              "playbooks/ACCESS-visual-parity.md",
+              "playbooks/ACCESS-worktree-cleanup.md",
+              "references/ACCESS-bugbot-triage.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:architect"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:benchmark-checklist"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:how"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:interrogate"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:ketchup"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:no-comments"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-attack-the-premise"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-boundary-discipline"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-build-the-lever"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-encode-lessons-in-structure"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-exhaust-the-design-space"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-experience-first"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-explain-the-number"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-fix-root-causes"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-foundational-thinking"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-guard-the-context-window"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-laziness-protocol"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-make-operations-idempotent"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-migrate-callers-then-delete-legacy-apis"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-minimize-reader-load"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-model-the-domain"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-never-block-on-the-human"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-outcome-oriented-execution"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-prove-it-works"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-redesign-from-first-principles"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-separate-before-serializing-shared-state"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-sequence-verifiable-units"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-subtract-before-you-add"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-test-behavior-not-implementation"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:principle-type-system-discipline"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:reflect"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:setup-pstack"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:show-me-your-work"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:swarm"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:tdd"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:technical-writing"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:unslop"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:why"
+              }
+            ]
+          }
         }
       ]
     },
