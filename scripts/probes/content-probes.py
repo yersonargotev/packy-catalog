@@ -120,10 +120,13 @@ class Probe:
             if args[0] == "update" and preview.get("retirements"):
                 prompts.append(f"Approve destructive-cleanup phase for exact project update preview {observation}? [y/N] ")
         else:
-            require(preview["plan_id"] and preview["disposition"] == "applicable", "global plan cannot apply")
+            require(preview["plan_id"] and preview["disposition"] in ("applicable", "converged"), "global plan cannot apply")
             prompts = [f"Approve {phase['kind']} phase for exact plan {preview['plan_id']}? [y/N] "
                        for phase in preview["phases"] if phase["approval_required"]]
-            require(bool(prompts), "global lifecycle missing approval phases")
+            if preview["disposition"] == "converged":
+                require(not preview["phases"], "converged global plan unexpectedly contains action phases")
+            else:
+                require(bool(prompts), "global lifecycle missing approval phases")
         return self.candidate(workspace, [*args, "--json"], approval=prompts)
 
     def prepare(self, name, *, pack_ids=None):
@@ -344,9 +347,7 @@ def pstack(probe, surfaces):
         workspace = old.prepare("pstack-" + scope, pack_ids=baseline["pack_ids"])
         base = workspace / ("project" if scope == "project" else "home")
         apply, remove = ("install", "uninstall") if scope == "project" else ("activate", "deactivate")
-        targets = {surface: base / SKILL_DIRECTORIES[surface] for surface in SURFACES}
-        if scope == "global":
-            targets["opencode"] = workspace / "config/opencode/skills"
+        targets = {surface: base / SKILL_DIRECTORIES[surface] for surface in ("codex", "claude")}
         original_project = tree(workspace / "project")
         personal_sentinels = {name: (workspace / name / "personal-sentinel").read_bytes() for name in ("home", "config")}
         inactive = {name: tree(workspace / name) for name in (("home", "config") if scope == "project" else ("project",))}
@@ -369,10 +370,6 @@ def pstack(probe, surfaces):
             require("## " + label + " execution" in (targets[surface] / "reflect/SKILL.md").read_text(),
                     "wrong pstack " + surface + " definition")
             require(untouched == tree(targets[other]), "pstack update changed other surface")
-        before = tree(workspace)
-        out, diagnostic = probe.candidate(workspace, [apply, "pstack", "--surface", "opencode", "--dry-run", "--json"], failure=True)
-        require("support" in out + diagnostic, "withdrawn OpenCode request failed for unrelated reason")
-        require(tree(workspace) == before, "OpenCode coexistence rejection changed workspace")
         helper = targets["codex"] / "poteto-mode/scripts/bootstrap.ts"
         original_helper = helper.read_bytes()
         original_mode = helper.stat().st_mode
@@ -405,7 +402,7 @@ def pstack(probe, surfaces):
             require((workspace / name / "personal-sentinel").read_bytes() == contents, "pstack changed unrelated personal file")
         probe.evidence["outcomes"].append({"scenario": "pstack", "scope": scope, "result": "passed",
                                           "checks": ["baseline-transition", "targeted-updates", "other-surface-preservation",
-                                                     "unsupported-opencode-rejection", "helper-drift-rejection",
+                                                     "helper-drift-rejection",
                                                      "effective-dependencies", "complete-retirement", "unrelated-state-preservation"]})
 
 
@@ -423,7 +420,9 @@ def pstack_withdrawal(probe, surfaces):
 
     def unsupported(workspace, args):
         before = tree(workspace)
-        output, diagnostic = probe.candidate(workspace, [*args, "--json"], failure=True)
+        output, diagnostic = probe.candidate(
+            workspace, [*args, "--json"], failure=True,
+            approval=[] if args[0] in ("install", "activate") and "--dry-run" not in args else None)
         require("support" in (output + diagnostic).lower() and "surface" in (output + diagnostic).lower(),
                 "OpenCode rejection did not identify unsupported surface")
         require(tree(workspace) == before, "unsupported OpenCode request mutated workspace")
@@ -445,7 +444,8 @@ def pstack_withdrawal(probe, surfaces):
         unsupported(workspace, [*args, "--surface", "opencode"])
 
     for host in ("codex", "claude"):
-        probe.set_context("content-acceptance", scenario="pstack-withdrawal", surface=host, scope="project")
+        for runner in (probe, old):
+            runner.set_context("content-acceptance", scenario="pstack-withdrawal", surface=host, scope="project")
         workspace = probe.prepare("pstack-preserved-access-" + host)
         target = tree(workspace / "project")
         discovery = probe.candidate(workspace, ["show", "pstack", "--surface", host, "--json"])
@@ -505,9 +505,18 @@ def pstack_withdrawal(probe, surfaces):
         if scope == "project":
             unsupported(workspace, [*args, "--dry-run"])
         else:
-            plan = probe.candidate(workspace, [*args, "--dry-run", "--json"])
-            require(plan["disposition"] != "applicable", "unsupported personal update became actionable")
-        probe.candidate(workspace, [*args, "--json"], failure=True)
+            output, diagnostic = probe.candidate(workspace, [*args, "--dry-run", "--json"], failure=True)
+            reports = [json.loads(line) for line in output.splitlines() if line.strip()]
+            plans = [item for item in reports if item["report"] == "pack-lifecycle-preview"]
+            require(len(plans) == 1, "missing personal update preview")
+            plan = plans[0]
+            require(plan["disposition"] not in ("applicable", "converged")
+                    and any(item["report"] == "pack-lifecycle-failure" and item["stage"] == "blocked"
+                            for item in reports), "unsupported personal update became actionable")
+        output, diagnostic = probe.candidate(workspace, [*args, "--json"], approval=[], failure=True)
+        require("interactive terminal" not in diagnostic, "legacy update did not reach the non-actionable plan guard")
+        if scope == "global":
+            require("plan is not actionable" in output + diagnostic, "personal update failed before the plan guard")
         require(tree(workspace) == before, "failed legacy update changed state")
         for guard in ("drift", "missing-retained-content"):
             path = (native / "reflect/SKILL.md") if guard == "drift" else (native / "reflect/SKILL.md").resolve()
@@ -522,7 +531,7 @@ def pstack_withdrawal(probe, surfaces):
                     path.unlink()
                 before = tree(workspace)
                 output, diagnostic = probe.candidate(workspace, [remove, "pstack", "--surface", "opencode", "--dry-run", "--json"], failure=True)
-                require(any(word in (output + diagnostic).lower() for word in ("drift", "identity", "missing", "no such file")),
+                require(any(word in (output + diagnostic).lower() for word in ("drift", "identity", "missing", "no such file", "do not exactly match the index")),
                         "legacy retirement guard failed for unrelated reason")
                 require(tree(workspace) == before, "rejected legacy retirement changed state")
             finally:
@@ -1190,10 +1199,8 @@ def main():
     if args.html_pack and "claude" not in scenarios:
         parser.error("--html-pack requires --scenario claude")
     surfaces = list(dict.fromkeys(args.surface or SURFACES))
-    if {"packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
+    if {"pstack", "pstack-withdrawal", "packy-bootstrap", "matty-design", "matty-delivery", "pstack-foundational"}.intersection(scenarios) and not {"codex", "claude"}.issubset(surfaces):
         parser.error("on-demand scenarios require Codex and Claude surfaces")
-    if "pstack" in scenarios and set(surfaces) != set(SURFACES):
-        parser.error("pstack requires --pstack-baseline and all three surfaces")
     if bool({"pstack", "pstack-foundational", "pstack-withdrawal"}.intersection(scenarios)) != (args.pstack_baseline is not None):
         parser.error("pstack scenarios require --pstack-baseline, used only with those scenarios")
     if bool({"matty-design", "matty-delivery"}.intersection(scenarios)) != (args.matty_baseline is not None):

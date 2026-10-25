@@ -37,6 +37,15 @@ class ProbeProcessTests(unittest.TestCase):
         self.assertEqual(result[0], 0)
         self.assertEqual(result[1], '{"result": "passed"}\n')
 
+    def test_empty_approval_sequence_keeps_terminal_without_answering(self):
+        result = self.run_child("import os; assert os.isatty(0); print('{}')", approval=[])
+        self.assertEqual(result, (0, "{}\n", ""))
+
+    def test_empty_approval_sequence_rejects_any_prompt(self):
+        with self.assertRaisesRegex(RuntimeError, "unexpected child approval"):
+            self.run_child("import os; assert os.isatty(0); "
+                           "print('Approve fixture? [y/N] ',end='',flush=True); input()", approval=[])
+
     def test_unexpected_prompt_is_never_approved(self):
         with self.assertRaisesRegex(RuntimeError, "unexpected child approval"):
             self.run_child("print('Activate personal state? [y/N] ',end='',flush=True); input()",
