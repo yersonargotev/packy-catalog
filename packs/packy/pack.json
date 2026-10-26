@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "packy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Discover and obtain reviewed Catalog skills through the Packy CLI",
   "selectable": true,
   "surfaces": [

@@ -43,11 +43,18 @@ normal preview, consent, ownership, and drift checks.
 
 ## Discover and obtain
 
-The host's bootstrap enumerates live local inventory using `packy list --json`
-and `packy show <pack> --surface <host> --json`, with no embedded Pack list.
-A unique match resolves directly; several matches require the user's choice.
-Keep Pack-qualified identities. Native bindings and installed copies alone do
-not establish reviewed on-demand compatibility.
+For a complete `<pack>:<skill>` identity, the host's bootstrap retrieves it
+directly. `get skill` checks reviewed compatibility; prior discovery is optional.
+For an incomplete request, inspect the known Pack with
+`packy show <pack> --surface <host> --json`; enumerate `packy list --json` first
+only when the Pack is unknown. Capture `show` JSON in writable scratch space,
+then display matching rows with a local JSON reader. If the name is unknown or
+unmatched, display only qualified identities and descriptions first, then
+inspect complete metadata for the matching candidates. The host skill includes
+[capture/filter examples](../packs/packy/skills/codex/packy-cli/SKILL.md#select-a-qualified-identity).
+There is no embedded Pack list. A unique match resolves directly; several matches
+require the user's choice. Keep Pack-qualified identities. Native bindings and installed copies
+alone do not establish reviewed on-demand compatibility.
 
 ```sh
 packy get skill <pack>:<skill> --surface codex --json
@@ -92,15 +99,33 @@ Catalog Snapshots; do not manually publish a second release.
 
 ## Concrete requests and recovery
 
-For a TDD request, inspect both matching Packs before selecting. A request for
-“Matty TDD” selects `matty:tdd`; an unspecified “TDD” request requires the user's
-choice between the qualified matches. The CLI does not perform natural-language
-ranking or resolve that product choice:
+For `matty:retro`, obtain the requested skill immediately:
+
+```sh
+packy get skill matty:retro --surface codex --json
+```
+
+Require a successful versioned `skill-access` report with `result: "prepared"`
+and the requested identity and host. The direct route retains all report,
+dependency, prerequisite and snapshot checks described above.
+
+For an unspecified “TDD” request, discover the relevant candidates and ask the
+user to choose between qualified matches such as `matty:tdd` and `pstack:tdd`.
+The CLI does not perform natural-language ranking or resolve that product choice.
+Using `jq` to display only exact-name matches:
 
 ```sh
 packy list --json
-packy show matty --surface codex --json
-packy show pstack --surface codex --json
+packy show matty --surface codex --json > <scratch>/matty.json
+packy show pstack --surface codex --json > <scratch>/pstack.json
+jq '.skills[] | select(.qualified_skill | endswith(":tdd"))' <scratch>/matty.json <scratch>/pstack.json
+# After the user selects matty:tdd:
+packy get skill matty:tdd --surface codex --json
+```
+
+For a separate `matty:implement` request and its nested TDD procedure:
+
+```sh
 packy get skill matty:implement --surface codex --json
 packy get skill matty:tdd --surface codex --snapshot <implement-snapshot-id> --json
 ```
@@ -117,6 +142,7 @@ the resource cache merely to infer the target project.
 | Packy is unavailable | Install the supporting released CLI explicitly; no substitute development binary. |
 | No local catalog | Acquire with `packy init` or `packy catalog refresh` after authorization. |
 | Several matching names | Ask the user to choose a qualified identity; do not prefer an installed copy. |
+| `invalid_identity` or `unknown_skill` | Correct the qualified identity using focused discovery: inspect the named Pack first, using `list` if the Pack is unknown or unresolved. Discovery describes the current selection; preserve the initiating host and `--snapshot` on nested retrieval retries. |
 | Incompatible host/resource | Correct the explicit host/identity or request a reviewed adaptation. |
 | Missing retained content | Restore that exact retained revision; do not retry against latest or native copies. |
 | Missing runtime, tool, model or service | Read resources normally; report/check prerequisites before the relevant procedure, preserving its stop/fallback policy. |
