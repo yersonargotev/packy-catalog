@@ -17,7 +17,7 @@ the manifests, resources, adaptations, provenance, and notices for:
 - Warp
 - Web
 
-Argote includes the Codex-only `issue-delivery` skill, adapted from Matt
+Argote includes the `issue-delivery` skill, adapted from Matt
 Pocock's implementation workflow. It requires the `tdd` and `code-review`
 skills from Matty at runtime. The standalone Engram and Issue Delivery Packs
 are no longer part of this catalog.
@@ -66,87 +66,72 @@ validation report:
 
 [Catalog tooling](docs/catalog-tooling.md) describes cache recovery, prerequisites,
 contract tests, snapshot commands, and reviewed release upgrades.
-See [schema v3 adoption](docs/schema-v3-adoption.md) before upgrading existing
-installations.
+The [schema v3 adoption record](docs/schema-v3-adoption.md) describes an earlier
+generation; follow the current handoff below for this incompatible transition.
 
 When a Pack's manifest contract or referenced bytes change, its version must
 increase. Packs whose content is unchanged must retain their versions. A new
 Pack may start at any valid SemVer. Pull-request CI applies the same rules
 against the exact base commit.
 
-## Packy CLI bootstrap
+## Use the catalog
 
-The official `packy` Pack contains only `packy-cli` and its legal closure for
-Codex and Claude Code. [Setup and use](docs/packy-cli.md) cover personal activation
-by default, optional project installation, live local discovery, and qualified
-resource retrieval. The [accepted design](docs/design/on-demand-skills.md) and
-[architecture decision](docs/adr/0002-provide-on-demand-skills-without-executing-workflows.md)
-record the provider/agent boundary. All 117 Matty, pstack and Warp logical skills
-have reviewed Codex/Claude access entries. The [complete coverage inventory and
-opt-in acceptance](docs/on-demand-coverage.md) account for 234 host cases and
-distinguish resource access from semantic workflow execution. Matty/Warp retain
-native OpenCode installation; pstack keeps its accepted OpenCode withdrawal.
+The compatible engine provides two surface conventions: `agents` for shared
+Agents instructions and skills, and `claude` for Claude instructions and skills.
+Agents is a convention, not a promise that every client supports a workflow's
+runtime assumptions. Custom roles require an explicitly reviewed client and
+scope; select `--client codex` when a supported Agents workflow requires Codex
+roles. The retired `codex` and `opencode` surface values are rejected.
 
-## Claude
+Before replacing an older binary, follow the released engine's
+[adoption and previous-binary handoff guide](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/catalog-adoption.md).
+Wait for a complete compatible catalog snapshot, inventory every affected
+receipt, and remove old projections using the previous binary. Preserve
+unrelated files, credentials, client settings, and retained content referenced
+by receipts. There is no automatic migration.
 
-Claude 1.0.0 provides `eli5` and `html-plan` for Claude Code, Codex, and
-OpenCode, adapted from the community repository at
-`f60f0454df3045f724c43c6346ec80bdcc3472b2`. `html-plan` includes its HTML
-runtime and requires Node.js. This edition includes the two self-contained
-skills, with their notices; the upstream marketplace and service-dependent
-plugins are outside its scope. See [scope, adaptations, and installation](docs/research/claude.md).
-No Packy engine changes are required.
-
-## Ponytail
-
-Ponytail 2.0.0 provides six skills and an independently selectable persistent
-instruction, adapted from upstream commit
-`09c434ab73ca43761c5d8b0c5d341926c2fba710` (upstream package version 5.3.2).
-It supports Codex, Claude Code, and OpenCode project installation using the
-existing Packy v0.2.28 engine. No engine changes are required.
-
-The coding skill applies Ponytail 5's smallest-complete-change approach.
-Review and audit cover correctness, safety, real load, tests, speed, and
-unnecessary complexity. Debt reports recognize `shortcut:` comments and the
-legacy `ponytail:` form.
-
-After this catalog revision is published, refresh catalog availability and
-install from the target Git project. The complete Pack is suitable when no
-other Pack owns the host's instruction file:
+Acquire the catalog explicitly with `packy init`, or select a newer complete
+snapshot with `packy catalog refresh`. Refresh does not update installations;
+existing receipts retain their snapshot. A failed refresh leaves the previous
+valid selection usable. Preview each desired installation before applying it:
 
 ```sh
 packy catalog refresh
-packy install ponytail --surface codex --dry-run
-packy install ponytail --surface codex
+packy install ponytail --surface agents --dry-run
+packy install ponytail --surface agents
 ```
 
-The complete Pack installs all six skills and permanent guidance. For skills
-without permanent guidance, repeat `--resource` for the desired skill roots:
+Select specific resource roots with `--resource` when the whole Pack is not
+wanted. For example, Ponytail's persistent `instruction:ponytail-guidance` is
+independent of its skills. Agents instructions apply at project scope; Claude
+uses its native instruction convention. Ownership and drift checks protect
+existing content. Consult the Pack's metadata and preview for supported
+surfaces, scopes, dependencies, and prerequisites.
+
+The catalog-authored Packy CLI skill supports [on-demand access](docs/packy-cli.md)
+without installation of the retrieved Pack. Qualified identities and the
+initiating surface and snapshot carry through nested access; acquisition and
+refresh are never implicit.
+
+## Export a plugin
+
+Export is separate from installation and reads a retained local snapshot:
 
 ```sh
-packy install ponytail --surface codex \
-  --resource skill:ponytail --resource skill:ponytail-review --dry-run
+packy export ponytail --surface agents --output ./ponytail-plugin --json
+packy export ponytail --surface claude --skill ponytail --output ./ponytail-claude
 ```
 
-Remove `--dry-run` after reviewing the preview. The standalone instruction is
-`instruction:ponytail-guidance`; it contributes to `AGENTS.md` on Codex/OpenCode
-and `CLAUDE.md` on Claude. It remains in effect when a conversational skill mode
-ends. Packy v0.2.28 blocks two different Packs from owning the same instruction
-file, even with distinct block identifiers. If Argote or another Pack already
-manages that file, select only Ponytail skills. Existing unmanaged instruction
-text is preserved. Supporting independent Pack blocks in the same file would
-require a separate engine change.
-
-This edition does not include lifecycle hooks, band/statusline integration, MCP,
-or mode configuration files. Skill levels are conversational. The main skill,
-help, benchmark summary, and persistent instruction are maintained adaptations;
-review, audit, debt, and the MIT notice retain exact upstream bytes. The benchmark
-skill reports the Ponytail 5 upstream agentic benchmark with its limitations, not
-claimed savings for the Packy adaptation or the current project.
-
-The [Ponytail installation probe](scripts/probes/README.md#released-binary-content-acceptance)
-checks resource selection, notices, preservation, and the shared-file limit on
-all three hosts.
+Agents exports Agent Plugins and Claude exports a Claude plugin. The default
+selects skills explicitly reviewed for the chosen format; an explicit selection
+and its required closure must all be compatible or the whole export fails. The
+output parent must exist and the destination must be new or empty. Reports
+identify the snapshot, selection, closure, and unverified prerequisites.
+Export does not install or enable a plugin, register custom roles, change client
+settings, or execute its content. A valid package does not establish client
+loading, authorization, or model-backed usability. See the released engine's
+[plugin export guide](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/plugin-export.md)
+for format and prerequisite details.
 
 ## Investigate a new Pack
 
@@ -228,11 +213,3 @@ GitHub to report the result as immutable. Retrying the same commit accepts only
 the same target and byte-identical assets. An interrupted draft can upload
 missing expected assets; a published mutable release, unexpected asset, or
 changed byte is rejected.
-
-### pstack host support
-
-pstack 5.0.0 supports Codex and Claude Code under one Pack identity. Common
-exact-copy upstream originals, provenance and notices remain included. OpenCode
-is withdrawn; existing installations are preserved until explicit retirement.
-Follow the [OpenCode retirement instructions](docs/pstack-opencode-retirement.md)
-before removing old retained content. Other Packs keep their declared hosts.

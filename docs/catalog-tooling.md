@@ -8,21 +8,17 @@ duplicate, missing, or malformed fields fail before acquisition.
 
 ## Reviewed engine adoption
 
-The current pin adopts [Packy v0.2.31](https://github.com/yersonargotev/packy/releases/tag/v0.2.31),
-following v0.2.30, for reviewed Codex/Claude discovery, qualified retrieval,
-cross-Pack dependencies, and immutable procedure snapshots. The sole source
-identity and four archive checksums live in `packy-release.json`.
+The current pin adopts [Packy v0.2.32](https://github.com/yersonargotev/packy/releases/tag/v0.2.32),
+source commit `9d8a03a0c0070f20736d6f6ab94d4f5c303243ba`, for the Agents and
+Claude conventions, explicit custom-agent projections, and reviewed plugin
+export. The sole source identity and four archive checksums live in
+`packy-release.json`.
 
-The [immutable release delivery evidence](https://github.com/yersonargotev/packy/issues/865#issuecomment-6387622326)
-links the four native executable contract artifacts from
-[release run 40117071228](https://github.com/yersonargotev/packy/actions/runs/40117071228).
-All four compatible runners passed the same functional cases before publication;
-the published archives are the tested bytes. Adoption reverified the immutable
-release, tag source, all published archive digests, checksum manifest, and native
-embedded identity. Catalog acceptance uses that released executable, independent
-of an engine source checkout. Engine release evidence is separate from Catalog content evidence. The
-[integrated inventory and opt-in acceptance](on-demand-coverage.md) now account
-for all 117 reviewed logical skills on both access hosts.
+The [engine release evidence](https://github.com/yersonargotev/packy/issues/881#issuecomment-6434297404)
+links [release run 40452008179](https://github.com/yersonargotev/packy/actions/runs/40452008179)
+and its four native staged-archive contracts. That release is immutable; engine
+qualification is separate from validation and publication of this complete
+Catalog Snapshot. Intermediate mixed-generation catalogs must not be published.
 
 ## Local commands and prerequisites
 
@@ -38,7 +34,7 @@ python3 -m pip install -r requirements-tooling.txt
 ```
 
 `packy.sh` forwards arguments to the verified released CLI. Its
-[command documentation](https://github.com/yersonargotev/packy/blob/v0.2.31/docs/catalog-project.md)
+[command documentation](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/catalog-project.md)
 explains versioned JSON reports, optional build baselines, and publication.
 Local construction labels do not certify a clean reviewed commit and do not
 create an attestation or official Catalog Publication. The main-push workflow
