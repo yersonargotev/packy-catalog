@@ -1,13 +1,12 @@
 {
   "schema_version": 3,
   "id": "thermos",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Thermos correctness, security, and maintainability reviews with portable reviewer agents",
   "selectable": true,
   "surfaces": [
-    "claude",
-    "codex",
-    "opencode"
+    "agents",
+    "claude"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -40,6 +39,21 @@
         "relationship": "adapted"
       },
       "bindings": [
+        {
+          "surface": "agents",
+          "projection": "agent",
+          "name": "thermo-nuclear-code-quality-review-subagent",
+          "invocation": "$thermo-nuclear-code-quality-review-subagent",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": [],
+          "client_projection": {
+            "client": "codex",
+            "scopes": [
+              "global"
+            ]
+          }
+        },
         {
           "surface": "claude",
           "projection": "agent",
@@ -83,25 +97,14 @@
                 }
               }
             }
-          ]
-        },
-        {
-          "surface": "codex",
-          "projection": "agent",
-          "name": "thermo-nuclear-code-quality-review-subagent",
-          "invocation": "$thermo-nuclear-code-quality-review-subagent",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "agent",
-          "name": "thermo-nuclear-code-quality-review-subagent",
-          "invocation": "thermo-nuclear-code-quality-review-subagent",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
+          ],
+          "client_projection": {
+            "client": "claude",
+            "scopes": [
+              "global",
+              "project"
+            ]
+          }
         }
       ],
       "surface_exclusions": [],
@@ -130,6 +133,21 @@
         "relationship": "adapted"
       },
       "bindings": [
+        {
+          "surface": "agents",
+          "projection": "agent",
+          "name": "thermo-nuclear-review-subagent",
+          "invocation": "$thermo-nuclear-review-subagent",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": [],
+          "client_projection": {
+            "client": "codex",
+            "scopes": [
+              "global"
+            ]
+          }
+        },
         {
           "surface": "claude",
           "projection": "agent",
@@ -185,25 +203,14 @@
                 }
               }
             }
-          ]
-        },
-        {
-          "surface": "codex",
-          "projection": "agent",
-          "name": "thermo-nuclear-review-subagent",
-          "invocation": "$thermo-nuclear-review-subagent",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "agent",
-          "name": "thermo-nuclear-review-subagent",
-          "invocation": "thermo-nuclear-review-subagent",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
+          ],
+          "client_projection": {
+            "client": "claude",
+            "scopes": [
+              "global",
+              "project"
+            ]
+          }
         }
       ],
       "surface_exclusions": [],
@@ -252,16 +259,7 @@
       },
       "bindings": [
         {
-          "surface": "claude",
-          "projection": "skill",
-          "name": "thermo-nuclear-code-quality-review",
-          "invocation": "/thermo-nuclear-code-quality-review",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
+          "surface": "agents",
           "projection": "skill",
           "name": "thermo-nuclear-code-quality-review",
           "invocation": "$thermo-nuclear-code-quality-review",
@@ -270,16 +268,27 @@
           "capabilities": []
         },
         {
-          "surface": "opencode",
+          "surface": "claude",
           "projection": "skill",
           "name": "thermo-nuclear-code-quality-review",
-          "invocation": "thermo-nuclear-code-quality-review",
+          "invocation": "/thermo-nuclear-code-quality-review",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "thermo-nuclear-code-quality-review",
+          "prerequisites": [
+            "The consuming client must permit the tools and review workflow described by this skill."
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -298,16 +307,7 @@
       },
       "bindings": [
         {
-          "surface": "claude",
-          "projection": "skill",
-          "name": "thermo-nuclear-review",
-          "invocation": "/thermo-nuclear-review",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
+          "surface": "agents",
           "projection": "skill",
           "name": "thermo-nuclear-review",
           "invocation": "$thermo-nuclear-review",
@@ -316,16 +316,27 @@
           "capabilities": []
         },
         {
-          "surface": "opencode",
+          "surface": "claude",
           "projection": "skill",
           "name": "thermo-nuclear-review",
-          "invocation": "thermo-nuclear-review",
+          "invocation": "/thermo-nuclear-review",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "thermo-nuclear-review",
+          "prerequisites": [
+            "The consuming client must permit the tools and review workflow described by this skill."
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -349,16 +360,7 @@
       },
       "bindings": [
         {
-          "surface": "claude",
-          "projection": "skill",
-          "name": "thermos",
-          "invocation": "/thermos",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
+          "surface": "agents",
           "projection": "skill",
           "name": "thermos",
           "invocation": "$thermos",
@@ -367,16 +369,38 @@
           "capabilities": []
         },
         {
-          "surface": "opencode",
+          "surface": "claude",
           "projection": "skill",
           "name": "thermos",
-          "invocation": "thermos",
+          "invocation": "/thermos",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "thermos",
+          "prerequisites": [
+            "The consuming client must permit the tools and review workflow described by this skill."
+          ],
+          "references": [],
+          "roles": [
+            {
+              "resource": "agent:thermo-nuclear-code-quality-review-subagent",
+              "resolution": "external",
+              "description": "The consuming client must provide the reviewed thermo-nuclear-code-quality-review-subagent specialist role and allow delegation."
+            },
+            {
+              "resource": "agent:thermo-nuclear-review-subagent",
+              "resolution": "external",
+              "description": "The consuming client must provide the reviewed thermo-nuclear-review-subagent specialist role and allow delegation."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

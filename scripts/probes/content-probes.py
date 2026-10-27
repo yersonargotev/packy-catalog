@@ -570,6 +570,7 @@ def bootstrap_state(base):
 def packy_bootstrap(probe, surfaces, *, fixtures=True):
     """Exercise the official two-host bootstrap through the released lifecycle."""
     hosts = ("codex", "claude")
+    version = json.loads((ROOT / "packs/packy/pack.json").read_text())["version"]
     for scope in ("project", "global"):
         probe.set_context("content-acceptance", scenario="packy-bootstrap",
                           scope="project" if scope == "project" else "disposable-global")
@@ -597,7 +598,7 @@ def packy_bootstrap(probe, surfaces, *, fixtures=True):
                             if key != "packy-cli" and not key.startswith("packy-cli/")}
             require(native_after == native_before, "bootstrap changed unrelated same-host skills")
             if scope == "project":
-                require("Pack: packy 1.0.0" in (base / "PACKY-NOTICES.md").read_text()
+                require(f"Pack: packy {version}" in (base / "PACKY-NOTICES.md").read_text()
                         and (ROOT / "packs/packy/notices/MIT").read_text() in (base / "PACKY-NOTICES.md").read_text(),
                         "bootstrap legal notice missing")
                 probe.verify(workspace)
@@ -2411,6 +2412,10 @@ def main():
                 probe.set_context("baseline-verification")
                 matty_baseline_commit = checkout_commit(probe, args.matty_baseline)
                 evidence["matty_baseline_project"] = str(args.matty_baseline)
+            pin_path = ROOT / "packy-release.json"
+            if pin_path.exists():
+                pin = json.loads(pin_path.read_text())
+                require(pin.get("version") == "v0.2.31", "historical probes require their v0.2.31 checkout; use generation.py for the two-surface catalog")
             probe.set_context("acquisition")
             probe.execute([sys.executable, "-B", str(ROOT / "scripts/packy_tool.py"), "--pin",
                            str(ROOT / "packy-release.json"), "--executable-output", str(probe.executable)], timeout=180)

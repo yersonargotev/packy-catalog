@@ -3,6 +3,13 @@ name: implement-specs
 description: Implement an approved feature from PRODUCT.md and TECH.md, keeping specs and code aligned in the same PR as implementation evolves. Use after the product and tech specs are approved and the next step is building the feature.
 ---
 
+## Reviewed execution prerequisites
+
+- target Warp repository, PRODUCT.md and TECH.md when warranted; reviewed and approved specs
+- target runtime, tests and validation artifacts; user choice of optional implementation aids
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # implement-specs
 
 Implement an approved feature from `PRODUCT.md` and `TECH.md`.

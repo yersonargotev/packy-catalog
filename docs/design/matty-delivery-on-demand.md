@@ -1,5 +1,9 @@
 # Matty delivery and writing: reviewed on-demand access
 
+This review records its original Catalog generation. Surface names, Pack
+versions, and acceptance evidence below are historical; see the
+[current setup guide](../packy-cli.md) for the `agents` and `claude` contract.
+
 This is the exact 14-skill slice in [issue #92](https://github.com/yersonargotev/packy-catalog/issues/92).
 Together with [the 19 design/planning skills](matty-design-on-demand.md), it
 accounts for all 33 Matty skills on Codex and Claude Code. Matty advances from

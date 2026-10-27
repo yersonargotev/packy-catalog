@@ -1,12 +1,12 @@
 {
   "schema_version": 3,
   "id": "packy",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Discover and obtain reviewed Catalog skills through the Packy CLI",
   "selectable": true,
   "surfaces": [
-    "claude",
-    "codex"
+    "agents",
+    "claude"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -30,7 +30,7 @@
     {
       "kind": "skill",
       "id": "packy-cli",
-      "source": "skills/codex/packy-cli",
+      "source": "skills/agents/packy-cli",
       "description": "Discover a requested Catalog skill and obtain its reviewed resources without installing its Pack",
       "requires": [],
       "conflicts": [],
@@ -45,19 +45,19 @@
       },
       "bindings": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "projection": "skill",
           "name": "packy-cli",
-          "invocation": "/packy-cli",
+          "invocation": "packy-cli",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "projection": "skill",
           "name": "packy-cli",
-          "invocation": "$packy-cli",
+          "invocation": "/packy-cli",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -68,6 +68,26 @@
         {
           "surface": "claude",
           "source": "skills/claude/packy-cli"
+        }
+      ],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "packy-cli",
+          "prerequisites": [
+            "packy executable and an explicitly acquired compatible catalog"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "packy-cli",
+          "prerequisites": [
+            "packy executable and an explicitly acquired compatible catalog"
+          ],
+          "references": [],
+          "roles": []
         }
       ]
     }

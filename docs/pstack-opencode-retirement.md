@@ -1,5 +1,11 @@
 # Retire an existing pstack OpenCode installation
 
+This guide records the earlier pstack withdrawal. The commands below require
+the previous Packy binary that owns the old receipts; Packy v0.2.32 rejects the
+`opencode` surface. For the complete current transition, use the
+[previous-binary handoff](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/catalog-adoption.md)
+when both the compatible engine and complete catalog are available.
+
 pstack 5.0.0 supports Codex and Claude Code. New OpenCode discovery, retrieval,
 installation and activation are unsupported. Existing OpenCode installations are
 not automatically deleted, replaced or migrated by this support withdrawal.

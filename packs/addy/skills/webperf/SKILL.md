@@ -1,7 +1,11 @@
-description = "Run a web performance audit via the web-performance-auditor persona"
+---
+name: webperf
+description: "Runs a web performance audit through the web-performance-auditor persona"
+---
 
-prompt = """
-/webperf targets web applications specifically. Do not use it for utility libraries, CLIs, or server-only code with no browser-facing output.
+# Webperf
+
+This workflow targets web applications specifically. Do not use it for utility libraries, CLIs, or server-only code with no browser-facing output.
 
 ## Determine the mode
 
@@ -17,7 +21,7 @@ Quick mode — default when none of the above are available. Scan source code fo
 
 ## Run the audit
 
-Spawn the `web-performance-auditor` subagent (the CLI exposes each custom subagent in `agents/` as a tool with the same name). Pass it explicitly:
+Request the `web-performance-auditor` native role only when the selected client exposes it and delegation is authorized. If unavailable, stop and report the missing prerequisite; a configured definition is not evidence of a successful delegation. Pass it explicitly:
 
 - The files, components, or diff under review
 - Any artifact paths (Lighthouse JSON, PSI JSON, CrUX response, trace) or pasted JSON content
@@ -28,5 +32,4 @@ The subagent returns a scorecard (only populated with sourced values — mark un
 
 ## Output
 
-Return the full audit report to the user. No synthesis or merge step is needed — this is a single-persona command.
-"""
+Return the full audit report to the user. No synthesis or merge step is needed — this is a single-persona workflow.

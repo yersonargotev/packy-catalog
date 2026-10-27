@@ -31,6 +31,8 @@ Read supporting references only when their procedure branch needs them.
 
 ## Codex execution
 
+This is a Codex-specific workflow carried by the Agents convention. A shared Agents binding does not provide Codex tools, model choice, or delegation; use only capabilities authorized and available in the actual client.
+
 Apply this workflow when explicitly requested, or read it as a dependency of an explicitly requested pstack workflow. Read required pstack skills through the prepared qualified references in this entry. Project skills belong under `.agents/skills`; personal skills under `~/.agents/skills`.
 
 # Make Operations Idempotent

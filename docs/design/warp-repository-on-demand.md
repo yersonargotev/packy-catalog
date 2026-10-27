@@ -1,5 +1,9 @@
 # Warp repository and reporting: reviewed on-demand access
 
+This review records its original Catalog generation. Surface names, Pack
+versions, and acceptance evidence below are historical; see the
+[current setup guide](../packy-cli.md) for the `agents` and `claude` contract.
+
 [Issue #97](https://github.com/yersonargotev/packy-catalog/issues/97) covers exactly
 13 skills on Codex and Claude Code. Warp advances independently from 2.3.0 to
 2.4.0; its upstream remains

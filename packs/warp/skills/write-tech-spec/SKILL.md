@@ -3,6 +3,14 @@ name: write-tech-spec
 description: Write a TECH.md spec for a significant Warp feature after researching the current codebase and implementation constraints. Use when the user asks for a technical spec, implementation plan, or architecture doc tied to a product spec.
 ---
 
+## Reviewed execution prerequisites
+
+- interactive directory/team clarification; Linear MCP or GitHub CLI only for explicitly requested ticket creation
+- optional host worker capability for parallelization planning; writable target specs directory
+- target Warp feature context, product spec when present and accessible current codebase for commit-pinned research
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # write-tech-spec
 
 Write a `TECH.md` spec for a significant feature in Warp.

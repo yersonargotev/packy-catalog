@@ -23,9 +23,8 @@ plugin's hooks, band or statusline, MCP server, or persistent mode tracker.
 | `ponytail-gain` | Explain Ponytail 5's upstream benchmark results and limitations. |
 | `ponytail-help` | Explain this Packy edition. |
 
-In Codex invoke `$ponytail` or `$ponytail-review`; in Claude Code use
-`/ponytail` or `/ponytail-review`. In OpenCode ask the agent to load the named
-skill. Skills omitted from a selected installation are not available there.
+Use the client’s skill invocation mechanism to invoke `ponytail` or
+`ponytail-review`. Skills omitted from a selected installation are not available there.
 
 The `ponytail` skill accepts `lite`, `full` (default), or `ultra`:
 
@@ -43,8 +42,8 @@ From the target Git project, preview before applying. These commands are
 instructions for the user, not authorization to run them during help:
 
 ```sh
-packy install ponytail --surface codex --dry-run
-packy install ponytail --surface codex
+packy install ponytail --surface agents --dry-run
+packy install ponytail --surface agents
 ```
 
 The complete Pack includes all six skills **and persistent guidance**. Packy
@@ -53,15 +52,15 @@ instruction file. In that case select only skills. For just the conversational
 coding skill, select it explicitly:
 
 ```sh
-packy install ponytail --surface codex --resource skill:ponytail --dry-run
-packy install ponytail --surface codex --resource skill:ponytail
+packy install ponytail --surface agents --resource skill:ponytail --dry-run
+packy install ponytail --surface agents --resource skill:ponytail
 ```
 
 Repeat `--resource skill:<name>` to include other skills. Persistent guidance is
 `instruction:ponytail-guidance`; it is not a dependency of any skill. Use
-`--surface claude` or `--surface opencode` for those hosts.
+`--surface claude` for Claude.
 
-Project guidance is installed into `AGENTS.md` for Codex/OpenCode and
+Project guidance is installed into `AGENTS.md` for Agents and
 `CLAUDE.md` for Claude. Stopping a conversational mode leaves that guidance
 in effect. Existing unmanaged text is preserved, but separate Packs cannot
 share ownership of this file. To switch an existing complete installation to
@@ -69,16 +68,16 @@ skills only, preview and uninstall that Pack surface, then reinstall with the
 desired skill roots. Preserve local edits and resolve any drift before removal.
 
 ```sh
-packy uninstall ponytail --surface codex --dry-run
-packy uninstall ponytail --surface codex
+packy uninstall ponytail --surface agents --dry-run
+packy uninstall ponytail --surface agents
 ```
 
 ## Updates and verification
 
 ```sh
 packy catalog refresh
-packy update ponytail --surface codex --project --dry-run
-packy update ponytail --surface codex --project
+packy update ponytail --surface agents --project --dry-run
+packy update ponytail --surface agents --project
 packy verify --json
 ```
 

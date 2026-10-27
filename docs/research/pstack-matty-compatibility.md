@@ -1,5 +1,10 @@
 # Matty alongside an active pstack workflow
 
+This is a historical research record. Its surface support, commands, engine
+versions and conclusions describe the generation investigated and are not
+current operator guidance. See [current catalog use](../../README.md#use-the-catalog)
+and [Packy CLI setup](../packy-cli.md).
+
 Reviewed on 2026-10-23 against this Catalog Project. The scope is the checked-in
 Matty 4.0.0 and pstack 4.5.0 sources, with Codex as the main host. This is a
 static instruction review, not a claim that the combined workflows have passed

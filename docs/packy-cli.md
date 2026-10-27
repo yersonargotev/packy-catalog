@@ -1,14 +1,14 @@
 # Packy CLI bootstrap
 
 The official `packy` Pack distributes the `packy-cli` skill and MIT notice,
-with effective definitions for Codex and Claude Code. It is Catalog-authored;
+with reviewed definitions for Agents and Claude. It is Catalog-authored;
 it is not an embedded executable skill distribution. Pack versions remain
 independent of the engine release selected by `packy-release.json`.
 
-## Set up a host
+## Set up a surface
 
 Install Packy explicitly if unavailable. Use the released CLI supporting the
-[on-demand protocol](https://github.com/yersonargotev/packy/blob/v0.2.31/docs/on-demand-skills.md).
+[on-demand protocol](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/on-demand-skills.md).
 Explicitly acquire with `packy init` when there is no local catalog, or update
 availability with `packy catalog refresh`. Discovery/retrieval never refresh
 implicitly.
@@ -17,21 +17,22 @@ Personal activation is the default. Preview, review the plan, then approve its
 exact identity through the existing interactive lifecycle:
 
 ```sh
-packy activate packy --surface codex --resource skill:packy-cli --dry-run
-packy activate packy --surface codex --resource skill:packy-cli
+packy activate packy --surface agents --resource skill:packy-cli --dry-run
+packy activate packy --surface agents --resource skill:packy-cli
 ```
 
-For Claude Code, independently run the same commands with `--surface claude`.
+For Claude, independently run the same commands with `--surface claude`.
 The personal roots are `~/.agents/skills/packy-cli` and
-`~/.claude/skills/packy-cli`. Both hosts can coexist alongside unrelated active
+`~/.claude/skills/packy-cli`. Both surfaces can coexist alongside unrelated active
 Packs and native skills; ownership conflicts and drift still require resolution.
-Claude Code retains the engine's supported host floor (2.1.203 or newer).
+Agents is a shared convention; selecting it does not establish Codex runtime
+compatibility or register custom roles.
 
 For a shared project, run from the intended Git project instead:
 
 ```sh
-packy install packy --surface codex --resource skill:packy-cli --dry-run
-packy install packy --surface codex --resource skill:packy-cli
+packy install packy --surface agents --resource skill:packy-cli --dry-run
+packy install packy --surface agents --resource skill:packy-cli
 ```
 
 Use `--surface claude` independently for the project's Claude bootstrap.
@@ -43,18 +44,24 @@ normal preview, consent, ownership, and drift checks.
 
 ## Discover and obtain
 
-The host's bootstrap enumerates live local inventory using `packy list --json`
-and `packy show <pack> --surface <host> --json`, with no embedded Pack list.
-A unique match resolves directly; several matches require the user's choice.
-Keep Pack-qualified identities. Native bindings and installed copies alone do
-not establish reviewed on-demand compatibility.
+For a complete `<pack>:<skill>` identity, the surface bootstrap retrieves it
+directly. `get skill` checks reviewed compatibility; prior discovery is optional.
+For an incomplete request, inspect the known Pack with
+`packy show <pack> --surface <surface> --json`; enumerate `packy list --json` first
+only when the Pack is unknown. Capture `show` JSON in writable scratch space,
+then display matching rows with a local JSON reader. If the name is unknown or
+unmatched, display only qualified identities and descriptions first, then
+inspect complete metadata for the matching candidates. The Packy CLI skill includes capture/filter examples.
+There is no embedded Pack list. A unique match resolves directly; several matches
+require the user's choice. Keep Pack-qualified identities. Native bindings and installed copies
+alone do not establish reviewed on-demand compatibility.
 
 ```sh
-packy get skill <pack>:<skill> --surface codex --json
-packy get skill <dependency-pack>:<dependency-skill> --surface codex --snapshot <returned-snapshot-id> --json
+packy get skill <pack>:<skill> --surface agents --json
+packy get skill <dependency-pack>:<dependency-skill> --surface agents --snapshot <returned-snapshot-id> --json
 ```
 
-Use the initiating host and immutable snapshot for all nested same-Pack and
+Use the initiating surface and immutable snapshot for all nested same-Pack and
 cross-Pack access. Read the returned `entry_document` and only needed supporting
 files under `resource_root`; descriptors also identify the Pack version,
 dependencies and known prerequisites. A new independent request follows the
@@ -72,40 +79,57 @@ resources and installed copies unchanged. Native invocation retains its installe
 behavior, including local modifications.
 
 Retrieval works outside Git after acquisition and does not execute scripts,
-change target projects or install/activate requested Packs. On-demand scope is
-Codex and Claude Code. Matty and Warp retain native OpenCode installation;
-pstack withdrew OpenCode in 5.0.0 under [ADR 0003](adr/0003-limit-pstack-host-support.md).
-Retained pstack installations require [explicit retirement](pstack-opencode-retirement.md);
-retrieval never migrates or removes them. All 117 logical Matty/pstack/Warp skills
-have reviewed entries for both access hosts; the [coverage inventory](on-demand-coverage.md)
-records applicability, dependencies, prerequisites and workflow limits. File/metadata
-checks do not prove model-driven matching, native loading, runtime readiness or
-semantic workflow success.
+change target projects or install/activate requested Packs. The supported
+surfaces are `agents` and `claude`; the retired `codex` and `opencode` values
+are rejected. Existing installations from an incompatible generation require
+an explicit [previous-binary handoff](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/catalog-adoption.md)
+after both the released engine and a complete compatible catalog are available.
+Keep retained snapshots needed by receipts and preserve unrelated user files and
+configuration. File and metadata checks do not prove native loading, runtime
+readiness, authorization, or semantic workflow success.
 
 ## Verify a candidate
 
-After content review, run the [integrated released-binary acceptance](on-demand-coverage.md#run-the-integrated-contract).
-It uses owned disposable state for both scopes/hosts, all 234 roots, controlled
-same-/cross-Pack selection transitions and optional safe real-content helpers. Ordinary validation, snapshot construction and publication
-remain inert. Only the existing successful-main workflow publishes official
-Catalog Snapshots; do not manually publish a second release.
+Catalog validation, snapshot construction and publication remain inert. Use
+isolated workspaces and the released engine's candidate interface for lifecycle,
+retained access and export acceptance. Keep any client loading or model-backed
+execution evidence separate from package validity and configuration. Only the
+successful-main publication workflow publishes official Catalog Snapshots.
 
 ## Concrete requests and recovery
 
-For a TDD request, inspect both matching Packs before selecting. A request for
-“Matty TDD” selects `matty:tdd`; an unspecified “TDD” request requires the user's
-choice between the qualified matches. The CLI does not perform natural-language
-ranking or resolve that product choice:
+For `matty:retro`, obtain the requested skill immediately:
+
+```sh
+packy get skill matty:retro --surface agents --json
+```
+
+Require a successful versioned `skill-access` report with `result: "prepared"`
+and the requested identity and surface. The direct route retains all report,
+dependency, prerequisite and snapshot checks described above.
+
+For an unspecified “TDD” request, discover the relevant candidates and ask the
+user to choose between qualified matches such as `matty:tdd` and `pstack:tdd`.
+The CLI does not perform natural-language ranking or resolve that product choice.
+Using `jq` to display only exact-name matches:
 
 ```sh
 packy list --json
-packy show matty --surface codex --json
-packy show pstack --surface codex --json
-packy get skill matty:implement --surface codex --json
-packy get skill matty:tdd --surface codex --snapshot <implement-snapshot-id> --json
+packy show matty --surface agents --json > <scratch>/matty.json
+packy show pstack --surface agents --json > <scratch>/pstack.json
+jq '.skills[] | select(.qualified_skill | endswith(":tdd"))' <scratch>/matty.json <scratch>/pstack.json
+# After the user selects matty:tdd:
+packy get skill matty:tdd --surface agents --json
 ```
 
-For Claude Code, use `--surface claude` on both discovery and every nested request.
+For a separate `matty:implement` request and its nested TDD procedure:
+
+```sh
+packy get skill matty:implement --surface agents --json
+packy get skill matty:tdd --surface agents --snapshot <implement-snapshot-id> --json
+```
+
+For Claude, use `--surface claude` on both discovery and every nested request.
 Keep `entry_document`, `resource_root` and `snapshot_id` from the successful
 report. Read supporting files relative to their document locations. Tell helpers
 the intended target explicitly (for example Warp review's `OZ_REPO_ROOT`), and
@@ -117,7 +141,8 @@ the resource cache merely to infer the target project.
 | Packy is unavailable | Install the supporting released CLI explicitly; no substitute development binary. |
 | No local catalog | Acquire with `packy init` or `packy catalog refresh` after authorization. |
 | Several matching names | Ask the user to choose a qualified identity; do not prefer an installed copy. |
-| Incompatible host/resource | Correct the explicit host/identity or request a reviewed adaptation. |
+| `invalid_identity` or `unknown_skill` | Correct the qualified identity using focused discovery: inspect the named Pack first, using `list` if the Pack is unknown or unresolved. Discovery describes the current selection; preserve the initiating surface and `--snapshot` on nested retrieval retries. |
+| Incompatible surface/resource | Correct the explicit surface/identity or request a reviewed adaptation. |
 | Missing retained content | Restore that exact retained revision; do not retry against latest or native copies. |
 | Missing runtime, tool, model or service | Read resources normally; report/check prerequisites before the relevant procedure, preserving its stop/fallback policy. |
 | Modified installed copy | Leave it unchanged; Packy retrieval supplies the selected Catalog Resource and native invocation still uses the installed copy. |

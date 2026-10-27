@@ -11,7 +11,7 @@ Create or update the pull request for the current task with a concise descriptio
 
 1. Read the description template:
 
-   `Read({SKILLBASE}/references/pr_description_template.md)`
+   `Read `references/pr_description_template.md` relative to this skill directory.`
 
 2. Identify or create the pull request:
    - Check the current branch for a PR with `gh pr view --json url,number,title,state,baseRefName,headRefName 2>/dev/null`.
@@ -23,7 +23,7 @@ Create or update the pull request for the current task with a concise descriptio
    - Read the ticket and any relevant task artifacts.
    - Read the complete PR diff and enough surrounding code to understand behavior and ownership.
    - Use `gh pr view` to collect PR metadata and changed files.
-   - Read `{SKILLBASE}/references/show-me.md` for the visual-outline conventions used in the PR body.
+   - Read `references/show-me.md` for the visual-outline conventions used in the PR body.
 
 4. Write the PR description using the template:
    - Keep **Why the change** to exactly one sentence.
@@ -45,9 +45,9 @@ Create or update the pull request for the current task with a concise descriptio
    - Confirm the update succeeded.
 
 6. Report completion:
-   - Read `{SKILLBASE}/references/describe_pr_final_answer.md`.
+   - Read `references/describe_pr_final_answer.md`.
    - Respond using that final answer template with the PR URL, saved description URL, and concise list of changed files.
 
-Always read and follow `{SKILLBASE}/references/pr_description_template.md`. Do not expand the PR body beyond that template.
+Always read and follow `references/pr_description_template.md`. Do not expand the PR body beyond that template.
 
 Write as one human talking to another: avoid jargon and slang, and use simple, coherent, concise language.

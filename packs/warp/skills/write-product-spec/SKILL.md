@@ -3,6 +3,13 @@ name: write-product-spec
 description: Write a PRODUCT.md spec for a significant user-facing feature in Warp, focused on detailed behavior and validation. Use when the user asks for a product spec, desired behavior doc, or PRD, wants to define feature behavior before implementation, or when the feature is substantial or behaviorally ambiguous enough that a written spec would improve implementation or review.
 ---
 
+## Reviewed execution prerequisites
+
+- Linear MCP or GitHub CLI only if explicitly asked to create a ticket; writable target specs directory
+- target Warp feature context, interactive missing-context and Figma decisions; selected spec directory identifier
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # write-product-spec
 
 Write a `PRODUCT.md` spec for a significant feature in Warp.

@@ -1,13 +1,12 @@
 {
   "schema_version": 3,
   "id": "web",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Web automation and React engineering skills",
   "selectable": true,
   "surfaces": [
-    "claude",
-    "codex",
-    "opencode"
+    "agents",
+    "claude"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -34,9 +33,6 @@
       "id": "agent-browser-apache-2-0",
       "source": "notices/vercel-agent-browser-apache-2.0",
       "description": "Preserve the agent-browser Apache 2.0 license and attribution",
-      "arguments": {
-        "mode": ""
-      },
       "license": "Apache-2.0",
       "attribution": "Copyright 2025 Vercel Inc.",
       "requires": [],
@@ -57,9 +53,6 @@
       "id": "agent-skills-mit",
       "source": "notices/vercel-agent-skills-mit",
       "description": "Preserve the Vercel Agent Skills MIT license declaration and attribution",
-      "arguments": {
-        "mode": ""
-      },
       "license": "MIT",
       "attribution": "Vercel",
       "requires": [],
@@ -80,9 +73,6 @@
       "id": "agent-browser",
       "source": "skills/web/agent-browser",
       "description": "Automate websites and browser-based workflows with the agent-browser CLI",
-      "arguments": {
-        "mode": ""
-      },
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -95,28 +85,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "agent-browser",
+          "invocation": "agent-browser",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "agent-browser",
           "invocation": "/agent-browser",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "agent-browser",
-          "invocation": "$agent-browser",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "agent-browser",
-          "invocation": "agent-browser",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -129,9 +110,6 @@
       "id": "composition-patterns",
       "source": "skills/web/composition-patterns",
       "description": "Apply scalable React composition patterns and component API design",
-      "arguments": {
-        "mode": ""
-      },
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -144,6 +122,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "composition-patterns",
+          "invocation": "composition-patterns",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "composition-patterns",
@@ -151,36 +138,31 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "composition-patterns",
-          "invocation": "$composition-patterns",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "composition-patterns",
-          "invocation": "composition-patterns",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "composition-patterns",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "composition-patterns",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
       "id": "react-best-practices",
       "source": "skills/web/react-best-practices",
       "description": "Apply Vercel's React and Next.js performance best practices",
-      "arguments": {
-        "mode": ""
-      },
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -193,6 +175,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "react-best-practices",
+          "invocation": "react-best-practices",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "react-best-practices",
@@ -200,27 +191,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "react-best-practices",
-          "invocation": "$react-best-practices",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "react-best-practices",
-          "invocation": "react-best-practices",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "react-best-practices",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "react-best-practices",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     }
   ]
 }

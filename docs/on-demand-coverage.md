@@ -1,5 +1,12 @@
 # Integrated on-demand coverage
 
+This inventory and its acceptance commands record the previous Catalog
+generation. Their Codex/OpenCode support claims, source fingerprints and probe
+results are historical, not evidence for the current `agents` and `claude`
+generation. The historical probe requires its original checkout and binary;
+with v0.2.32 the current runner rejects it. See the
+[current setup](packy-cli.md) and [two-surface candidate probe](../scripts/probes/README.md#two-surface-candidate-acceptance).
+
 The [review inventory](on-demand-coverage.json) accounts for exactly **117 unique
 qualified logical skills and 234 host cases**: Matty 33, pstack 55, Warp 29, each
 on Codex and Claude Code. The scope comes from the approved parent and eight
@@ -42,7 +49,7 @@ guide](pstack-opencode-retirement.md); integrated retrieval does not change that
 contract. Matty/Warp retain native OpenCode installation, without OpenCode
 on-demand compatibility.
 
-## Run the integrated contract
+## Historical integrated contract
 
 After reviewing content, use a clean committed checkout:
 
