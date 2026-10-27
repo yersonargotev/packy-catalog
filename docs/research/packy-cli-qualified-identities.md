@@ -1,5 +1,10 @@
 # Direct retrieval for qualified Packy skill identities
 
+This is a historical research record. Its surface support, commands, engine
+versions and conclusions describe the generation investigated and are not
+current operator guidance. See [current catalog use](../../README.md#use-the-catalog)
+and [Packy CLI setup](../packy-cli.md).
+
 ## Question
 
 Should the `packy-cli` skill run broad `list` and `show` discovery before

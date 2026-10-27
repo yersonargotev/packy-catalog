@@ -1,11 +1,12 @@
 # On-demand skill access
 
-Status: accepted design. The user confirmed all sixteen decisions and the final
-shared understanding on 2026-10-23. This document records agreed requirements and
-constraints from the dated interview. The engine and all eight Catalog content slices are now integrated. The
-[complete inventory and acceptance](../on-demand-coverage.md) consolidate all
-117 logical skills and 234 host cases; resource access is distinct from semantic
-workflow success.
+This is the historical accepted design from the 2026-10-23 interview and
+records the original Codex/Claude generation. Surface names, support claims,
+examples, and coverage in this record describe that generation and are not
+current operator guidance. For the current `agents` and `claude` contracts,
+see [Packy CLI setup](../packy-cli.md), the released engine's
+[on-demand access guide](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/on-demand-skills.md),
+and the [previous-binary handoff](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/catalog-adoption.md).
 
 ## Agreed requirements
 
@@ -123,7 +124,7 @@ capability or support claims.
   bootstrap Pack can coexist with other Packs and be active for Codex and Claude
   simultaneously, provided its resource names and paths do not conflict.
 
-## Bootstrap usage
+## Historical bootstrap usage
 
 The official `packy` Pack is integrated. Use the [setup instructions](../packy-cli.md). Each host is
 optional; personal activation is the default:

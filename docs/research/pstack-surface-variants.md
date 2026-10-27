@@ -1,5 +1,10 @@
 # Reviewed pstack surface variants
 
+This is a historical research record. Its surface support, commands, engine
+versions and conclusions describe the generation investigated and are not
+current operator guidance. See [current catalog use](../../README.md#use-the-catalog)
+and [Packy CLI setup](../packy-cli.md).
+
 The sections below record the 4.0.0 rollout, the subsequent 4.1.0, 4.2.0,
 and 4.3.0 updates limited to common sources and Codex, the 4.4.0 Claude
 adaptation, and the 4.5.0 update across all three hosts.

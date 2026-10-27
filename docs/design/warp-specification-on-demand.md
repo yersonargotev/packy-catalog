@@ -1,5 +1,9 @@
 # Warp specification and coordination: reviewed on-demand access
 
+This review records its original Catalog generation. Surface names, Pack
+versions, and acceptance evidence below are historical; see the
+[current setup guide](../packy-cli.md) for the `agents` and `claude` contract.
+
 [Issue #96](https://github.com/yersonargotev/packy-catalog/issues/96) covers exactly
 15 logical skills on Codex and Claude Code. This contract migration advances
 Warp 2.2.0 to 2.3.0 against Catalog baseline

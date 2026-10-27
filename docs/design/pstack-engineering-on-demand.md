@@ -1,5 +1,9 @@
 # pstack engineering and verification: reviewed on-demand access
 
+This review records its original Catalog generation. Surface names, Pack
+versions, and acceptance evidence below are historical; see the
+[current setup guide](../packy-cli.md) for the `agents` and `claude` contract.
+
 [Issue #94](https://github.com/yersonargotev/packy-catalog/issues/94) covers exactly
 13 logical skills and 26 effective Codex/Claude entries. This Catalog contract
 migration advances pstack from 5.0.0 to 5.1.0. The upstream remains

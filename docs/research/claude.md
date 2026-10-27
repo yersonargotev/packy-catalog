@@ -1,5 +1,10 @@
 # Claude community Pack
 
+This is a historical research record. Its surface support, commands, engine
+versions and conclusions describe the generation investigated and are not
+current operator guidance. See [current catalog use](../../README.md#use-the-catalog)
+and [Packy CLI setup](../packy-cli.md).
+
 The `claude` Pack 1.0.0 contains the portable, self-contained `eli5` and
 `html-plan` skills from
 [`anthropics/claude-plugins-community` at `f60f0454df3045f724c43c6346ec80bdcc3472b2`](https://github.com/anthropics/claude-plugins-community/tree/f60f0454df3045f724c43c6346ec80bdcc3472b2).
