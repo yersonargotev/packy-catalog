@@ -3,6 +3,12 @@ name: diagnose-ci-failures
 description: Diagnose CI failures for a PR using the GitHub CLI, extract error logs, and generate a plan to fix them. Use when the user asks to check CI status, pull CI issues, triage test failures, or investigate PR build failures.
 ---
 
+## Reviewed execution prerequisites
+
+- intended PR checkout; Git and authenticated GitHub CLI read access to checks/logs; explicit writable reviewable plan destination
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # diagnose-ci-failures
 
 Programmatically diagnose CI failures for a PR and generate a plan to fix them.

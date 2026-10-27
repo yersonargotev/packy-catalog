@@ -3,6 +3,13 @@ name: update-skill
 description: Create or update skills by generating, editing, or refining SKILL.md files in this repository. Use when authoring new skills or revising the structure, frontmatter, or guidance for existing ones.
 ---
 
+## Reviewed execution prerequisites
+
+- explicit writable target skill-authoring repository/destination; host frontmatter and invocation rules
+- optional skills-ref runtime or available web search for validation guidance; no automatic runtime installation
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # update-skill
 
 This guide provides instructions for creating or updating skills in this repository. It covers the required structure, frontmatter, and best practices for skills.
