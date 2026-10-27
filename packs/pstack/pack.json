@@ -633,7 +633,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "benchmark-checklist",
+              "prerequisites": [
+                "A compatible Codex client",
+                "Representative data and appropriate measurement tools"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -658,7 +670,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "benchmark-checklist",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "Representative data and appropriate measurement tools"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -852,7 +876,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "bro",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -875,7 +910,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "bro",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -941,7 +987,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "correct",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -967,7 +1024,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "correct",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -1033,7 +1101,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "create-formal-verification-skill",
+              "prerequisites": [
+                "A compatible Codex client",
+                "An appropriate formal verification tool and permission to run it"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -1059,7 +1139,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "create-formal-verification-skill",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "An appropriate formal verification tool and permission to run it"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -1426,7 +1518,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "how",
+              "prerequisites": [
+                "A compatible Codex client",
+                "Authorized host delegation and available lookup tools; model preferences are optional"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -1453,7 +1557,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "how",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "Authorized host delegation and available lookup tools; model preferences are optional"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -1517,7 +1633,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "in-your-own-words",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -1540,7 +1667,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "in-your-own-words",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -1607,7 +1745,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "interrogate",
+              "prerequisites": [
+                "A compatible Codex client",
+                "Authorized read-only host delegation and access to the requested review scope; diverse model availability is not guaranteed"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -1634,7 +1784,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "interrogate",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "Authorized read-only host delegation and access to the requested review scope; diverse model availability is not guaranteed"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -1899,7 +2061,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "make-bot-ui",
+              "prerequisites": [
+                "A compatible Codex client",
+                "An authorized Grok Bot webhook routine or provisioning connector; a suitable web server and runtime"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -1926,7 +2100,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "make-bot-ui",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "An authorized Grok Bot webhook routine or provisioning connector; a suitable web server and runtime"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -2965,7 +3151,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-boundary-discipline",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -2988,7 +3185,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-boundary-discipline",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -3169,7 +3377,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-encode-lessons-in-structure",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -3192,7 +3411,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-encode-lessons-in-structure",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -3256,7 +3486,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-exhaust-the-design-space",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -3279,7 +3520,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-exhaust-the-design-space",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -3343,7 +3595,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-experience-first",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -3366,7 +3629,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-experience-first",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -3531,7 +3805,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-fix-root-causes",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -3554,7 +3839,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-fix-root-causes",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -3618,7 +3914,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-foundational-thinking",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -3641,7 +3948,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-foundational-thinking",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -3705,7 +4023,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-guard-the-context-window",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -3728,7 +4057,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-guard-the-context-window",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -3792,7 +4132,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-laziness-protocol",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -3815,7 +4166,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-laziness-protocol",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -3879,7 +4241,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-make-operations-idempotent",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -3902,7 +4275,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-make-operations-idempotent",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -3966,7 +4350,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-migrate-callers-then-delete-legacy-apis",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -3989,7 +4384,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-migrate-callers-then-delete-legacy-apis",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -4146,7 +4552,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-model-the-domain",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -4169,7 +4586,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-model-the-domain",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -4233,7 +4661,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-never-block-on-the-human",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -4256,7 +4695,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-never-block-on-the-human",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -4320,7 +4770,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-outcome-oriented-execution",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -4343,7 +4804,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-outcome-oriented-execution",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -4494,7 +4966,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-redesign-from-first-principles",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -4517,7 +5000,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-redesign-from-first-principles",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -4581,7 +5075,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-separate-before-serializing-shared-state",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -4604,7 +5109,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-separate-before-serializing-shared-state",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -4755,7 +5271,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-subtract-before-you-add",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -4778,7 +5305,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-subtract-before-you-add",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -4842,7 +5380,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "principle-test-behavior-not-implementation",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -4865,7 +5414,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "principle-test-behavior-not-implementation",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -5248,7 +5808,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "setup-pstack",
+              "prerequisites": [
+                "A compatible Codex client",
+                "Permission to write the user-approved pstack model preference file and access to the actual client model capabilities"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -5275,7 +5847,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "setup-pstack",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "Permission to write the user-approved pstack model preference file and access to the actual client model capabilities"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -5339,7 +5923,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "sharpen",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -5362,7 +5957,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "sharpen",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -5547,7 +6153,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "swarm",
+              "prerequisites": [
+                "A compatible Codex client",
+                "Authorized host delegation and isolated worker outputs; independent review depends on actual host capability"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -5574,7 +6192,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "swarm",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "Authorized host delegation and isolated worker outputs; independent review depends on actual host capability"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -6119,7 +6749,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "unslop",
+              "prerequisites": [
+                "A compatible Codex client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -6142,7 +6783,18 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "unslop",
+              "prerequisites": [
+                "A compatible Claude Code client"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     },
@@ -6209,7 +6861,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "why",
+              "prerequisites": [
+                "A compatible Codex client",
+                "Authorized host delegation and evidence connectors; unavailable sources remain gaps"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         },
         {
           "surface": "claude",
@@ -6236,7 +6900,19 @@
               "ACCESS.md"
             ],
             "dependencies": []
-          }
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "why",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "Authorized host delegation and evidence connectors; unavailable sources remain gaps"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
         }
       ]
     }
