@@ -1,13 +1,12 @@
 {
   "schema_version": 3,
   "id": "humanlayer",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "HumanLayer skills for visual explanations, pull requests, React types, and agentic workflows",
   "selectable": true,
   "surfaces": [
-    "claude",
-    "codex",
-    "opencode"
+    "agents",
+    "claude"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -55,9 +54,18 @@
       "origin": {
         "id": "humanlayer-skills",
         "path": "plugins/build-iterated-agentic-loop/skills/build-iterated-agentic-loop",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "build-iterated-agentic-loop",
+          "invocation": "build-iterated-agentic-loop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
         {
           "surface": "claude",
           "projection": "skill",
@@ -66,27 +74,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "build-iterated-agentic-loop",
-          "invocation": "$build-iterated-agentic-loop",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "build-iterated-agentic-loop",
-          "invocation": "build-iterated-agentic-loop",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "build-iterated-agentic-loop",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "build-iterated-agentic-loop",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -105,6 +111,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "design-control-loop",
+          "invocation": "design-control-loop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "design-control-loop",
@@ -112,27 +127,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "design-control-loop",
-          "invocation": "$design-control-loop",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "design-control-loop",
-          "invocation": "design-control-loop",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "design-control-loop",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "design-control-loop",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -151,6 +164,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "improve-claude-md",
+          "invocation": "improve-claude-md",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "improve-claude-md",
@@ -158,27 +180,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "improve-claude-md",
-          "invocation": "$improve-claude-md",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "improve-claude-md",
-          "invocation": "improve-claude-md",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "improve-claude-md",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "improve-claude-md",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -197,6 +217,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "narrow-react-prop-types",
+          "invocation": "narrow-react-prop-types",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "narrow-react-prop-types",
@@ -204,27 +233,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "narrow-react-prop-types",
-          "invocation": "$narrow-react-prop-types",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "narrow-react-prop-types",
-          "invocation": "narrow-react-prop-types",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "narrow-react-prop-types",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "narrow-react-prop-types",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -239,9 +266,18 @@
       "origin": {
         "id": "humanlayer-skills",
         "path": "plugins/show-me/skills/show-me",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "show-me",
+          "invocation": "show-me",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
         {
           "surface": "claude",
           "projection": "skill",
@@ -250,27 +286,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "show-me",
-          "invocation": "$show-me",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "show-me",
-          "invocation": "show-me",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "show-me",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -285,9 +312,18 @@
       "origin": {
         "id": "humanlayer-skills",
         "path": "plugins/visual-pr/skills/visual-pr",
-        "relationship": "exact-copy"
+        "relationship": "adapted"
       },
       "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "visual-pr",
+          "invocation": "visual-pr",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
         {
           "surface": "claude",
           "projection": "skill",
@@ -296,27 +332,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "visual-pr",
-          "invocation": "$visual-pr",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "visual-pr",
-          "invocation": "visual-pr",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "visual-pr",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "visual-pr",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     }
   ]
 }

@@ -1,13 +1,12 @@
 {
   "schema_version": 3,
   "id": "claude",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Portable HTML explanation and planning skills from the Claude community repository",
   "selectable": true,
   "surfaces": [
-    "claude",
-    "codex",
-    "opencode"
+    "agents",
+    "claude"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -102,6 +101,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "eli5",
+          "invocation": "eli5",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "eli5",
@@ -109,27 +117,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "eli5",
-          "invocation": "$eli5",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "eli5",
-          "invocation": "eli5",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "eli5",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "eli5",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -149,6 +155,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "html-plan",
+          "invocation": "html-plan",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "html-plan",
@@ -156,27 +171,29 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "html-plan",
-          "invocation": "$html-plan",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "html-plan",
-          "invocation": "html-plan",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "html-plan",
+          "prerequisites": [
+            "Node.js is required to pack the generated plan."
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "html-plan",
+          "prerequisites": [
+            "Node.js is required to pack the generated plan."
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     }
   ]
 }

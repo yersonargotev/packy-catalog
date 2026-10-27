@@ -1,13 +1,12 @@
 {
   "schema_version": 3,
   "id": "ponytail",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Ponytail 5 minimal-code guidance and six skills, adapted for Packy without plugin runtime hooks",
   "selectable": true,
   "surfaces": [
-    "claude",
-    "codex",
-    "opencode"
+    "agents",
+    "claude"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -39,6 +38,23 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "instruction",
+          "name": "ponytail-guidance",
+          "invocation": "ponytail-guidance",
+          "mode": "native",
+          "sharing": "shared",
+          "capabilities": [
+            {
+              "type": "project-instruction",
+              "project_instruction": {
+                "id": "ponytail-guidance",
+                "source": "instructions/ponytail.md"
+              }
+            }
+          ]
+        },
+        {
           "surface": "claude",
           "projection": "instruction",
           "name": "ponytail-guidance",
@@ -46,40 +62,6 @@
           "mode": "native",
           "sharing": "shared",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "instruction",
-          "name": "ponytail-guidance",
-          "invocation": "ponytail-guidance",
-          "mode": "native",
-          "sharing": "shared",
-          "capabilities": [
-            {
-              "type": "project-instruction",
-              "project_instruction": {
-                "id": "ponytail-guidance",
-                "source": "instructions/ponytail.md"
-              }
-            }
-          ]
-        },
-        {
-          "surface": "opencode",
-          "projection": "instruction",
-          "name": "ponytail-guidance",
-          "invocation": "ponytail-guidance",
-          "mode": "native",
-          "sharing": "shared",
-          "capabilities": [
-            {
-              "type": "project-instruction",
-              "project_instruction": {
-                "id": "ponytail-guidance",
-                "source": "instructions/ponytail.md"
-              }
-            }
-          ]
         }
       ],
       "surface_exclusions": []
@@ -113,6 +95,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "ponytail",
+          "invocation": "ponytail",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "ponytail",
@@ -120,27 +111,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "ponytail",
-          "invocation": "$ponytail",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "ponytail",
-          "invocation": "ponytail",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "ponytail",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "ponytail",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -159,28 +148,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "ponytail-audit",
+          "invocation": "ponytail-audit",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "ponytail-audit",
           "invocation": "/ponytail-audit",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "ponytail-audit",
-          "invocation": "$ponytail-audit",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "ponytail-audit",
-          "invocation": "ponytail-audit",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -205,28 +185,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "ponytail-debt",
+          "invocation": "ponytail-debt",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "ponytail-debt",
           "invocation": "/ponytail-debt",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "ponytail-debt",
-          "invocation": "$ponytail-debt",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "ponytail-debt",
-          "invocation": "ponytail-debt",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -251,6 +222,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "ponytail-gain",
+          "invocation": "ponytail-gain",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "ponytail-gain",
@@ -258,27 +238,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "ponytail-gain",
-          "invocation": "$ponytail-gain",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "ponytail-gain",
-          "invocation": "ponytail-gain",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "ponytail-gain",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "ponytail-gain",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -297,28 +275,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "ponytail-help",
+          "invocation": "ponytail-help",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "ponytail-help",
           "invocation": "/ponytail-help",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "ponytail-help",
-          "invocation": "$ponytail-help",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "ponytail-help",
-          "invocation": "ponytail-help",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -343,28 +312,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "ponytail-review",
+          "invocation": "ponytail-review",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "ponytail-review",
           "invocation": "/ponytail-review",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "ponytail-review",
-          "invocation": "$ponytail-review",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "ponytail-review",
-          "invocation": "ponytail-review",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
