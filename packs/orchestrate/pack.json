@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "id": "orchestrate",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Coordinate focused Codex subagents",
   "selectable": true,
   "surfaces": [
-    "codex"
+    "agents"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -21,25 +21,6 @@
     }
   ],
   "resources": [
-    {
-      "kind": "lifecycle",
-      "id": "coordinate-session",
-      "description": "Track the Orchestrate coordination session lifecycle",
-      "requires": [],
-      "conflicts": [],
-      "bindings": [
-        {
-          "surface": "codex",
-          "projection": "lifecycle",
-          "name": "coordinate-session",
-          "invocation": "coordinate-session",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        }
-      ],
-      "surface_exclusions": []
-    },
     {
       "kind": "notice",
       "id": "mit",
@@ -72,7 +53,7 @@
       ],
       "bindings": [
         {
-          "surface": "codex",
+          "surface": "agents",
           "projection": "skill",
           "name": "orchestrate",
           "invocation": "$orchestrate",
@@ -86,7 +67,18 @@
         "id": "orchestrate-skill",
         "path": "skills/orchestrate",
         "relationship": "exact-copy"
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "orchestrate",
+          "prerequisites": [
+            "A Codex session with an authorized delegation tool and configured worker roles."
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     }
   ]
 }
