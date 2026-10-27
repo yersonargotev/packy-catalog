@@ -92,7 +92,10 @@ def main():
     baseline = Path(sys.argv[1]).resolve(strict=True)
     json_output = sys.argv[2] == 'json'
     candidate_pin = json.loads((ROOT / 'packy-release.json').read_text())
-    baseline_pin = json.loads((baseline / 'packy-release.json').read_text())
+    try:
+        baseline_pin = json.loads((baseline / 'packy-release.json').read_text())
+    except (OSError, ValueError):
+        baseline_pin = None
     old_pin = json.loads(OLD_PIN.read_text())
     # This is a bounded exception for the single reviewed incompatible cut.
     # Every other baseline remains subject to Packy's ordinary baseline check.
