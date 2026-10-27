@@ -22,6 +22,10 @@ class TransitionVersions(unittest.TestCase):
                 module.compare_packs({'fixture': current}, {'fixture': pack()})
         module.compare_packs({'fixture': pack('1.0.1', digest='b')}, {'fixture': pack()})
 
+    def test_missing_baseline_pack_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "missing baseline Packs"):
+            module.compare_packs({}, {"fixture": pack()})
+
     def test_unchanged_content_must_keep_version_and_new_pack_is_allowed(self):
         with self.assertRaisesRegex(ValueError, 'must retain version'):
             module.compare_packs({'fixture': pack('1.0.1')}, {'fixture': pack()})

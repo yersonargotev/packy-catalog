@@ -33,6 +33,9 @@ def version_key(value):
 
 
 def compare_packs(candidate, baseline):
+    missing = sorted(set(baseline) - set(candidate))
+    if missing:
+        raise ValueError("missing baseline Packs: " + ", ".join(missing))
     for pack_id, current in candidate.items():
         previous = baseline.get(pack_id)
         if previous is None:
