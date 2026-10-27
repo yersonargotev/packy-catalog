@@ -223,7 +223,7 @@ new complete Catalog Projects with their respective checksum-verified releases,
 then compares the validated archived manifests (excluding version) and declared
 file paths, modes, and digests. Changed Packs require a strictly greater version;
 unchanged Packs must retain their version. A failed build or comparison fails
-validation. New Packs are permitted, as in the normal engine comparison.
+validation. New Packs are permitted; removing a baseline Pack fails this complete-catalog transition gate.
 
 This authoring-only check does not read old contracts at runtime or migrate user
 state. Other engine/baseline pairs continue to use the engine's ordinary
