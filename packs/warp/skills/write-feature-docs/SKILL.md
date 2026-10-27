@@ -3,6 +3,14 @@ name: write-feature-docs
 description: Draft a complete documentation page for a new Warp feature from its PRODUCT.md and/or TECH.md spec. Use when an engineer has written a spec and needs to produce a first-pass MDX draft for the warpdotdev/docs repo. Also handles features without specs by researching the codebase first. Invoke this skill whenever an engineer mentions writing docs for a feature, drafting a docs page, creating feature documentation, starting the eng-docs workflow, or converting a spec into documentation. Requires an interactive session with the engineer present - it confirms a content design plan, then an outline, before drafting, and cannot run unattended. For automated, release-triggered docs, use the missing_docs skill in warpdotdev/docs instead. Works from warp-internal or warp-server.
 ---
 
+## Reviewed execution prerequisites
+
+- GitHub CLI and repository access for research; separate authorization for external draft PR publication; optional Warp UI/computer-use launch guidance
+- Warp source repository context (warp-internal or warp-server), accessible warpdotdev/docs templates and content-design/worthiness references
+- present engineer in an interactive session; confidentiality review and separate ordered content-plan then outline confirmations
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # write-feature-docs
 
 Draft a complete documentation page for a new Warp feature. You read the feature's spec, verify technical claims by researching the codebase yourself, confirm the content design plan and then the outline with the engineer, and only then produce a complete MDX draft and open a draft PR in `warpdotdev/docs` — tagging the docs team for review.

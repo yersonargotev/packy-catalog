@@ -3,6 +3,13 @@ name: create-pr
 description: Create a pull request in the warp repository for the current branch. Use when the user mentions opening a PR, creating a pull request, submitting changes for review, or preparing code for merge.
 ---
 
+## Reviewed execution prerequisites
+
+- intended Warp checkout with master/base context, Git/GitHub CLI and authorized PR actions, repository template and validation commands; Linear when available
+- user integration-coverage decision; external warp-integration-test guidance for required coverage and optional add-feature-flag guidance; completed candidate evidence
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # create-pr
 
 ## Overview

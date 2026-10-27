@@ -3,6 +3,13 @@ name: review-pr
 description: Review a pull request diff and write structured feedback to review.json for the workflow to publish. Use when reviewing a checked-out PR from local artifacts like pr_diff.txt and pr_description.txt and producing machine-readable review output instead of posting directly to GitHub.
 ---
 
+## Reviewed execution prerequisites
+
+- Python 3; explicit OZ_REPO_ROOT/workspace context; authorized existing GitHub read token only when remote resolver is requested; mandatory final exact-diff review validator
+- intended PR checkout, explicit annotated diff/description/spec artifact paths and local companion guidance where applicable; separate writable review output and scratch
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Review PR Skill
 
 Review the current pull request and write the output to `review.json`.

@@ -3,6 +3,12 @@ name: write-pr-description
 description: Writes the body of a pull request - the summary, the repository template sections, and reviewer guidance such as a recommended reading order and focus areas. Use whenever drafting or revising a PR description, filling in a repository's PR template, refreshing a description that no longer matches the branch, or preparing a branch for review. Use it even when the user only says "open a PR", "put this up for review", or "write this up" without naming the description.
 ---
 
+## Reviewed execution prerequisites
+
+- actual target branch or PR, commit/diff facts, target repository PR template and truthful validation evidence
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # write-pr-description
 
 A pull request description has one job: give the reviewer what the diff cannot.

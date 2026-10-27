@@ -3,6 +3,12 @@ name: brandalf
 description: Guides creation, revision, and review of Warp- or Oz-branded assets. Use when working on launch pages, docs, HTML/CSS components, UI mockups, prompts, social assets, copy, presentations, or any other branded deliverable that should look and sound unmistakably Warp or Oz.
 ---
 
+## Reviewed execution prerequisites
+
+- network access to the hosted Warp/Oz canonical brand source when performing branding; user retry/proceed decision if unavailable
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Brandalf
 
 Use this skill as the entrypoint for Warp and Oz branding work.
