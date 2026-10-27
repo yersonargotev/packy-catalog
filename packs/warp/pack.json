@@ -1,13 +1,12 @@
 {
   "schema_version": 3,
   "id": "warp",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "Warp common engineering and agent workflows",
   "selectable": true,
   "surfaces": [
-    "claude",
-    "codex",
-    "opencode"
+    "agents",
+    "claude"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -72,28 +71,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "brandalf",
+          "invocation": "brandalf",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "brandalf",
           "invocation": "/brandalf",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "brandalf",
-          "invocation": "$brandalf",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "brandalf",
-          "invocation": "brandalf",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -102,7 +92,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/brandalf",
           "origin": {
             "id": "warp-common-skills",
@@ -127,7 +117,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/brandalf",
           "origin": {
             "id": "warp-common-skills",
@@ -170,28 +160,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "check-impl-against-spec",
+          "invocation": "check-impl-against-spec",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "check-impl-against-spec",
           "invocation": "/check-impl-against-spec",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "check-impl-against-spec",
-          "invocation": "$check-impl-against-spec",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "check-impl-against-spec",
-          "invocation": "check-impl-against-spec",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -200,7 +181,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/check-impl-against-spec",
           "origin": {
             "id": "warp-common-skills",
@@ -225,7 +206,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/check-impl-against-spec",
           "origin": {
             "id": "warp-common-skills",
@@ -248,6 +229,26 @@
             ],
             "dependencies": []
           }
+        }
+      ],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "check-impl-against-spec",
+          "prerequisites": [
+            "existing spec_context.md and PR-review inputs pr_diff.txt, optional pr_description.md, checked-out PR files and writable existing review.json"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "check-impl-against-spec",
+          "prerequisites": [
+            "existing spec_context.md and PR-review inputs pr_diff.txt, optional pr_description.md, checked-out PR files and writable existing review.json"
+          ],
+          "references": [],
+          "roles": []
         }
       ]
     },
@@ -268,28 +269,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "complain",
+          "invocation": "complain",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "complain",
           "invocation": "/complain",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "complain",
-          "invocation": "$complain",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "complain",
-          "invocation": "complain",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -298,7 +290,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/complain",
           "origin": {
             "id": "warp-common-skills",
@@ -323,7 +315,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/complain",
           "origin": {
             "id": "warp-common-skills",
@@ -366,28 +358,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "council",
+          "invocation": "council",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "council",
           "invocation": "/council",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "council",
-          "invocation": "$council",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "council",
-          "invocation": "council",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -396,7 +379,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/council",
           "origin": {
             "id": "warp-common-skills",
@@ -422,7 +405,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/council",
           "origin": {
             "id": "warp-common-skills",
@@ -466,28 +449,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "create-pr",
+          "invocation": "create-pr",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "create-pr",
           "invocation": "/create-pr",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "create-pr",
-          "invocation": "$create-pr",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "create-pr",
-          "invocation": "create-pr",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -496,7 +470,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/create-pr",
           "origin": {
             "id": "warp-common-skills",
@@ -527,7 +501,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/create-pr",
           "origin": {
             "id": "warp-common-skills",
@@ -563,7 +537,7 @@
       "kind": "skill",
       "id": "cross-critique",
       "source": "skills/cross-critique",
-      "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision \u2014 architecture tradeoffs, code review disagreements, design choices, competing root-cause theories \u2014 and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
+      "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision — architecture tradeoffs, code review disagreements, design choices, competing root-cause theories — and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -576,28 +550,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "cross-critique",
+          "invocation": "cross-critique",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "cross-critique",
           "invocation": "/cross-critique",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "cross-critique",
-          "invocation": "$cross-critique",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "cross-critique",
-          "invocation": "cross-critique",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -606,7 +571,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/cross-critique",
           "origin": {
             "id": "warp-common-skills",
@@ -617,7 +582,7 @@
             "notice:mit"
           ],
           "requires": [],
-          "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision \u2014 architecture tradeoffs, code review disagreements, design choices, competing root-cause theories \u2014 and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
+          "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision — architecture tradeoffs, code review disagreements, design choices, competing root-cause theories — and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -641,7 +606,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/cross-critique",
           "origin": {
             "id": "warp-common-skills",
@@ -652,7 +617,7 @@
             "notice:mit"
           ],
           "requires": [],
-          "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision \u2014 architecture tradeoffs, code review disagreements, design choices, competing root-cause theories \u2014 and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
+          "description": "Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision — architecture tradeoffs, code review disagreements, design choices, competing root-cause theories — and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -694,28 +659,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "diagnose-ci-failures",
+          "invocation": "diagnose-ci-failures",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "diagnose-ci-failures",
           "invocation": "/diagnose-ci-failures",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "diagnose-ci-failures",
-          "invocation": "$diagnose-ci-failures",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "diagnose-ci-failures",
-          "invocation": "diagnose-ci-failures",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -724,7 +680,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/diagnose-ci-failures",
           "origin": {
             "id": "warp-common-skills",
@@ -754,7 +710,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/diagnose-ci-failures",
           "origin": {
             "id": "warp-common-skills",
@@ -802,28 +758,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "fix-errors",
+          "invocation": "fix-errors",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "fix-errors",
           "invocation": "/fix-errors",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "fix-errors",
-          "invocation": "$fix-errors",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "fix-errors",
-          "invocation": "fix-errors",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -832,7 +779,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/fix-errors",
           "origin": {
             "id": "warp-common-skills",
@@ -857,7 +804,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/fix-errors",
           "origin": {
             "id": "warp-common-skills",
@@ -900,28 +847,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "implement-specs",
+          "invocation": "implement-specs",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "implement-specs",
           "invocation": "/implement-specs",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "implement-specs",
-          "invocation": "$implement-specs",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "implement-specs",
-          "invocation": "implement-specs",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -930,7 +868,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/implement-specs",
           "origin": {
             "id": "warp-common-skills",
@@ -956,7 +894,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/implement-specs",
           "origin": {
             "id": "warp-common-skills",
@@ -1000,28 +938,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "merge-risk",
+          "invocation": "merge-risk",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "merge-risk",
           "invocation": "/merge-risk",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "merge-risk",
-          "invocation": "$merge-risk",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "merge-risk",
-          "invocation": "merge-risk",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1030,7 +959,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/merge-risk",
           "origin": {
             "id": "warp-common-skills",
@@ -1055,7 +984,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/merge-risk",
           "origin": {
             "id": "warp-common-skills",
@@ -1078,6 +1007,26 @@
             ],
             "dependencies": []
           }
+        }
+      ],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "merge-risk",
+          "prerequisites": [
+            "actual PR diff, description, source issue when present, and verification/rollback/monitoring evidence"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "merge-risk",
+          "prerequisites": [
+            "actual PR diff, description, source issue when present, and verification/rollback/monitoring evidence"
+          ],
+          "references": [],
+          "roles": []
         }
       ]
     },
@@ -1098,28 +1047,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "migrate-to-factory",
+          "invocation": "migrate-to-factory",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "migrate-to-factory",
           "invocation": "/migrate-to-factory",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "migrate-to-factory",
-          "invocation": "$migrate-to-factory",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "migrate-to-factory",
-          "invocation": "migrate-to-factory",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1128,7 +1068,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/migrate-to-factory",
           "origin": {
             "id": "warp-common-skills",
@@ -1153,7 +1093,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/migrate-to-factory",
           "origin": {
             "id": "warp-common-skills",
@@ -1196,28 +1136,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "pr-walkthrough",
+          "invocation": "pr-walkthrough",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "pr-walkthrough",
           "invocation": "/pr-walkthrough",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "pr-walkthrough",
-          "invocation": "$pr-walkthrough",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "pr-walkthrough",
-          "invocation": "pr-walkthrough",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1226,7 +1157,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/pr-walkthrough",
           "origin": {
             "id": "warp-common-skills",
@@ -1257,7 +1188,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/pr-walkthrough",
           "origin": {
             "id": "warp-common-skills",
@@ -1293,7 +1224,7 @@
       "kind": "skill",
       "id": "readout",
       "source": "skills/readout",
-      "description": "Produce a polished, self-contained HTML \"readout\" document under ~/.readouts (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or \u2014 when invoked fresh, e.g. \"/readout on how github webhook events are processed\" \u2014 by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
+      "description": "Produce a polished, self-contained HTML \"readout\" document under ~/.readouts (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or — when invoked fresh, e.g. \"/readout on how github webhook events are processed\" — by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -1306,28 +1237,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "readout",
+          "invocation": "readout",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "readout",
           "invocation": "/readout",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "readout",
-          "invocation": "$readout",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "readout",
-          "invocation": "readout",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1336,7 +1258,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/readout",
           "origin": {
             "id": "warp-common-skills",
@@ -1347,7 +1269,7 @@
             "notice:mit"
           ],
           "requires": [],
-          "description": "Produce a polished, self-contained HTML \"readout\" document in an explicit writable output directory (personal ~/.readouts only when selected) (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or \u2014 when invoked fresh, e.g. \"/readout on how github webhook events are processed\" \u2014 by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
+          "description": "Produce a polished, self-contained HTML \"readout\" document in an explicit writable output directory (personal ~/.readouts only when selected) (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or — when invoked fresh, e.g. \"/readout on how github webhook events are processed\" — by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1362,7 +1284,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/readout",
           "origin": {
             "id": "warp-common-skills",
@@ -1373,7 +1295,7 @@
             "notice:mit"
           ],
           "requires": [],
-          "description": "Produce a polished, self-contained HTML \"readout\" document in an explicit writable output directory (personal ~/.readouts only when selected) (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or \u2014 when invoked fresh, e.g. \"/readout on how github webhook events are processed\" \u2014 by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
+          "description": "Produce a polished, self-contained HTML \"readout\" document in an explicit writable output directory (personal ~/.readouts only when selected) (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or — when invoked fresh, e.g. \"/readout on how github webhook events are processed\" — by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says \"write this up\", \"turn this into a doc/page\", \"make a readout\", or asks for a readable, shareable document capturing findings or explaining how something works.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1406,28 +1328,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "reproduce-bug-report",
+          "invocation": "reproduce-bug-report",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "reproduce-bug-report",
           "invocation": "/reproduce-bug-report",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "reproduce-bug-report",
-          "invocation": "$reproduce-bug-report",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "reproduce-bug-report",
-          "invocation": "reproduce-bug-report",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1436,7 +1349,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/reproduce-bug-report",
           "origin": {
             "id": "warp-common-skills",
@@ -1461,7 +1374,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/reproduce-bug-report",
           "origin": {
             "id": "warp-common-skills",
@@ -1491,7 +1404,7 @@
       "kind": "skill",
       "id": "research",
       "source": "skills/research",
-      "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys \u2014 i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
+      "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys — i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -1504,28 +1417,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "research",
+          "invocation": "research",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "research",
           "invocation": "/research",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "research",
-          "invocation": "$research",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "research",
-          "invocation": "research",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1534,7 +1438,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/research",
           "origin": {
             "id": "warp-common-skills",
@@ -1545,7 +1449,7 @@
             "notice:mit"
           ],
           "requires": [],
-          "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys \u2014 i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
+          "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys — i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1560,7 +1464,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/research",
           "origin": {
             "id": "warp-common-skills",
@@ -1571,7 +1475,7 @@
             "notice:mit"
           ],
           "requires": [],
-          "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys \u2014 i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
+          "description": "Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys — i.e. when producing the answer generates far more noise than the answer itself. Use it for \"how does X work\", \"where is Y used\", \"what's the root cause of Z\", \"summarize this PR/log\" style questions, and reach for it liberally before reading a pile of files inline.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1604,28 +1508,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "resolve-merge-conflicts",
+          "invocation": "resolve-merge-conflicts",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "resolve-merge-conflicts",
           "invocation": "/resolve-merge-conflicts",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "resolve-merge-conflicts",
-          "invocation": "$resolve-merge-conflicts",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "resolve-merge-conflicts",
-          "invocation": "resolve-merge-conflicts",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1634,7 +1529,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/resolve-merge-conflicts",
           "origin": {
             "id": "warp-common-skills",
@@ -1659,7 +1554,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/resolve-merge-conflicts",
           "origin": {
             "id": "warp-common-skills",
@@ -1702,28 +1597,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "respond-to-pr-comments-in-blocklist",
+          "invocation": "respond-to-pr-comments-in-blocklist",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "respond-to-pr-comments-in-blocklist",
           "invocation": "/respond-to-pr-comments-in-blocklist",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "respond-to-pr-comments-in-blocklist",
-          "invocation": "$respond-to-pr-comments-in-blocklist",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "respond-to-pr-comments-in-blocklist",
-          "invocation": "respond-to-pr-comments-in-blocklist",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1732,7 +1618,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/respond-to-pr-comments-in-blocklist",
           "origin": {
             "id": "warp-common-skills",
@@ -1758,7 +1644,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/respond-to-pr-comments-in-blocklist",
           "origin": {
             "id": "warp-common-skills",
@@ -1802,28 +1688,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "review-pr",
+          "invocation": "review-pr",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "review-pr",
           "invocation": "/review-pr",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "review-pr",
-          "invocation": "$review-pr",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "review-pr",
-          "invocation": "review-pr",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1832,7 +1709,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/review-pr",
           "origin": {
             "id": "warp-common-skills",
@@ -1858,7 +1735,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/review-pr",
           "origin": {
             "id": "warp-common-skills",
@@ -1902,28 +1779,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "saga",
+          "invocation": "saga",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "saga",
           "invocation": "/saga",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "saga",
-          "invocation": "$saga",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "saga",
-          "invocation": "saga",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -1932,7 +1800,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/saga",
           "origin": {
             "id": "warp-common-skills",
@@ -1959,7 +1827,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/saga",
           "origin": {
             "id": "warp-common-skills",
@@ -2004,28 +1872,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "scan-new-specs",
+          "invocation": "scan-new-specs",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "scan-new-specs",
           "invocation": "/scan-new-specs",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "scan-new-specs",
-          "invocation": "$scan-new-specs",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "scan-new-specs",
-          "invocation": "scan-new-specs",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2034,7 +1893,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/scan-new-specs",
           "origin": {
             "id": "warp-common-skills",
@@ -2060,7 +1919,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/scan-new-specs",
           "origin": {
             "id": "warp-common-skills",
@@ -2104,28 +1963,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "skill-doctor",
+          "invocation": "skill-doctor",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "skill-doctor",
           "invocation": "/skill-doctor",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "skill-doctor",
-          "invocation": "$skill-doctor",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "skill-doctor",
-          "invocation": "skill-doctor",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2134,7 +1984,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/skill-doctor",
           "origin": {
             "id": "warp-common-skills",
@@ -2162,7 +2012,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/skill-doctor",
           "origin": {
             "id": "warp-common-skills",
@@ -2208,28 +2058,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "spec-driven-implementation",
+          "invocation": "spec-driven-implementation",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "spec-driven-implementation",
           "invocation": "/spec-driven-implementation",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "spec-driven-implementation",
-          "invocation": "$spec-driven-implementation",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "spec-driven-implementation",
-          "invocation": "spec-driven-implementation",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2238,7 +2079,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/spec-driven-implementation",
           "origin": {
             "id": "warp-common-skills",
@@ -2277,7 +2118,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/spec-driven-implementation",
           "origin": {
             "id": "warp-common-skills",
@@ -2334,28 +2175,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "suggestion-box",
+          "invocation": "suggestion-box",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "suggestion-box",
           "invocation": "/suggestion-box",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "suggestion-box",
-          "invocation": "$suggestion-box",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "suggestion-box",
-          "invocation": "suggestion-box",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2364,7 +2196,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/suggestion-box",
           "origin": {
             "id": "warp-common-skills",
@@ -2389,7 +2221,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/suggestion-box",
           "origin": {
             "id": "warp-common-skills",
@@ -2432,28 +2264,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "update-skill",
+          "invocation": "update-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "update-skill",
           "invocation": "/update-skill",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "update-skill",
-          "invocation": "$update-skill",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "update-skill",
-          "invocation": "update-skill",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2462,7 +2285,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/update-skill",
           "origin": {
             "id": "warp-common-skills",
@@ -2488,7 +2311,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/update-skill",
           "origin": {
             "id": "warp-common-skills",
@@ -2532,28 +2355,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "validate-changes-match-specs",
+          "invocation": "validate-changes-match-specs",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "validate-changes-match-specs",
           "invocation": "/validate-changes-match-specs",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "validate-changes-match-specs",
-          "invocation": "$validate-changes-match-specs",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "validate-changes-match-specs",
-          "invocation": "validate-changes-match-specs",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2562,7 +2376,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/validate-changes-match-specs",
           "origin": {
             "id": "warp-common-skills",
@@ -2589,7 +2403,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/validate-changes-match-specs",
           "origin": {
             "id": "warp-common-skills",
@@ -2634,28 +2448,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "write-feature-docs",
+          "invocation": "write-feature-docs",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "write-feature-docs",
           "invocation": "/write-feature-docs",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "write-feature-docs",
-          "invocation": "$write-feature-docs",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "write-feature-docs",
-          "invocation": "write-feature-docs",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2664,7 +2469,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/write-feature-docs",
           "origin": {
             "id": "warp-common-skills",
@@ -2691,7 +2496,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/write-feature-docs",
           "origin": {
             "id": "warp-common-skills",
@@ -2736,28 +2541,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "write-pr-description",
+          "invocation": "write-pr-description",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "write-pr-description",
           "invocation": "/write-pr-description",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "write-pr-description",
-          "invocation": "$write-pr-description",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "write-pr-description",
-          "invocation": "write-pr-description",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2766,7 +2562,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/write-pr-description",
           "origin": {
             "id": "warp-common-skills",
@@ -2791,7 +2587,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/write-pr-description",
           "origin": {
             "id": "warp-common-skills",
@@ -2834,28 +2630,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "write-product-spec",
+          "invocation": "write-product-spec",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "write-product-spec",
           "invocation": "/write-product-spec",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "write-product-spec",
-          "invocation": "$write-product-spec",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "write-product-spec",
-          "invocation": "write-product-spec",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2864,7 +2651,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/write-product-spec",
           "origin": {
             "id": "warp-common-skills",
@@ -2895,7 +2682,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/write-product-spec",
           "origin": {
             "id": "warp-common-skills",
@@ -2944,28 +2731,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "write-tech-spec",
+          "invocation": "write-tech-spec",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "write-tech-spec",
           "invocation": "/write-tech-spec",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "write-tech-spec",
-          "invocation": "$write-tech-spec",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "write-tech-spec",
-          "invocation": "write-tech-spec",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -2974,7 +2752,7 @@
       "surface_exclusions": [],
       "variants": [
         {
-          "surface": "claude",
+          "surface": "agents",
           "source": "skills/write-tech-spec",
           "origin": {
             "id": "warp-common-skills",
@@ -3001,7 +2779,7 @@
           }
         },
         {
-          "surface": "codex",
+          "surface": "claude",
           "source": "skills/write-tech-spec",
           "origin": {
             "id": "warp-common-skills",

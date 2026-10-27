@@ -2,11 +2,14 @@
 name: "merge-risk"
 description: "Use when assessing the risk of merging a PR"
 metadata:
-  credits:
-    skill: pr
-    author: Matt Pocock
-    url: "https://github.com/mattpocock/skills/blob/main/skills/engineering/pr/SKILL.md"
+  credits: "pr by Matt Pocock; https://github.com/mattpocock/skills/blob/main/skills/engineering/pr/SKILL.md"
 ---
+
+## Reviewed execution prerequisites
+
+- actual PR diff, description, source issue when present, and verification/rollback/monitoring evidence
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
 Output format:
 
 ```

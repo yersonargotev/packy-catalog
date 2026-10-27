@@ -3,6 +3,13 @@ name: research
 description: Delegate noisy investigation to one or more subagents so the orchestrator's context stays clean, then work from the distilled answer. Use this skill whenever answering a question would require reading many files, long logs, large diffs, or wide codebase surveys — i.e. when producing the answer generates far more noise than the answer itself. Use it for "how does X work", "where is Y used", "what's the root cause of Z", "summarize this PR/log" style questions, and reach for it liberally before reading a pile of files inline.
 ---
 
+## Reviewed execution prerequisites
+
+- accessible target files, logs or search sources; delegation useful only when a distilled conclusion suffices
+- local host subagent launch and follow-up controls with an available search-appropriate model
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Research
 
 Use this skill to answer a question by delegating the *work of finding the answer* to a subagent, so that the byproducts of that work — file contents, log noise, dead-end reads — never enter your own context. You get back a distilled answer plus the evidence that supports it, and you stay sharp for the actual task.
