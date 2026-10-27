@@ -1,13 +1,12 @@
 {
   "schema_version": 3,
   "id": "emil",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Emil Kowalski skills for UI design, web and Expo animation, mobile polish, Swift, and frontend libraries",
   "selectable": true,
   "surfaces": [
-    "claude",
-    "codex",
-    "opencode"
+    "agents",
+    "claude"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -47,7 +46,9 @@
       "id": "animate",
       "source": "skills/animate",
       "description": "Build an animation from scratch, making the decisions in the order that determines whether it feels right — should it animate at all, what purpose, which tool, which properties, which curve and duration, how it interrupts, how it exits. Writes the implementation. Use when asked to animate something, add motion, make a component feel alive, or build a transition. For critiquing existing motion use review-animations; for auditing a whole codebase use improve-animations.",
-      "requires": [],
+      "requires": [
+        "skill:pick-ui-library"
+      ],
       "conflicts": [],
       "notices": [
         "notice:mit"
@@ -59,28 +60,19 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "animate",
+          "invocation": "animate",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "animate",
           "invocation": "/animate",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "animate",
-          "invocation": "$animate",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "animate",
-          "invocation": "animate",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -105,6 +97,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "animate-expo",
+          "invocation": "animate-expo",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "animate-expo",
@@ -112,27 +113,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "animate-expo",
-          "invocation": "$animate-expo",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "animate-expo",
-          "invocation": "animate-expo",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "animate-expo",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "animate-expo",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -151,6 +150,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "animation-performance",
+          "invocation": "animation-performance",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "animation-performance",
@@ -158,27 +166,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "animation-performance",
-          "invocation": "$animation-performance",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "animation-performance",
-          "invocation": "animation-performance",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "animation-performance",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "animation-performance",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -197,6 +203,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "animation-vocabulary",
+          "invocation": "animation-vocabulary",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "animation-vocabulary",
@@ -204,27 +219,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "animation-vocabulary",
-          "invocation": "$animation-vocabulary",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "animation-vocabulary",
-          "invocation": "animation-vocabulary",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "animation-vocabulary",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "animation-vocabulary",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -243,6 +256,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "apple-design",
+          "invocation": "apple-design",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "apple-design",
@@ -250,27 +272,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "apple-design",
-          "invocation": "$apple-design",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "apple-design",
-          "invocation": "apple-design",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "apple-design",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "apple-design",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -289,6 +309,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "ask-sonner",
+          "invocation": "ask-sonner",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "ask-sonner",
@@ -296,27 +325,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "ask-sonner",
-          "invocation": "$ask-sonner",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "ask-sonner",
-          "invocation": "ask-sonner",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "ask-sonner",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "ask-sonner",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -335,6 +362,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "break-ui",
+          "invocation": "break-ui",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "break-ui",
@@ -342,27 +378,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "break-ui",
-          "invocation": "$break-ui",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "break-ui",
-          "invocation": "break-ui",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "break-ui",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "break-ui",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -381,6 +415,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "emil-design-eng",
+          "invocation": "emil-design-eng",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "emil-design-eng",
@@ -388,27 +431,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "emil-design-eng",
-          "invocation": "$emil-design-eng",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "emil-design-eng",
-          "invocation": "emil-design-eng",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "emil-design-eng",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "emil-design-eng",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -427,6 +468,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "find-animation-opportunities",
+          "invocation": "find-animation-opportunities",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "find-animation-opportunities",
@@ -434,27 +484,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "find-animation-opportunities",
-          "invocation": "$find-animation-opportunities",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "find-animation-opportunities",
-          "invocation": "find-animation-opportunities",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "find-animation-opportunities",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "find-animation-opportunities",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -473,6 +521,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "improve-animations",
+          "invocation": "improve-animations",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "improve-animations",
@@ -480,27 +537,29 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "improve-animations",
-          "invocation": "$improve-animations",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "improve-animations",
-          "invocation": "improve-animations",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "improve-animations",
+          "prerequisites": [
+            "The consuming client must support the requested read-only and executor subagents for the applicable workflow."
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "improve-animations",
+          "prerequisites": [
+            "The consuming client must support the requested read-only and executor subagents for the applicable workflow."
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -519,6 +578,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "mobile-native",
+          "invocation": "mobile-native",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "mobile-native",
@@ -526,27 +594,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "mobile-native",
-          "invocation": "$mobile-native",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "mobile-native",
-          "invocation": "mobile-native",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "mobile-native",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "mobile-native",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -565,6 +631,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "pick-ui-library",
+          "invocation": "pick-ui-library",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "pick-ui-library",
@@ -572,27 +647,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "pick-ui-library",
-          "invocation": "$pick-ui-library",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "pick-ui-library",
-          "invocation": "pick-ui-library",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "pick-ui-library",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -611,6 +677,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "prototype",
+          "invocation": "prototype",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "prototype",
@@ -618,27 +693,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "prototype",
-          "invocation": "$prototype",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "prototype",
-          "invocation": "prototype",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "prototype",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -657,6 +723,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "review-animations",
+          "invocation": "review-animations",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "review-animations",
@@ -664,27 +739,18 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "review-animations",
-          "invocation": "$review-animations",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "review-animations",
-          "invocation": "review-animations",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "review-animations",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -703,6 +769,15 @@
       },
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "write-swift",
+          "invocation": "write-swift",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
           "surface": "claude",
           "projection": "skill",
           "name": "write-swift",
@@ -710,27 +785,25 @@
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "skill",
-          "name": "write-swift",
-          "invocation": "$write-swift",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "opencode",
-          "projection": "skill",
-          "name": "write-swift",
-          "invocation": "write-swift",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "write-swift",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "write-swift",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     }
   ]
 }
