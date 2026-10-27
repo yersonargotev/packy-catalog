@@ -37,8 +37,7 @@ delegation. Use the host's actual tool schema and available agent types:
 | Surface | Reviewer dispatch |
 | --- | --- |
 | Claude Code | Select the installed `thermo-nuclear-review-subagent` and `thermo-nuclear-code-quality-review-subagent` through the available agent tool. Pass the complete matching rubric in each task; Claude cannot preload these manual-only skills. |
-| Codex | Select those custom roles if exposed by the session's delegation tool. Otherwise assign available general review workers with the complete corresponding rubric and the work contract below. |
-| OpenCode | Select the installed subagents through its task/delegation tool. Supply each matching rubric explicitly if skill loading is restricted. |
+| Codex | Select those custom roles if exposed by the session's delegation tool. If the named roles are unavailable, stop and report the missing prerequisite. |
 
 Each worker receives the **same** scope, diff, file context, guidance, and spec,
 plus its own complete rubric. Assign this work contract explicitly:
@@ -58,10 +57,9 @@ plus its own complete rubric. Assign this work contract explicitly:
   and attribute incorporated findings; disclose unavailable discussion access.
 
 Do not assume Cursor's `Task`, `run_in_background`, or `shell`/`explore` agent
-names exist on another host. If named agents are unavailable, a general worker
-with the full assignment above is sufficient. If delegation is unavailable or
-prohibited, run the two complete rubrics as separate sequential passes in the
-current session and disclose that they did not have independent contexts.
+names exist on another host. If named agents or delegation are unavailable or prohibited, report the missing
+prerequisite and incomplete review; do not substitute generic workers or claim
+that sequential passes are independent.
 If capacity allows only one worker at a time, run them sequentially with the
 same captured inputs. Wait for both passes to finish; report failed or incomplete
 passes as coverage gaps, never as clean reviews.
