@@ -1,5 +1,10 @@
 # Thermos upstream and projection requirements
 
+This is a historical research record. Its surface support, commands, engine
+versions and conclusions describe the generation investigated and are not
+current operator guidance. See [current catalog use](../../README.md#use-the-catalog)
+and [Packy CLI setup](../packy-cli.md).
+
 Research date: 2026-09-22. Upstream is pinned to Cursor's `plugins` commit [`53e579f1481697931fc44f5445171397cfa2b24b`](https://github.com/cursor/plugins/tree/53e579f1481697931fc44f5445171397cfa2b24b/thermos), rather than the mutable `main` branch.
 
 ## Upstream inventory and license

@@ -1,5 +1,9 @@
 # Matty design and planning: reviewed on-demand access
 
+This review records its original Catalog generation. Surface names, Pack
+versions, and acceptance evidence below are historical; see the
+[current setup guide](../packy-cli.md) for the `agents` and `claude` contract.
+
 This review covers exactly the 19 logical skills in [issue #91](https://github.com/yersonargotev/packy-catalog/issues/91)
 on Codex and Claude Code. Matty advances from 4.0.0 to 4.1.0; its upstream remains
 `mattpocock/skills@d81f3a183412e71a5b1e84ca21bc1a35eea03a60`.

@@ -1,5 +1,9 @@
 # pstack principles and foundational skills: reviewed on-demand access
 
+This review records its original Catalog generation. Surface names, Pack
+versions, and acceptance evidence below are historical; see the
+[current setup guide](../packy-cli.md) for the `agents` and `claude` contract.
+
 This is the exact 38-skill slice in [issue #93](https://github.com/yersonargotev/packy-catalog/issues/93):
 24 principles and 14 foundational/utility skills, on Codex and Claude Code.
 pstack advances from 4.5.0 to 4.6.0 as a Catalog contract migration. Its upstream

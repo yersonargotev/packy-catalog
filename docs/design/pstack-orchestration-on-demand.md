@@ -1,5 +1,9 @@
 # pstack orchestration: complete reviewed on-demand access
 
+This review records its original Catalog generation. Surface names, Pack
+versions, and acceptance evidence below are historical; see the
+[current setup guide](../packy-cli.md) for the `agents` and `claude` contract.
+
 [Issue #95](https://github.com/yersonargotev/packy-catalog/issues/95) completes
 pstack's 55 logical skills on Codex and Claude. This contract migration advances
 pstack from 5.1.0 to 5.2.0 against integrated baseline

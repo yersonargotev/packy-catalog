@@ -1,5 +1,9 @@
 # Warp skill-doctor: reviewed on-demand access
 
+This review records its original Catalog generation. Surface names, Pack
+versions, and acceptance evidence below are historical; see the
+[current setup guide](../packy-cli.md) for the `agents` and `claude` contract.
+
 [Issue #98](https://github.com/yersonargotev/packy-catalog/issues/98) covers exactly
 `warp:skill-doctor` on Codex and Claude Code. Warp advances from 2.4.0 to 2.5.0
 against Catalog baseline `cac283b0e829bd9a88233eb1050a4e49a2316019`.
