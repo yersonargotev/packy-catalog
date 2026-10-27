@@ -1,7 +1,11 @@
-description = "Conduct a five-axis code review — correctness, readability, architecture, security, performance"
+---
+name: review
+description: "Reviews code for correctness, readability, architecture, security, and performance"
+---
 
-prompt = """
-Invoke the code-review-and-quality skill.
+# Review
+
+Request the named code-reviewer role when available and authorized, with the code-review-and-quality skill. If that role or delegation is unavailable, report the unmet prerequisite instead of claiming a specialist review.
 
 Review the current changes (staged or recent commits) across all five axes:
 
@@ -13,4 +17,3 @@ Review the current changes (staged or recent commits) across all five axes:
 
 Categorize findings as Critical, Required, Optional, or Nit.
 Output a structured review with specific file:line references and fix recommendations.
-"""

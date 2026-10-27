@@ -68,11 +68,12 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         pack.mkdir(parents=True)
         source = json.loads((ROOT / "packs/argote/pack.json").read_text())
         guidance = source["resources"][0]
-        guidance["bindings"] = [binding for binding in guidance["bindings"] if binding["surface"] == "codex"]
+        guidance["bindings"] = [binding for binding in guidance["bindings"] if binding["surface"] in ("agents", "codex")]
+        guidance["bindings"][0]["surface"] = "agents"
         guidance["source"] = "instructions/guidance.md"
         guidance["bindings"][0]["capabilities"][0]["project_instruction"]["source"] = "instructions/guidance.md"
         manifest = {"schema_version": 3, "id": "demo", "version": "1.0.0", "description": "Test fixture",
-                    "selectable": True, "surfaces": ["codex"], "readiness_obligations": [],
+                    "selectable": True, "surfaces": ["agents"], "readiness_obligations": [],
                     "external_requirements": [], "origins": [], "resources": [guidance]}
         (pack / "pack.json").write_text(json.dumps(manifest))
         (pack / "instructions").mkdir()
@@ -126,234 +127,77 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         self.assert_rejected(self.run_cli("version", "--json"), "malformed release declaration")
         self.assertFalse((self.work / "downloads").exists())
 
-    def prepare_content_probe_fixture(self):
-        """No shipped Pack runtime, origin service, host, or model participates."""
+    def prepare_generation_fixture(self, *, on_demand=True):
+        """A synthetic complete catalog exercises the released binary without content execution."""
         shutil.rmtree(self.project / "packs")
-        for pack_id in ("argote", "emil", "ponytail", "claude"):
-            pack = self.project / "packs" / pack_id
-            pack.mkdir(parents=True)
-            manifest = json.loads((ROOT / ("packs/claude/pack.json" if pack_id == "claude"
-                                          else "packs/ponytail/pack.json")).read_text())
-            manifest.update(id=pack_id, origins=[], external_requirements=[])
-            resources = manifest["resources"]
-            if pack_id == "argote":
-                resources = [resources[0]]
-                resources[0].update(id="guidance", notices=[])
-                for binding in resources[0]["bindings"]:
-                    binding.update(name="guidance", invocation="guidance")
-                    for capability in binding["capabilities"]:
-                        capability["project_instruction"]["id"] = "guidance"
-            elif pack_id == "emil":
-                resources = [resources[2]]
-                resources[0].update(id="example", notices=[])
-                for binding in resources[0]["bindings"]:
-                    binding.update(name="example", invocation="example")
-            manifest["resources"] = resources
-            for resource in resources:
-                resource.pop("origin", None)
-                path = pack / resource["source"]
-                if resource["kind"] == "skill":
-                    path.mkdir(parents=True)
-                    (path / "SKILL.md").write_text("---\nname: " + resource["id"] +
-                                                  "\ndescription: Inert controlled fixture\n---\nFixture text.\n")
-                    if resource["id"] == "html-plan":
-                        for name in ("runtime/htmlplan.js", "runtime/htmlplan.css", "runtime/pack.mjs",
-                                     "references/blocks.md", "examples/scheduled-send.html"):
-                            asset = path / name
-                            asset.parent.mkdir(exist_ok=True)
-                            asset.write_text("Inert fixture: " + name + "\n")
-                else:
-                    path.parent.mkdir(parents=True, exist_ok=True)
-                    if resource["kind"] == "instruction":
-                        path.write_text("# Ponytail, lazy senior dev mode\n" if pack_id == "ponytail"
-                                        else "# Argote fixture guidance\n")
-                    else:
-                        path.write_text("Apache License\n" if resource["id"] == "apache-2-0" else
-                                        '{"name": "eli5"}\n' if resource["id"] == "eli5-metadata" else
-                                        '{"name": "html-plan"}\n' if resource["id"] == "html-plan-metadata" else
-                                        "MIT License\nCopyright (c) 2026 DietrichGebert\n")
-            (pack / "pack.json").write_text(json.dumps(manifest))
-        # Controlled curl boundary supplies the real archive, still checksum/identity checked.
+        pack = self.project / "packs/ponytail"
+        skill = pack / "skills/ponytail"
+        skill.mkdir(parents=True)
+        (skill / "SKILL.md").write_text("---\nname: ponytail\ndescription: Inert controlled fixture\n---\nFixture text.\n")
+        bindings = [{"surface": surface, "projection": "skill", "name": "ponytail",
+                     "invocation": "/ponytail" if surface == "claude" else "ponytail", "mode": "native",
+                     "sharing": "exclusive", "capabilities": []} for surface in ("agents", "claude")]
+        exports = [{"format": fmt, "name": "ponytail", "prerequisites": [], "references": [], "roles": []}
+                   for fmt in ("agent-plugins", "claude-plugin")]
+        resource = {"kind": "skill", "id": "ponytail", "source": "skills/ponytail", "description": "Test skill",
+                    "requires": [], "conflicts": [], "notices": [], "bindings": bindings,
+                    "surface_exclusions": [], "plugin_exports": exports}
+        if on_demand:
+            resource["on_demand"] = {"protocol": "skill-tree-v1", "prerequisites": []}
+        manifest = {"schema_version": 3, "id": "ponytail", "version": "1.0.0", "description": "Test fixture",
+                    "selectable": True, "surfaces": ["agents", "claude"], "readiness_obligations": [],
+                    "external_requirements": [], "origins": [], "resources": [resource]}
+        (pack / "pack.json").write_text(json.dumps(manifest))
+        for label, args in (("git init", ("init", "-q")), ("git add", ("add", ".")),
+                            ("git commit", ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Fixture"))):
+            prepare([shutil.which("git"), "-C", str(self.project), *args], label=label, env=self.env)
         (self.bin / "curl").write_text(
             "#!" + sys.executable + "\nimport shutil,sys\n"
             "args=sys.argv[1:]\nshutil.copyfile(" + repr(str(Path(ARCHIVE).resolve())) +
             ",args[args.index('--output')+1])\n")
-        # Node is an external transport fixture, never an executable Pack resource.
-        node = self.bin / "node"
-        node.write_text("#!" + sys.executable + "\nfrom pathlib import Path\nimport sys\n"
-                        "runtime=Path(sys.argv[1]).parent\npage=Path(sys.argv[2])\n"
-                        "packed='<style data-htmlplan>\\n'+(runtime/'htmlplan.css').read_text()+'\\n</style>'\n"
-                        "packed+='<script data-htmlplan>\\n'+(runtime/'htmlplan.js').read_text()+'\\n</script>'\n"
-                        "page.with_suffix('.packed.html').write_text(packed)\n"
-                        "print('  ⚠ line 48 <doc-calls>: 7 rows point at files not found under fixture')\n"
-                        "print('  ⚠ controlled editorial warning')\n")
-        node.chmod(0o755)
-        git = shutil.which("git")
-        for label, args in (("git init", ("init", "-q")), ("git add", ("add", ".")),
-                            ("git commit", ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Fixture"))):
-            prepare([git, "-C", str(self.project), *args], label=label, env=self.env)
         owned_temp = self.work / "owned-temp"
         owned_temp.mkdir()
         self.probe_env = {**self.env, "TMPDIR": str(owned_temp)}
         self.probe_temp = owned_temp
 
-    def run_content_probe(self, *args):
-        result = subprocess.run([sys.executable, "-B", str(self.project / "scripts/probes/content-probes.py"), *args],
-                                env=self.probe_env, text=True, capture_output=True, timeout=180)
+    def run_generation_probe(self):
+        result = subprocess.run([sys.executable, "-B", str(self.project / "scripts/probes/generation.py"),
+                                 "--access", "ponytail:ponytail"], env=self.probe_env,
+                                text=True, capture_output=True, timeout=180)
         report = json.loads(result.stdout)
         self.assertEqual(report["cleanup"], "removed")
         self.assertEqual(list(self.probe_temp.iterdir()), [])
-        events = [json.loads(line.removeprefix("Content probe: ")) for line in result.stderr.splitlines()
-                  if line.startswith("Content probe: ")]
-        self.assertEqual(len(events), 2 * len(report["commands"]))
-        for index, receipt in enumerate(report["commands"]):
-            self.assertTrue(math.isfinite(receipt["elapsed_seconds"]))
-            self.assertGreaterEqual(receipt["elapsed_seconds"], 0)
-            start, end = events[2 * index:2 * index + 2]
-            self.assertEqual(start["event"], "started")
-            self.assertEqual(start["command"], receipt["command"])
-            self.assertEqual(end["event"], receipt["outcome"])
-            self.assertEqual(start["command_id"], index + 1)
-            self.assertEqual(end["command_id"], index + 1)
-            self.assertEqual(start["context"], receipt["context"])
-            self.assertEqual(end["context"], receipt["context"])
-            self.assertEqual(end["elapsed_seconds"], receipt["elapsed_seconds"])
         return result, report
 
-    def test_content_probe_command_uses_real_pin_with_inert_controlled_content(self):
-        self.prepare_content_probe_fixture()
-        result, report = self.run_content_probe("--scenario", "adoption", "--scenario", "ponytail",
-                                                "--scenario", "claude", "--html-pack")
+    def test_historical_probe_rejects_two_surface_engine(self):
+        self.prepare_generation_fixture()
+        result = subprocess.run([sys.executable, "-B", str(self.project / "scripts/probes/content-probes.py"),
+                                 "--scenario", "adoption"], env=self.probe_env,
+                                text=True, capture_output=True, timeout=30)
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(result.stdout)
+        self.assertIn("historical probes require their v0.2.31 checkout", report["error"])
+        self.assertEqual(report["cleanup"], "removed")
+        self.assertFalse(any("packy_tool.py" in " ".join(command["command"]) for command in report["commands"]))
+
+    def test_generation_probe_checks_both_surfaces_with_the_released_binary(self):
+        self.prepare_generation_fixture()
+        result, report = self.run_generation_probe()
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout[-3000:])
         self.assertEqual(report["result"], "passed")
-        self.assertEqual(len(report["outcomes"]), 21)
-        self.assertEqual({(case["surface"], case["selection"]) for case in report["outcomes"]
-                          if case["scenario"] == "claude"},
-                         {(surface, selection) for surface in ("codex", "claude", "opencode")
-                          for selection in ("complete", "eli5", "html-plan")})
-        self.assertFalse(report["official_publication"])
+        self.assertEqual({(case["surface"], case["format"]) for case in report["outcomes"]},
+                         {("agents", "agent-plugins"), ("claude", "claude-plugin")})
         self.assertEqual(report["verified_packy_identity"]["version"], self.pin()["version"])
-        contexts = [receipt["context"] for receipt in report["commands"]]
-        self.assertEqual({context["stage"] for context in contexts},
-                         {"candidate-verification", "acquisition", "candidate-construction", "content-acceptance"})
-        self.assertEqual({(context["scenario"], context["surface"], context["scope"]) for context in contexts
-                          if context["stage"] == "content-acceptance"},
-                         {(scenario, surface, "project") for scenario in ("adoption", "ponytail", "claude")
-                          for surface in ("codex", "claude", "opencode")})
-        self.assertTrue(any(receipt["outcome"] == "expected-rejection" for receipt in report["commands"]))
-        for context in contexts:
-            if context["stage"] != "content-acceptance":
-                self.assertEqual((context["scenario"], context["surface"], context["scope"]), (None, None, None))
-        packing = [case["html_packing"] for case in report["outcomes"] if "html_packing" in case]
-        self.assertEqual(len(packing), 6)
-        for outcome in packing:
-            self.assertEqual(len(outcome["fictional_source_warnings"]), 1)
-            self.assertEqual(outcome["other_warnings"], ["⚠ controlled editorial warning"])
+        self.assertFalse(report["official_publication"])
+        self.assertEqual(sum(receipt["outcome"] == "expected-rejection" for receipt in report["commands"]), 2)
 
-    def test_claude_missing_runtime_fails_and_cleans_owned_state(self):
-        self.prepare_content_probe_fixture()
-        # A checksum-valid built snapshot can still lack required Pack content.
-        (self.project / "packs/claude/skills/html-plan/runtime/htmlplan.js").unlink()
-        for label, args in (("git add", ("add", ".")),
-                            ("git commit", ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
-                                            "commit", "-qm", "Missing runtime fixture"))):
-            prepare([shutil.which("git"), "-C", str(self.project), *args], label=label, env=self.env)
-        result, report = self.run_content_probe("--scenario", "claude", "--surface", "codex")
+    def test_generation_probe_rejects_missing_access_contract_and_cleans_up(self):
+        self.prepare_generation_fixture(on_demand=False)
+        result, report = self.run_generation_probe()
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(report["result"], "failed")
-        self.assertIn("missing HTML runtime closure: runtime/htmlplan.js", report["error"])
-
-    def prepare_pstack_fixture(self):
-        self.prepare_content_probe_fixture()
-        pack = self.project / "packs/pstack"
-        manifest = json.loads((ROOT / "packs/pstack/pack.json").read_text())
-        manifest.update(origins=[], external_requirements=[])
-        for resource in manifest["resources"]:
-            definitions = [(resource, "Common"), *[(variant, {"codex": "Codex", "claude": "Claude Code",
-                                                            "opencode": "OpenCode"}[variant["surface"]])
-                                                  for variant in resource.get("variants", [])]]
-            for definition, label in definitions:
-                definition.pop("origin", None)
-                definition.pop("on_demand", None)
-                path = pack / definition.get("source", resource["source"])
-                if resource["kind"] == "notice":
-                    path.parent.mkdir(parents=True, exist_ok=True)
-                    path.write_text("MIT License\nCopyright fixture\n")
-                else:
-                    path.mkdir(parents=True, exist_ok=True)
-                    (path / "SKILL.md").write_text("---\nname: " + resource["id"] +
-                                                  "\ndescription: Inert fixture\n---\n## " + label + " execution\n")
-                    if resource["id"] == "poteto-mode":
-                        (path / "scripts").mkdir(exist_ok=True)
-                        (path / "scripts/bootstrap.ts").write_text("Inert helper fixture.\n")
-        (pack / "pack.json").write_text(json.dumps(manifest))
-        baseline = self.work / "pstack-baseline"
-        shutil.copytree(self.project, baseline, ignore=shutil.ignore_patterns(".git"))
-        manifest["version"] = "3.0.0"
-        for resource in manifest["resources"]:
-            resource.pop("variants", None)
-            resource["requires"] = []
-        (baseline / "packs/pstack/pack.json").write_text(json.dumps(manifest))
-        for surface in manifest["surfaces"]:
-            shutil.rmtree(baseline / "packs/pstack/skills" / surface)
-        for checkout in (self.project, baseline):
-            for label, args in (("git init", ("init", "-q")), ("git add", ("add", ".")),
-                                ("git commit", ("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Pstack fixture"))):
-                prepare([shutil.which("git"), "-C", str(checkout), *args],
-                        label=label, env=self.env)
-        return baseline
-
-    def test_pstack_transitions_both_scopes_through_the_released_binary(self):
-        baseline = self.prepare_pstack_fixture()
-        result, report = self.run_content_probe("--scenario", "pstack", "--pstack-baseline", str(baseline))
-        self.assertEqual(result.returncode, 0, result.stderr + result.stdout[-3000:])
-        self.assertEqual(report["result"], "passed")
-        self.assertEqual({case["scope"] for case in report["outcomes"]}, {"project", "global"})
-        self.assertIn("pstack_baseline", report)
-        self.assertEqual({receipt["context"]["stage"] for receipt in report["commands"]},
-                         {"candidate-verification", "baseline-verification", "acquisition",
-                          "candidate-construction", "baseline-construction", "content-acceptance"})
-        acceptance = [receipt for receipt in report["commands"]
-                      if receipt["context"]["stage"] == "content-acceptance"]
-        self.assertEqual({receipt["context"]["scope"] for receipt in acceptance},
-                         {"project", "disposable-global"})
-        for receipt in acceptance:
-            self.assertEqual(receipt["context"]["scenario"], "pstack")
-            args = receipt["command"]
-            if "--surface" in args:
-                self.assertEqual(receipt["context"]["surface"], args[args.index("--surface") + 1])
-            else:
-                self.assertIsNone(receipt["context"]["surface"], "shared operation inherited a stale surface")
-        baseline_commands = [receipt for receipt in acceptance
-                             if Path(receipt["command"][receipt["command"].index("--snapshot") + 1]).name == "baseline-dist"]
-        self.assertEqual({receipt["context"]["scope"] for receipt in baseline_commands},
-                         {"project", "disposable-global"})
-        for receipt in report["commands"][-4:]:
-            self.assertIn(receipt["context"]["stage"], {"candidate-verification", "baseline-verification"})
-            self.assertEqual([receipt["context"][key] for key in ("scenario", "surface", "scope")], [None] * 3)
-
-    def test_pstack_missing_effective_dependency_fails_and_cleans_owned_state(self):
-        baseline = self.prepare_pstack_fixture()
-        path = self.project / "packs/pstack/pack.json"
-        manifest = json.loads(path.read_text())
-        architect = next(resource for resource in manifest["resources"] if resource["id"] == "architect")
-        codex = next(variant for variant in architect["variants"] if variant["surface"] == "codex")
-        codex["requires"].remove("skill:principle-exhaust-the-design-space")
-        path.write_text(json.dumps(manifest))
-        prepare([shutil.which("git"), "-C", str(self.project), "-c", "user.name=Fixture",
-                 "-c", "user.email=fixture@example.invalid", "commit", "-qam", "Missing dependency fixture"],
-                label="git commit missing dependency fixture", env=self.env)
-        result, report = self.run_content_probe("--scenario", "pstack", "--pstack-baseline", str(baseline))
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("missing pstack effective dependency: principle-exhaust-the-design-space", report["error"])
-
-    def test_html_packing_success_without_included_assets_is_rejected(self):
-        self.prepare_content_probe_fixture()
-        node = self.bin / "node"
-        node.write_text(node.read_text().replace("write_text(packed)", "write_text('<html>Incomplete fixture</html>')"))
-        result, report = self.run_content_probe("--scenario", "claude", "--surface", "codex", "--html-pack")
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("packed HTML missing runtime asset: htmlplan.css", report["error"])
+        self.assertIn("on_demand", report["error"])
+        self.assertEqual(report["outcomes"], [])
 
     def test_unsupported_platform_is_rejected_before_download(self):
         (self.bin / "uname").unlink()

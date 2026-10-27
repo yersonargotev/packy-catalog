@@ -3,6 +3,12 @@ name: reproduce-bug-report
 description: Launch Oz cloud agents with computer use to reproduce UI-focused bug reports, capture visual evidence (a screen recording by default), and report reproduction findings. Use when investigating a specific interactive or visual bug from an issue, ticket, support report, or prompt.
 ---
 
+## Reviewed execution prerequisites
+
+- actual Oz cloud agents with computer use and recording capability; reporter-matched runnable app/build/state where available, permitted test auth/state and explicit variant artifacts
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Reproduce bug report
 
 Use this skill when the current context is a GitHub issue, support report, Linear ticket, or user prompt describing a specific bug that may be reproduced through visible application behavior. It is primarily for UI, rendering, windowing, settings, editor, terminal-display, onboarding, or other interactive bugs where a screen recording (or screenshots) makes the result more actionable.

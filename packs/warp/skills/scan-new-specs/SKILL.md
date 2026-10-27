@@ -3,6 +3,13 @@ name: scan-new-specs
 description: DEPRECATED and retired as of 2026-08-20. Do not invoke, and do not schedule. This skill scanned for merged PRODUCT.md specs and auto-drafted docs PRs, which produced documentation for features that had not shipped. Docs for newly shipped features are now triggered by the weekly release and gated on documentation-worthiness by the missing_docs skill in warpdotdev/docs. If you were about to run this skill to find docs gaps, run missing_docs in drift-watch mode instead.
 ---
 
+## Reviewed execution prerequisites
+
+- missing_docs is external guidance in warpdotdev/docs, not a prepared Catalog dependency
+- retired inventory only: do not invoke or schedule; existing scheduled agent must stay paused
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # scan-new-specs (deprecated)
 
 **Retired 2026-08-20. Do not invoke this skill and do not schedule it.**
