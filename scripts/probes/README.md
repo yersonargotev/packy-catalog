@@ -514,10 +514,12 @@ and live history remains untouched. Omit the flag for retrieval-only acceptance.
 Ordinary tests/validation/build/publication remain inert. See the
 [reviewed contract, evidence and limits](../../docs/design/warp-skill-doctor-on-demand.md).
 
-## Integrated on-demand acceptance
+## Historical integrated on-demand acceptance
 
-Use the [complete contract and independently specified inventory](../../docs/on-demand-coverage.md)
-from a clean committed candidate:
+This command was used with the original pre-two-surface checkout and released
+binary. It is rejected by the current runner when pinned to v0.2.32; do not use
+it as acceptance for the current catalog. The historical
+[contract and inventory](../../docs/on-demand-coverage.md) recorded this command:
 
 ```sh
 python3 -B scripts/probes/content-probes.py --scenario integrated-on-demand \
@@ -531,6 +533,6 @@ The optional flag runs the existing reviewed pstack bootstraps and Warp fictiona
 repository/report/collector/rendering checks. Read the linked contract for runtime,
 network-isolation prerequisites and evidence limitations. Historical slice probes
 still require their separate documented pre-adaptation baselines; this scenario
-uses the current integrated content and two independently committed inert fixture
+used the then-integrated content and two independently committed inert fixture
 revisions. It does not repurpose one baseline for every historical slice.
 Ordinary validation and publication remain inert and main-owned.
