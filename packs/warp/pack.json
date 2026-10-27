@@ -141,6 +141,26 @@
             "dependencies": []
           }
         }
+      ],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "brandalf",
+          "prerequisites": [
+            "network access to the hosted Warp/Oz canonical brand source when performing branding; user retry/proceed decision if unavailable"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "brandalf",
+          "prerequisites": [
+            "network access to the hosted Warp/Oz canonical brand source when performing branding; user retry/proceed decision if unavailable"
+          ],
+          "references": [],
+          "roles": []
+        }
       ]
     },
     {
@@ -828,6 +848,26 @@
             "dependencies": []
           }
         }
+      ],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "fix-errors",
+          "prerequisites": [
+            "intended Warp Rust checkout, Git, Cargo/toolchain and nextest, platform targets, repository test/lint/format scripts; full presubmit only if explicitly required"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "fix-errors",
+          "prerequisites": [
+            "intended Warp Rust checkout, Git, Cargo/toolchain and nextest, platform targets, repository test/lint/format scripts; full presubmit only if explicitly required"
+          ],
+          "references": [],
+          "roles": []
+        }
       ]
     },
     {
@@ -918,6 +958,28 @@
             ],
             "dependencies": []
           }
+        }
+      ],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "implement-specs",
+          "prerequisites": [
+            "target Warp repository, PRODUCT.md and TECH.md when warranted; reviewed and approved specs",
+            "target runtime, tests and validation artifacts; user choice of optional implementation aids"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "implement-specs",
+          "prerequisites": [
+            "target Warp repository, PRODUCT.md and TECH.md when warranted; reviewed and approved specs",
+            "target runtime, tests and validation artifacts; user choice of optional implementation aids"
+          ],
+          "references": [],
+          "roles": []
         }
       ]
     },
@@ -2336,6 +2398,28 @@
             "dependencies": []
           }
         }
+      ],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "update-skill",
+          "prerequisites": [
+            "explicit writable target skill-authoring repository/destination; host frontmatter and invocation rules",
+            "optional skills-ref runtime or available web search for validation guidance; no automatic runtime installation"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "update-skill",
+          "prerequisites": [
+            "explicit writable target skill-authoring repository/destination; host frontmatter and invocation rules",
+            "optional skills-ref runtime or available web search for validation guidance; no automatic runtime installation"
+          ],
+          "references": [],
+          "roles": []
+        }
       ]
     },
     {
@@ -2611,6 +2695,26 @@
             "dependencies": []
           }
         }
+      ],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "write-pr-description",
+          "prerequisites": [
+            "actual target branch or PR, commit/diff facts, target repository PR template and truthful validation evidence"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "write-pr-description",
+          "prerequisites": [
+            "actual target branch or PR, commit/diff facts, target repository PR template and truthful validation evidence"
+          ],
+          "references": [],
+          "roles": []
+        }
       ]
     },
     {
@@ -2804,6 +2908,30 @@
             ],
             "dependencies": []
           }
+        }
+      ],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "write-tech-spec",
+          "prerequisites": [
+            "interactive directory/team clarification; Linear MCP or GitHub CLI only for explicitly requested ticket creation",
+            "optional host worker capability for parallelization planning; writable target specs directory",
+            "target Warp feature context, product spec when present and accessible current codebase for commit-pinned research"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "write-tech-spec",
+          "prerequisites": [
+            "interactive directory/team clarification; Linear MCP or GitHub CLI only for explicitly requested ticket creation",
+            "optional host worker capability for parallelization planning; writable target specs directory",
+            "target Warp feature context, product spec when present and accessible current codebase for commit-pinned research"
+          ],
+          "references": [],
+          "roles": []
         }
       ]
     }
