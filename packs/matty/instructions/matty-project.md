@@ -1,1 +1,1 @@
-Packy manages the Matty Codex skill trees in .agents/skills.
+Packy manages the Matty skill trees in .agents/skills.
