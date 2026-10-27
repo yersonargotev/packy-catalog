@@ -1,6 +1,10 @@
-description = "Start spec-driven development — write a structured specification before writing code"
+---
+name: spec
+description: "Creates a structured specification before implementation begins"
+---
 
-prompt = """
+# Spec
+
 Invoke the spec-driven-development skill.
 
 Begin by understanding what the user wants to build. Ask clarifying questions about:
@@ -14,4 +18,3 @@ Then generate a structured spec covering all six core areas: objective, commands
 If the request bundles several independently testable capabilities, first propose a capability map (module ids, dependency direction, build order) per the skill's Phase 0 and get it approved, then spec each module in dependency order.
 
 Save the spec as SPEC.md in the project root and confirm with the user before proceeding.
-"""

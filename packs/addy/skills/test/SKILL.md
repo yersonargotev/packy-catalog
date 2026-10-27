@@ -1,6 +1,10 @@
-description = "Run TDD workflow — write failing tests, implement, verify. For bugs, use the Prove-It pattern."
+---
+name: test
+description: "Runs a test-driven workflow from failing tests through implementation and verification"
+---
 
-prompt = """
+# Test
+
 Invoke the test-driven-development skill.
 
 For new features:
@@ -15,5 +19,4 @@ For bug fixes (Prove-It pattern):
 4. Confirm the test passes
 5. Run the full test suite for regressions
 
-For browser-related issues, also invoke browser-testing-with-devtools to verify with Chrome DevTools MCP.
-"""
+For browser-related issues, also invoke browser-testing-with-devtools. Its browser tools must already be configured and authorized; report unavailable runtime evidence rather than claiming browser verification.
