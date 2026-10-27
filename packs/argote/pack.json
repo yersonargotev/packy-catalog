@@ -1,13 +1,12 @@
 {
   "schema_version": 3,
   "id": "argote",
-  "version": "4.0.3",
+  "version": "5.0.0",
   "description": "Yerson Argote's engineering, communication, and issue-delivery workflows",
   "selectable": true,
   "surfaces": [
-    "claude",
-    "codex",
-    "opencode"
+    "agents",
+    "claude"
   ],
   "readiness_obligations": [
     "runtime-usability",
@@ -36,6 +35,23 @@
       "notices": [],
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "instruction",
+          "name": "guidance",
+          "invocation": "guidance",
+          "mode": "native",
+          "sharing": "shared",
+          "capabilities": [
+            {
+              "type": "project-instruction",
+              "project_instruction": {
+                "id": "guidance",
+                "source": "instructions/argote-guidance.md"
+              }
+            }
+          ]
+        },
+        {
           "surface": "claude",
           "projection": "instruction",
           "name": "guidance",
@@ -43,40 +59,6 @@
           "mode": "native",
           "sharing": "shared",
           "capabilities": []
-        },
-        {
-          "surface": "codex",
-          "projection": "instruction",
-          "name": "guidance",
-          "invocation": "guidance",
-          "mode": "native",
-          "sharing": "shared",
-          "capabilities": [
-            {
-              "type": "project-instruction",
-              "project_instruction": {
-                "id": "guidance",
-                "source": "instructions/argote-guidance.md"
-              }
-            }
-          ]
-        },
-        {
-          "surface": "opencode",
-          "projection": "instruction",
-          "name": "guidance",
-          "invocation": "guidance",
-          "mode": "native",
-          "sharing": "shared",
-          "capabilities": [
-            {
-              "type": "project-instruction",
-              "project_instruction": {
-                "id": "guidance",
-                "source": "instructions/argote-guidance.md"
-              }
-            }
-          ]
         }
       ],
       "surface_exclusions": []
@@ -103,16 +85,7 @@
       "notices": [],
       "bindings": [
         {
-          "surface": "claude",
-          "projection": "skill",
-          "name": "espera-que",
-          "invocation": "/espera-que",
-          "mode": "native",
-          "sharing": "exclusive",
-          "capabilities": []
-        },
-        {
-          "surface": "codex",
+          "surface": "agents",
           "projection": "skill",
           "name": "espera-que",
           "invocation": "$espera-que",
@@ -121,16 +94,25 @@
           "capabilities": []
         },
         {
-          "surface": "opencode",
+          "surface": "claude",
           "projection": "skill",
           "name": "espera-que",
-          "invocation": "espera-que",
+          "invocation": "/espera-que",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
         }
       ],
-      "surface_exclusions": []
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "espera-que",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "kind": "skill",
@@ -149,7 +131,7 @@
       },
       "bindings": [
         {
-          "surface": "codex",
+          "surface": "agents",
           "projection": "skill",
           "name": "issue-delivery",
           "invocation": "$issue-delivery",
@@ -164,14 +146,9 @@
           "mode": "optional",
           "code": "codex-only",
           "reason": "This delivery workflow retains its reviewed Codex-only availability."
-        },
-        {
-          "surface": "opencode",
-          "mode": "optional",
-          "code": "codex-only",
-          "reason": "This delivery workflow retains its reviewed Codex-only availability."
         }
-      ]
+      ],
+      "plugin_exports": []
     }
   ]
 }

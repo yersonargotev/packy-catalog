@@ -3,6 +3,12 @@ name: check-impl-against-spec
 description: Compare a pull request's implementation against spec context in spec_context.md and feed any material mismatches into review.json. Use during PR review when approved or repository spec context is available.
 ---
 
+## Reviewed execution prerequisites
+
+- existing spec_context.md and PR-review inputs pr_diff.txt, optional pr_description.md, checked-out PR files and writable existing review.json
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Check implementation against spec
 
 Use this skill only when `spec_context.md` exists during PR review.

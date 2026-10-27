@@ -3,6 +3,12 @@ name: fix-errors
 description: Fix compilation errors, linting issues, and test failures in the warp Rust codebase. Covers presubmit checks, WASM-specific errors, and running specific tests. Use when the user hits build errors, clippy or fmt failures, test failures, or needs to run or interpret presubmit before a PR.
 ---
 
+## Reviewed execution prerequisites
+
+- intended Warp Rust checkout, Git, Cargo/toolchain and nextest, platform targets, repository test/lint/format scripts; full presubmit only if explicitly required
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # fix-errors
 
 Fix compilation errors, linting issues, and test failures in the warp Rust codebase.

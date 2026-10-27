@@ -3,6 +3,14 @@ name: validate-changes-match-specs
 description: Validate that a branch or pull request implementation matches introduced product, technical, security, and related specs. Use when reviewing or finishing a spec-driven change and resolving mismatches between checked-in specs and implementation.
 ---
 
+## Reviewed execution prerequisites
+
+- interactive per-mismatch decisions and resolution-mode selection; explicit approval for follow-up posting or commit/push
+- optional visual sources/computer use and authorized remote workers only when available
+- target branch/base, relevant existing specs and actual code/tests/review evidence; stop if no relevant spec
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Validate changes match specs
 
 Use this skill to verify that a branch or pull request implements the behavior and design promised by its specs. The workflow finds specs introduced by the change, compares them against code, tests, documentation, and validation artifacts, then walks the user through every material mismatch.

@@ -12,7 +12,7 @@ independently using the complete `thermo-nuclear-code-quality-review` skill.
 Use the complete rubric supplied by the parent. When directly assigned without
 that text, read `thermo-nuclear-code-quality-review/SKILL.md` from the active installation:
 use the location supplied by the host, or the matching Packy skill directory
-(`~/.claude/skills` for Claude Code; `~/.agents/skills` for Codex/OpenCode).
+(`~/.claude/skills` for Claude Code; `~/.agents/skills` for Codex).
 Respect custom home/configuration roots and project-local skill locations when
 provided. Read the file directly with the host's read tool: these skills retain
 manual invocation settings, so automatic discovery/preloading may omit them.
