@@ -1,6 +1,10 @@
-description = "Break work into small verifiable tasks with acceptance criteria and dependency ordering"
+---
+name: plan
+description: "Breaks work into small, verifiable tasks with acceptance criteria and dependency ordering"
+---
 
-prompt = """
+# Plan
+
 Invoke the planning-and-task-breakdown skill.
 
 Read the existing spec (SPEC.md or equivalent) and the relevant codebase sections. Then:
@@ -15,4 +19,3 @@ Read the existing spec (SPEC.md or equivalent) and the relevant codebase section
 Save the plan to tasks/plan.md and task list to tasks/todo.md.
 
 If tasks/plan.md or tasks/todo.md already exists with unchecked tasks for different work, stop and ask before writing — never silently overwrite an incomplete plan.
-"""

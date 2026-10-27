@@ -254,7 +254,27 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "codebase-design",
+          "prerequisites": [
+            "background agents for alternative-interface exploration"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "codebase-design",
+          "prerequisites": [
+            "background agents for alternative-interface exploration"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -303,7 +323,29 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "diagnosing-bugs",
+          "prerequisites": [
+            "a demonstrated tight red-capable feedback loop before hypotheses",
+            "target runtime or human-loop access appropriate to the reported bug"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "diagnosing-bugs",
+          "prerequisites": [
+            "a demonstrated tight red-capable feedback loop before hypotheses",
+            "target runtime or human-loop access appropriate to the reported bug"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -351,7 +393,27 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "domain-modeling",
+          "prerequisites": [
+            "writable target project when recording resolved terms or decisions"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "domain-modeling",
+          "prerequisites": [
+            "writable target project when recording resolved terms or decisions"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -512,7 +574,29 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "grilling",
+          "prerequisites": [
+            "background agents for environmental fact finding",
+            "user answers and final shared-understanding confirmation"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "grilling",
+          "prerequisites": [
+            "background agents for environmental fact finding",
+            "user answers and final shared-understanding confirmation"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -560,7 +644,19 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "handoff",
+          "prerequisites": [
+            "a client Skill tool for suggested skill invocation by the receiving agent",
+            "writable OS temporary directory"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -893,7 +989,31 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "prototype",
+          "prerequisites": [
+            "Git repository for throwaway branch capture",
+            "browser",
+            "project runtime for the UI branch"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "prototype",
+          "prerequisites": [
+            "Git repository for throwaway branch capture",
+            "browser",
+            "project runtime for the UI branch"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -943,7 +1063,31 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "research",
+          "prerequisites": [
+            "background-agent capability",
+            "primary-source access",
+            "writable target project for cited Markdown findings"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "research",
+          "prerequisites": [
+            "background-agent capability",
+            "primary-source access",
+            "writable target project for cited Markdown findings"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -1045,7 +1189,19 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "setup-matt-pocock-skills",
+          "prerequisites": [
+            "Git and applicable tracker CLI for repository inspection",
+            "user confirmation before configuration writes"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -1203,7 +1359,20 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "teach",
+          "prerequisites": [
+            "browser for interactive HTML lessons",
+            "interactive learner and confirmed mission",
+            "trusted cited sources and a writable target teaching workspace"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -1252,7 +1421,19 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "to-questionnaire",
+          "prerequisites": [
+            "recipient and knowledge-gap answers from the user",
+            "writable target directory"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -1456,7 +1637,18 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "wait-what",
+          "prerequisites": [
+            "prior conversation to re-explain"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -1573,7 +1765,31 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "wizard",
+          "prerequisites": [
+            "Bash for the generated wizard",
+            "human-only steps and user-confirmed stages",
+            "procedure-specific tools and service access"
+          ],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "wizard",
+          "prerequisites": [
+            "Bash for the generated wizard",
+            "human-only steps and user-confirmed stages",
+            "procedure-specific tools and service access"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -1622,7 +1838,19 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "writing-beats",
+          "prerequisites": [
+            "interactive audience prerequisites and user choice before each beat",
+            "raw material and a user-selected writable article destination"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -1733,7 +1961,19 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "writing-fragments",
+          "prerequisites": [
+            "interactive exploratory interview",
+            "user-selected writable fragment destination"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [
@@ -1782,7 +2022,19 @@
           "ACCESS.md"
         ],
         "dependencies": []
-      }
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "writing-shape",
+          "prerequisites": [
+            "complete read-only raw material and a separate writable article destination",
+            "interactive audience prerequisites, opening choice and agreed incremental blocks"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     }
   ]
 }
