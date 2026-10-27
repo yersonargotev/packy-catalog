@@ -212,3 +212,20 @@ When changing acquisition code, update its marked inline mirror in
 `.github/workflows/publish.yml` in the same PR. The workflow guard rejects drift
 and changes to the publication authority or exact-source boundaries. Review
 that mirror as executable workflow orchestration, and the release pin as data.
+
+### Independent versions across the two-surface contract cut
+
+The v0.2.32 engine deliberately rejects the retired surfaces, so it cannot
+validate the v0.2.31 Catalog Project as a current-contract baseline. For this
+one reviewed transition, `scripts/validate.sh` recognizes the exact v0.2.31
+release pin and the v0.2.32 engine identity. It validates and builds the old and
+new complete Catalog Projects with their respective checksum-verified releases,
+then compares the validated archived manifests (excluding version) and declared
+file paths, modes, and digests. Changed Packs require a strictly greater version;
+unchanged Packs must retain their version. A failed build or comparison fails
+validation. New Packs are permitted, as in the normal engine comparison.
+
+This authoring-only check does not read old contracts at runtime or migrate user
+state. Other engine/baseline pairs continue to use the engine's ordinary
+`catalog validate --baseline` operation. The previous release pin is retained in
+`scripts/packy-release-v0.2.31.json` solely for this transition check.
