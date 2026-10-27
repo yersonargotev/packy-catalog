@@ -2,6 +2,15 @@
 name: "skill-doctor"
 description: "Grades agent skills by scoring agent conversations for efficiency, code quality, procedure compliance, and verbosity, then drafts concrete skill edits and a shareable report. Use when the user wants their agent setup graded from real conversation history, or asks which of their installed skills are actually working."
 ---
+
+## Reviewed execution prerequisites
+
+- Python 3.9+ standard library for collection and rendering; Git for intended-project validation
+- current local scoring process or local-only child agents; optional authorized browser for viewing/PNG export
+- fresh writable report/scratch directory outside target repositories and immutable resources; Python bytecode suppression
+- runtime-identified supported executing harness, actual scope replies, and authorized local history/skill inputs
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
 # skill-doctor
 
 Grade the user's agent setup by scoring recent local agent conversations, then propose concrete skill edits and render one shareable report page.

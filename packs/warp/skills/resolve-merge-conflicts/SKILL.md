@@ -3,6 +3,12 @@ name: resolve-merge-conflicts
 description: Resolve Git merge conflicts by extracting only unresolved paths, conflict hunks, and compact diffs instead of loading whole files into context. Use when a merge, rebase, cherry-pick, or stash pop stops on conflicts, when `git status` shows unmerged paths, or when files contain conflict markers.
 ---
 
+## Reviewed execution prerequisites
+
+- intended repository with unresolved index/worktree conflicts, Git and Python 3, explicit --repo context and applicable targeted validation commands
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Resolve Merge Conflicts
 
 ## Overview

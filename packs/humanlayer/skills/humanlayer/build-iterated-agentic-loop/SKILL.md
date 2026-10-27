@@ -13,10 +13,10 @@ The target shape is an iterated agentic loop: a focused skill defines the agent'
 
 Create or update these files in the target repo:
 
-- `.claude/skills/<skill-name>/SKILL.md` for the repo-local agent behavior.
+- `<skill-root>/<skill-name>/SKILL.md` for the repo-local agent behavior, where `<skill-root>` follows the explicitly selected agent client and project conventions (for example `.agents/skills` or `.claude/skills`).
 - `.github/workflows/agent-<task-name>.yml` for the recurring coding-agent automation.
 - `.github/agent-memory/<task-name>.md` for stable feedback and scope constraints.
-- Optional references under `.claude/skills/<skill-name>/references/` when the skill needs templates, examples, or long supporting material.
+- Optional references under `<skill-root>/<skill-name>/references/` when the skill needs templates, examples, or long supporting material.
 
 ## Workflow
 

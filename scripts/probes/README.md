@@ -1,5 +1,35 @@
 # Opt-in content probes
 
+## Two-surface candidate acceptance
+
+After all Packs are integrated and reviewed, run from a clean committed checkout:
+
+```sh
+python3 -B scripts/probes/generation.py > /tmp/catalog-generation-evidence.json
+```
+
+The probe builds a complete local candidate with the pinned released binary and
+uses isolated user and project directories. It installs, verifies and removes a
+selected skill on `agents` and `claude`, retrieves a separately declared
+on-demand skill using the retained snapshot, and exports the selected skill twice
+in each format. It checks matching bytes and modes, rejects an occupied output
+without mutation, and verifies that export leaves the isolated installation and
+client state unchanged. Defaults are `ponytail:ponytail` for installation/export
+and `matty:tdd` for on-demand access; `--pack`, `--skill`, and `--access` select
+other reviewed representatives. The output identifies the source commit, binary,
+snapshot and reports. It is a local candidate, not an official publication.
+Passing does not establish client installation, authorization, model-backed
+execution, a previous-binary handoff, or the full publication acceptance of #117.
+
+## Historical pre-two-surface probes
+
+The remaining commands describe historical catalog generations and require the
+corresponding historical checkout and its original released binary. They are not
+acceptance instructions for the current two-surface generation: their retired
+`codex` and `opencode` surface arguments and old baselines are not accepted by
+the new engine. Use the preceding probe and release-specific acceptance evidence
+for current work.
+
 Adoption, Ponytail, Claude and pstack lifecycle acceptance use the verified
 released binary below. Independent pstack content/host checks remain separate
 and opt-in. Ordinary validation, construction and publication do not run them.

@@ -3,6 +3,12 @@ name: migrate-to-factory
 description: Migrates user-specified skills and their supporting scripts, references, assets, and workflow instructions into an existing Warp Factory configuration repository. Use when a user asks to port or adapt an existing agent workflow into Factory agents and skills. Do not use for routine Factory-file edits or for registering or operating a live Factory.
 ---
 
+## Reviewed execution prerequisites
+
+- existing selected Factory configuration with factory.yaml and default agents; user-selected read-only migration sources; available factory-files guidance and complete-root validator
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Migrate to Factory
 
 Adapt supplied skills and their supporting resources into an existing Factory created through onboarding.

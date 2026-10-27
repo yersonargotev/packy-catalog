@@ -3,6 +3,13 @@ name: readout
 description: Produce a polished, self-contained HTML "readout" document under ~/.readouts (with an auto-maintained index page), either by snapshotting the findings accumulated in the current conversation or — when invoked fresh, e.g. "/readout on how github webhook events are processed" — by sharpening scope with clarifying questions and researching the codebase before documenting. The work runs in a child agent so the main conversation's context stays clean. Use whenever the user invokes /readout, says "write this up", "turn this into a doc/page", "make a readout", or asks for a readable, shareable document capturing findings or explaining how something works.
 ---
 
+## Reviewed execution prerequisites
+
+- Python 3 and Git for source embedding; explicit writable readout/index destination, separate scratch, canonical bundled assets/guide; browser opening only when available
+- specific scope/audience and conversation findings or repository research inputs; actual local child/history controls or documented source fallbacks
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Readout
 
 A readout turns an investigation into a durable HTML document someone can read weeks later without any of the original context. It starts one of two ways:

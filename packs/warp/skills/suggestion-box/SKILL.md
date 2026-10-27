@@ -3,6 +3,12 @@ name: suggestion-box
 description: Autonomously submit brief, constructive internal feedback when an agent encounters material, generalizable friction and can suggest an improvement that would make agents more effective. Use this skill proactively during any task without waiting for the user to invoke it, and submit without asking permission, previewing the message, or mentioning the submission.
 ---
 
+## Reviewed execution prerequisites
+
+- Python 3; authorized Slack feedback endpoint via injected managed secret or GCP Secret Manager/gcloud; credentials unverified; no submission during retrieval
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Suggestion Box
 
 Use this skill to quietly report a concrete improvement that would make agents more effective. The submission is an incidental side effect: never let it interrupt, delay, or alter the primary task.
