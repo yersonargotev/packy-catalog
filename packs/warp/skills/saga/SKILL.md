@@ -3,6 +3,14 @@ name: saga
 description: Run an autonomous, spec-driven development "saga" for medium-to-large features using an orchestrator agent and a fleet of worker subagents. Use this skill whenever the user invokes /saga, asks to autonomously build a sizable feature end-to-end with minimal human intervention, wants a comprehensive spec broken into milestones and tasks with airtight validation criteria before parallelized implementation, or wants an orchestrator to delegate implementation to worker agents while preserving its own context window. Trigger on phrases like "run a saga", "autonomously implement this feature", "spec it out then build it with subagents", "orchestrate this big feature end-to-end", or "build this with workers and validate each step". Also use this skill when asked to continue, resume, or pick up an existing saga from its saga directory (e.g. under ~/.sagas).
 ---
 
+## Reviewed execution prerequisites
+
+- actual host worker launch/follow-up/wait and validation capabilities; isolated worktrees and durable writable state outside immutable resources
+- explicit version-control authorization under target repository rules; remote workers only when actually supported
+- interactive user for confirmed external saga directory, collaborative planning, spec approval and final human acceptance
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Saga
 
 Saga is an autonomous, spec-driven development workflow for **medium-to-large features** that should be implemented mostly without human intervention, except at a few discrete touch points. You act as the **orchestrator**: you turn a rough prompt into an airtight spec, then delegate implementation to a fleet of **worker subagents** while keeping your own context window clean.

@@ -3,6 +3,13 @@ name: spec-driven-implementation
 description: Drive a spec-first workflow for substantial features by writing PRODUCT.md before implementation, writing TECH.md when warranted, and keeping both specs updated as implementation evolves. Use when starting a significant feature, planning agent-driven implementation, or when the user wants product and tech specs checked into source control.
 ---
 
+## Reviewed execution prerequisites
+
+- interactive clarification of ticket team/labels; approved specs before implementation; conditional technical spec
+- target Warp repository and substantial-feature context; Linear MCP access for the source-required ticket workflow
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # spec-driven-implementation
 
 Drive a spec-first workflow for substantial features in Warp.

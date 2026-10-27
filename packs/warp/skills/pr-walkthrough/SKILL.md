@@ -2,6 +2,13 @@
 name: pr-walkthrough
 description: Generate a static interactive D3 walkthrough of a pull request. Use when the user wants a zoomable PR map, graph/canvas PR orientation, or alternate visualization of PR system components, data flow, code dependencies, and user actions.
 ---
+
+## Reviewed execution prerequisites
+
+- Python 3 and bundled rendering/validation helpers, real browser validation runtime; explicit writable output and separate scratch; hosting account/tools only for user-requested publication
+- intended PR checkout, base/head/diff/spec/review context; Git/GitHub read access and hosted Warp branding source
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
 # PR Walkthrough
 Create a local static HTML/CSS/JavaScript walkthrough that orients a reviewer to the current branch's pull request as four separate interactive D3 views. The walkthrough should help the reviewer understand the affected code and the PR from four distinct views:
 - **System overview view**: a concise standalone code overview for the subsystem touched by the PR. It should not feel like a graph. Present it as a small set of expanded component cards that give the reviewer just enough architectural context to get their bearings before reviewing the PR. Do not mention the PR, changed files, review comments, diff links, screenshots, specs, or implementation deltas in this view.

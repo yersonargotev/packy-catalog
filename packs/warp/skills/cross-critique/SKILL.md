@@ -3,6 +3,13 @@ name: cross-critique
 description: Run a second round on a contested question by circulating each subagent's independent proposal to the other authors and asking for structured pros and cons, then synthesize. Use this skill whenever you have multiple independent proposals or opinions on a contested decision — architecture tradeoffs, code review disagreements, design choices, competing root-cause theories — and want sharper analysis than you'd produce by synthesizing alone. Pairs naturally with the council and research skills; reach for it liberally whenever proposals diverge.
 ---
 
+## Reviewed execution prerequisites
+
+- genuinely divergent independent first-round proposals and reachable original authors for follow-up critique
+- host subagent controls and evidence for read-only pros/cons synthesis
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Cross-Critique
 
 Use this skill to run a **second round** after several subagents have independently produced proposals or opinions on the same contested question. Instead of synthesizing their reports yourself, you circulate each proposal to the *other* authors and ask them to critique it — pros and cons — and then you synthesize the richer set of analyses that results.

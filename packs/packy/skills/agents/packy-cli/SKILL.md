@@ -7,7 +7,7 @@ description: Discover and obtain a requested Catalog skill through Packy, includ
 
 Use the Packy CLI as a resource provider. You read the returned instructions and
 follow the selected procedure; retrieval itself does not execute that procedure.
-This definition is for Codex. Pass `--surface codex` explicitly on every
+This definition is for the Agents convention. Pass `--surface agents` explicitly on every
 host-specific inspection and retrieval, including nested calls.
 
 ## Select a qualified identity
@@ -21,7 +21,7 @@ host-specific inspection and retrieval, including nested calls.
    name, for example using `jq`:
 
    ```sh
-   packy show <pack> --surface codex --json > <scratch>/pack.json
+   packy show <pack> --surface agents --json > <scratch>/pack.json
    jq --arg name "<skill>" '.skills[] | select(.qualified_skill | endswith(":" + $name))' <scratch>/pack.json
    ```
 
@@ -47,7 +47,7 @@ unresolved ambiguity.
 Run:
 
 ```sh
-packy get skill <pack>:<skill> --surface codex --json
+packy get skill <pack>:<skill> --surface agents --json
 ```
 
 Require a successful versioned `skill-access` report with `result: "prepared"`
@@ -65,7 +65,7 @@ reviewed access references point to their usable entry documents.
 For every nested request, keep the initiating host and snapshot:
 
 ```sh
-packy get skill <dependency-pack>:<dependency-skill> --surface codex --snapshot <snapshot_id> --json
+packy get skill <dependency-pack>:<dependency-skill> --surface agents --snapshot <snapshot_id> --json
 ```
 
 A new independent request uses the selected local snapshot. Explicit refresh does

@@ -3,6 +3,13 @@ name: council
 description: Run a model-diverse subagent council to investigate the same problem from multiple perspectives, compare findings, and produce a final recommendation. Use this skill whenever the user asks for a council, second opinions, multiple agents/models to evaluate one question, parallel investigation, red-team/blue-team comparison, or help deciding between competing technical approaches.
 ---
 
+## Reviewed execution prerequisites
+
+- explicit orchestration approval before launching; read-only ownership or isolated editing worktrees
+- host subagent launch, follow-up and wait controls with available model identifiers; model diversity or disclosed source-defined perspective-only fallback
+
+These are external prerequisites, not capabilities provisioned by Packy. Use only controls available and authorized in the active client; if a required capability is unavailable, stop that branch or follow the stated fallback. Installation does not establish runtime readiness.
+
 # Council
 
 Use this skill to coordinate multiple subagents investigating the same question, with different models first and different assigned perspectives second, then synthesize their reports into one recommendation.

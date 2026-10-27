@@ -1,5 +1,10 @@
 # Catalog schema v3 adoption
 
+This is a historical record of the 2026-10-02 schema transition. Its host
+contracts and probe commands describe that generation and are not current
+operator guidance. For the current incompatible transition, follow the
+[released engine handoff](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/catalog-adoption.md).
+
 The original schema v3 cut pinned its validator, snapshot builder, and trusted
 publisher to Packy v0.2.26, commit `b4cf72d892570c1fb26571c434f2407bb0728bd3`.
 The engine release is immutable (GitHub release 402053995). This catalog cut
