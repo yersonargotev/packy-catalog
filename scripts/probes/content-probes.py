@@ -2412,6 +2412,10 @@ def main():
                 probe.set_context("baseline-verification")
                 matty_baseline_commit = checkout_commit(probe, args.matty_baseline)
                 evidence["matty_baseline_project"] = str(args.matty_baseline)
+            pin_path = ROOT / "packy-release.json"
+            if pin_path.exists():
+                pin = json.loads(pin_path.read_text())
+                require(pin.get("version") == "v0.2.31", "historical probes require their v0.2.31 checkout; use generation.py for the two-surface catalog")
             probe.set_context("acquisition")
             probe.execute([sys.executable, "-B", str(ROOT / "scripts/packy_tool.py"), "--pin",
                            str(ROOT / "packy-release.json"), "--executable-output", str(probe.executable)], timeout=180)
