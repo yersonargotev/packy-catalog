@@ -27,7 +27,7 @@ def react_guide_links(skill_root):
         ("Check Cheap Conditions Before Async Flags", "async-cheap-condition-before-await.md"),
         ("Hoist Static I/O to Module Level", "server-hoist-static-io.md"),
     ):
-        links = re.findall(r"\[" + re.escape(title) + r"\]\(([^)]+)\)", guide)
+        links = re.findall(r"\[" + re.escape(title) + r"\]\((\./[^)]+)\)", guide)
         expected = "./rules/" + filename
         legacy.require(links == [expected], "incorrect React guide reference: " + filename)
         target = skill_root / links[0]
@@ -80,8 +80,24 @@ def main():
                 probe.verify(workspace)
                 react = (args.pack, args.skill) == ("web", "react-best-practices")
                 if react:
+                    pack_root = legacy.ROOT / "packs/web"
+                    manifest = json.loads((pack_root / "pack.json").read_text())
+                    resource = next(item for item in manifest["resources"] if item["id"] == args.skill)
+                    variant = next(item for item in resource["variants"] if item["surface"] == surface)
                     native_root = workspace / "project" / (".agents/skills" if surface == "agents" else ".claude/skills") / args.skill
                     native_links = react_guide_links(native_root)
+                    legacy.require(legacy.tree(native_root) == legacy.tree(pack_root / variant["source"]),
+                                   "native React tree changed during installation")
+                    original = legacy.tree(pack_root / resource["source"])
+                    adapted = legacy.tree(native_root)
+                    legacy.require(set(original) == set(adapted)
+                                   and all(adapted[name] == value for name, value in original.items() if name != "AGENTS.md")
+                                   and resource["origin"]["relationship"] == "exact-copy"
+                                   and variant["origin"] == {**resource["origin"], "relationship": "adapted"},
+                                   "React adaptation lost original content or provenance")
+                    notice = (pack_root / "notices/vercel-agent-skills-mit").read_bytes()
+                    legacy.require(notice in (workspace / "project/PACKY-NOTICES.md").read_bytes(),
+                                   "native React installation lost MIT notice")
                 ponytail = (args.pack, args.skill) == ("ponytail", "ponytail")
                 if ponytail:
                     pack_root = legacy.ROOT / "packs/ponytail"
@@ -108,8 +124,38 @@ def main():
                 expected_format = "agent-plugins" if surface == "agents" else "claude-plugin"
                 legacy.require(all(report["result"] == "exported" and report["surface"] == surface and report["format"] == expected_format and report["snapshot_id"] == snapshot for report in reports), "incorrect export report")
                 if react:
-                    for output in outputs:
-                        react_guide_links(output / "skills" / args.skill)
+                    exported_evidence = []
+                    for output, report in zip(outputs, reports):
+                        targets = react_guide_links(output / "skills" / args.skill)
+                        legacy.require(legacy.tree(output / "skills" / args.skill) == adapted,
+                                       "React export changed complete skill bytes or modes")
+                        legacy.require(report["schema_version"] == 1 and report["report"] == "plugin-export"
+                                       and report["pack_id"] == report["plugin_name"] == "web"
+                                       and report["pack_version"] == manifest["version"]
+                                       and report["selected_skills"] == [args.skill] and report["prerequisites"] == [],
+                                       "wrong React export identity, selection or prerequisites")
+                        package = json.loads((output / (".claude-plugin/plugin.json" if surface == "claude" else "plugin.json")).read_text())
+                        legacy.require(package["name"] == "web" and package["version"] == manifest["version"],
+                                       "wrong Web plugin package identity")
+                        provenance = json.loads((output / "packy-provenance.json").read_text())
+                        origins = [item for item in manifest["origins"] if item["id"] == "vercel-agent-skills"]
+                        legacy.require(provenance["snapshot_id"] == snapshot and provenance["pack_id"] == "web"
+                                       and provenance["pack_version"] == manifest["version"]
+                                       and provenance["origins"] == origins and provenance["resources"] == report["resources"],
+                                       "React export lost reviewed provenance")
+                        resources = {item["resource"]["kind"] + ":" + item["resource"]["id"]: item
+                                     for item in provenance["resources"]}
+                        legacy.require(set(resources) == {"skill:react-best-practices", "notice:agent-skills-mit"}
+                                       and resources["skill:react-best-practices"]["origin"] == variant["origin"]
+                                       and resources["notice:agent-skills-mit"]["license"] == "MIT"
+                                       and resources["notice:agent-skills-mit"]["attribution"] == "Vercel"
+                                       and (output / "notices/vercel-agent-skills-mit").read_bytes() == notice,
+                                       "React export lost adaptation origin or MIT legal closure")
+                        exported_evidence.append({"report": report, "guide_targets": targets,
+                                                  "guide_sha256": legacy.hashlib.sha256((output / "skills" / args.skill / "AGENTS.md").read_bytes()).hexdigest()})
+                    evidence.setdefault("react_best_practices", []).append({"surface": surface, "snapshot_id": snapshot,
+                                                                          "native_guide_targets": native_links,
+                                                                          "exports": exported_evidence})
                 if ponytail:
                     exported = (outputs[0] / "skills/ponytail/SKILL.md").read_text()
                     if surface == "claude":

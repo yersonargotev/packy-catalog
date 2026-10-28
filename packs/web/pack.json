@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "web",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Web automation and React engineering skills",
   "selectable": true,
   "surfaces": [
@@ -208,6 +208,26 @@
           "prerequisites": [],
           "references": [],
           "roles": []
+        }
+      ],
+      "variants": [
+        {
+          "surface": "agents",
+          "source": "skills/web/react-best-practices-adapted",
+          "origin": {
+            "id": "vercel-agent-skills",
+            "path": "skills/react-best-practices",
+            "relationship": "adapted"
+          }
+        },
+        {
+          "surface": "claude",
+          "source": "skills/web/react-best-practices-adapted",
+          "origin": {
+            "id": "vercel-agent-skills",
+            "path": "skills/react-best-practices",
+            "relationship": "adapted"
+          }
         }
       ]
     }
