@@ -34,8 +34,10 @@ python3 -B scripts/probes/generation.py --pack web --skill react-best-practices 
 
 This inspects the three actionable guide links and their complete rule targets
 in both native installations and both plugin formats, preserving rule-to-rule
-references. It compares full skill bytes and modes, checks retained original versus
-adapted provenance and MIT legal closure, and records the actual destinations and
+references. It compares full supporting bytes and modes and unchanged entry
+metadata/behavior apart from the declared exported skill name, preserves Web's
+declared external prerequisites, checks retained original versus adapted
+provenance and MIT legal closure, and records the actual destinations and
 export reports for the same candidate snapshot. The original upstream tree stays
 byte-exact in the declared Catalog closure; both surfaces use the reviewed tree
 whose only content changes are the three guide paths. Illustrative sample-code

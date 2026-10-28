@@ -127,12 +127,22 @@ def main():
                     exported_evidence = []
                     for output, report in zip(outputs, reports):
                         targets = react_guide_links(output / "skills" / args.skill)
-                        legacy.require(legacy.tree(output / "skills" / args.skill) == adapted,
-                                       "React export changed complete skill bytes or modes")
+                        exported_tree = legacy.tree(output / "skills" / args.skill)
+                        native_mode, native_entry, native_link = adapted["SKILL.md"]
+                        exported_mode, exported_entry, exported_link = exported_tree["SKILL.md"]
+                        legacy.require(set(exported_tree) == set(adapted)
+                                       and all(exported_tree[name] == value for name, value in adapted.items() if name != "SKILL.md")
+                                       and (exported_mode, exported_link) == (native_mode, native_link),
+                                       "React export changed supporting content or modes")
+                        legacy.require(native_entry.startswith(b"---\nname: vercel-react-best-practices\n")
+                                       and exported_entry.startswith(b"---\nname: react-best-practices\n")
+                                       and exported_entry.split(b"\n", 2)[2] == native_entry.split(b"\n", 2)[2],
+                                       "React export changed metadata or behavior beyond its declared skill name")
                         legacy.require(report["schema_version"] == 1 and report["report"] == "plugin-export"
                                        and report["pack_id"] == report["plugin_name"] == "web"
                                        and report["pack_version"] == manifest["version"]
-                                       and report["selected_skills"] == [args.skill] and report["prerequisites"] == [],
+                                       and report["selected_skills"] == [args.skill]
+                                       and report["prerequisites"] == manifest["external_requirements"],
                                        "wrong React export identity, selection or prerequisites")
                         package = json.loads((output / (".claude-plugin/plugin.json" if surface == "claude" else "plugin.json")).read_text())
                         legacy.require(package["name"] == "web" and package["version"] == manifest["version"],

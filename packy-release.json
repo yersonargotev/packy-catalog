@@ -1,10 +1,10 @@
 {
-  "version": "v0.2.32",
-  "source_commit": "9d8a03a0c0070f20736d6f6ab94d4f5c303243ba",
+  "version": "v0.2.33",
+  "source_commit": "87da712b378597bd98b4a66c2fe84164d3c0cd37",
   "artifacts": {
-    "darwin_amd64": "a4bb4c2cd6760430386958febe772622c3d413b5a7b4164a1ccf5518f30f03f5",
-    "darwin_arm64": "c477d55df114fb2d9f057f5369c51cd3b806412e1003adce8887d89c60a713fd",
-    "linux_amd64": "ad94960087c33d3413552fd66348215dc9d94aa7ec656ed5950df79e15044c3d",
-    "linux_arm64": "9d3fe5e61f5f1106b8e40a3137bb8a9c13e3941bb7dae6a21125f7ccb6caedb4"
+    "darwin_amd64": "3efd26ef8abe1e945925ce1dd0a369b6a17d8bbddb35a11e356d6a5fcdbf1383",
+    "darwin_arm64": "1325b09bd0d8984d8c0559602b85746509feca92bbfa8b12643f82e32f6a2790",
+    "linux_amd64": "d722dd936bd6da6d1316fe625090e10b7448101ea266ed793327fd3a5b281a07",
+    "linux_arm64": "7065bb1cdb705b2fb09b4cebfac8172c5b63027797c1a8b4ac291d196ba6b3c4"
   }
 }
