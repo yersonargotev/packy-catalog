@@ -53,6 +53,18 @@ def main():
                 selection = ["--surface", surface, "--resource", "skill:" + args.skill]
                 probe.apply(workspace, ["install", args.pack, *selection])
                 probe.verify(workspace)
+                ponytail = (args.pack, args.skill) == ("ponytail", "ponytail")
+                if ponytail:
+                    pack_root = legacy.ROOT / "packs/ponytail"
+                    native_root = workspace / "project" / (".agents/skills" if surface == "agents" else ".claude/skills") / "ponytail"
+                    native = (native_root / "SKILL.md").read_text()
+                    legacy.require(legacy.tree(native_root) == legacy.tree(pack_root / "skills/ponytail"),
+                                   "native Ponytail tree changed during installation")
+                    legacy.require("For native installations" in native
+                                   and "`$ponytail lite|full|ultra`" in native
+                                   and "`/ponytail lite|full|ultra`" in native
+                                   and "OpenCode" not in native and "{{packy.export:" not in native,
+                                   "native Ponytail lacks scoped supported invocation guidance")
                 content = probe.candidate(workspace, ["get", "skill", args.access, "--surface", surface, "--json"])
                 snapshot = content["snapshot_id"]
                 entry = Path(content["entry_document"])
@@ -66,7 +78,7 @@ def main():
                     reports.append(probe.candidate(workspace, ["export", args.pack, "--surface", surface, "--skill", args.skill, "--output", str(output), "--json"]))
                 expected_format = "agent-plugins" if surface == "agents" else "claude-plugin"
                 legacy.require(all(report["result"] == "exported" and report["surface"] == surface and report["format"] == expected_format and report["snapshot_id"] == snapshot for report in reports), "incorrect export report")
-                if (args.pack, args.skill) == ("ponytail", "ponytail"):
+                if ponytail:
                     exported = (outputs[0] / "skills/ponytail/SKILL.md").read_text()
                     if surface == "claude":
                         legacy.require("`/ponytail:ponytail lite|full|ultra`" in exported,
@@ -77,6 +89,35 @@ def main():
                     legacy.require(all(value not in exported for value in
                                        ("OpenCode", "`/ponytail ", "$ponytail", "{{packy.export:")),
                                    "plugin retains native/retired invocation guidance or unresolved markers")
+                    legacy.require(exported.split("## Conversation scope")[0] == native.split("## Conversation scope")[0]
+                                   and exported.split("The Packy edition", 1)[1] == native.split("The Packy edition", 1)[1],
+                                   "plugin changed Ponytail metadata or behavior beyond invocation guidance")
+                    manifest = json.loads((pack_root / "pack.json").read_text())
+                    legacy.require(all(report["schema_version"] == 1 and report["report"] == "plugin-export"
+                                       and report["pack_id"] == report["plugin_name"] == "ponytail"
+                                       and report["pack_version"] == manifest["version"]
+                                       and report["selected_skills"] == ["ponytail"]
+                                       and report["prerequisites"] == [] for report in reports),
+                                   "wrong Ponytail export identity, selection or prerequisites")
+                    plugin_manifest = outputs[0] / (".claude-plugin/plugin.json" if surface == "claude" else "plugin.json")
+                    package = json.loads(plugin_manifest.read_text())
+                    legacy.require(package["name"] == "ponytail" and package["version"] == manifest["version"],
+                                   "wrong Ponytail package identity")
+                    provenance = json.loads((outputs[0] / "packy-provenance.json").read_text())
+                    legacy.require(provenance["snapshot_id"] == snapshot and provenance["pack_id"] == "ponytail"
+                                   and provenance["pack_version"] == manifest["version"]
+                                   and provenance["origins"] == manifest["origins"]
+                                   and provenance["resources"] == reports[0]["resources"],
+                                   "Ponytail export lost provenance")
+                    resources = {item["resource"]["kind"] + ":" + item["resource"]["id"]: item
+                                 for item in provenance["resources"]}
+                    legacy.require(set(resources) == {"skill:ponytail", "notice:mit"}
+                                   and resources["skill:ponytail"]["origin"] == {
+                                       "id": "ponytail", "path": "skills/ponytail", "relationship": "adapted"}
+                                   and resources["notice:mit"]["license"] == "MIT"
+                                   and resources["notice:mit"]["attribution"] == "Copyright (c) 2026 DietrichGebert"
+                                   and legacy.tree(outputs[0] / "notices") == legacy.tree(pack_root / "notices"),
+                                   "Ponytail export lost legal closure or adaptation origin")
                 legacy.require(legacy.tree(outputs[0]) == legacy.tree(outputs[1]), "exports differ in content or modes")
                 legacy.require(legacy.tree(workspace) == state, "export changed installation or client state")
                 occupied = root / (surface + "-occupied")

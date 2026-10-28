@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "ponytail",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Ponytail 5 minimal-code guidance and six skills, adapted for Packy without plugin runtime hooks",
   "selectable": true,
   "surfaces": [
@@ -119,15 +119,43 @@
           "format": "agent-plugins",
           "name": "ponytail",
           "prerequisites": [],
-          "references": [],
-          "roles": []
+          "references": [
+            {
+              "id": "ponytail-invocation",
+              "file": "SKILL.md",
+              "target": "skill:ponytail",
+              "kind": "invocation",
+              "value": "use the consuming client's skill invocation mechanism for `ponytail` with `lite`, `full`, or `ultra`"
+            }
+          ],
+          "roles": [],
+          "source": "plugins/ponytail",
+          "origin": {
+            "id": "ponytail",
+            "path": "skills/ponytail",
+            "relationship": "adapted"
+          }
         },
         {
           "format": "claude-plugin",
           "name": "ponytail",
           "prerequisites": [],
-          "references": [],
-          "roles": []
+          "references": [
+            {
+              "id": "ponytail-invocation",
+              "file": "SKILL.md",
+              "target": "skill:ponytail",
+              "kind": "invocation",
+              "value": "use `/ponytail:ponytail lite|full|ultra`"
+            }
+          ],
+          "roles": [],
+          "source": "plugins/ponytail",
+          "origin": {
+            "id": "ponytail",
+            "path": "skills/ponytail",
+            "relationship": "adapted"
+          }
         }
       ]
     },

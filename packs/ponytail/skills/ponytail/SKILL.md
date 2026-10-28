@@ -17,9 +17,11 @@ lines: what you skipped or did not check, and any risk the user must know.
 ## Conversation scope
 
 Once invoked, apply the selected level until the user changes it or ends the
-conversation. Default to **full**. In Codex use `$ponytail lite|full|ultra`;
-in Claude Code use `/ponytail lite|full|ultra`; in OpenCode ask to use the
-`ponytail` skill at the desired level. "Stop ponytail" or "normal mode" ends
+conversation. Default to **full**. For native installations, in Codex use
+`$ponytail lite|full|ultra`; in Claude Code use `/ponytail lite|full|ultra`.
+Other Agents-compatible clients use their own skill invocation mechanism for
+`ponytail` with `lite`, `full`, or `ultra`. Plugin packages provide separate,
+format-specific invocation guidance. "Stop ponytail" or "normal mode" ends
 this conversational mode.
 
 The Packy edition ships instructions and skills without lifecycle hooks, a

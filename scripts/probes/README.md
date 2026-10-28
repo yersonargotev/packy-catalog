@@ -18,6 +18,11 @@ client state unchanged. Defaults are `ponytail:ponytail` for installation/export
 and `matty:tdd` for on-demand access; `--pack`, `--skill`, and `--access` select
 other reviewed representatives. The output identifies the source commit, binary,
 snapshot and reports. It is a local candidate, not an official publication.
+For the default Ponytail selection it also inspects both native installations
+and both generated entries: scoped native commands, qualified Claude plugin
+invocation, portable Agent Plugins guidance, retained level arguments, absence
+of retired OpenCode guidance and unresolved markers, unchanged metadata/behavior,
+package/report identity, adaptation provenance and complete MIT legal closure.
 Passing does not establish client installation, authorization, model-backed
 execution, a previous-binary handoff, or the full publication acceptance of #117.
 

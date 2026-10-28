@@ -5,6 +5,22 @@ This review accompanies the two-surface migration of claude 2.0.0, emil
 eligibility separately from direct skill installation. No plugin declaration
 claims that a client installed, authorized, or executed a skill.
 
+Ponytail 3.0.1 corrects the invocation review in
+[Catalog #120](https://github.com/yersonargotev/packy-catalog/issues/120).
+`ponytail:ponytail` uses the explicit reviewed `plugins/ponytail` source in both
+formats, with adapted provenance from the unchanged pinned upstream
+`skills/ponytail`. Its invocation reference renders
+`/ponytail:ponytail lite|full|ultra` for Claude plugins. Agent Plugins delegates
+invocation to the consuming client, retaining the same level arguments without
+inventing shared command syntax. Native installation keeps its separately scoped
+Codex and Claude commands and client-dependent Agents guidance. Retired OpenCode
+workflow guidance is removed. Metadata, full behavior, conversational stop rules,
+supporting content and MIT attribution/notices are preserved. The opt-in
+generation probe checks actual installed and exported instructions, unchanged
+behavior outside invocation guidance, provenance/legal closure, deterministic
+bytes/modes and isolated installation/client state. Other skills' eligibility
+below is unchanged.
+
 The manifests explicitly declare eligible formats. Omitted formats are not
 eligible. The following exceptions apply to both plugin formats unless a format
 is named:
