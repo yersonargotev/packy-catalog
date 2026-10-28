@@ -130,21 +130,21 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
     def prepare_generation_fixture(self, *, on_demand=True):
         """A synthetic complete catalog exercises the released binary without content execution."""
         shutil.rmtree(self.project / "packs")
-        pack = self.project / "packs/ponytail"
-        skill = pack / "skills/ponytail"
+        pack = self.project / "packs/fixture"
+        skill = pack / "skills/fixture"
         skill.mkdir(parents=True)
-        (skill / "SKILL.md").write_text("---\nname: ponytail\ndescription: Inert controlled fixture\n---\nFixture text.\n")
-        bindings = [{"surface": surface, "projection": "skill", "name": "ponytail",
-                     "invocation": "/ponytail" if surface == "claude" else "ponytail", "mode": "native",
+        (skill / "SKILL.md").write_text("---\nname: fixture\ndescription: Inert controlled fixture\n---\nFixture text.\n")
+        bindings = [{"surface": surface, "projection": "skill", "name": "fixture",
+                     "invocation": "/fixture" if surface == "claude" else "fixture", "mode": "native",
                      "sharing": "exclusive", "capabilities": []} for surface in ("agents", "claude")]
-        exports = [{"format": fmt, "name": "ponytail", "prerequisites": [], "references": [], "roles": []}
+        exports = [{"format": fmt, "name": "fixture", "prerequisites": [], "references": [], "roles": []}
                    for fmt in ("agent-plugins", "claude-plugin")]
-        resource = {"kind": "skill", "id": "ponytail", "source": "skills/ponytail", "description": "Test skill",
+        resource = {"kind": "skill", "id": "fixture", "source": "skills/fixture", "description": "Test skill",
                     "requires": [], "conflicts": [], "notices": [], "bindings": bindings,
                     "surface_exclusions": [], "plugin_exports": exports}
         if on_demand:
             resource["on_demand"] = {"protocol": "skill-tree-v1", "prerequisites": []}
-        manifest = {"schema_version": 3, "id": "ponytail", "version": "1.0.0", "description": "Test fixture",
+        manifest = {"schema_version": 3, "id": "fixture", "version": "1.0.0", "description": "Test fixture",
                     "selectable": True, "surfaces": ["agents", "claude"], "readiness_obligations": [],
                     "external_requirements": [], "origins": [], "resources": [resource]}
         (pack / "pack.json").write_text(json.dumps(manifest))
@@ -162,7 +162,7 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
 
     def run_generation_probe(self):
         result = subprocess.run([sys.executable, "-B", str(self.project / "scripts/probes/generation.py"),
-                                 "--access", "ponytail:ponytail"], env=self.probe_env,
+                                 "--pack", "fixture", "--skill", "fixture", "--access", "fixture:fixture"], env=self.probe_env,
                                 text=True, capture_output=True, timeout=180)
         report = json.loads(result.stdout)
         self.assertEqual(report["cleanup"], "removed")
