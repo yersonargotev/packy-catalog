@@ -7,7 +7,7 @@ claims that a client installed, authorized, or executed a skill.
 
 Ponytail 3.0.1 corrects the invocation review in
 [Catalog #120](https://github.com/yersonargotev/packy-catalog/issues/120).
-`ponytail:ponytail` uses the explicit reviewed `plugins/ponytail` source in both
+`ponytail:ponytail` uses the explicit reviewed `skills/ponytail-plugin` source in both
 formats, with adapted provenance from the unchanged pinned upstream
 `skills/ponytail`. Its invocation reference renders
 `/ponytail:ponytail lite|full|ultra` for Claude plugins. Agent Plugins delegates

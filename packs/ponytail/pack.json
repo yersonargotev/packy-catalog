@@ -129,7 +129,7 @@
             }
           ],
           "roles": [],
-          "source": "plugins/ponytail",
+          "source": "skills/ponytail-plugin",
           "origin": {
             "id": "ponytail",
             "path": "skills/ponytail",
@@ -150,7 +150,7 @@
             }
           ],
           "roles": [],
-          "source": "plugins/ponytail",
+          "source": "skills/ponytail-plugin",
           "origin": {
             "id": "ponytail",
             "path": "skills/ponytail",
