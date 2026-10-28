@@ -7,6 +7,7 @@ import argparse
 import importlib.util
 import json
 from pathlib import Path
+import re
 import shutil
 import signal
 import sys
@@ -15,6 +16,30 @@ import tempfile
 spec = importlib.util.spec_from_file_location("legacy_probe", Path(__file__).with_name("content-probes.py"))
 legacy = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(legacy)
+
+
+def react_guide_links(skill_root):
+    """Check the three actionable links from the aggregate guide, not code examples."""
+    guide = (skill_root / "AGENTS.md").read_text()
+    targets = []
+    for title, filename in (
+        ("Defer Await Until Needed", "async-defer-await.md"),
+        ("Check Cheap Conditions Before Async Flags", "async-cheap-condition-before-await.md"),
+        ("Hoist Static I/O to Module Level", "server-hoist-static-io.md"),
+    ):
+        links = re.findall(r"\[" + re.escape(title) + r"\]\(([^)]+)\)", guide)
+        expected = "./rules/" + filename
+        legacy.require(links == [expected], "incorrect React guide reference: " + filename)
+        target = skill_root / links[0]
+        legacy.require(target.is_file() and target.read_text().strip(), "missing React rule: " + filename)
+        legacy.require(not (skill_root / filename).exists(), "legacy React rule duplicate: " + filename)
+        targets.append(expected)
+    for source, destination in (("async-cheap-condition-before-await.md", "async-defer-await.md"),
+                                ("async-defer-await.md", "async-cheap-condition-before-await.md"),
+                                ("server-no-shared-module-state.md", "server-hoist-static-io.md")):
+        legacy.require("](./" + destination + ")" in (skill_root / "rules" / source).read_text(),
+                       "changed valid rule-to-rule reference: " + source)
+    return targets
 
 
 def main():
@@ -53,6 +78,10 @@ def main():
                 selection = ["--surface", surface, "--resource", "skill:" + args.skill]
                 probe.apply(workspace, ["install", args.pack, *selection])
                 probe.verify(workspace)
+                react = (args.pack, args.skill) == ("web", "react-best-practices")
+                if react:
+                    native_root = workspace / "project" / (".agents/skills" if surface == "agents" else ".claude/skills") / args.skill
+                    native_links = react_guide_links(native_root)
                 ponytail = (args.pack, args.skill) == ("ponytail", "ponytail")
                 if ponytail:
                     pack_root = legacy.ROOT / "packs/ponytail"
@@ -78,6 +107,9 @@ def main():
                     reports.append(probe.candidate(workspace, ["export", args.pack, "--surface", surface, "--skill", args.skill, "--output", str(output), "--json"]))
                 expected_format = "agent-plugins" if surface == "agents" else "claude-plugin"
                 legacy.require(all(report["result"] == "exported" and report["surface"] == surface and report["format"] == expected_format and report["snapshot_id"] == snapshot for report in reports), "incorrect export report")
+                if react:
+                    for output in outputs:
+                        react_guide_links(output / "skills" / args.skill)
                 if ponytail:
                     exported = (outputs[0] / "skills/ponytail/SKILL.md").read_text()
                     if surface == "claude":
