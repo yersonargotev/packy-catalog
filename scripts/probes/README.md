@@ -2,6 +2,29 @@
 
 ## Two-surface candidate acceptance
 
+For Addy's Claude native asset-closure regression, run from a clean committed
+checkout with the pinned supporting release:
+
+```sh
+python3 -B scripts/probes/addy-native.py > /tmp/addy-native-evidence.json
+```
+
+The probe constructs one complete local snapshot and copies its exact retained
+bytes into disposable standard Catalog stores, following the clean-HOME status
+reproduction. Ordinary installed CLI commands must emit general and targeted
+status reports with no installations, preserve unrelated installed Ponytail in
+general status, and install/update/inspect/remove complete Addy at global and
+project scope. It compares every skill's complete files, all ten compositions'
+supporting assets and legal closure, rejects removal of a drifted asset without
+mutation, and proves all retired Addy projections absent while preserving
+foreign configuration. Native client executables are absent from its runtime
+PATH. Add `--qualification-executable /absolute/path/to/packy` to separately
+exercise the engine's qualification guard: negative Catalog copies must fail for
+plain external assets and incomplete composite references. The output records
+that executable's identity independently of the pinned release used for native
+lifecycle proof. No retained snapshot or real-user configuration is edited, and
+no client/model execution is claimed.
+
 After all Packs are integrated and reviewed, run from a clean committed checkout:
 
 ```sh

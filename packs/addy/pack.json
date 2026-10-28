@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "addy",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Addy agent skills",
   "selectable": true,
   "surfaces": [
@@ -955,7 +955,73 @@
           "invocation": "build",
           "mode": "native",
           "sharing": "exclusive",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "skill",
+                    "id": "debugging-and-error-recovery"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "doubt-driven-development"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "incremental-implementation"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "planning-and-task-breakdown"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "spec-driven-development"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "test-driven-development"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Implements planned tasks incrementally with testing, verification, and commits",
@@ -1112,7 +1178,57 @@
           "invocation": "code-simplify",
           "mode": "native",
           "sharing": "exclusive",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "skill",
+                    "id": "code-review-and-quality"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "code-simplification"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Simplifies code for clarity and maintainability without changing behavior",
@@ -1191,7 +1307,53 @@
           "invocation": "constraints",
           "mode": "native",
           "sharing": "exclusive",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "skill",
+                    "id": "constraint-driven-development"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Defines and enforces a project quality bar through written, measurable constraints",
@@ -1692,7 +1854,53 @@
           "invocation": "plan",
           "mode": "native",
           "sharing": "exclusive",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "skill",
+                    "id": "planning-and-task-breakdown"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Breaks work into small, verifiable tasks with acceptance criteria and dependency ordering",
@@ -1770,7 +1978,65 @@
           "invocation": "review",
           "mode": "native",
           "sharing": "exclusive",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "agent",
+                    "id": "code-reviewer"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "code-review-and-quality"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "performance-optimization"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "security-and-hardening"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Reviews code for correctness, readability, architecture, security, and performance",
@@ -1851,7 +2117,65 @@
           "invocation": "ship",
           "mode": "native",
           "sharing": "exclusive",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "agent",
+                    "id": "code-reviewer"
+                  },
+                  {
+                    "kind": "agent",
+                    "id": "security-auditor"
+                  },
+                  {
+                    "kind": "agent",
+                    "id": "test-engineer"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "shipping-and-launch"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Runs specialist pre-launch checks and synthesizes a go or no-go decision",
@@ -1969,7 +2293,53 @@
           "invocation": "spec",
           "mode": "native",
           "sharing": "exclusive",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "skill",
+                    "id": "spec-driven-development"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Creates a structured specification before implementation begins",
@@ -2047,7 +2417,61 @@
           "invocation": "test",
           "mode": "native",
           "sharing": "exclusive",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "agent",
+                    "id": "test-engineer"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "browser-testing-with-devtools"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "test-driven-development"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Runs a test-driven workflow from failing tests through implementation and verification",
@@ -2127,7 +2551,44 @@
           "projection": "skill",
           "sharing": "exclusive",
           "surface": "claude",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Discovers and invokes the agent skill appropriate to a task",
@@ -2152,7 +2613,18 @@
         "id": "addy-agent-skills",
         "path": "skills/using-agent-skills",
         "relationship": "adapted"
-      }
+      },
+      "variants": [
+        {
+          "surface": "claude",
+          "source": "skills/using-agent-skills-claude",
+          "origin": {
+            "id": "addy-agent-skills",
+            "path": "skills/using-agent-skills",
+            "relationship": "adapted"
+          }
+        }
+      ]
     },
     {
       "bindings": [
@@ -2172,7 +2644,53 @@
           "invocation": "webperf",
           "mode": "native",
           "sharing": "exclusive",
-          "capabilities": []
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "agent",
+                    "id": "web-performance-auditor"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
         }
       ],
       "description": "Runs a web performance audit through the web-performance-auditor persona",
