@@ -1,11 +1,22 @@
 # Addy two-surface review
 
-Addy 5.0.0 retains the original skill trees, supporting assets, MIT notice, and
+Addy 5.0.1 retains the original skill trees, supporting assets, MIT notice, and
 four named specialists. The source revision is unchanged. Codex role files are
 explicitly selected only at global scope on `agents`; Claude role documents
 are supported at global and project scope. Neither files nor a preview prove
 that a client loaded, authorized, or used a role. Browser and network tools
 remain external prerequisites and are never configured by this Pack.
+
+The 5.0.1 native-closure correction restores explicit `claude-composite-skill`
+declarations for `build`, `code-simplify`, `constraints`, `plan`, `review`,
+`ship`, `spec`, `test`, `using-agent-skills`, and `webperf`. Each composition
+retains its declared workflow dependencies and all seven transitive supporting
+assets under `references/`. A separate reviewed Claude source for
+`using-agent-skills` keeps its entry bytes unchanged while allowing the
+composition to supply `references/definition-of-done.md` without colliding with
+the source copy. The common Agents tree, original upstream revision,
+provenance, required dependencies, and MIT notice remain unchanged. This is an
+explicit native adaptation; it does not grant on-demand or plugin eligibility.
 
 The nine former command resources are reviewed adaptations, not runtime command
 projections. Each keeps its original upstream `commands/*.toml` provenance.
