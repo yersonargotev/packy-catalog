@@ -66,6 +66,17 @@ def main():
                     reports.append(probe.candidate(workspace, ["export", args.pack, "--surface", surface, "--skill", args.skill, "--output", str(output), "--json"]))
                 expected_format = "agent-plugins" if surface == "agents" else "claude-plugin"
                 legacy.require(all(report["result"] == "exported" and report["surface"] == surface and report["format"] == expected_format and report["snapshot_id"] == snapshot for report in reports), "incorrect export report")
+                if (args.pack, args.skill) == ("ponytail", "ponytail"):
+                    exported = (outputs[0] / "skills/ponytail/SKILL.md").read_text()
+                    if surface == "claude":
+                        legacy.require("`/ponytail:ponytail lite|full|ultra`" in exported,
+                                       "Claude plugin lacks qualified Ponytail invocation")
+                    else:
+                        legacy.require("consuming client's skill invocation mechanism" in exported,
+                                       "Agent Plugins lacks portable Ponytail invocation guidance")
+                    legacy.require(all(value not in exported for value in
+                                       ("OpenCode", "`/ponytail ", "$ponytail", "{{packy.export:")),
+                                   "plugin retains native/retired invocation guidance or unresolved markers")
                 legacy.require(legacy.tree(outputs[0]) == legacy.tree(outputs[1]), "exports differ in content or modes")
                 legacy.require(legacy.tree(workspace) == state, "export changed installation or client state")
                 occupied = root / (surface + "-occupied")
