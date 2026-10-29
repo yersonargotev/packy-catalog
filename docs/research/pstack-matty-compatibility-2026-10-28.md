@@ -1,0 +1,117 @@
+# Compatibilidad pstack 6.0.0 y Matty 4.3.0
+
+Evaluado el 28 de octubre de 2026 sobre el commit `959b9018bc29bbca93054ec8e23579f5d1cbd8ff` de este catálogo. Codex/Agents es el foco; el ciclo de instalación se verifica también en Claude. El informe histórico permanece como antecedente de otra generación.
+
+## Dictamen
+
+Con pstack instalado y su workflow solicitado, Matty aporta más como selección de especialistas que como segundo ejecutor. Recomiendo `writing-for-agents`, `research`, `codebase-design` y `domain-modeling`; añadir `wizard`, `handoff` y `to-questionnaire` cuando hagan falta esos entregables. `grill-me` es una fase interactiva valiosa. `grill-with-docs` comparte esa misma entrevista y añade escrituras de glosario/ADR. No hay evidencia de que la entrevista simple sea más compatible con la autonomía de pstack.
+
+Instalar, configurar y ejecutar son estados distintos. Instalar pstack no mantiene todas sus instrucciones activas. `setup-pstack` tampoco activa `poteto-mode`: configura preferencias de roles que leen los flujos pstack. La instalación de ambos packs completos colisiona en `tdd` y `teach`. El acceso on-demand usa identidades calificadas y resuelve sus propias dependencias; evita la colisión de archivos, pero conserva las diferencias de comportamiento.
+
+## Los dos setups
+
+`setup-pstack` escribe `~/.pstack/codex-models.md` o `~/.pstack/claude-models.md`. No es una regla global del host. `setup-matt-pocock-skills` propone el bloque `## Agent skills` de `CLAUDE.md` o `AGENTS.md` y `docs/agents/issue-tracker.md`, `domain.md`, y `triage-labels.md` sólo si detecta triage. Conserva las secciones vecinas. Ambos órdenes tienen conjuntos de escritura distintos; ésta es una conclusión de revisión estática, no una ejecución de setups.
+
+Matty no lee automáticamente el archivo de modelos pstack. Para que una delegación Matty siga esos roles hace falta una integración explícita; correr los dos setups no la implementa. Si existen `CLAUDE.md` y `AGENTS.md`, setup Matty elige `CLAUDE.md`; comprobar que el host objetivo alcance esos punteros. Setup Matty no es necesario para usar research, writing-for-agents o handoff por separado. Si triage se consumirá on-demand, comprobar su detección antes de asumir que se escribirán labels.
+
+## Grill-me y grill-with-docs
+
+`grill-me` llama a `grilling`; `grill-with-docs` llama a `grilling` y `domain-modeling`. Grilling investiga los hechos, pregunta decisiones por rondas y espera confirmación de comprensión antes de actuar. Por tanto, ambos sirven antes de la implementación solicitada y ambos chocan si se intenta imponer simultáneamente la política de ejecución reversible sin espera. Las escrituras extra de grill-with-docs tienen que limitarse a términos resueltos y ADRs que cumplan sus tres criterios. No convierte cada decisión en ADR ni exige crear archivos vacíos.
+
+Secuencia recomendada: entrevista explícita → decisiones aceptadas y documentación si corresponde → handoff acotado → ejecución pstack → evidencia. Una nueva decisión de producto puede abrir otra entrevista; no encadenar ambos orquestadores sobre la misma tarea.
+
+## Research y writing-for-agents
+
+Research no descubre una capacidad ausente en pstack: Investigation/how/why también investigan y citan. Su valor es un contrato más específico: agente en background, fuentes primarias y una nota Markdown citada en el repo. How responde funcionamiento/ubicación; why reconstruye motivaciones e historia. Research admite preguntas externas al código y deja un resultado reutilizable. `research-with-sources` sería un nombre más explícito para una adaptación futura; el nombre actual no se ha cambiado.
+
+Writing-for-agents mejora punteros de contexto, revelación progresiva y criterios de terminación. Technical-writing/unslop gobiernan claridad y estilo en pstack; los criterios de Matty se pueden aplicar a documentos para agentes. No duplicar las mismas reglas en cada skill. Su uso no exige adoptar el router ask-matt.
+
+## Matty sobre pstack: 33 skills
+
+| Skill | Uso con pstack | Motivo |
+|---|---|---|
+| [ask-matt](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/ask-matt/SKILL.md) | Elegir un dueño | Router de todo el ciclo Matty; puede desviar implementación fuera de pstack. Útil on-demand sólo para elegir conscientemente un flow Matty. |
+| [code-review](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/code-review/SKILL.md) | Opcional | Dos ejes separados, Standards y Spec. Aporta una revisión distinta, pero no reemplaza `interrogate`, `blast-radius` ni gates de pstack. |
+| [codebase-design](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/codebase-design/SKILL.md) | Complemento | Vocabulario preciso para módulos profundos, interfaces y seams. Complementa `architect` y los principios de dominio/test sin poseer la ejecución. |
+| [diagnosing-bugs](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/diagnosing-bugs/SKILL.md) | Elegir un dueño | Exige un loop rojo reproducible antes de teorizar. Es más estricto que pstack TDD, que permite la verificación útil más cercana cuando un test es impráctico. |
+| [domain-modeling](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/domain-modeling/SKILL.md) | Complemento | Añade disciplina activa: resolver términos, mantener `GLOSSARY.md` y registrar ADRs sólo para decisiones difíciles de revertir. |
+| [grill-with-docs](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/grill-with-docs/SKILL.md) | Fase explícita | No choca estructuralmente con pstack. Compone `matty:grilling` + `matty:domain-modeling`; por eso entrevista y escribe documentación. Usar antes de ejecución, no dentro de un run autónomo. |
+| [implement](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/implement/SKILL.md) | Elegir un dueño | Posee implementación, llama TDD/review y hace commit en la rama actual. Compite con worktrees, playbook y gates de pstack. |
+| [implement-spec](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/implement-spec/SKILL.md) | Elegir un dueño | Posee grafo de tickets, worktrees, integración, merges y PR borrador. On-demand ya enlaza `matty:tdd` y `matty:code-review`, lo que evita resolución accidental hacia pstack, pero sigue siendo otro orquestador. |
+| [improve-codebase-architecture](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/improve-codebase-architecture/SKILL.md) | Fase explícita | Buen generador de oportunidades de módulos profundos; luego pide elección y grilling. Ejecutarlo como fase de descubrimiento separada. |
+| [pr](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/pr/SKILL.md) | Elegir un dueño | Su plantilla Summary/Evidence/Merge Danger compite con la estructura de PR de pstack. Elegir una por PR. |
+| [prototype](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/prototype/SKILL.md) | Elegir un dueño | Matty preserva el prototipo en una rama y cerca del código; pstack usa experimento aislado. No mezclar políticas en un prototipo. |
+| [research](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/research/SKILL.md) | Complemento | Más específico que `how`/`why`: background agent, fuentes primarias, una nota Markdown citada retenida en el repo. `how` explica funcionamiento y `why` reconstruye razones; Matty research entrega evidencia reusable y general. No consume por sí sola ~/.pstack/*-models.md. Propuesta de nombre más explícito: research-with-sources; es una sugerencia, no un cambio aplicado. |
+| [retro](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/retro/SKILL.md) | Opcional | Revisa la sesión para mejorar el entorno. Solapa con `reflect`; escoger un driver. Su dependencia on-demand de `matty:writing-for-agents` ya está calificada. |
+| [setup-matt-pocock-skills](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/setup-matt-pocock-skills/SKILL.md) | Opcional | Compatible con setup-pstack por rutas y responsabilidades distintas. Ejecutar una vez si se adoptan tracker y docs de dominio Matty. No aplica las preferencias de modelos pstack a los agentes Matty. Si existen CLAUDE.md y AGENTS.md, elige CLAUDE.md: comprobar el acceso desde Codex. |
+| [tdd](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/tdd/SKILL.md) | Elegir un dueño | Colisión nativa exacta. Semántica distinta: Matty cubre feature TDD por slices y seams confirmados; pstack se concentra en regresiones baratas y acepta fallback. On-demand `matty:tdd` sí es seguro cuando se elige deliberadamente. |
+| [to-spec](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/to-spec/SKILL.md) | Fase explícita | Publica al tracker y confirma seams con el usuario. Compatible antes de pstack si se desea ese artefacto, pero no como paso implícito de pstack. |
+| [to-tickets](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/to-tickets/SKILL.md) | Fase explícita | Aporta tickets tracer-bullet y dependencias. Revisar migraciones: su expand-contract puede diferir de la preferencia pstack de migrar y retirar API interna en una ola. |
+| [triage](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/triage/SKILL.md) | Fase explícita | Aporta máquina de estados del tracker y briefs agent-ready. Puede alimentar pstack; no debe conducir a la vez el run de entrega. |
+| [wayfinder](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/wayfinder/SKILL.md) | Fase explícita | Valioso para esfuerzos que no caben en una sesión: resuelve decisiones, no entregables. Solapa con `figure-it-out` en escala, pero ofrece mapa persistente en el tracker y fog-of-war. |
+| [wizard](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/wizard/SKILL.md) | Complemento | Cubre pasos manuales que el agente no puede ejecutar: credenciales, dashboards y cutovers, mediante un Bash guiado. No sustituye trabajo automatizable. |
+| [grill-me](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/productivity/grill-me/SKILL.md) | Fase explícita | Es la entrada stateless a `grilling`. No equivale a pstack `interrogate`: entrevista al usuario sobre decisiones; `interrogate` enfrenta un diff/código con reviewers independientes. Sí contradice `never-block-on-the-human` si se inserta durante ejecución reversible; como fase de diseño solicitada, la espera es el producto. Comparte la misma espera humana que grill-with-docs; no tiene una ventaja de autonomía. |
+| [grilling](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/productivity/grilling/SKILL.md) | Fase explícita | Instalar/obtener como dependencia de `grill-me`; pregunta todo el frontier por rondas y espera decisiones del usuario. No usar como activación implícita en un run AFK. |
+| [handoff](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/productivity/handoff/SKILL.md) | Complemento | Produce un resumen portátil en el temp del SO con pointers y secretos redactados. Sirve entre sesiones/herramientas; no reemplaza el log auditable de `show-me-your-work`. |
+| [teach](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/productivity/teach/SKILL.md) | Elegir un dueño | Colisión nativa exacta y productos distintos: Matty crea un workspace docente persistente; pstack explica how+why de una base de código. Usar `matty:teach` on-demand sólo en un workspace de aprendizaje deliberado. |
+| [to-questionnaire](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/productivity/to-questionnaire/SKILL.md) | Complemento | Extrae información que está en la cabeza de otra persona y produce un cuestionario. pstack no tiene este entregable. |
+| [wait-what](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/productivity/wait-what/SKILL.md) | Opcional | Repitch breve con STE y vocabulario del glosario. Solapa con pstack `bro`; Matty aporta alineación con dominio, pstack es la opción más ligera. |
+| [writing-for-agents](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/productivity/writing-for-agents/SKILL.md) | Complemento | Especialista en context pointers, carga de contexto/cognitiva, progressive disclosure y criterios de terminación. Complementa `technical-writing`: pstack gobierna claridad/estilo del documento; Matty gobierna predictibilidad de instrucciones para agentes. |
+| [claude-handoff](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/in-progress/claude-handoff/SKILL.md) | In-progress | Lanza otra herramienta (`claude --bg`) en el mismo directorio y puede crear un segundo dueño de ejecución. Sólo para handoff explícito a Claude. |
+| [loop-me](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/in-progress/loop-me/SKILL.md) | In-progress | Diseña workflows mediante grilling y archivos propios. Mantener fuera de un run pstack y fuera del perfil estable. |
+| [setup-ts-deep-modules](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/in-progress/setup-ts-deep-modules/SKILL.md) | In-progress | Instala dependency-cruiser y aplica una política concreta de imports/paquetes. Compatible con principios pstack si el proyecto quiere esa arquitectura; no es un complemento universal. |
+| [writing-beats](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/in-progress/writing-beats/SKILL.md) | In-progress | Flujo interactivo beat por beat. No usar para docs técnicas automáticas; elegirlo en lugar de `writing-shape` para un artículo. |
+| [writing-fragments](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/in-progress/writing-fragments/SKILL.md) | In-progress | Explora material sin estructura mediante entrevista. Fuera del run de ingeniería. |
+| [writing-shape](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/in-progress/writing-shape/SKILL.md) | In-progress | Convierte un pile en artículo bloque por bloque con aprobación humana. Solapa con `writing-beats`; elegir uno. |
+
+## pstack sobre Matty
+
+Si Matty conduce implement/implement-spec, añadir how/why, revisión adversarial y análisis de alcance como fases acotadas. Show-me-your-work añade auditabilidad; los principios de tipos, boundaries y pruebas de comportamiento sirven como criterios. No activar poteto-mode como un segundo ejecutor en esa misma fase. Setup-pstack puede coexistir, pero sus preferencias no se heredan automáticamente en los agentes Matty.
+
+TDD y teach requieren elegir identidad. Mantener Matty TDD si otros workflows lo requieren, como Argote Issue Delivery en este proyecto. Instalar pstack sin sus tdd/teach puede ser válido a nivel de archivos, pero no convierte todas las llamadas nativas sin calificar en intercambiables. Preferir on-demand para las excepciones.
+
+## Conflictos concretos
+
+- PR: Matty exige Summary/Evidence/Merge Danger; pstack Why/What changed/Scope/Tradeoffs/Blast Radius/Verification. Matty implement-spec abre draft; pstack pide PR listo.
+- Prototype: Matty crea cerca del módulo y preserva una rama; pstack experimenta en scratch aislado.
+- TDD/diagnóstico: Matty exige seams confirmados y diagnosing-bugs un loop rojo antes de hipótesis. pstack TDD admite la verificación útil más cercana cuando una prueba es impráctica.
+- Migraciones: to-tickets puede usar expand-contract; pstack favorece migrar y retirar APIs internas sin consumidores externos en la misma ola. Decidir según el contrato real.
+- Delegación: las preferencias de setup-pstack afectan sus lectores, no a Matty de forma universal.
+
+## Instalación nativa, on-demand y plugins
+
+Ambos manifiestos declaran tdd/teach exclusivos. El orden cambia el dueño que ya existe, no elimina la colisión. Los cuerpos nativos Matty aún llaman siblings por nombre sin declarar todas las dependencias en requires. Su grafo on-demand sí declara identidades calificadas. Un alias de directorio por sí solo no reescribe llamadas internas.
+
+En Codex, 54 de 55 skills pstack tienen allow_implicit_invocation: false, salvo setup-pstack. Matty permite invocación implícita en code-review, codebase-design, diagnosing-bugs, domain-modeling, grilling, pr, prototype, research, tdd, wizard y writing-for-agents; las otras 22 son explícitas. Elegibilidad no garantiza invocación. En particular, instalar grilling como dependencia nativa puede exponer su descripción al enrutamiento; on-demand conserva una selección deliberada.
+
+El soporte on-demand no equivale a exportabilidad como plugin. Matty no exporta grill-me/grill-with-docs en los formatos revisados; setup-matt es exportable en Claude, no en Agent Plugins. Consultar la evaluación de plugins del catálogo. No asumir que el perfil nativo funciona íntegramente como plugin.
+
+## Evidencia y límites
+
+Se construyó un snapshot local del commit fijado con el Packy v0.2.34 publicado. En entornos de candidate desechables se probaron ambas órdenes, en Agents y Claude: instalación completa del primer pack; rechazo de la segunda selección completa por tdd/teach; instalación y verify de una selección sin colisiones; acceso simultáneo a matty:tdd/pstack:tdd y grill-with-docs dentro del mismo snapshot sin modificar el proyecto. Los resultados compactos están adjuntos al artifact.
+
+La selección pstack → Matty probada contiene 11 skills (las siete complementarias, grilling, grill-me, grill-with-docs y setup). La selección Matty → pstack probada contiene las 53 skills pstack excepto tdd y teach. Es aceptación del ciclo de archivos y acceso a recursos, no una recomendación de activar todos esos flujos juntos. No se ejecutaron las skills combinadas con un modelo ni los setups sobre la configuración personal.
+
+Para confirmar calidad de ejecución falta un eval controlado: entrevista que sólo pregunta decisiones no observables, docs con términos realmente resueltos, research con nota primaria citada, preservación de archivos al correr ambos setups en sandbox y elección correcta del driver de PR/TDD. Medir rondas innecesarias, omisión de gates y referencias al pack equivocado, sin inventar porcentajes de compatibilidad.
+
+## Fuentes
+
+- [packs/matty/pack.json](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/pack.json)
+- [packs/pstack/pack.json](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/pack.json)
+- [packs/pstack/skills/codex/setup-pstack/SKILL.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/skills/codex/setup-pstack/SKILL.md)
+- [packs/pstack/skills/claude/setup-pstack/SKILL.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/skills/claude/setup-pstack/SKILL.md)
+- [packs/matty/skills/engineering/setup-matt-pocock-skills/SKILL.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/setup-matt-pocock-skills/SKILL.md)
+- [packs/matty/skills/engineering/setup-matt-pocock-skills/domain.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/setup-matt-pocock-skills/domain.md)
+- [packs/pstack/skills/codex/poteto-mode/SKILL.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/skills/codex/poteto-mode/SKILL.md)
+- [packs/pstack/skills/codex/poteto-mode/playbooks/investigation.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/skills/codex/poteto-mode/playbooks/investigation.md)
+- [packs/pstack/skills/codex/poteto-mode/playbooks/opening-a-pr.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/skills/codex/poteto-mode/playbooks/opening-a-pr.md)
+- [packs/pstack/skills/codex/poteto-mode/playbooks/prototype.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/skills/codex/poteto-mode/playbooks/prototype.md)
+- [packs/pstack/skills/codex/tdd/SKILL.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/skills/codex/tdd/SKILL.md)
+- [packs/pstack/skills/codex/principle-never-block-on-the-human/SKILL.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/skills/codex/principle-never-block-on-the-human/SKILL.md)
+- [packs/pstack/skills/codex/principle-migrate-callers-then-delete-legacy-apis/SKILL.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/pstack/skills/codex/principle-migrate-callers-then-delete-legacy-apis/SKILL.md)
+- [packs/matty/skills/engineering/grill-with-docs/ACCESS.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/grill-with-docs/ACCESS.md)
+- [packs/matty/skills/engineering/implement-spec/ACCESS.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packs/matty/skills/engineering/implement-spec/ACCESS.md)
+- [docs/research/matty-plugin-review.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/docs/research/matty-plugin-review.md)
+- [docs/packy-cli.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/docs/packy-cli.md)
+- [packy.json](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/packy.json)
+- [README.md](https://github.com/yersonargotev/packy-catalog/blob/959b9018bc29bbca93054ec8e23579f5d1cbd8ff/README.md)

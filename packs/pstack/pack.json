@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -17,7 +17,7 @@
     {
       "id": "cursor-plugins",
       "repository": "cursor/plugins",
-      "commit": "0148b78c56c72a1b8412055913c79f767095b217"
+      "commit": "1ba91fc25c0977741dd0e267849e6234b037ed0a"
     }
   ],
   "resources": [
@@ -102,7 +102,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/architect",
+          "source": "skills/agents/architect",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/architect",
@@ -352,7 +352,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/arena",
+          "source": "skills/agents/arena",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/arena",
@@ -493,7 +493,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/automate-me",
+          "source": "skills/agents/automate-me",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/automate-me",
@@ -611,7 +611,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/benchmark-checklist",
+          "source": "skills/agents/benchmark-checklist",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/benchmark-checklist",
@@ -729,7 +729,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/blast-radius",
+          "source": "skills/agents/blast-radius",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/blast-radius",
@@ -855,7 +855,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/bro",
+          "source": "skills/agents/bro",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/bro",
@@ -964,7 +964,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/correct",
+          "source": "skills/agents/correct",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/correct",
@@ -1044,7 +1044,9 @@
       "id": "create-formal-verification-skill",
       "source": "skills/create-formal-verification-skill",
       "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for /create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests.",
-      "requires": [],
+      "requires": [
+        "skill:statechart"
+      ],
       "conflicts": [],
       "notices": [
         "notice:pstack-mit"
@@ -1078,7 +1080,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/create-formal-verification-skill",
+          "source": "skills/agents/create-formal-verification-skill",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/create-formal-verification-skill",
@@ -1087,7 +1089,9 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [],
+          "requires": [
+            "skill:statechart"
+          ],
           "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for $create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests.",
           "on_demand": {
             "protocol": "skill-tree-v1",
@@ -1100,7 +1104,12 @@
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": []
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:statechart"
+              }
+            ]
           },
           "plugin_exports": [
             {
@@ -1126,7 +1135,9 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [],
+          "requires": [
+            "skill:statechart"
+          ],
           "description": "Generate a project-local skill that formally verifies the code where a bug costs the most and tests reach the least, in any language, with whichever verification tool fits. Use for /create-formal-verification-skill, \"model-check this race\", \"prove this invariant\", or when concurrency, retries, state machines, parsers, or unsafe code need more than tests.",
           "on_demand": {
             "protocol": "skill-tree-v1",
@@ -1138,7 +1149,12 @@
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": []
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:statechart"
+              }
+            ]
           },
           "plugin_exports": [
             {
@@ -1159,7 +1175,7 @@
       "kind": "skill",
       "id": "create-verification-skill",
       "source": "skills/create-verification-skill",
-      "description": "Generate a project-local verification skill that drives your app the way a user does \u2014 any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior.",
+      "description": "Generate a project-local verification skill that drives your app the way a user does — any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -1194,7 +1210,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/create-verification-skill",
+          "source": "skills/agents/create-verification-skill",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/create-verification-skill",
@@ -1204,7 +1220,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Generate a project-local verification skill that drives your app the way a user does \u2014 any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior.",
+          "description": "Generate a project-local verification skill that drives your app the way a user does — any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1231,7 +1247,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Generate a project-local verification skill that drives your app the way a user does \u2014 any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior.",
+          "description": "Generate a project-local verification skill that drives your app the way a user does — any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1294,7 +1310,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/figure-it-out",
+          "source": "skills/agents/figure-it-out",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/figure-it-out",
@@ -1494,7 +1510,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/how",
+          "source": "skills/agents/how",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/how",
@@ -1612,7 +1628,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/in-your-own-words",
+          "source": "skills/agents/in-your-own-words",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/in-your-own-words",
@@ -1687,7 +1703,10 @@
       "id": "interrogate",
       "source": "skills/interrogate",
       "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles.",
-      "requires": [],
+      "requires": [
+        "skill:arena",
+        "skill:in-your-own-words"
+      ],
       "conflicts": [],
       "notices": [
         "notice:pstack-mit"
@@ -1721,7 +1740,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/interrogate",
+          "source": "skills/agents/interrogate",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/interrogate",
@@ -1730,8 +1749,11 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [],
-          "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles.",
+          "requires": [
+            "skill:arena",
+            "skill:in-your-own-words"
+          ],
+          "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Adversaries try to break a change or design, and only findings proven by a run survive.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1744,7 +1766,16 @@
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": []
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:in-your-own-words"
+              }
+            ]
           },
           "plugin_exports": [
             {
@@ -1770,8 +1801,11 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [],
-          "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles.",
+          "requires": [
+            "skill:arena",
+            "skill:in-your-own-words"
+          ],
+          "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Adversaries try to break a change or design, and only findings proven by a run survive.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1783,7 +1817,16 @@
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": []
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:arena"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:in-your-own-words"
+              }
+            ]
           },
           "plugin_exports": [
             {
@@ -1839,7 +1882,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/ketchup",
+          "source": "skills/agents/ketchup",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/ketchup",
@@ -1906,6 +1949,264 @@
     },
     {
       "kind": "skill",
+      "id": "ketchup-video",
+      "source": "skills/ketchup-video",
+      "description": "Catch the user up like /ketchup, with a short subtitled video of slides for what happened and the waiting calls as text under it. Use for /ketchup-video.",
+      "requires": [
+        "skill:ketchup"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/ketchup-video",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "ketchup-video",
+          "invocation": "$ketchup-video",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "ketchup-video",
+          "invocation": "ketchup-video",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "agents",
+          "source": "skills/agents/ketchup-video",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/create-formal-verification-skill",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:ketchup"
+          ],
+          "description": "Catch the user up like $ketchup, with a short subtitled video of slides for what happened and the waiting calls as text under it. Use for $ketchup-video.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
+              "authorized target and separate writable output/scratch; actual runtime and tool capabilities must be checked before execution",
+              "available video renderer/encoder and supported video presentation; separate writable scratch outside repo and resources"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:ketchup"
+              }
+            ]
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "create-formal-verification-skill",
+              "prerequisites": [
+                "A compatible Codex client",
+                "An appropriate formal verification tool and permission to run it"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
+        },
+        {
+          "surface": "claude",
+          "source": "skills/claude/ketchup-video",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/create-formal-verification-skill",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:ketchup"
+          ],
+          "description": "Catch the user up like /ketchup, with a short subtitled video of slides for what happened and the waiting calls as text under it. Use for /ketchup-video.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target and separate writable output/scratch; actual runtime and tool capabilities must be checked before execution",
+              "available video renderer/encoder and supported video presentation; separate writable scratch outside repo and resources"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:ketchup"
+              }
+            ]
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "create-formal-verification-skill",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "An appropriate formal verification tool and permission to run it"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "maintain-formal-verification-skill",
+      "source": "skills/maintain-formal-verification-skill",
+      "description": "Bring a project's formal verification back in line with the code after the code changes: find the commits that touched verified code, update the model, harness, or properties to describe the code as it is now, rerun, and say whether each failure is drift in the verification or a bug in the code. Use for /maintain-formal-verification-skill, \"is the model still true to the code\", or after merges and refactors that touched verified code without rechecking it.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/maintain-formal-verification-skill",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "maintain-formal-verification-skill",
+          "invocation": "$maintain-formal-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "maintain-formal-verification-skill",
+          "invocation": "maintain-formal-verification-skill",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "agents",
+          "source": "skills/agents/maintain-formal-verification-skill",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/create-formal-verification-skill",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Bring a project's formal verification back in line with the code after the code changes: find the commits that touched verified code, update the model, harness, or properties to describe the code as it is now, rerun, and say whether each failure is drift in the verification or a bug in the code. Use for $maintain-formal-verification-skill, \"is the model still true to the code\", or after merges and refactors that touched verified code without rechecking it.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
+              "authorized target and separate writable output/scratch; actual runtime and tool capabilities must be checked before execution"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          },
+          "plugin_exports": [
+            {
+              "format": "agent-plugins",
+              "name": "create-formal-verification-skill",
+              "prerequisites": [
+                "A compatible Codex client",
+                "An appropriate formal verification tool and permission to run it"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
+        },
+        {
+          "surface": "claude",
+          "source": "skills/claude/maintain-formal-verification-skill",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/create-formal-verification-skill",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [
+            "skill:create-formal-verification-skill",
+            "skill:statechart"
+          ],
+          "description": "Bring a project's formal verification back in line with the code after the code changes: find the commits that touched verified code, update the model, harness, or properties to describe the code as it is now, rerun, and say whether each failure is drift in the verification or a bug in the code. Use for /maintain-formal-verification-skill, \"is the model still true to the code\", or after merges and refactors that touched verified code without rechecking it.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized target and separate writable output/scratch; actual runtime and tool capabilities must be checked before execution"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": [
+              {
+                "type": "skill",
+                "target": "pstack:create-formal-verification-skill"
+              },
+              {
+                "type": "skill",
+                "target": "pstack:statechart"
+              }
+            ]
+          },
+          "plugin_exports": [
+            {
+              "format": "claude-plugin",
+              "name": "create-formal-verification-skill",
+              "prerequisites": [
+                "A compatible Claude Code client",
+                "An appropriate formal verification tool and permission to run it"
+              ],
+              "references": [],
+              "roles": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "skill",
       "id": "maintain-verification-skill",
       "source": "skills/maintain-verification-skill",
       "description": "Periodic pass that keeps a project's verification skill and feature map honest: parallel source readers per feature, one live session driving every feature, at most one PR of proven corrections. Use for /maintain-verification-skill or \"audit the verify skill\".",
@@ -1943,7 +2244,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/maintain-verification-skill",
+          "source": "skills/agents/maintain-verification-skill",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/maintain-verification-skill",
@@ -2037,7 +2338,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/make-bot-ui",
+          "source": "skills/agents/make-bot-ui",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/make-bot-ui",
@@ -2161,7 +2462,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/no-comments",
+          "source": "skills/agents/no-comments",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/no-comments",
@@ -2307,7 +2608,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/poteto-help",
+          "source": "skills/agents/poteto-help",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/poteto-help",
@@ -2466,7 +2767,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/poteto-mode",
+          "source": "skills/agents/poteto-mode",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/poteto-mode",
@@ -2521,9 +2822,9 @@
             "prerequisites": [
               "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
               "Git, Bash/shell utilities and selected gh or Origin CLI for project/forge/worktree helpers; credentials only for authorized queries",
-              "Node for plan checks; Bun and package/network access for orchestration/watcher dependency installation",
+              "Node for plan checks; Bun and package/network access for watcher dependency installation",
               "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority",
-              "explicit intended target, owned temporary execution/dependency space and separate writable store/output/evidence destinations",
+              "explicit intended target, owned temporary execution/dependency space and separate writable tracker/output/evidence destinations",
               "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence"
             ],
             "reference_files": [
@@ -2769,9 +3070,9 @@
             "entry_document": "ACCESS.md",
             "prerequisites": [
               "Git, Bash/shell utilities and selected gh or Origin CLI for project/forge/worktree helpers; credentials only for authorized queries",
-              "Node for plan checks; Bun and package/network access for orchestration/watcher dependency installation",
+              "Node for plan checks; Bun and package/network access for watcher dependency installation",
               "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority",
-              "explicit intended target, owned temporary execution/dependency space and separate writable store/output/evidence destinations",
+              "explicit intended target, owned temporary execution/dependency space and separate writable tracker/output/evidence destinations",
               "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence"
             ],
             "reference_files": [
@@ -3007,7 +3308,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-attack-the-premise",
+          "source": "skills/agents/principle-attack-the-premise",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-attack-the-premise",
@@ -3130,7 +3431,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-boundary-discipline",
+          "source": "skills/agents/principle-boundary-discipline",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-boundary-discipline",
@@ -3243,7 +3544,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-build-the-lever",
+          "source": "skills/agents/principle-build-the-lever",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-build-the-lever",
@@ -3356,7 +3657,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-encode-lessons-in-structure",
+          "source": "skills/agents/principle-encode-lessons-in-structure",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-encode-lessons-in-structure",
@@ -3465,7 +3766,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-exhaust-the-design-space",
+          "source": "skills/agents/principle-exhaust-the-design-space",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-exhaust-the-design-space",
@@ -3574,7 +3875,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-experience-first",
+          "source": "skills/agents/principle-experience-first",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-experience-first",
@@ -3683,7 +3984,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-explain-the-number",
+          "source": "skills/agents/principle-explain-the-number",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-explain-the-number",
@@ -3695,7 +3996,7 @@
           "requires": [
             "skill:benchmark-checklist"
           ],
-          "description": "Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think.",
+          "description": "Apply before you measure, and before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -3727,7 +4028,7 @@
           "requires": [
             "skill:benchmark-checklist"
           ],
-          "description": "Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think.",
+          "description": "Apply before you measure, and before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -3784,7 +4085,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-fix-root-causes",
+          "source": "skills/agents/principle-fix-root-causes",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-fix-root-causes",
@@ -3893,7 +4194,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-foundational-thinking",
+          "source": "skills/agents/principle-foundational-thinking",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-foundational-thinking",
@@ -4002,7 +4303,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-guard-the-context-window",
+          "source": "skills/agents/principle-guard-the-context-window",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-guard-the-context-window",
@@ -4111,7 +4412,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-laziness-protocol",
+          "source": "skills/agents/principle-laziness-protocol",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-laziness-protocol",
@@ -4220,7 +4521,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-make-operations-idempotent",
+          "source": "skills/agents/principle-make-operations-idempotent",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-make-operations-idempotent",
@@ -4329,7 +4630,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-migrate-callers-then-delete-legacy-apis",
+          "source": "skills/agents/principle-migrate-callers-then-delete-legacy-apis",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-migrate-callers-then-delete-legacy-apis",
@@ -4440,7 +4741,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-minimize-reader-load",
+          "source": "skills/agents/principle-minimize-reader-load",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-minimize-reader-load",
@@ -4531,7 +4832,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-model-the-domain",
+          "source": "skills/agents/principle-model-the-domain",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-model-the-domain",
@@ -4640,7 +4941,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-never-block-on-the-human",
+          "source": "skills/agents/principle-never-block-on-the-human",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-never-block-on-the-human",
@@ -4749,7 +5050,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-outcome-oriented-execution",
+          "source": "skills/agents/principle-outcome-oriented-execution",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-outcome-oriented-execution",
@@ -4858,7 +5159,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-prove-it-works",
+          "source": "skills/agents/principle-prove-it-works",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-prove-it-works",
@@ -4945,7 +5246,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-redesign-from-first-principles",
+          "source": "skills/agents/principle-redesign-from-first-principles",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-redesign-from-first-principles",
@@ -5054,7 +5355,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-separate-before-serializing-shared-state",
+          "source": "skills/agents/principle-separate-before-serializing-shared-state",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-separate-before-serializing-shared-state",
@@ -5163,7 +5464,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-sequence-verifiable-units",
+          "source": "skills/agents/principle-sequence-verifiable-units",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-sequence-verifiable-units",
@@ -5250,7 +5551,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-subtract-before-you-add",
+          "source": "skills/agents/principle-subtract-before-you-add",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-subtract-before-you-add",
@@ -5359,7 +5660,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-test-behavior-not-implementation",
+          "source": "skills/agents/principle-test-behavior-not-implementation",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-test-behavior-not-implementation",
@@ -5468,7 +5769,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/principle-type-system-discipline",
+          "source": "skills/agents/principle-type-system-discipline",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-type-system-discipline",
@@ -5558,7 +5859,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/recall",
+          "source": "skills/agents/recall",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/recall",
@@ -5674,7 +5975,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/reflect",
+          "source": "skills/agents/reflect",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/reflect",
@@ -5784,7 +6085,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/setup-pstack",
+          "source": "skills/agents/setup-pstack",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/setup-pstack",
@@ -5902,7 +6203,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/sharpen",
+          "source": "skills/agents/sharpen",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/sharpen",
@@ -5912,7 +6213,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for $sharpen.",
+          "description": "Make a task deeper, not bigger, then rewrite the prompt. Use for $sharpen.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -5948,7 +6249,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen.",
+          "description": "Make a task deeper, not bigger, then rewrite the prompt. Use for /sharpen.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -6013,7 +6314,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/show-me-your-work",
+          "source": "skills/agents/show-me-your-work",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/show-me-your-work",
@@ -6092,6 +6393,59 @@
     },
     {
       "kind": "skill",
+      "id": "statechart",
+      "source": "skills/statechart",
+      "description": "Check a TLA+ model of a system that moves between states, such as a product flow, a protocol, or a service, and draw it as a Mermaid statechart. The report gives the shortest path to each state that breaks a rule. Use for /statechart, or to show a bug as a path through states.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/statechart/SKILL.md",
+        "relationship": "adapted"
+      },
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "statechart",
+          "invocation": "$statechart",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "statechart",
+          "invocation": "statechart",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "Pele 1.9.0 and separate writable dependency space for optional SVG rendering",
+          "TLC and Java 11+ via existing TLA2TOOLS/JAVA or installed mise with authorized first-run network/setup",
+          "absolute model/config/view inputs and explicit new or empty output in separate owned writable scratch",
+          "supported TypeScript runtime: Node 22.18 to 22.x, Node 23.6+, Bun 1.1.5+, or Deno 2+"
+        ],
+        "reference_files": [
+          "ACCESS.md",
+          "references/render.md",
+          "references/upstream-SKILL.md"
+        ],
+        "dependencies": []
+      }
+    },
+    {
+      "kind": "skill",
       "id": "swarm",
       "source": "skills/swarm",
       "description": "Fan out N parallel workers, drain them, and return one report. Use for /swarm, 'swarm this', or parallel coverage, races, gauntlets, and exploration.",
@@ -6129,7 +6483,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/swarm",
+          "source": "skills/agents/swarm",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/swarm",
@@ -6247,7 +6601,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/tdd",
+          "source": "skills/agents/tdd",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/tdd",
@@ -6377,7 +6731,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/teach",
+          "source": "skills/agents/teach",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/teach",
@@ -6468,7 +6822,7 @@
       "kind": "skill",
       "id": "technical-writing",
       "source": "skills/technical-writing",
-      "description": "Layered technical-writing standard: Di\u00e1taxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages.",
+      "description": "Layered technical-writing standard: Diátaxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages.",
       "requires": [
         "skill:unslop"
       ],
@@ -6505,7 +6859,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/technical-writing",
+          "source": "skills/agents/technical-writing",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/technical-writing",
@@ -6517,7 +6871,7 @@
           "requires": [
             "skill:unslop"
           ],
-          "description": "Layered technical-writing standard: Di\u00e1taxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages.",
+          "description": "Layered technical-writing standard: Diátaxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -6550,7 +6904,7 @@
           "requires": [
             "skill:unslop"
           ],
-          "description": "Layered technical-writing standard: Di\u00e1taxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages.",
+          "description": "Layered technical-writing standard: Diátaxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -6612,7 +6966,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/typescript-best-practices",
+          "source": "skills/agents/typescript-best-practices",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/typescript-best-practices",
@@ -6728,7 +7082,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/unslop",
+          "source": "skills/agents/unslop",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/unslop",
@@ -6837,7 +7191,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/codex/why",
+          "source": "skills/agents/why",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/why",

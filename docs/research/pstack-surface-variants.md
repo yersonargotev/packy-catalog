@@ -442,3 +442,73 @@ These checks do not establish native host discovery, model-backed execution
 of every workflow, or persistent background operation. This update changes
 the local Catalog Project; it does not publish a snapshot or update installed
 Packs.
+
+## 6.1.0 Agents and Claude update
+
+The 2026-10-29 contract migration updates pstack from 6.0.0 to 6.1.0 at
+[`1ba91fc25c0977741dd0e267849e6234b037ed0a`](https://github.com/cursor/plugins/tree/1ba91fc25c0977741dd0e267849e6234b037ed0a/pstack),
+upstream 0.15.36. Both supported surfaces have 58 skills. The Pack has 60
+logical resources. Other Pack versions stay unchanged.
+
+The former `skills/codex` source directory becomes `skills/agents`, matching
+Packy's current surface convention. Codex-specific runtime requirements and
+preference paths retain their meaning. The common Cursor originals remain
+separate from the two maintained adaptations. Native `SKILL.md` and prepared
+`ACCESS.md` continue to support distinct lookup and execution contracts.
+
+The update adds `ketchup-video`, `maintain-formal-verification-skill`, and
+`statechart`. Interrogate now delegates to Arena and `in-your-own-words`, then
+reruns adversaries' reproductions before reporting findings. Orchestrate uses
+actual host tools and drops the retired `orch` code. Updated watcher code limits
+polling to its deadline and distinguishes fork heads. Worktree audit supports
+GNU and BSD timestamp commands. Formal verification uses TLA+ by default for
+stateful problems and offers a concrete fallback when no verifier exists.
+Setup, help, Sharpen, Swarm, Arena, autopilot planning, and Reflect follow the
+selected upstream revision while preserving host capability and authority limits.
+
+Statechart uses one shared portable production tree. Its new distribution has
+an explicit full-original retention exception, described in
+[pstack maintenance](../pstack-maintenance.md#shared-runtime-distribution).
+The original entry and complete 407-file source hash/mode inventory are retained.
+Thirty retained original files match upstream, including the runtime and render
+reference. The adaptation adds access/execution guidance and invocation metadata,
+and removes development commands and dependencies from package metadata.
+The manifest origin is explicitly scoped to the entry document. A separate
+probe verifies full runtime provenance against the same pinned commit. Neither
+ordinary typed-origin validation nor the reduced tree is presented as a check
+of the omitted 376 development test files.
+
+Validation evidence for this local change uses clean baseline
+`3e88555630e85495c25addbf3554c6f646b660fd` and the repository's pinned Packy
+v0.2.34. No installed user Pack or selected user snapshot is changed.
+
+- `./scripts/validate.sh <baseline> --json` passed for 13 Packs and 426 fitness
+  rows, including resolved origins, exact-copy provenance, and baseline version
+  rules. All 12 unrelated Pack manifests, files, and executable modes match the
+  baseline.
+- `./scripts/test.sh` passed 74 ordinary tests and three helper-execution
+  sentinels. The opt-in probe suite passed 16 tests and 18 plan scenarios.
+- Both host helper suites passed 61 tests with 179 assertions and strict type
+  checking in disposable execution directories. Watcher and decision-log probes
+  also passed for both variants without changing installed or authored files.
+- All 116 surface skill entries passed native and access frontmatter checks.
+  Relative links resolved. Independent review found and corrected prepared-path,
+  optional-route, native-link, and copied-context regressions before acceptance.
+- `pstack-statechart.py --upstream <pinned-checkout>` verified all 407 original
+  source records and 30 retained original files. Controlled content and executable
+  mode drift were rejected. Upstream's complete test suite ran in disposable
+  scratch with canonical temporary paths. It passed 267 tests; 67 TLC/Java tests
+  were skipped because the required verifier runtime was unavailable.
+- `pstack-native.py` passed for both surfaces on a disposable clean fixture
+  copied from this working tree. Its candidate label was
+  `de1aa786d96c1e66a105683011901893a84fd3a6`, a local fixture commit rather than
+  a reviewed Catalog source commit. All 663 Pack files and executable modes
+  matched this working tree. It installed and verified all 58 skills per surface,
+  recovered six representative roots with pinned dependency snapshots, retained
+  complete legal notices, uninstalled the Pack, preserved foreign files, and
+  removed its temporary state. It did not modify this repository's commit.
+
+These checks do not establish client loading, model-backed workflow execution,
+persistent monitoring, or execution of the skipped TLC checks. The update does
+not publish a snapshot, enable unreviewed plugin exports, or update user
+installations.

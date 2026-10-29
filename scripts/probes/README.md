@@ -66,6 +66,51 @@ byte-exact in the declared Catalog closure; both surfaces use the reviewed tree
 whose only content changes are the three guide paths. Illustrative sample-code
 links remain unchanged.
 
+## Current pstack update checks
+
+The current pstack sources use `skills/agents` and `skills/claude`.
+After reviewing the changed content, run:
+
+```sh
+python3 -B scripts/probes/pstack-update.py plans
+python3 -B -m unittest discover -s scripts/probes -p 'test_pstack_update.py'
+python3 -B scripts/probes/pstack-helpers.py
+```
+
+The plan probe checks six cases per common, Agents, and Claude checker. These
+include matching inline-code delimiters, obsolete audit cadence, and a missing
+live lane. The 16 probe tests check failures and temporary-state cleanup.
+The helper probe runs watcher help and decision-log append/escaping on both
+adaptations, checking that authored and installed bytes stay unchanged.
+Orchestrate now uses available host tools; its retired `orch` scripts are absent.
+Verify the shared statechart runtime and its complete source inventory against
+an exact upstream checkout:
+
+```sh
+python3 -B scripts/probes/pstack-statechart.py --upstream /path/to/cursor-plugins
+```
+
+This compares the checkout commit, all 407 upstream file hashes and modes, the
+30 retained original files, the production package metadata, and the shared
+source contract. Runtime execution and TLC availability remain separate checks.
+
+Node and Bun are required for these opt-in execution checks. They do not run
+through ordinary catalog validation.
+
+For a clean committed candidate, run the native/access lifecycle check:
+
+```sh
+python3 -B scripts/probes/pstack-native.py > /tmp/pstack-native-evidence.json
+```
+
+This checks all native skill bytes and modes, six retained access roots with
+pinned dependencies, verification, and removal on Agents and Claude. It preserves
+foreign project documents and personal sentinel files. It does not execute every workflow
+or claim client loading. pstack plugin export remains unavailable where the
+required dependency closure lacks reviewed export metadata.
+See [pstack maintenance](../../docs/pstack-maintenance.md) for the distribution
+boundary and source provenance.
+
 ## Historical pre-two-surface probes
 
 The remaining commands describe historical catalog generations and require the

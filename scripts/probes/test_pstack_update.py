@@ -25,7 +25,7 @@ class PstackUpdateProbeTest(unittest.TestCase):
         resources = []
         for name in ('sample', 'helper'):
             variants = []
-            for host in ('claude', 'codex', 'opencode'):
+            for host in ('claude', 'agents'):
                 source = f'skills/{host}/{name}'
                 folder = pack / source
                 folder.mkdir(parents=True)
@@ -35,9 +35,9 @@ class PstackUpdateProbeTest(unittest.TestCase):
                 'kind': 'skill', 'id': name, 'source': f'skills/{name}',
                 'description': name, 'requires': ['skill:helper'] if name == 'sample' else [],
                 'notices': [], 'variants': variants,
-                'bindings': [{'surface': host, 'name': name} for host in ('claude', 'codex', 'opencode')],
+                'bindings': [{'surface': host, 'name': name} for host in ('claude', 'agents')],
             })
-        self.manifest = {'version': '1.0.0', 'surfaces': ['claude', 'codex', 'opencode'], 'origins': [{'commit': 'old'}], 'resources': resources}
+        self.manifest = {'version': '1.0.0', 'surfaces': ['claude', 'agents'], 'origins': [{'commit': 'old'}], 'resources': resources}
         (pack / 'pack.json').write_text(json.dumps(self.manifest), encoding='utf-8')
         shutil.copytree(self.baseline, self.candidate)
 
@@ -52,34 +52,42 @@ class PstackUpdateProbeTest(unittest.TestCase):
     def contracts(self):
         return self.run_probe('contracts', '--project', str(self.candidate),
                               '--baseline', str(self.baseline),
-                              '--preserve-surface', 'claude', '--preserve-surface', 'opencode')
+                              '--preserve-surface', 'claude')
 
     def write_manifest(self):
         (self.candidate / 'packs/pstack/pack.json').write_text(json.dumps(self.manifest), encoding='utf-8')
 
-    def test_accepts_untouched_hosts_when_version_origin_and_codex_advance(self):
+    def test_accepts_untouched_host_when_version_origin_and_agents_advance(self):
         self.manifest['version'] = '1.1.0'
         self.manifest['origins'][0]['commit'] = 'new'
         self.write_manifest()
-        (self.candidate / 'packs/pstack/skills/codex/sample/SKILL.md').write_text('new Codex workflow\n')
+        (self.candidate / 'packs/pstack/skills/agents/sample/SKILL.md').write_text('new Agents workflow\n')
         result = self.contracts()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('claude: preserved', result.stdout)
-        self.assertIn('opencode: preserved', result.stdout)
 
 
     def test_accepts_retirement_of_an_unselected_host(self):
-        self.manifest['surfaces'].remove('opencode')
+        self.manifest['surfaces'].remove('agents')
         for resource in self.manifest['resources']:
             for key in ('bindings', 'variants'):
-                resource[key] = [item for item in resource[key] if item['surface'] != 'opencode']
+                resource[key] = [item for item in resource[key] if item['surface'] != 'agents']
         self.write_manifest()
         result = self.run_probe('contracts', '--project', str(self.candidate),
                                 '--baseline', str(self.baseline), '--preserve-surface', 'claude')
         self.assertEqual(result.returncode, 0, result.stderr)
-        result = self.contracts()
+        result = self.run_probe('contracts', '--project', str(self.candidate),
+                                '--baseline', str(self.baseline), '--preserve-surface', 'agents')
         self.assertEqual(result.returncode, 1)
-        self.assertIn('opencode: Pack contract drift', result.stderr)
+        self.assertIn('agents: Pack contract drift', result.stderr)
+
+    def test_rejects_retired_surface_arguments(self):
+        for surface in ('codex', 'opencode'):
+            with self.subTest(surface=surface):
+                result = self.run_probe('contracts', '--project', str(self.candidate),
+                                        '--baseline', str(self.baseline), '--preserve-surface', surface)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn('invalid choice', result.stderr)
 
     def test_rejects_preserved_host_content_drift(self):
         (self.candidate / 'packs/pstack/skills/claude/sample/SKILL.md').write_text('changed\n')
@@ -88,11 +96,11 @@ class PstackUpdateProbeTest(unittest.TestCase):
         self.assertIn('claude: content or executable-mode drift', result.stderr)
 
     def test_rejects_preserved_host_executable_mode_drift(self):
-        path = self.candidate / 'packs/pstack/skills/opencode/sample/SKILL.md'
+        path = self.candidate / 'packs/pstack/skills/claude/sample/SKILL.md'
         path.chmod(path.stat().st_mode ^ 0o100)
         result = self.contracts()
         self.assertEqual(result.returncode, 1)
-        self.assertIn('opencode: content or executable-mode drift', result.stderr)
+        self.assertIn('claude: content or executable-mode drift', result.stderr)
 
     def test_rejects_changed_inherited_dependency(self):
         self.manifest['resources'][0]['requires'] = []
@@ -128,13 +136,13 @@ class PstackUpdateProbeTest(unittest.TestCase):
 
     def test_plan_scenarios_pass_without_mutating_owned_helpers(self):
         paths = [PROJECT / 'packs/pstack/skills' / host / 'poteto-mode/scripts/check-plan.mjs'
-                 for host in ('', 'claude', 'codex')]
+                 for host in ('', 'claude', 'agents')]
         before = [p.read_bytes() for p in paths]
         result = self.run_probe('plans', '--project', str(PROJECT))
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn('common: 3 plan scenarios passed', result.stdout)
-        self.assertIn('claude: 3 plan scenarios passed', result.stdout)
-        self.assertIn('codex: 3 plan scenarios passed', result.stdout)
+        self.assertIn('common: 6 plan scenarios passed', result.stdout)
+        self.assertIn('claude: 6 plan scenarios passed', result.stdout)
+        self.assertIn('agents: 6 plan scenarios passed', result.stdout)
         self.assertEqual([p.read_bytes() for p in paths], before)
 
 

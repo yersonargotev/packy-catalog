@@ -1,5 +1,9 @@
 # pstack orchestration: complete reviewed on-demand access
 
+This document records the original access adaptation. The 6.1.0 update removes
+the `orch` runtime and uses available host tools for Orchestrate. Follow the
+[current maintenance guide](../pstack-maintenance.md) for current checks.
+
 This review records its original Catalog generation. Surface names, Pack
 versions, and acceptance evidence below are historical; see the
 [current setup guide](../packy-cli.md) for the `agents` and `claude` contract.

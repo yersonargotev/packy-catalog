@@ -26,6 +26,9 @@ Independent upstream products keep their own repositories and release
 lifecycles. A pinned `origin` in a Pack manifest identifies the exact upstream
 commit from which reviewed resources were copied or adapted.
 
+[pstack maintenance](docs/pstack-maintenance.md) explains original sources, Agents and
+Claude variants, and the shared statechart runtime.
+
 [Resource ownership terminology](GLOSSARY.md) distinguishes Catalog Resources,
 Catalog Adaptations, Upstream Resources, and Installed Resources.
 

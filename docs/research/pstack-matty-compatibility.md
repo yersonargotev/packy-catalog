@@ -44,7 +44,7 @@ compatibility profile. `handoff` and `to-questionnaire` remain explicitly invoke
 `wizard` is for steps the agent cannot perform itself.
 
 Matty `research` is optional rather than a missing pstack capability. pstack's
-[Investigation playbook](../../packs/pstack/skills/codex/poteto-mode/playbooks/investigation.md)
+[Investigation playbook](../../packs/pstack/skills/agents/poteto-mode/playbooks/investigation.md)
 already produces cited explanations and recommendations through `how` and,
 for motivation questions, `why`. Matty adds a specific delivery contract:
 delegate primary-source research to a background agent and retain a cited
@@ -79,10 +79,10 @@ and [Matty research metadata](../../packs/matty/skills/engineering/research/agen
 pstack's Codex skills use the explicit-only policy except `setup-pstack`.
 An explicitly requested pstack workflow can still read its sibling skills as
 dependencies. Its execution contract states this distinction directly.
-See [pstack TDD](../../packs/pstack/skills/codex/tdd/SKILL.md),
-[its activation policy](../../packs/pstack/skills/codex/tdd/agents/openai.yaml),
-[setup instructions](../../packs/pstack/skills/codex/setup-pstack/SKILL.md),
-and [poteto-mode](../../packs/pstack/skills/codex/poteto-mode/SKILL.md).
+See [pstack TDD](../../packs/pstack/skills/agents/tdd/SKILL.md),
+[its activation policy](../../packs/pstack/skills/agents/tdd/agents/openai.yaml),
+[setup instructions](../../packs/pstack/skills/agents/setup-pstack/SKILL.md),
+and [poteto-mode](../../packs/pstack/skills/agents/poteto-mode/SKILL.md).
 
 Consequently, installing Matty's implicit-capable skills makes them candidates
 for selection by their descriptions. Installing its manual skills does not
@@ -133,7 +133,7 @@ row links the instruction source behind the assessment.
 ## Concrete conflicts behind the exclusions
 
 **Two different PR templates.** Matty `pr` prescribes three sections. pstack's
-[Opening a PR playbook](../../packs/pstack/skills/codex/poteto-mode/playbooks/opening-a-pr.md)
+[Opening a PR playbook](../../packs/pstack/skills/agents/poteto-mode/playbooks/opening-a-pr.md)
 prescribes `Why`, `What changed`, mandatory `Scope`, optional `Tradeoffs`,
 `Blast Radius`, and `Verification` in that order. Combining the full templates
 would violate at least one. pstack also requires PRs to open ready, whereas
@@ -141,26 +141,26 @@ Matty `implement-spec` opens a draft after the first integration merge.
 
 **Different prototype locations.** Matty `prototype` puts throwaway code near
 its eventual module or page and preserves it on a prototype branch. pstack's
-[Prototype playbook](../../packs/pstack/skills/codex/poteto-mode/playbooks/prototype.md)
+[Prototype playbook](../../packs/pstack/skills/agents/poteto-mode/playbooks/prototype.md)
 puts the experiment in an isolated scratch directory, separate from production
 source. Both are reasonable policies, but one must own the run.
 
 **Different stopping rules.** Matty `grilling` waits for the user at each frontier
 and before action. Matty TDD requires user-confirmed seams before tests.
-pstack's [Never Block on the Human principle](../../packs/pstack/skills/codex/principle-never-block-on-the-human/SKILL.md)
+pstack's [Never Block on the Human principle](../../packs/pstack/skills/agents/principle-never-block-on-the-human/SKILL.md)
 asks the agent to proceed with reversible execution. Explicitly requesting an
 interactive design session can choose the Matty behavior; installing that
 workflow does not make it an appropriate default inside an unattended run.
 
 **Different regression-test thresholds.** Matty `diagnosing-bugs` requires an
 already-run, red-capable reproduction before hypotheses. pstack
-[TDD](../../packs/pstack/skills/codex/tdd/SKILL.md) allows practical fallback
+[TDD](../../packs/pstack/skills/agents/tdd/SKILL.md) allows practical fallback
 verification and explicitly prefers no new test over an impractical one.
 The choice affects whether the agent keeps moving when a reproducer is costly.
 
 **Different migration defaults.** Matty `to-tickets` permits expand-contract
 sequences with intermediate compatibility states for wide refactors. pstack's
-[internal API migration principle](../../packs/pstack/skills/codex/principle-migrate-callers-then-delete-legacy-apis/SKILL.md)
+[internal API migration principle](../../packs/pstack/skills/agents/principle-migrate-callers-then-delete-legacy-apis/SKILL.md)
 applies when there are no external compatibility users and asks for migration
 and deletion in the same wave. Resolve this against the project's actual
 compatibility contract before using Matty's planner for a pstack migration.
