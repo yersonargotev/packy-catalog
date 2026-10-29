@@ -18,7 +18,7 @@ def run(command, *, cwd, env):
     assert status == 0, (command, status, out, err)
     return out
 
-for host in ("codex", "claude"):
+for host in ("agents", "claude"):
     source = root / host
     original = inventory(source)
     with tempfile.TemporaryDirectory(prefix="pstack-helpers-") as directory:
@@ -38,7 +38,6 @@ for host in ("codex", "claude"):
         shutil.copytree(source, skills)
         before = inventory(skills)
         scripts = skills / "poteto-mode/scripts"
-        assert "Usage: orch" in run(["bun", str(scripts / "orch/orch.ts"), "--help"], cwd=workspace, env=env)
         assert "usage:" in run(["bun", str(scripts / "watch-pr/watch-pr"), "--help"], cwd=workspace, env=env).lower()
         with tempfile.TemporaryDirectory(prefix="pstack-log-", dir=workspace) as directory:
             log = Path(directory) / "decisions.tsv"
@@ -49,5 +48,5 @@ for host in ("codex", "claude"):
             assert len(rows) == 3 and all(len(row.split("\t")) == 6 for row in rows)
             assert "'=unsafe" in rows[1]
         assert before == inventory(skills), f"{host} runtime changed installed skill closure"
-        print(f"{host}: orch/watch-pr execute; log appends and escapes cells; installed closure unchanged", flush=True)
+        print(f"{host}: watch-pr executes; log appends and escapes cells; installed closure unchanged", flush=True)
     assert original == inventory(source), f"{host} authored closure changed"

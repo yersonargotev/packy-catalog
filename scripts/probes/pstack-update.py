@@ -91,7 +91,7 @@ def compare_surfaces(project, baseline, surfaces):
 
 def check_plans(project):
     template = (Path(__file__).parent / 'fixtures/pstack-plan.md').read_text(encoding='utf-8')
-    for host, cadence in (('common', '/loop 1h'), ('claude', 'hourly audit'), ('codex', 'hourly audit')):
+    for host, cadence in (('common', '/loop 1h'), ('claude', 'hourly audit'), ('agents', 'hourly audit')):
         skills = project / 'packs/pstack/skills'
         source = skills / ('' if host == 'common' else host) / 'poteto-mode/scripts/check-plan.mjs'
         valid = template.replace('@AUDIT@', cadence)
@@ -101,6 +101,12 @@ def check_plans(project):
              f'Program checklist lacks "{cadence}"'),
             ('missing-lane', '\n'.join(line for line in valid.splitlines()
                                       if not line.startswith('- [ ] Lane 10.')), 1, 'expected 1 to 10'),
+            ('matching-inline-code', valid + '\nUse ``echo `x`: “quoted” — example``.\n',
+             0, '1 PR sections, 0 problems'),
+            ('punctuation-after-inline-code', valid + '\nUse ``echo `x`: y``. Bad: prose.\n',
+             1, 'mid-sentence colon'),
+            ('unmatched-inline-code', valid + '\nUse ``unclosed: bad` here.\n',
+             1, 'mid-sentence colon'),
         )
         with tempfile.TemporaryDirectory(prefix='pstack-plan-probe-') as directory:
             scratch = Path(directory)
@@ -118,7 +124,7 @@ def check_plans(project):
                 if result.returncode != code or diagnostic not in output:
                     raise ValueError(f'{host}/{name}: expected exit {code} and {diagnostic!r}; '
                                      f'got exit {result.returncode}\n{result.stdout}{result.stderr}')
-        print(f'{host}: 3 plan scenarios passed; execution copies removed')
+        print(f'{host}: {len(scenarios)} plan scenarios passed; execution copies removed')
 
 
 def main():
@@ -128,8 +134,8 @@ def main():
     contracts.add_argument('--project', type=Path, default=PROJECT)
     contracts.add_argument('--baseline', type=Path, required=True)
     contracts.add_argument('--preserve-surface', action='append', required=True,
-                           choices=('claude', 'codex', 'opencode'))
-    plans = commands.add_parser('plans', help='execute reviewed common/Claude/Codex plan checkers in temporary copies')
+                           choices=('agents', 'claude'))
+    plans = commands.add_parser('plans', help='execute reviewed common/Agents/Claude plan checkers in temporary copies')
     plans.add_argument('--project', type=Path, default=PROJECT)
     args = parser.parse_args()
     try:
