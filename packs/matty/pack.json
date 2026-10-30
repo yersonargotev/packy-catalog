@@ -764,7 +764,7 @@
         "entry_document": "ACCESS.md",
         "prerequisites": [
           "Git target repository and prescribed project checks",
-          "background agents and configured tracker access for final code review",
+          "configured tracker access and parallel foreground agents with fresh contexts for final code review",
           "user-confirmed test seams before writing tests"
         ],
         "reference_files": [
