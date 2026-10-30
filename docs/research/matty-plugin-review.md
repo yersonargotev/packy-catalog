@@ -11,10 +11,10 @@ relative support files remain within each skill tree. Their use of an interactiv
 user, target project, browser, shell, or background agent is a disclosed
 prerequisite, not a reason to treat the files as automatically unusable.
 
-Claude additionally exports `handoff`, `setup-matt-pocock-skills`, `teach`,
+Claude additionally exports experimental `chief-of-staff`, `handoff`, `setup-matt-pocock-skills`, `teach`,
 `to-questionnaire`, `wait-what`, `writing-beats`, `writing-fragments`, and
 `writing-shape`. Their user-only invocation metadata is preserved. The Agent
-Plugins export excludes these eight: their `disable-model-invocation` or
+Plugins export excludes these nine: their `disable-model-invocation` or
 `argument-hint` fields are rejected by the released engine's Agent Skills
 frontmatter validation. Removing the user-only control would change the
 workflow's invocation policy. A format adaptation must preserve that policy
@@ -43,3 +43,9 @@ silently omit the selected skill. Eligibility does not prove plugin installation
 client authorization, delegation, or model-backed execution. Additional
 candidates require reviewed native dependency closure and reference contexts or
 a format-specific adaptation; on-demand edges are not native plugin dependencies.
+
+`chief-of-staff` remains an experimental, explicitly invoked workflow. Its
+Claude export preserves original invocation metadata and discloses fresh-context
+background agents, a user-agreed writable wiki, and host support and user
+authorization for any selected recurring schedule. Its Agents native binding
+and on-demand entry remain available; no Agent Plugins export is declared.
