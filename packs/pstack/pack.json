@@ -6333,9 +6333,9 @@
             "prerequisites": [
               "Bash, date, dirname, mkdir and tr for optional log helper execution; explicit writable log destination",
               "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
+              "Python 3 with standard library for evidence retention preflight before cleanup",
               "accessible active-session record or labeled conversation/artifact evidence",
-              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete",
-              "Python 3 with standard library for evidence retention preflight before cleanup"
+              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete"
             ],
             "reference_files": [
               "ACCESS.md",
@@ -6373,9 +6373,9 @@
             "entry_document": "ACCESS.md",
             "prerequisites": [
               "Bash, date, dirname, mkdir and tr for optional log helper execution; explicit writable log destination",
+              "Python 3 with standard library for evidence retention preflight before cleanup",
               "accessible active-session record or labeled conversation/artifact evidence",
-              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete",
-              "Python 3 with standard library for evidence retention preflight before cleanup"
+              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete"
             ],
             "reference_files": [
               "ACCESS.md",
