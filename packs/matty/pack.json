@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "matty",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "description": "Matty workflow",
   "selectable": true,
   "surfaces": [
@@ -17,7 +17,7 @@
     {
       "id": "mattpocock-skills",
       "repository": "mattpocock/skills",
-      "commit": "d81f3a183412e71a5b1e84ca21bc1a35eea03a60"
+      "commit": "a496f5513d4a4cf889bc48e189e579f4b0bdf6aa"
     }
   ],
   "resources": [
@@ -113,6 +113,71 @@
     {
       "bindings": [
         {
+          "invocation": "chief-of-staff",
+          "mode": "native",
+          "name": "chief-of-staff",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "agents",
+          "capabilities": []
+        },
+        {
+          "invocation": "chief-of-staff",
+          "mode": "native",
+          "name": "chief-of-staff",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "claude",
+          "capabilities": []
+        }
+      ],
+      "description": "Experimental, explicitly invoked coordination of long-running goals through subagents and a persistent wiki",
+      "id": "chief-of-staff",
+      "kind": "skill",
+      "requires": [],
+      "source": "skills/in-progress/chief-of-staff",
+      "surface_exclusions": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "mattpocock-skills",
+        "path": "skills/in-progress/chief-of-staff",
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "background subagents with fresh contexts",
+          "explicit user invocation of this experimental workflow",
+          "host scheduling support and user authorization for any selected recurring schedule",
+          "writable persistent wiki with user-agreed location before its first write"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "chief-of-staff",
+          "prerequisites": [
+            "background subagents with fresh contexts",
+            "explicit user invocation of this experimental workflow",
+            "host scheduling support and user authorization for any selected recurring schedule",
+            "writable persistent wiki with user-agreed location before its first write"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
+    },
+    {
+      "bindings": [
+        {
           "invocation": "claude-handoff",
           "mode": "native",
           "name": "claude-handoff",
@@ -199,8 +264,8 @@
         "protocol": "skill-tree-v1",
         "entry_document": "ACCESS.md",
         "prerequisites": [
-          "background agents for two independent parallel review axes",
-          "configured issue tracker access and a valid nonempty fixed-point Git diff"
+          "configured issue tracker access and a valid nonempty fixed-point Git diff",
+          "parallel foreground review agents with fresh contexts for two independent axes"
         ],
         "reference_files": [
           "ACCESS.md"
@@ -699,7 +764,7 @@
         "entry_document": "ACCESS.md",
         "prerequisites": [
           "Git target repository and prescribed project checks",
-          "background agents and configured tracker access for final code review",
+          "configured tracker access and parallel foreground agents with fresh contexts for final code review",
           "user-confirmed test seams before writing tests"
         ],
         "reference_files": [
@@ -757,8 +822,8 @@
         "protocol": "skill-tree-v1",
         "entry_document": "ACCESS.md",
         "prerequisites": [
-          "background implementer and merger agents with isolated Git worktrees",
           "configured issue tracker access and a ready specification/task graph",
+          "fresh-context implementer and merger agents with isolated Git worktrees; background implementers where possible",
           "user-confirmed test seams before writing tests"
         ],
         "reference_files": [
@@ -1182,8 +1247,8 @@
         "protocol": "skill-tree-v1",
         "entry_document": "ACCESS.md",
         "prerequisites": [
-          "Git and applicable tracker CLI for repository inspection",
-          "user confirmation before configuration writes"
+          "Git and applicable tracker CLI with a reachable selected GitHub or GitLab repository",
+          "user confirmation before configuration writes and permission to create selected tracker labels"
         ],
         "reference_files": [
           "ACCESS.md"
@@ -1195,8 +1260,8 @@
           "format": "claude-plugin",
           "name": "setup-matt-pocock-skills",
           "prerequisites": [
-            "Git and applicable tracker CLI for repository inspection",
-            "user confirmation before configuration writes"
+            "Git and applicable tracker CLI with a reachable selected GitHub or GitLab repository",
+            "user confirmation before configuration writes and permission to create selected tracker labels"
           ],
           "references": [],
           "roles": []

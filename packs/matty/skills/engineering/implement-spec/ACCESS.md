@@ -42,6 +42,8 @@ The goal is the entire spec implemented on a single **integration branch**, with
 
 The tickets are not a list of steps. They are a **task graph** with blocking relationships between them. This means there is always a **frontier** of tickets which are ready to be grabbed.
 
+Start every subagent with a fresh context window.
+
 Communication to and from subagents should be sparse. Communicate primarily through **context pointers**: to the spec, tickets, research notes, and previous commits. Don't duplicate information already available via pointers.
 
 **Implementer subagents** should be run in the background where possible for maximum concurrency.
@@ -64,7 +66,7 @@ Communication to and from subagents should be sparse. Communicate primarily thro
    Missing retained resources require restoring that revision; native registration
    or another Pack's `tdd` is not a substitute.
 
-   Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Each implementer subagent:
+   Use a fresh **implementer subagent** for each ticket, each in its own worktree on its own branch. Each implementer subagent:
    - confirms its worktree is based on the integration branch before starting, and resets onto it if not;
    - reads and follows [matty:tdd]({{packy.access:matty:tdd}}) to build the ticket, retaining its user-confirmed test seams;
    - merges the integration branch tip into its own branch before reporting done
@@ -73,7 +75,7 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
-7. Once all tickets are complete, read and follow [matty:code-review]({{packy.access:matty:code-review}}) on the integration branch. Fix all issues raised by the code review in a single **implementer subagent**.
+7. Once all tickets are complete, read and follow [matty:code-review]({{packy.access:matty:code-review}}) on the integration branch. Fix all issues raised by the code review in a single fresh **implementer subagent**.
 
 8. If a draft PR exists, mark it ready for review. Otherwise, resolve each ticket the way the issue tracker closes work, and report the integration branch.
 
