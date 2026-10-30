@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Exercise the read-only evidence retention preflight on both adapted resources."""
 import hashlib
 import os
 from pathlib import Path
