@@ -23,6 +23,15 @@ Packy installs only the selected surface's effective source. Native use reads
 Each pair preserves the workflow while adapting dependency lookup and writable
 output locations. Editing one entry requires checking its counterpart.
 
+## Evidence retention helper
+
+The Agents and Claude `show-me-your-work` adaptations each package the same
+standard-library Python preflight and reference. Maintain their helper bytes
+identically. The focused [retention probe](../scripts/probes/README.md#current-pstack-update-checks)
+checks both copies and exercises the cleanup boundary. The common exact-copy
+upstream resource remains unchanged. The helper reads evidence only; it neither
+performs cleanup nor grants authority to do so.
+
 ## Shared runtime distribution
 
 `statechart` has no host-specific delegation or configuration. Both surfaces

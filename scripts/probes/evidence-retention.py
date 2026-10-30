@@ -16,13 +16,14 @@ NAMES = ("probe-v4.log", "probe-v8.log", "artifact-validation.log", "formula.rb"
 
 
 def snapshot(root):
-    return {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}
+    return {str(p.relative_to(root)): (p.stat().st_mode, hashlib.sha256(p.read_bytes()).hexdigest()) for p in root.rglob('*') if p.is_file()}
 
 
 def main():
     assert all(p.is_file() for p in HELPERS), "missing retention helper"
     assert HELPERS[0].read_bytes() == HELPERS[1].read_bytes(), "adapted helpers differ"
     for helper in HELPERS:
+        helper_bytes = helper.read_bytes()
         with tempfile.TemporaryDirectory(prefix="retention-probe-") as tmp:
             root = Path(tmp).resolve()
             env = {"PATH": os.environ.get("PATH", ""), "LANG": "C", "LC_ALL": "C"}
@@ -76,6 +77,40 @@ def main():
             check(False, targets=(target, retained / NAMES[0]))
             check(True, targets=(target, root / "absent"))
             check(False, targets=(root / "absent",), handoffs=(retained / "missing.md",))
+            missing.rename(root / "saved")
+            check(False, targets=(root / "absent",))
+            (root / "saved").rename(missing)
+            original_trail = trail.read_text()
+            for evidence in (str(target), "https://example.com/other; " + str(missing),
+                             "${RUN}/proof.log", "[broken](/some/path", "[x](file:///tmp/a)"):
+                trail.write_text(HEADER + f"now\tproof\tchecked\twhy\t{evidence}\tok\n")
+                check(False)
+            trail.write_text(original_trail)
+            for text in ("[bad][reference]", "`opaque`", "`$file`", "<a href='proof.log'>proof</a>"):
+                handoff.write_text(text + "\n")
+                check(False, handoffs=(handoff,))
+            handoff.write_text("[relative](later-acceptance.log) and `later-acceptance.log:1`\n")
+            check(True, handoffs=(handoff,))
+            trail.write_text(HEADER + "now\tproof\tchecked\twhy\tretained/later-acceptance.log:1; retained/review.txt, [result](retained/formula.rb)\tok\n")
+            check(True)
+            trail.write_text(original_trail)
+            link = root / "alias"
+            link.symlink_to(target, target_is_directory=True)
+            trail.write_text(HEADER + f"now\tproof\tchecked\twhy\t{link}/../owned/{NAMES[0]}\tok\n")
+            check(False)
+            link.unlink()
+            trail.write_text(original_trail)
+            relocate(originals[0], retained / NAMES[1])
+            check(False)
+            trail.write_text(original_trail)
+            check(False, targets=(target, retained))
+            relocate(originals[0], Path("https://example.com/proof"))
+            check(False)
+            trail.write_text(original_trail)
+            relocate(retained / NAMES[0], retained / NAMES[1])
+            check(False)
+            trail.write_text(original_trail)
+            assert helper.read_bytes() == helper_bytes
             assert (unrelated / "sentinel").read_text() == "operator state"
             print(f"{helper.relative_to(ROOT)}: partial copy blocked; verified copies passed; negatives and read-only state verified")
 

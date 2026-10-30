@@ -89,13 +89,17 @@ After reviewing the changed content, run:
 python3 -B scripts/probes/pstack-update.py plans
 python3 -B -m unittest discover -s scripts/probes -p 'test_pstack_update.py'
 python3 -B scripts/probes/pstack-helpers.py
+python3 -B scripts/probes/evidence-retention.py
 ```
 
 The plan probe checks six cases per common, Agents, and Claude checker. These
 include matching inline-code delimiters, obsolete audit cadence, and a missing
 live lane. The 16 probe tests check failures and temporary-state cleanup.
 The helper probe runs watcher help and decision-log append/escaping on both
-adaptations, checking that authored and installed bytes stay unchanged.
+adaptations, checking that authored and installed bytes stay unchanged. The
+evidence-retention probe executes both byte-identical preflights against isolated
+partial and complete copies, failure cases, and unrelated state; it performs no
+cleanup through the helper. Python 3 is required.
 Orchestrate now uses available host tools; its retired `orch` scripts are absent.
 Verify the shared statechart runtime and its complete source inventory against
 an exact upstream checkout:

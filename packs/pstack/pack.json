@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -6334,10 +6334,12 @@
               "Bash, date, dirname, mkdir and tr for optional log helper execution; explicit writable log destination",
               "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
               "accessible active-session record or labeled conversation/artifact evidence",
-              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete"
+              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete",
+              "Python 3 with standard library for evidence retention preflight before cleanup"
             ],
             "reference_files": [
-              "ACCESS.md"
+              "ACCESS.md",
+              "references/evidence-retention.md"
             ],
             "dependencies": [
               {
@@ -6372,10 +6374,12 @@
             "prerequisites": [
               "Bash, date, dirname, mkdir and tr for optional log helper execution; explicit writable log destination",
               "accessible active-session record or labeled conversation/artifact evidence",
-              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete"
+              "independent reviewer on a different model family for trail review; unavailable diversity leaves the gate incomplete",
+              "Python 3 with standard library for evidence retention preflight before cleanup"
             ],
             "reference_files": [
-              "ACCESS.md"
+              "ACCESS.md",
+              "references/evidence-retention.md"
             ],
             "dependencies": [
               {

@@ -62,6 +62,10 @@ Commit it only when the work is ambitious enough that a reviewer needs the trail
 - Append-only. A wrong call gets a new row that supersedes it. Never edit or delete history.
 - Prefer evidence produced by committed scripts over hand-made one-offs (the **encode-lessons-in-structure** principle skill).
 
+## Evidence before cleanup
+
+Before deleting run-owned temporary state, follow [evidence retention](references/evidence-retention.md) to inventory citations and targets and run the read-only preflight. A passing check is separate from cleanup ownership and authorization.
+
 ## Audit the log against the transcript
 
 At the end of the run, before handing back, check the log told the truth. Use this host's accessible active-session record; if none is exposed, compare the log with this conversation and the actual artifacts. Do not search unrelated private chats. Walk this run's rows against what actually happened. Each stretch begins at one of this run's `start` rows, or at the first row if this run created the log, and ends at the next `start` row of another run:
