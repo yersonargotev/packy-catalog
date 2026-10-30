@@ -4,6 +4,7 @@ import importlib.util
 import json
 from pathlib import Path
 import signal
+import stat
 import sys
 import tempfile
 
@@ -35,6 +36,18 @@ def source_fidelity(upstream, manifest):
                            "source bytes or executable mode differ: " + str(copied))
             checked += 1
     return {"upstream_commit": commit, "original_files_checked": checked}
+
+
+def assert_installation_preserved(before, after):
+    # First access creates these parents of the provider-owned preparation tree.
+    expected = {**before, "home": dict(before["home"])}
+    for parent in (".local", ".local/share", ".local/share/packy"):
+        if parent not in expected["home"] and parent in after["home"]:
+            mode, data, link = after["home"][parent]
+            legacy.require(stat.S_ISDIR(mode) and data is None and link is None,
+                           "provider parent is not a plain directory: " + parent)
+            expected["home"][parent] = after["home"][parent]
+    legacy.require(after == expected, "access changed native installation or unrelated client state")
 
 
 def check_surface(probe, manifest, surface):
@@ -70,8 +83,8 @@ def check_surface(probe, manifest, surface):
             legacy.require(retained["snapshot_id"] == report["snapshot_id"]
                            and Path(retained["entry_document"]).read_bytes() == Path(report["entry_document"]).read_bytes(),
                            "chief-of-staff explicit retained access differs")
-    legacy.require(len(snapshots) == 1 and legacy.installation_state(workspace) == installed,
-                   "access changed native installation or mixed snapshots")
+    legacy.require(len(snapshots) == 1, "access mixed snapshots")
+    assert_installation_preserved(installed, legacy.installation_state(workspace))
     before_export = legacy.tree(workspace)
     output = probe.root / (surface + "-chief-plugin")
     args = ["export", "matty", "--surface", surface, "--skill", "chief-of-staff", "--output", str(output), "--json"]
