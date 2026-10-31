@@ -49,23 +49,30 @@ class Checker:
     def fail(self, location, message):
         self.findings.append(Finding(location, message))
 
-    def path(self, text, base, location, absolute=False):
-        if re.search(r"[\\\s?#*\[\]{}$~]", text) or not text:
+    def path(self, text, base, location, absolute=False, allow_missing=False):
+        if re.search(r"[\\\s?#*%\[\]{}$~]", text) or not text:
             self.fail(location, f"unsupported path: {text}")
             return None
         if absolute and not os.path.isabs(text):
             self.fail(location, f"expected absolute path: {text}")
             return None
-        raw = Path(os.path.join(base, text))
-        current = Path(raw.anchor)
-        for part in raw.parts[1:]:
-            if part == "..":
-                current = current.parent
+        raw = os.path.join(base, text)
+        current = ""
+        missing = False
+        for part in raw.split("/")[1:]:
+            current += "/" + part
+            if missing:
+                if part == "..":
+                    self.fail(location, f"cannot traverse missing path: {current}")
+                    return None
                 continue
-            current /= part
             try:
-                mode = current.lstat().st_mode
-            except FileNotFoundError:
+                mode = os.lstat(current).st_mode
+            except FileNotFoundError as exc:
+                if not allow_missing:
+                    self.fail(location, f"cannot inspect {current}: {exc}")
+                    return None
+                missing = True
                 continue
             except OSError as exc:
                 self.fail(location, f"cannot inspect {current}: {exc}")
@@ -73,7 +80,7 @@ class Checker:
             if stat.S_ISLNK(mode):
                 self.fail(location, f"symlink path is unsupported: {current}")
                 return None
-        return Path("/" + os.path.abspath(raw).lstrip("/"))
+        return Path(os.path.abspath(raw))
 
     def local(self, text, base, location):
         text = re.sub(r":\d+$", "", text)
@@ -244,7 +251,7 @@ def main():
         checker.fail("--base", f"not a directory: {base}")
     checker.base = base or Path("/")
     for value in args.target:
-        target = checker.path(value, "/", "--target", absolute=True)
+        target = checker.path(value, "/", "--target", absolute=True, allow_missing=True)
         if target:
             checker.targets.append(target)
     for kind, paths in (("trail", args.trail or []), ("handoff", args.handoff or [])):

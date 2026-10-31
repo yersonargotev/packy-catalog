@@ -44,12 +44,15 @@ Supported pointers are absolute paths, relative paths with a slash, simple filen
 with an extension, an optional numeric `:line` suffix, ordinary inline Markdown
 links, HTTPS URLs, `commit <hex>`, a 7-to-64-digit hexadecimal commit, `PR #N`,
 and `#N`. Link destinations follow the same local path rules. Relocation links
-require absolute local paths on both sides. Whitespace, escapes, shell variables,
-globs, URL relocations and paths with Markdown delimiters are unsupported.
+require absolute local paths on both sides. Whitespace, escapes, percent signs
+(including percent-encoded link destinations), shell variables, globs, URL
+relocations and paths with Markdown delimiters are unsupported.
 Directories and special files are not evidence files; cite their individual files.
+Path components must resolve under filesystem traversal rules before normalization.
 Symlink paths and ancestors are rejected, including symlinks encountered before
-`..`. Existing targets are also compared by filesystem identity with paths and
-their ancestors, so aliases into targets are blocked. A hard-linked file may
+`..`. Missing cleanup targets are allowed, but `..` cannot follow a missing
+component. Existing targets are also compared by filesystem identity with paths
+and their ancestors, so aliases into targets are blocked. A hard-linked file may
 therefore be treated conservatively as inside a file target. An absent cleanup
 target can pass only when all citations still resolve.
 

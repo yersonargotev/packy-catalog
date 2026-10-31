@@ -43,8 +43,8 @@ def main():
                 with trail.open("a") as f:
                     f.write(f"now\trelocation\tretained\twhy\t[{source}]({dest})\tok\n")
             relocate(originals[-1], retained / NAMES[-1])
-            def check(expect, targets=(target,), handoffs=()):
-                args = [sys.executable, "-B", str(helper), "--base", str(root), "--trail", str(trail)]
+            def check(expect, targets=(target,), handoffs=(), base=None, trail_arg=None):
+                args = [sys.executable, "-B", str(helper), "--base", str(base or root), "--trail", str(trail_arg or trail)]
                 args += sum((["--target", str(t)] for t in targets), [])
                 args += sum((["--handoff", str(h)] for h in handoffs), []) if handoffs else ["--no-handoff"]
                 before = snapshot(root)
@@ -105,6 +105,49 @@ def main():
             check(True, handoffs=(handoff,))
             trail.write_text(HEADER + "now\tproof\tchecked\twhy\tretained/later-acceptance.log:1; retained/review.txt, [result](retained/formula.rb)\tok\n")
             check(True)
+            trail.write_text(original_trail)
+            (retained / "directory").mkdir()
+            raw_bad = (f"{retained}/missing/../{NAMES[0]}",
+                       f"{retained}/{NAMES[1]}/../{NAMES[0]}",
+                       f"{retained}/{NAMES[0]}/")
+            raw_good = f"{retained}/directory/../{NAMES[0]}"
+            for cited in raw_bad:
+                trail.write_text(HEADER + f"now\tproof\tchecked\twhy\t{cited}\tok\n")
+                check(False, targets=(root / "absent",))
+                trail.write_text(HEADER)
+                handoff.write_text(f"[proof]({cited})\n")
+                check(False, targets=(root / "absent",), handoffs=(handoff,))
+                trail.write_text(HEADER + f"now\trelocation\tretained\twhy\t[{cited}]({retained / NAMES[0]})\tok\n")
+                check(False, targets=(root / "absent",))
+                trail.write_text(HEADER + f"now\trelocation\tretained\twhy\t[{retained / NAMES[0]}]({cited})\tok\n")
+                check(False, targets=(root / "absent",))
+            trail.write_text(HEADER + f"now\tproof\tchecked\twhy\t{raw_good}\tok\n")
+            check(True, targets=(root / "absent" / "tail",))
+            handoff.write_text(f"[proof]({raw_good})\n")
+            check(True, targets=(root / "absent" / "tail",), handoffs=(handoff,))
+            trail.write_text(HEADER + f"now\trelocation\tretained\twhy\t[{raw_good}]({originals[0]})\tok\n")
+            check(True, targets=(root / "absent",))
+            trail.write_text(HEADER + f"now\trelocation\tretained\twhy\t[{originals[0]}]({raw_good})\tok\n")
+            check(True, targets=(root / "absent",))
+            trail.write_text(HEADER)
+            check(True, targets=(root / "absent",), base=f"{retained}/directory/..",
+                  trail_arg=f"{retained}/directory/../{trail.name}",
+                  handoffs=(f"{retained}/directory/../{handoff.name}",))
+            for bad in (f"{root}/missing/../retained", f"{retained / NAMES[0]}/../retained", f"{retained / NAMES[0]}/"):
+                check(False, targets=(root / "absent",), base=bad)
+            for bad in (f"{retained}/missing/../{trail.name}", f"{retained / NAMES[0]}/../{trail.name}", f"{trail}/"):
+                check(False, targets=(root / "absent",), trail_arg=bad)
+            for bad in (f"{retained}/missing/../{handoff.name}", f"{retained / NAMES[0]}/../{handoff.name}", f"{handoff}/"):
+                check(False, targets=(root / "absent",), handoffs=(bad,))
+            for bad in (f"{root}/missing/../absent", f"{retained / NAMES[0]}/../absent", f"{retained / NAMES[0]}/"):
+                check(False, targets=(bad,))
+            check(True, targets=(f"{retained}/directory/../../absent/tail",))
+            (retained / "review%2Etxt").write_text("literal percent path")
+            trail.write_text(HEADER + "now\tproof\tchecked\twhy\t[result](retained/review%2Etxt)\tok\n")
+            check(False, targets=(root / "absent",))
+            trail.write_text(HEADER)
+            handoff.write_text("[result](review%2Etxt)\n")
+            check(False, targets=(root / "absent",), handoffs=(handoff,))
             trail.write_text(original_trail)
             link = root / "alias"
             link.symlink_to(target, target_is_directory=True)
