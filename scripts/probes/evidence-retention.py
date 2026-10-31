@@ -51,27 +51,40 @@ def main():
                 status, out, err = run_child(args, cwd=root, env=env, timeout=30)
                 assert (status == 0) == expect, (args, status, out, err)
                 assert snapshot(root) == before, "preflight mutated files"
-                return out + err
-            message = check(False)
+                return out, err
+            def proof(source):
+                digest = hashlib.sha256(source.read_bytes()).hexdigest()
+                return f"Verified SHA-256 {digest}: {source} -> {retained / source.name}"
+            out, err = check(False)
+            message = out + err
             for name in NAMES[:-1]:
                 assert name in message, message
+            assert proof(originals[-1]) in out, out
             for source in originals[:-1]:
                 shutil.copyfile(source, retained / source.name)
                 relocate(source, retained / source.name)
-            check(True)
+            out, _ = check(True)
+            for source in originals:
+                assert proof(source) in out, out
+            preserved_proof = proof(originals[0])
             handoff = retained / "handoff.md"
             handoff.write_text(f"[proof]({originals[0]}) and `{originals[1]}`\n")
             check(True, handoffs=(handoff,))
             missing = originals[0]
+            pair = f": {missing} -> {retained / missing.name}"
             missing.rename(root / "saved")
-            check(False)
+            out, _ = check(False)
+            assert pair not in out, out
+            assert proof(originals[-1]) in out, out
             (root / "saved").rename(missing)
             dest = retained / NAMES[0]
             dest.rename(root / "saved")
-            check(False)
+            out, _ = check(False)
+            assert pair not in out, out
             (root / "saved").rename(dest)
             dest.write_text("wrong bytes")
-            check(False)
+            out, _ = check(False)
+            assert pair not in out, out
             shutil.copyfile(missing, dest)
             check(False, targets=(target, retained / NAMES[0]))
             check(True, targets=(target, root / "absent"))
@@ -109,8 +122,28 @@ def main():
             relocate(retained / NAMES[0], retained / NAMES[1])
             check(False)
             trail.write_text(original_trail)
+            alias_target = root / target.name.upper()
+            aliases = ["/" + str(target)]
+            if alias_target.exists() and os.path.samefile(alias_target, target):
+                aliases.append(str(alias_target))
+                print("case alias supported by filesystem")
+            else:
+                print("case alias not supported by filesystem; case check skipped")
+            owned_handoff = target / "handoff.md"
+            owned_handoff.write_text("[proof](../retained/review.txt)\n")
+            for alias in aliases:
+                trail.write_text(HEADER + f"now\tproof\tchecked\twhy\t{alias}/{NAMES[0]}\tok\n")
+                check(False)
+                trail.write_text(HEADER + f"now\tproof\tchecked\twhy\t{retained / NAMES[0]}\tok\n")
+                relocate(retained / NAMES[0], f"{alias}/{NAMES[0]}")
+                check(False)
+                trail.write_text(original_trail)
+                check(False, handoffs=(f"{alias}/handoff.md",))
             assert helper.read_bytes() == helper_bytes
             assert (unrelated / "sentinel").read_text() == "operator state"
+            originals[0].unlink()
+            retained_hash = hashlib.sha256((retained / NAMES[0]).read_bytes()).hexdigest()
+            assert preserved_proof == f"Verified SHA-256 {retained_hash}: {originals[0]} -> {retained / NAMES[0]}"
             print(f"{helper.relative_to(ROOT)}: partial copy blocked; verified copies passed; negatives and read-only state verified")
 
 

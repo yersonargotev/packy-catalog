@@ -29,6 +29,13 @@ not a replacement for the original. If an original is already missing, this
 checker cannot verify a new copy claim, even when an earlier check was reported.
 Report that gap; do not claim reconstruction. Do not retain credentials as evidence.
 
+Preserve the helper's stdout outside every cleanup target as durable evidence.
+For each live source and destination with matching bytes, stdout names both paths
+and their full SHA-256 digest, even if another finding causes the check to fail.
+After cleanup, compare each preserved digest with the retained file's bytes. This
+checks the retained file against the earlier output; it is not a new comparison
+with the deleted original. A successful check is still required before cleanup.
+
 ## Supported citations
 
 A trail uses the exact `ts`, `phase`, `decision`, `why`, `evidence`, `result` TSV
@@ -41,7 +48,10 @@ require absolute local paths on both sides. Whitespace, escapes, shell variables
 globs, URL relocations and paths with Markdown delimiters are unsupported.
 Directories and special files are not evidence files; cite their individual files.
 Symlink paths and ancestors are rejected, including symlinks encountered before
-`..`. An absent cleanup target can pass only when all citations still resolve.
+`..`. Existing targets are also compared by filesystem identity with paths and
+their ancestors, so aliases into targets are blocked. A hard-linked file may
+therefore be treated conservatively as inside a file target. An absent cleanup
+target can pass only when all citations still resolve.
 
 In handoffs, express local citations as ordinary inline links or inline code paths.
 Links resolve relative to the handoff. Plain HTTPS URLs are independent citations.

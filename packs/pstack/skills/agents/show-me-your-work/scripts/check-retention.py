@@ -73,7 +73,7 @@ class Checker:
             if stat.S_ISLNK(mode):
                 self.fail(location, f"symlink path is unsupported: {current}")
                 return None
-        return Path(os.path.abspath(raw))
+        return Path("/" + os.path.abspath(raw).lstrip("/"))
 
     def local(self, text, base, location):
         text = re.sub(r":\d+$", "", text)
@@ -154,8 +154,28 @@ class Checker:
             if any(c in rest for c in "[]`()<>$~") or LOCAL.search(rest) or "\\" in rest:
                 self.fail(location, "unsupported or ambiguous Markdown citation; use inline links or code paths")
 
-    def survives(self, path):
-        return not any(path == target or target in path.parents for target in self.targets)
+    def survives(self, path, location):
+        for target in self.targets:
+            if path == target or target in path.parents:
+                return False
+            try:
+                target_stat = target.stat()
+            except FileNotFoundError:
+                continue
+            except OSError as exc:
+                self.fail(location, f"cannot inspect cleanup target {target}: {exc}")
+                return False
+            for ancestor in (path, *path.parents):
+                try:
+                    ancestor_stat = ancestor.stat()
+                except FileNotFoundError:
+                    continue
+                except OSError as exc:
+                    self.fail(location, f"cannot inspect {ancestor}: {exc}")
+                    return False
+                if (target_stat.st_dev, target_stat.st_ino) == (ancestor_stat.st_dev, ancestor_stat.st_ino):
+                    return False
+        return True
 
     def regular(self, path, location):
         try:
@@ -187,20 +207,22 @@ class Checker:
             mappings[relocation.source] = relocation.destination
             source_ok = self.regular(relocation.source, relocation.location)
             dest_ok = self.regular(relocation.destination, relocation.location)
-            if not self.survives(relocation.destination):
+            if not self.survives(relocation.destination, relocation.location):
                 self.fail(relocation.location, f"destination is inside a cleanup target: {relocation.destination}")
             if source_ok and dest_ok:
                 source_hash = self.digest(relocation.source, relocation.location)
                 dest_hash = self.digest(relocation.destination, relocation.location)
                 if source_hash is not None and dest_hash is not None and source_hash != dest_hash:
                     self.fail(relocation.location, f"different bytes: {relocation.source} -> {relocation.destination}")
+                elif source_hash is not None and dest_hash is not None:
+                    print(f"Verified SHA-256 {source_hash.hex()}: {relocation.source} -> {relocation.destination}")
         for relocation in self.relocations:
             if relocation.destination in mappings:
                 self.fail(relocation.location, f"chained or cyclic relocation: {relocation.destination}")
         for ref in self.references:
             if self.regular(ref.path, ref.location):
                 self.digest(ref.path, ref.location)
-                if not self.survives(ref.path) and ref.path not in mappings:
+                if not self.survives(ref.path, ref.location) and ref.path not in mappings:
                     self.fail(ref.location, f"no verified relocation for cleanup target reference: {ref.path}")
         return sorted(set(self.findings))
 
@@ -230,7 +252,7 @@ def main():
             path = checker.path(value, "/", f"--{kind}", absolute=True)
             if not path:
                 continue
-            if not checker.survives(path):
+            if not checker.survives(path, f"--{kind}"):
                 checker.fail(f"--{kind}", f"document is inside a cleanup target: {path}")
             if checker.regular(path, f"--{kind}"):
                 getattr(checker, kind)(path)
