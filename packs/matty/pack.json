@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "matty",
-  "version": "4.4.0",
+  "version": "5.0.0",
   "description": "Matty workflow",
   "selectable": true,
   "surfaces": [
@@ -17,7 +17,7 @@
     {
       "id": "mattpocock-skills",
       "repository": "mattpocock/skills",
-      "commit": "a496f5513d4a4cf889bc48e189e579f4b0bdf6aa"
+      "commit": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d"
     }
   ],
   "resources": [
@@ -150,30 +150,35 @@
         "protocol": "skill-tree-v1",
         "entry_document": "ACCESS.md",
         "prerequisites": [
+          "access to primary subagent session evidence for retrospectives",
           "background subagents with fresh contexts",
+          "configured issue tracker and user-approved planning decisions for large-work delivery",
           "explicit user invocation of this experimental workflow",
           "host scheduling support and user authorization for any selected recurring schedule",
-          "writable persistent wiki with user-agreed location before its first write"
+          "writable shared wiki following its conventions, or user-agreed location before creating one"
         ],
         "reference_files": [
           "ACCESS.md"
         ],
-        "dependencies": []
-      },
-      "plugin_exports": [
-        {
-          "format": "claude-plugin",
-          "name": "chief-of-staff",
-          "prerequisites": [
-            "background subagents with fresh contexts",
-            "explicit user invocation of this experimental workflow",
-            "host scheduling support and user authorization for any selected recurring schedule",
-            "writable persistent wiki with user-agreed location before its first write"
-          ],
-          "references": [],
-          "roles": []
-        }
-      ]
+        "dependencies": [
+          {
+            "type": "skill",
+            "target": "matty:implement-spec"
+          },
+          {
+            "type": "skill",
+            "target": "matty:retro"
+          },
+          {
+            "type": "skill",
+            "target": "matty:to-spec"
+          },
+          {
+            "type": "skill",
+            "target": "matty:to-tickets"
+          }
+        ]
+      }
     },
     {
       "bindings": [
@@ -1321,6 +1326,67 @@
           }
         ]
       }
+    },
+    {
+      "bindings": [
+        {
+          "invocation": "software-factory",
+          "mode": "native",
+          "name": "software-factory",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "agents",
+          "capabilities": []
+        },
+        {
+          "invocation": "software-factory",
+          "mode": "native",
+          "name": "software-factory",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "claude",
+          "capabilities": []
+        }
+      ],
+      "description": "Experimental, explicitly invoked vocabulary and design guidance for agent software factories",
+      "id": "software-factory",
+      "kind": "skill",
+      "requires": [],
+      "source": "skills/in-progress/software-factory",
+      "surface_exclusions": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "mattpocock-skills",
+        "path": "skills/in-progress/software-factory",
+        "relationship": "adapted"
+      },
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "entry_document": "ACCESS.md",
+        "prerequisites": [
+          "explicit user invocation of this experimental design vocabulary",
+          "interactive design decisions and current primary-source research before choosing service products"
+        ],
+        "reference_files": [
+          "ACCESS.md"
+        ],
+        "dependencies": []
+      },
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "software-factory",
+          "prerequisites": [
+            "explicit user invocation of this experimental design vocabulary",
+            "interactive design decisions and current primary-source research before choosing service products"
+          ],
+          "references": [],
+          "roles": []
+        }
+      ]
     },
     {
       "bindings": [

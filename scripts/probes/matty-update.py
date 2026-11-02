@@ -31,6 +31,14 @@ def source_fidelity(upstream, manifest):
         legacy.require(bool(files), "missing upstream resource: " + str(source))
         for original in files:
             copied = target if source.is_file() else target / original.relative_to(source)
+            if resource["id"] == "software-factory" and original == source / "SKILL.md":
+                copied = target / "upstream-SKILL.md"
+                native = (target / "SKILL.md").read_text()
+                upstream_text = original.read_text()
+                description = upstream_text.splitlines()[2].removeprefix("description: ")
+                expected = upstream_text.replace("description: " + description,
+                                                 "description: " + json.dumps(description), 1)
+                legacy.require(native == expected, "software-factory adaptation exceeds YAML quoting fix")
             legacy.require(original.read_bytes() == copied.read_bytes()
                            and bool(original.stat().st_mode & 0o111) == bool(copied.stat().st_mode & 0o111),
                            "source bytes or executable mode differ: " + str(copied))
@@ -78,6 +86,16 @@ def check_surface(probe, manifest, surface):
         legacy.assert_skill_content(descriptors, manifest)
         snapshots.add(report["snapshot_id"])
         if name == "chief-of-staff":
+            legacy.require(set(descriptors) == {"matty:" + skill for skill in (
+                "chief-of-staff", "implement-spec", "retro", "to-spec", "to-tickets",
+                "code-review", "tdd", "codebase-design", "writing-for-agents")},
+                "chief-of-staff procedure closure differs: " + ", ".join(sorted(descriptors)))
+            entry = Path(report["entry_document"]).read_text()
+            legacy.require("Look for a shared wiki first" in entry
+                           and "about one in five" in entry
+                           and "decide yourself which candidates" in entry
+                           and "../retro/SKILL.md" not in entry,
+                           "chief-of-staff access lost shared wiki or procedure adaptation")
             retained = probe.candidate(workspace, ["get", "skill", "matty:chief-of-staff", "--surface", surface,
                                                    "--snapshot", report["snapshot_id"], "--json"])
             legacy.require(retained["snapshot_id"] == report["snapshot_id"]
@@ -86,22 +104,26 @@ def check_surface(probe, manifest, surface):
     legacy.require(len(snapshots) == 1, "access mixed snapshots")
     assert_installation_preserved(installed, legacy.installation_state(workspace))
     before_export = legacy.tree(workspace)
-    output = probe.root / (surface + "-chief-plugin")
-    args = ["export", "matty", "--surface", surface, "--skill", "chief-of-staff", "--output", str(output), "--json"]
-    if surface == "agents":
-        stdout, stderr = probe.candidate(workspace, args, failure=True)
-        legacy.require("chief-of-staff" in stdout + stderr and not output.exists(),
-                       "unsupported Agent Plugins selection did not fail without output")
-    else:
-        report = probe.candidate(workspace, args)
-        legacy.require(report["result"] == "exported" and report["format"] == "claude-plugin"
-                       and report["selected_skills"] == ["chief-of-staff"]
-                       and report["snapshot_id"] in snapshots, "wrong chief-of-staff plugin identity")
-        legacy.require(legacy.tree(output / "skills/chief-of-staff")
-                       == legacy.tree(native / "chief-of-staff"), "chief-of-staff export changed content or invocation policy")
-        legacy.require(legacy.tree(output / "notices") == legacy.tree(legacy.ROOT / "packs/matty/notices"),
-                       "chief-of-staff export lost legal closure")
-    legacy.require(legacy.tree(workspace) == before_export, "plugin export changed installation or client state")
+    exports = {}
+    for name in ("chief-of-staff", "software-factory"):
+        output = probe.root / (surface + "-" + name + "-plugin")
+        args = ["export", "matty", "--surface", surface, "--skill", name, "--output", str(output), "--json"]
+        if name == "chief-of-staff" or surface == "agents":
+            stdout, stderr = probe.candidate(workspace, args, failure=True)
+            legacy.require(name in stdout + stderr and not output.exists(),
+                           "unsupported plugin selection did not fail without output: " + name)
+            exports[name] = "rejected"
+        else:
+            report = probe.candidate(workspace, args)
+            legacy.require(report["result"] == "exported" and report["format"] == "claude-plugin"
+                           and report["selected_skills"] == [name]
+                           and report["snapshot_id"] in snapshots, "wrong software-factory plugin identity")
+            legacy.require(legacy.tree(output / "skills" / name) == legacy.tree(native / name),
+                           "software-factory export changed content or invocation policy")
+            legacy.require(legacy.tree(output / "notices") == legacy.tree(legacy.ROOT / "packs/matty/notices"),
+                           "software-factory export lost legal closure")
+            exports[name] = "exported"
+        legacy.require(legacy.tree(workspace) == before_export, "plugin export changed installation or client state")
     probe.apply(workspace, ["uninstall", "matty", "--surface", surface])
     for filename in ("AGENTS.md", "CLAUDE.md", "unrelated.txt"):
         legacy.require((workspace / "project" / filename).read_bytes().rstrip(b"\n")
@@ -110,7 +132,7 @@ def check_surface(probe, manifest, surface):
         legacy.require(not (workspace / "project" / filename).exists(), "uninstall retained " + filename)
     legacy.require(not native.exists() or not list(native.iterdir()), "uninstall retained Matty skills")
     return {"surface": surface, "skills_checked": len(skills), "snapshot_id": snapshots.pop(),
-            "chief_plugin": "exported" if surface == "claude" else "rejected", "result": "passed"}
+            "plugins": exports, "result": "passed"}
 
 
 def main():
