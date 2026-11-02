@@ -2,7 +2,7 @@
 
 ## Two-surface candidate acceptance
 
-For Matty's 4.4.0 upstream migration and experimental chief-of-staff resource,
+For Matty's 5.0.0 upstream migration and experimental coordination/design resources,
 run from a clean committed candidate with a clean checkout of its pinned origin:
 
 ```sh
@@ -11,10 +11,11 @@ python3 -B scripts/probes/matty-update.py --upstream /path/to/mattpocock-skills 
 ```
 
 This checks original source bytes/modes, all Matty native trees and on-demand
-entries on Agents and Claude, notices, retained chief-of-staff access, its Claude
-export and rejected Agent Plugins export, uninstall cleanup and unchanged
+entries on Agents and Claude, notices, retained chief-of-staff access with its
+nine-skill procedure closure, rejected chief-of-staff plugin exports,
+software-factory's Claude export and rejected Agent Plugins export, uninstall cleanup and unchanged
 ambient/authored state. It never executes a skill or schedules work. See the
-[migration review](../../docs/design/matty-upstream-2026-10-30.md).
+[migration review](../../docs/design/matty-upstream-2026-11-01.md).
 
 For Addy's Claude native asset-closure regression, run from a clean committed
 checkout with the pinned supporting release:
