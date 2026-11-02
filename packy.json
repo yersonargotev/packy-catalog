@@ -25,10 +25,41 @@
       "surface_intents": [
         {
           "surface": "agents",
-          "version": "4.3.0",
+          "version": "5.0.0",
           "selection": {
             "mode": "all",
             "roots": []
+          },
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "id": "pstack",
+      "surface_intents": [
+        {
+          "surface": "agents",
+          "version": "6.1.0",
+          "selection": {
+            "mode": "custom",
+            "roots": [
+              {
+                "kind": "skill",
+                "id": "create-formal-verification-skill"
+              },
+              {
+                "kind": "skill",
+                "id": "create-verification-skill"
+              },
+              {
+                "kind": "skill",
+                "id": "maintain-formal-verification-skill"
+              },
+              {
+                "kind": "skill",
+                "id": "maintain-verification-skill"
+              }
+            ]
           },
           "aliases": []
         }
