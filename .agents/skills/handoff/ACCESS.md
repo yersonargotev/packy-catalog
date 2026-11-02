@@ -29,7 +29,7 @@ separately from immutable Catalog resources. Preserve the procedure's invocation
 policy, user decisions, and output destinations. Read only the references needed
 for the active branch.
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS - not the current workspace.
+Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS (`$TMPDIR`, else `/tmp`; `%TEMP%` on Windows) - not the current workspace.
 
 Include a "suggested skills" section in the document, naming suggested skills with their owning Pack and invocation policy. For an on-demand continuation, include the initiating host and snapshot and the qualified retrieval command. Suggestions are next-session recommendations, not dependencies or permission to invoke user-only skills.
 

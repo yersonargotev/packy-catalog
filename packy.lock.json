@@ -73,8 +73,8 @@
     {
       "pack": {
         "id": "matty",
-        "version": "4.3.0",
-        "catalog_snapshot": "adfc6f9a12f4886ddcdbd271d97fce2fd68113c9"
+        "version": "5.0.0",
+        "catalog_snapshot": "1417108113ee7fe3c10ffcec35d46b79fecbdad8"
       },
       "surface": "agents",
       "readiness_obligations": [
@@ -98,6 +98,10 @@
         {
           "kind": "skill",
           "id": "ask-matt"
+        },
+        {
+          "kind": "skill",
+          "id": "chief-of-staff"
         },
         {
           "kind": "skill",
@@ -177,6 +181,10 @@
         },
         {
           "kind": "skill",
+          "id": "software-factory"
+        },
+        {
+          "kind": "skill",
           "id": "tdd"
         },
         {
@@ -232,31 +240,37 @@
         {
           "id": "skill:ask-matt",
           "target": ".agents/skills/ask-matt",
-          "digest": "12e48a8005c7b6cb4a62b854dbf78fbcaba860ed964c98f017644dc484311eac",
+          "digest": "b6bbc2320348263bd4b577e42ffece81cf07c6f60766c1468437a0502c29d059",
+          "file_mode": 493
+        },
+        {
+          "id": "skill:chief-of-staff",
+          "target": ".agents/skills/chief-of-staff",
+          "digest": "7480d61b5812a5ea92b1722a3c6d75b25e086fb81d4b1df59cc1dbcf9871c693",
           "file_mode": 493
         },
         {
           "id": "skill:claude-handoff",
           "target": ".agents/skills/claude-handoff",
-          "digest": "da138467430bf6ce9815b46cbf2ad6027c11712e650a43cb15cd7d5b3a5407a2",
+          "digest": "7f88986ff39cffc01a35a26aae7a69d8cbae142c1ae431519ae8ca5dbba55c60",
           "file_mode": 493
         },
         {
           "id": "skill:code-review",
           "target": ".agents/skills/code-review",
-          "digest": "6bf46b137c14e8f306169e6a5ed0cfdd666df39f5f0a11f915ab96d94a20ab31",
+          "digest": "cc0ac29ad0493f5cc6e05bdaf5d2abde8f7be1c4ad68a61c631fc72124d323a5",
           "file_mode": 493
         },
         {
           "id": "skill:codebase-design",
           "target": ".agents/skills/codebase-design",
-          "digest": "6f739caffe56a1822f6f9e61f10eef2f0a0751d8cbc07b4cf64bd981ea671959",
+          "digest": "7400a980a87f014a048377308d17f565ea5a3ea976f8003b093cb5d999b8d91f",
           "file_mode": 493
         },
         {
           "id": "skill:diagnosing-bugs",
           "target": ".agents/skills/diagnosing-bugs",
-          "digest": "66c1329091fc3117a6effcc7144537c4e7b8e1640d618c028556f4ece87fc22c",
+          "digest": "e4defcd7c41cfa985eb51c206af51830aed456b3839935f83d8237689542ab38",
           "file_mode": 493
         },
         {
@@ -280,31 +294,31 @@
         {
           "id": "skill:grilling",
           "target": ".agents/skills/grilling",
-          "digest": "33a346dc466947b279d53d1c8ef15018e04ede9421ea6a0dcf0fd65557e91204",
+          "digest": "3f8c1413ff9843c8a11d99b391d57cd9c2e2bc0f80ee7901280ae5f1bcd5734a",
           "file_mode": 493
         },
         {
           "id": "skill:handoff",
           "target": ".agents/skills/handoff",
-          "digest": "e0d095b70313ac2103e6dc1cd29ef25c9519a926568de7613f4515d296fd9bfa",
+          "digest": "4c525ce0c7aebb2b06ef6ea037843f1dcb4be5441b373f8bc74ed181c653edab",
           "file_mode": 493
         },
         {
           "id": "skill:implement",
           "target": ".agents/skills/implement",
-          "digest": "cdedc9889cbd4db9120f6d201c56bad5d5e7b65f78885d69e3bb2465bbd514c0",
+          "digest": "65305e95eb1ead8763cb6e1b15a976e222216f547da3f3fb9e308ac225eb25b2",
           "file_mode": 493
         },
         {
           "id": "skill:implement-spec",
           "target": ".agents/skills/implement-spec",
-          "digest": "a9292ca5ed7181a3ec78df8023b51d7870c034055bdc3898606bb31eca3f6151",
+          "digest": "6b749682b14cb1fae68f545c8489f0ec0f11a72ca60b34b8b4094d5814680436",
           "file_mode": 493
         },
         {
           "id": "skill:improve-codebase-architecture",
           "target": ".agents/skills/improve-codebase-architecture",
-          "digest": "b0ce0e046ca1f91cc40ebbd761a29611e17095a3419e21a02f5b6f12c8d65a02",
+          "digest": "dede233ff487b569958ebe46d8a57ac360268d52029c1437fb568aafa2e31643",
           "file_mode": 493
         },
         {
@@ -328,7 +342,7 @@
         {
           "id": "skill:research",
           "target": ".agents/skills/research",
-          "digest": "9b4aba8d07a90d669ec8622a85b316149cc03d0e7b664ec7c49de6890f9edba8",
+          "digest": "e38fb2ff717bee13dd0e3d6e7589f7c1b184611b63fa372a32f8143975114844",
           "file_mode": 493
         },
         {
@@ -340,7 +354,7 @@
         {
           "id": "skill:setup-matt-pocock-skills",
           "target": ".agents/skills/setup-matt-pocock-skills",
-          "digest": "1f7f05864f77f608d66663a8c253a2dce0e9514cfd2401396e07aead5392d917",
+          "digest": "b21ea5565d3604972e46d1081622fd86d674c3cb444486a9781fe0361bc785e2",
           "file_mode": 493
         },
         {
@@ -350,15 +364,21 @@
           "file_mode": 493
         },
         {
+          "id": "skill:software-factory",
+          "target": ".agents/skills/software-factory",
+          "digest": "86bcc897eb2ac89b6c5a586c80b0239763cb84b3e925b3d2220c43b455dfa3a9",
+          "file_mode": 493
+        },
+        {
           "id": "skill:tdd",
           "target": ".agents/skills/tdd",
-          "digest": "dc4d129087463988a6735961163b88f4ce01754772b18fe734818d8663cd1a8c",
+          "digest": "dd4b65c3a85a8222b0ca80808adf662edf0f123d8f51122b59172db1779247bb",
           "file_mode": 493
         },
         {
           "id": "skill:teach",
           "target": ".agents/skills/teach",
-          "digest": "d489deb8fd90a4085e28ab08f6f38d022e41d598b141c727abef6e72234bab18",
+          "digest": "3b65d3ef59d793dee98bb2134f250132c4dae9f945acec3a4063987b5d787348",
           "file_mode": 493
         },
         {
@@ -376,7 +396,7 @@
         {
           "id": "skill:to-tickets",
           "target": ".agents/skills/to-tickets",
-          "digest": "d6f36ded2fe0fe08f6bc169c62bd25f5070f738df00d738a3965fcc331e1c111",
+          "digest": "9c882ce2c60c2d6ec9747d6b387cb1ec994914c824437c654ccef692d820fc90",
           "file_mode": 493
         },
         {
@@ -394,13 +414,13 @@
         {
           "id": "skill:wayfinder",
           "target": ".agents/skills/wayfinder",
-          "digest": "30df477e396811cdae868deb429a6277cee33c1aa20b1f08b0c766cb3540b76e",
+          "digest": "e6eb721c2e2776f0fb7831567a0d26f43476431de6352586832cdc68f8587ba7",
           "file_mode": 493
         },
         {
           "id": "skill:wizard",
           "target": ".agents/skills/wizard",
-          "digest": "c7fffcd2546ddf19ddd890b421cf3aabd2b53f7d803022922ff7cbfe3cc55277",
+          "digest": "330b7269122c96daf3b9ffdb6892b7388d7a91b6d1164c026c4ebdd27a7c0ee2",
           "file_mode": 493
         },
         {
@@ -436,7 +456,105 @@
         {
           "id": "notice:pack-matty-agents",
           "target": "PACKY-NOTICES.md",
-          "digest": "8fb7bc6dc1244522b1a3a23db32483cf15e3371c86936aacb4a58ec8f3ee8b35",
+          "digest": "1f1630031ada99302897516b49cfb5ef145fe0f9bcd46450133599781ada1be1",
+          "file_mode": 420
+        }
+      ]
+    },
+    {
+      "pack": {
+        "id": "pstack",
+        "version": "6.1.0",
+        "catalog_snapshot": "1417108113ee7fe3c10ffcec35d46b79fecbdad8"
+      },
+      "surface": "agents",
+      "readiness_obligations": [
+        "runtime-usability",
+        "surface-authorization"
+      ],
+      "external_requirements": [],
+      "selection": {
+        "mode": "custom",
+        "roots": [
+          {
+            "kind": "skill",
+            "id": "create-formal-verification-skill"
+          },
+          {
+            "kind": "skill",
+            "id": "create-verification-skill"
+          },
+          {
+            "kind": "skill",
+            "id": "maintain-formal-verification-skill"
+          },
+          {
+            "kind": "skill",
+            "id": "maintain-verification-skill"
+          }
+        ]
+      },
+      "resources": [
+        {
+          "kind": "notice",
+          "id": "pstack-mit"
+        },
+        {
+          "kind": "skill",
+          "id": "create-formal-verification-skill"
+        },
+        {
+          "kind": "skill",
+          "id": "create-verification-skill"
+        },
+        {
+          "kind": "skill",
+          "id": "maintain-formal-verification-skill"
+        },
+        {
+          "kind": "skill",
+          "id": "maintain-verification-skill"
+        },
+        {
+          "kind": "skill",
+          "id": "statechart"
+        }
+      ],
+      "projections": [
+        {
+          "id": "skill:create-formal-verification-skill",
+          "target": ".agents/skills/create-formal-verification-skill",
+          "digest": "d2afa234d2851175db2c7df43893a80ad85cc4391ebed0752a9d2f414f4fbc34",
+          "file_mode": 493
+        },
+        {
+          "id": "skill:create-verification-skill",
+          "target": ".agents/skills/create-verification-skill",
+          "digest": "ecb8a827d0364b62ea00357db09e69dcbaad41930929211dad7ba355f8d1106a",
+          "file_mode": 493
+        },
+        {
+          "id": "skill:maintain-formal-verification-skill",
+          "target": ".agents/skills/maintain-formal-verification-skill",
+          "digest": "b0a200e6a0ea3fb39e24fe949695ce593b0eee7edf3c816eaf6c1d59ef777aa2",
+          "file_mode": 493
+        },
+        {
+          "id": "skill:maintain-verification-skill",
+          "target": ".agents/skills/maintain-verification-skill",
+          "digest": "39dcaa95cd3095ab68599d43654961d637922c0a3bdb3e95bf6b1316f7051166",
+          "file_mode": 493
+        },
+        {
+          "id": "skill:statechart",
+          "target": ".agents/skills/statechart",
+          "digest": "a8c0f014197f0d0199dab997c7bb7ab1e3300090dd8a6f1202bbea6930a6b0d6",
+          "file_mode": 493
+        },
+        {
+          "id": "notice:pack-pstack-agents",
+          "target": "PACKY-NOTICES.md",
+          "digest": "d8acc487eeb247458db37167f2aa0d711d00922680f90699ed88e91058887381",
           "file_mode": 420
         }
       ]
