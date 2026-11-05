@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "emil",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Emil Kowalski skills for UI design, web and Expo animation, mobile polish, Swift, and frontend libraries",
   "selectable": true,
   "surfaces": [
@@ -17,7 +17,7 @@
     {
       "id": "emil-skills",
       "repository": "emilkowalski/skills",
-      "commit": "2d228630ba1446365f614a108cb8252f1feda202"
+      "commit": "c8a79627b59d72d764d6ab6f2c87c09a48169833"
     }
   ],
   "resources": [
@@ -137,7 +137,7 @@
       "kind": "skill",
       "id": "animation-performance",
       "source": "skills/animation-performance",
-      "description": "Keep web animations inside the frame budget — animate composite-only properties, keep motion off the main thread when the page is busy, and find the cause when an animation drops frames. Covers the layout/paint/composite pipeline, cheaper property swaps, CSS vs WAAPI vs requestAnimationFrame, Framer Motion's hardware-accelerated path, React re-rendering per frame, inherited CSS variable recalculation, blur cost, and when `will-change` actually helps. Use when an animation is janky, choppy, stutters, or drops frames; when choosing which property to animate; when deciding between CSS and JS animation on performance grounds; or when reaching for `will-change` or GPU layers. For choosing easing, duration, or whether to animate at all use animate; for reviewing motion as a whole use review-animations.",
+      "description": "Keep web animations inside the frame budget — animate composite-only properties, keep motion off the main thread when the page is busy, and find the cause when an animation drops frames. Covers the layout/paint/composite pipeline, cheaper property swaps, CSS vs WAAPI vs requestAnimationFrame, Motion's hardware-accelerated path, React re-rendering per frame, inherited CSS variable recalculation, blur cost, and when `will-change` actually helps. Use when an animation is janky, choppy, stutters, or drops frames; when choosing which property to animate; when deciding between CSS and JS animation on performance grounds; or when reaching for `will-change` or GPU layers. For choosing easing, duration, or whether to animate at all use animate; for reviewing motion as a whole use review-animations.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -392,6 +392,59 @@
         {
           "format": "claude-plugin",
           "name": "break-ui",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "choreograph",
+      "source": "skills/choreograph",
+      "description": "Coordinate several elements that animate together — decide what moves, in what order, how much they overlap, and what stays still — so a group reads as one intentional motion instead of a pile of separate animations. Use when building or fixing a staggered list, a hero entrance, a view swap inside a container, a multi-step flow, an element leaving while its siblings close the gap, a morph between rich states, or any interaction with several moving parts (icon + background + lines, panel + content, items flying into a target). Triggers on — stagger, staggerChildren, delayChildren, animation-delay, sequence, sequencing, orchestration, choreography, cascade, wave, timeline, \"one after another\", \"at the same time\", crossfade, popLayout, mode=\"wait\", AnimatePresence mode, hero entrance, list entrance, multi-step, step transition, morph, useAnimate, Promise.all animations, \"feels mechanical\", \"feels robotic\", \"too much going on\", \"feels slow to open\".",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "emil-skills",
+        "path": "skills/choreograph",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "choreograph",
+          "invocation": "choreograph",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "choreograph",
+          "invocation": "/choreograph",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "choreograph",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "choreograph",
           "prerequisites": [],
           "references": [],
           "roles": []
@@ -700,6 +753,59 @@
         {
           "format": "claude-plugin",
           "name": "prototype",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "remove-animations",
+      "source": "skills/remove-animations",
+      "description": "Find the animations an interface doesn't need and remove them — motion on keyboard actions, high-frequency surfaces, functional data, and decoration with no purpose — then clean up what they leave behind. Edits code, but only to subtract; it never adds or retunes motion. Use when the user says the app \"feels slow\", \"has too much animation\", \"feels over-animated\", wants to \"tone down the motion\", or asks what animations to remove. For finding places that should animate, use find-animation-opportunities; for fixing animations that should stay, use improve-animations or review-animations.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "emil-skills",
+        "path": "skills/remove-animations",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "remove-animations",
+          "invocation": "remove-animations",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "remove-animations",
+          "invocation": "/remove-animations",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "agent-plugins",
+          "name": "remove-animations",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        },
+        {
+          "format": "claude-plugin",
+          "name": "remove-animations",
           "prerequisites": [],
           "references": [],
           "roles": []
