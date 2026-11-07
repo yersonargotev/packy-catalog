@@ -10,6 +10,11 @@ The manifest selects the reviewed source for that surface.
   resource declares `exact-copy` provenance.
 - `packs/pstack/skills/agents/<id>` contains the Agents adaptation.
 - `packs/pstack/skills/claude/<id>` contains the Claude adaptation.
+- `packs/pstack/skills/shared/<id>` contains one host-neutral adaptation that
+  both surface variants select. It is used where the hosts differ only in the
+  execution preface: the principles, `blast-radius`, `bro`, `correct`,
+  `in-your-own-words`, `ketchup`, `sharpen`, `tdd`, `teach`,
+  `technical-writing` and `unslop`.
 - `packs/pstack/skills/statechart` contains a shared portable adaptation.
 
 The former `skills/codex` directory is now `skills/agents`. This aligns source
@@ -22,6 +27,12 @@ Packy installs only the selected surface's effective source. Native use reads
 `SKILL.md`; reviewed on-demand access reads `ACCESS.md` and its declared closure.
 Each pair preserves the workflow while adapting dependency lookup and writable
 output locations. Editing one entry requires checking its counterpart.
+
+A shared tree names each host's roots, delegation tool and preference file in
+one `## Host execution` section. Its frontmatter keeps Claude's
+`disable-model-invocation`, and `agents/openai.yaml` keeps Codex's manual-only
+policy; each host ignores the other's control. Move a skill back to separate
+host trees when its workflow needs host-specific steps beyond that section.
 
 ## Shared runtime distribution
 

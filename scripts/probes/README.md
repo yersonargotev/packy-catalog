@@ -83,7 +83,8 @@ links remain unchanged.
 
 ## Current pstack update checks
 
-The current pstack sources use `skills/agents` and `skills/claude`.
+The current pstack sources use `skills/agents`, `skills/claude` and, for
+skills whose hosts differ only in the execution preface, `skills/shared`.
 After reviewing the changed content, run:
 
 ```sh
