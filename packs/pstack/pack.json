@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -729,7 +729,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/blast-radius",
+          "source": "skills/shared/blast-radius",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/blast-radius",
@@ -773,7 +773,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/blast-radius",
+          "source": "skills/shared/blast-radius",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/blast-radius",
@@ -855,7 +855,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/bro",
+          "source": "skills/shared/bro",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/bro",
@@ -891,7 +891,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/bro",
+          "source": "skills/shared/bro",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/bro",
@@ -964,7 +964,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/correct",
+          "source": "skills/shared/correct",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/correct",
@@ -974,7 +974,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct.",
+          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for $correct or /correct.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1002,7 +1002,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/correct",
+          "source": "skills/shared/correct",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/correct",
@@ -1012,7 +1012,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct.",
+          "description": "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for $correct or /correct.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1628,7 +1628,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/in-your-own-words",
+          "source": "skills/shared/in-your-own-words",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/in-your-own-words",
@@ -1638,7 +1638,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for $in-your-own-words.",
+          "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for $in-your-own-words or /in-your-own-words.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1664,7 +1664,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/in-your-own-words",
+          "source": "skills/shared/in-your-own-words",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/in-your-own-words",
@@ -1674,7 +1674,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for /in-your-own-words.",
+          "description": "Restate in your own words what you think the user's goals are and what problem they're trying to solve. Use for $in-your-own-words or /in-your-own-words.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1882,7 +1882,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/ketchup",
+          "source": "skills/shared/ketchup",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/ketchup",
@@ -1894,7 +1894,7 @@
           "requires": [
             "skill:bro"
           ],
-          "description": "Catch the user up on what changed in this chat since their last message, in plain words and small visuals. List every item waiting on them with what they need to decide it from the reply alone. Use for $ketchup.",
+          "description": "Catch the user up on what changed in this chat since their last message, in plain words and small visuals. List every item waiting on them with what they need to decide it from the reply alone. Use for $ketchup or /ketchup.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -1915,7 +1915,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/ketchup",
+          "source": "skills/shared/ketchup",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/ketchup",
@@ -1927,7 +1927,7 @@
           "requires": [
             "skill:bro"
           ],
-          "description": "Catch the user up on what changed in this chat since their last message, in plain words and small visuals. List every item waiting on them with what they need to decide it from the reply alone. Use for /ketchup.",
+          "description": "Catch the user up on what changed in this chat since their last message, in plain words and small visuals. List every item waiting on them with what they need to decide it from the reply alone. Use for $ketchup or /ketchup.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -3308,7 +3308,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-attack-the-premise",
+          "source": "skills/shared/principle-attack-the-premise",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-attack-the-premise",
@@ -3351,7 +3351,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-attack-the-premise",
+          "source": "skills/shared/principle-attack-the-premise",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-attack-the-premise",
@@ -3431,7 +3431,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-boundary-discipline",
+          "source": "skills/shared/principle-boundary-discipline",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-boundary-discipline",
@@ -3467,7 +3467,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-boundary-discipline",
+          "source": "skills/shared/principle-boundary-discipline",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-boundary-discipline",
@@ -3544,7 +3544,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-build-the-lever",
+          "source": "skills/shared/principle-build-the-lever",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-build-the-lever",
@@ -3582,7 +3582,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-build-the-lever",
+          "source": "skills/shared/principle-build-the-lever",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-build-the-lever",
@@ -3657,7 +3657,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-encode-lessons-in-structure",
+          "source": "skills/shared/principle-encode-lessons-in-structure",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-encode-lessons-in-structure",
@@ -3693,7 +3693,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-encode-lessons-in-structure",
+          "source": "skills/shared/principle-encode-lessons-in-structure",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-encode-lessons-in-structure",
@@ -3766,7 +3766,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-exhaust-the-design-space",
+          "source": "skills/shared/principle-exhaust-the-design-space",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-exhaust-the-design-space",
@@ -3802,7 +3802,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-exhaust-the-design-space",
+          "source": "skills/shared/principle-exhaust-the-design-space",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-exhaust-the-design-space",
@@ -3875,7 +3875,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-experience-first",
+          "source": "skills/shared/principle-experience-first",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-experience-first",
@@ -3911,7 +3911,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-experience-first",
+          "source": "skills/shared/principle-experience-first",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-experience-first",
@@ -3984,7 +3984,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-explain-the-number",
+          "source": "skills/shared/principle-explain-the-number",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-explain-the-number",
@@ -4016,7 +4016,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-explain-the-number",
+          "source": "skills/shared/principle-explain-the-number",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-explain-the-number",
@@ -4085,7 +4085,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-fix-root-causes",
+          "source": "skills/shared/principle-fix-root-causes",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-fix-root-causes",
@@ -4121,7 +4121,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-fix-root-causes",
+          "source": "skills/shared/principle-fix-root-causes",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-fix-root-causes",
@@ -4194,7 +4194,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-foundational-thinking",
+          "source": "skills/shared/principle-foundational-thinking",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-foundational-thinking",
@@ -4230,7 +4230,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-foundational-thinking",
+          "source": "skills/shared/principle-foundational-thinking",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-foundational-thinking",
@@ -4303,7 +4303,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-guard-the-context-window",
+          "source": "skills/shared/principle-guard-the-context-window",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-guard-the-context-window",
@@ -4339,7 +4339,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-guard-the-context-window",
+          "source": "skills/shared/principle-guard-the-context-window",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-guard-the-context-window",
@@ -4412,7 +4412,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-laziness-protocol",
+          "source": "skills/shared/principle-laziness-protocol",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-laziness-protocol",
@@ -4448,7 +4448,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-laziness-protocol",
+          "source": "skills/shared/principle-laziness-protocol",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-laziness-protocol",
@@ -4521,7 +4521,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-make-operations-idempotent",
+          "source": "skills/shared/principle-make-operations-idempotent",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-make-operations-idempotent",
@@ -4557,7 +4557,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-make-operations-idempotent",
+          "source": "skills/shared/principle-make-operations-idempotent",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-make-operations-idempotent",
@@ -4630,7 +4630,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-migrate-callers-then-delete-legacy-apis",
+          "source": "skills/shared/principle-migrate-callers-then-delete-legacy-apis",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-migrate-callers-then-delete-legacy-apis",
@@ -4666,7 +4666,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-migrate-callers-then-delete-legacy-apis",
+          "source": "skills/shared/principle-migrate-callers-then-delete-legacy-apis",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-migrate-callers-then-delete-legacy-apis",
@@ -4741,7 +4741,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-minimize-reader-load",
+          "source": "skills/shared/principle-minimize-reader-load",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-minimize-reader-load",
@@ -4768,7 +4768,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-minimize-reader-load",
+          "source": "skills/shared/principle-minimize-reader-load",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-minimize-reader-load",
@@ -4832,7 +4832,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-model-the-domain",
+          "source": "skills/shared/principle-model-the-domain",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-model-the-domain",
@@ -4868,7 +4868,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-model-the-domain",
+          "source": "skills/shared/principle-model-the-domain",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-model-the-domain",
@@ -4941,7 +4941,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-never-block-on-the-human",
+          "source": "skills/shared/principle-never-block-on-the-human",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-never-block-on-the-human",
@@ -4977,7 +4977,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-never-block-on-the-human",
+          "source": "skills/shared/principle-never-block-on-the-human",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-never-block-on-the-human",
@@ -5050,7 +5050,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-outcome-oriented-execution",
+          "source": "skills/shared/principle-outcome-oriented-execution",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-outcome-oriented-execution",
@@ -5086,7 +5086,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-outcome-oriented-execution",
+          "source": "skills/shared/principle-outcome-oriented-execution",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-outcome-oriented-execution",
@@ -5159,7 +5159,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-prove-it-works",
+          "source": "skills/shared/principle-prove-it-works",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-prove-it-works",
@@ -5184,7 +5184,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-prove-it-works",
+          "source": "skills/shared/principle-prove-it-works",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-prove-it-works",
@@ -5246,7 +5246,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-redesign-from-first-principles",
+          "source": "skills/shared/principle-redesign-from-first-principles",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-redesign-from-first-principles",
@@ -5282,7 +5282,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-redesign-from-first-principles",
+          "source": "skills/shared/principle-redesign-from-first-principles",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-redesign-from-first-principles",
@@ -5355,7 +5355,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-separate-before-serializing-shared-state",
+          "source": "skills/shared/principle-separate-before-serializing-shared-state",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-separate-before-serializing-shared-state",
@@ -5391,7 +5391,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-separate-before-serializing-shared-state",
+          "source": "skills/shared/principle-separate-before-serializing-shared-state",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-separate-before-serializing-shared-state",
@@ -5464,7 +5464,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-sequence-verifiable-units",
+          "source": "skills/shared/principle-sequence-verifiable-units",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-sequence-verifiable-units",
@@ -5489,7 +5489,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-sequence-verifiable-units",
+          "source": "skills/shared/principle-sequence-verifiable-units",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-sequence-verifiable-units",
@@ -5551,7 +5551,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-subtract-before-you-add",
+          "source": "skills/shared/principle-subtract-before-you-add",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-subtract-before-you-add",
@@ -5587,7 +5587,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-subtract-before-you-add",
+          "source": "skills/shared/principle-subtract-before-you-add",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-subtract-before-you-add",
@@ -5660,7 +5660,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-test-behavior-not-implementation",
+          "source": "skills/shared/principle-test-behavior-not-implementation",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-test-behavior-not-implementation",
@@ -5696,7 +5696,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-test-behavior-not-implementation",
+          "source": "skills/shared/principle-test-behavior-not-implementation",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-test-behavior-not-implementation",
@@ -5769,7 +5769,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/principle-type-system-discipline",
+          "source": "skills/shared/principle-type-system-discipline",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-type-system-discipline",
@@ -5794,7 +5794,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/principle-type-system-discipline",
+          "source": "skills/shared/principle-type-system-discipline",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/principle-type-system-discipline",
@@ -6203,7 +6203,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/sharpen",
+          "source": "skills/shared/sharpen",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/sharpen",
@@ -6213,7 +6213,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Make a task deeper, not bigger, then rewrite the prompt. Use for $sharpen.",
+          "description": "Make a task deeper, not bigger, then rewrite the prompt. Use for $sharpen or /sharpen.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -6239,7 +6239,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/sharpen",
+          "source": "skills/shared/sharpen",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/sharpen",
@@ -6249,7 +6249,7 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Make a task deeper, not bigger, then rewrite the prompt. Use for /sharpen.",
+          "description": "Make a task deeper, not bigger, then rewrite the prompt. Use for $sharpen or /sharpen.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
@@ -6601,7 +6601,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/tdd",
+          "source": "skills/shared/tdd",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/tdd",
@@ -6645,7 +6645,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/tdd",
+          "source": "skills/shared/tdd",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/tdd",
@@ -6731,7 +6731,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/teach",
+          "source": "skills/shared/teach",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/teach",
@@ -6775,7 +6775,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/teach",
+          "source": "skills/shared/teach",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/teach",
@@ -6859,7 +6859,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/technical-writing",
+          "source": "skills/shared/technical-writing",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/technical-writing",
@@ -6892,7 +6892,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/technical-writing",
+          "source": "skills/shared/technical-writing",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/technical-writing",
@@ -7082,7 +7082,7 @@
       "variants": [
         {
           "surface": "agents",
-          "source": "skills/agents/unslop",
+          "source": "skills/shared/unslop",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/unslop",
@@ -7118,7 +7118,7 @@
         },
         {
           "surface": "claude",
-          "source": "skills/claude/unslop",
+          "source": "skills/shared/unslop",
           "origin": {
             "id": "cursor-plugins",
             "path": "pstack/skills/unslop",
