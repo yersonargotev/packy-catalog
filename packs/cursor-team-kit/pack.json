@@ -1,0 +1,156 @@
+{
+  "schema_version": 3,
+  "id": "cursor-team-kit",
+  "version": "1.0.0",
+  "description": "Cursor Team Kit skills for removing code slop and driving local CLI and UI harnesses",
+  "selectable": true,
+  "surfaces": [
+    "agents",
+    "claude"
+  ],
+  "readiness_obligations": [
+    "runtime-usability",
+    "surface-authorization"
+  ],
+  "external_requirements": [],
+  "origins": [
+    {
+      "id": "cursor-plugins",
+      "repository": "cursor/plugins",
+      "commit": "1ba91fc25c0977741dd0e267849e6234b037ed0a"
+    }
+  ],
+  "resources": [
+    {
+      "kind": "notice",
+      "id": "mit",
+      "source": "notices/cursor-team-kit-mit",
+      "description": "Preserve the Cursor Team Kit MIT license and attribution",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Cursor",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "cursor-team-kit/LICENSE",
+        "relationship": "exact-copy"
+      },
+      "bindings": [],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "control-cli",
+      "source": "skills/control-cli",
+      "description": "Build or adapt a local harness to drive, inspect, and profile an interactive CLI or TUI without external services. Use for CLI UX checks, startup regressions, memory leaks, hangs, prompt flows, or terminal demos.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "cursor-team-kit/skills/control-cli",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "control-cli",
+          "invocation": "control-cli",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "control-cli",
+          "invocation": "/control-cli",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "control-ui",
+      "source": "skills/control-ui",
+      "description": "Build or adapt a local browser/CDP harness to drive and inspect a web, IDE, or Electron UI. Use for local UI verification, screenshots, accessibility snapshots, perf profiles, visual diffs, or reproducing UI bugs.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "cursor-team-kit/skills/control-ui",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "control-ui",
+          "invocation": "control-ui",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "control-ui",
+          "invocation": "/control-ui",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    },
+    {
+      "kind": "skill",
+      "id": "deslop",
+      "source": "skills/deslop",
+      "description": "Remove AI-generated code slop and clean up code style",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "cursor-team-kit/skills/deslop",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "deslop",
+          "invocation": "deslop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "deslop",
+          "invocation": "/deslop",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": []
+    }
+  ]
+}
