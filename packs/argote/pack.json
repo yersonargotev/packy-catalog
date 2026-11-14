@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "argote",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Yerson Argote's engineering, communication, and issue-delivery workflows",
   "selectable": true,
   "surfaces": [
@@ -108,6 +108,45 @@
         {
           "format": "claude-plugin",
           "name": "espera-que",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
+    },
+    {
+      "description": "Formalizes existing local changes through an issue, a pull request, a protected merge, cleanup, and sync",
+      "kind": "skill",
+      "id": "formaliza",
+      "source": "skills/productivity/formaliza",
+      "requires": [],
+      "conflicts": [],
+      "notices": [],
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "formaliza",
+          "invocation": "$formaliza",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "formaliza",
+          "invocation": "/formaliza",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "formaliza",
           "prerequisites": [],
           "references": [],
           "roles": []
