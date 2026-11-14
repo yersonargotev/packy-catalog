@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "argote",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Yerson Argote's engineering, communication, and issue-delivery workflows",
   "selectable": true,
   "surfaces": [
@@ -108,6 +108,45 @@
         {
           "format": "claude-plugin",
           "name": "espera-que",
+          "prerequisites": [],
+          "references": [],
+          "roles": []
+        }
+      ]
+    },
+    {
+      "description": "Sets up a Home Repo that owns shared skills, steering files, and docs, with navigation pointers to other repos",
+      "kind": "skill",
+      "id": "home-repo",
+      "source": "skills/productivity/home-repo",
+      "requires": [],
+      "conflicts": [],
+      "notices": [],
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "home-repo",
+          "invocation": "$home-repo",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "home-repo",
+          "invocation": "/home-repo",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "plugin_exports": [
+        {
+          "format": "claude-plugin",
+          "name": "home-repo",
           "prerequisites": [],
           "references": [],
           "roles": []
