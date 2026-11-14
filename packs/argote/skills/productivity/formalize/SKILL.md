@@ -1,5 +1,5 @@
 ---
-name: formaliza
+name: formalize
 description: Formalize existing local changes through an issue, a pull request, a protected merge, cleanup, and sync.
 disable-model-invocation: true
 ---

@@ -117,8 +117,8 @@
     {
       "description": "Formalizes existing local changes through an issue, a pull request, a protected merge, cleanup, and sync",
       "kind": "skill",
-      "id": "formaliza",
-      "source": "skills/productivity/formaliza",
+      "id": "formalize",
+      "source": "skills/productivity/formalize",
       "requires": [],
       "conflicts": [],
       "notices": [],
@@ -126,8 +126,8 @@
         {
           "surface": "agents",
           "projection": "skill",
-          "name": "formaliza",
-          "invocation": "$formaliza",
+          "name": "formalize",
+          "invocation": "$formalize",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -135,8 +135,8 @@
         {
           "surface": "claude",
           "projection": "skill",
-          "name": "formaliza",
-          "invocation": "/formaliza",
+          "name": "formalize",
+          "invocation": "/formalize",
           "mode": "native",
           "sharing": "exclusive",
           "capabilities": []
@@ -146,7 +146,7 @@
       "plugin_exports": [
         {
           "format": "claude-plugin",
-          "name": "formaliza",
+          "name": "formalize",
           "prerequisites": [],
           "references": [],
           "roles": []
