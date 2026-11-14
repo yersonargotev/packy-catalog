@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "matty",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Matty workflow",
   "selectable": true,
   "surfaces": [
@@ -17,7 +17,7 @@
     {
       "id": "mattpocock-skills",
       "repository": "mattpocock/skills",
-      "commit": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d"
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa"
     }
   ],
   "resources": [
