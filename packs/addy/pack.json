@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "addy",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "Addy agent skills",
   "selectable": true,
   "surfaces": [
@@ -17,10 +17,181 @@
     {
       "id": "addy-agent-skills",
       "repository": "addyosmani/agent-skills",
-      "commit": "aeac41d4d005999432bb7312f7ff06383a91d59d"
+      "commit": "e997ac5b9a74eab332d5e9793bb38a38c8cfdd74"
     }
   ],
   "resources": [
+    {
+      "bindings": [
+        {
+          "invocation": "$accessibility-auditor",
+          "mode": "native",
+          "name": "accessibility-auditor",
+          "projection": "agent",
+          "sharing": "exclusive",
+          "surface": "agents",
+          "capabilities": [],
+          "client_projection": {
+            "client": "codex",
+            "scopes": [
+              "global"
+            ]
+          }
+        },
+        {
+          "invocation": "@accessibility-auditor",
+          "mode": "native",
+          "name": "accessibility-auditor",
+          "projection": "agent",
+          "sharing": "exclusive",
+          "surface": "claude",
+          "capabilities": [
+            {
+              "type": "claude-agent-document",
+              "claude_agent_document": {
+                "skills": [
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "authority": {
+                  "authorities": [
+                    {
+                      "claude_tools": [],
+                      "declarations": [
+                        "permission:browser",
+                        "tool:browser"
+                      ],
+                      "fallback": "static evidence-only analysis",
+                      "outcome": "fallback",
+                      "portable": "browser"
+                    },
+                    {
+                      "claude_tools": [
+                        "Bash"
+                      ],
+                      "declarations": [
+                        "permission:commit"
+                      ],
+                      "fallback": "none",
+                      "outcome": "guarded",
+                      "portable": "commit"
+                    },
+                    {
+                      "claude_tools": [
+                        "Bash"
+                      ],
+                      "declarations": [
+                        "permission:deploy"
+                      ],
+                      "fallback": "none",
+                      "outcome": "guarded",
+                      "portable": "deploy"
+                    },
+                    {
+                      "claude_tools": [
+                        "Glob",
+                        "Grep",
+                        "Read"
+                      ],
+                      "declarations": [
+                        "permission:filesystem"
+                      ],
+                      "fallback": "none",
+                      "outcome": "native",
+                      "portable": "filesystem"
+                    },
+                    {
+                      "claude_tools": [
+                        "WebFetch",
+                        "WebSearch"
+                      ],
+                      "declarations": [
+                        "permission:network"
+                      ],
+                      "fallback": "static evidence-only analysis",
+                      "outcome": "native",
+                      "portable": "network"
+                    },
+                    {
+                      "claude_tools": [
+                        "Bash"
+                      ],
+                      "declarations": [
+                        "permission:package-manager"
+                      ],
+                      "fallback": "report commands without running them",
+                      "outcome": "native",
+                      "portable": "package-manager"
+                    },
+                    {
+                      "claude_tools": [
+                        "Bash"
+                      ],
+                      "declarations": [
+                        "permission:process"
+                      ],
+                      "fallback": "report commands without running them",
+                      "outcome": "native",
+                      "portable": "process"
+                    },
+                    {
+                      "claude_tools": [],
+                      "declarations": [
+                        "permission:subagent"
+                      ],
+                      "fallback": "sequential single-agent analysis",
+                      "outcome": "fallback",
+                      "portable": "subagent"
+                    }
+                  ],
+                  "permission_mode": "default"
+                }
+              }
+            }
+          ],
+          "client_projection": {
+            "client": "claude",
+            "scopes": [
+              "global",
+              "project"
+            ]
+          }
+        }
+      ],
+      "description": "Audits interfaces for WCAG 2.2 AA conformance, keyboard and screen reader support, and contrast",
+      "id": "accessibility-auditor",
+      "kind": "agent",
+      "mode": "subagent",
+      "permissions": [
+        "browser",
+        "commit",
+        "deploy",
+        "filesystem",
+        "network",
+        "package-manager",
+        "process",
+        "subagent"
+      ],
+      "requires": [
+        "skill:using-agent-skills"
+      ],
+      "source": "agents/accessibility-auditor.md",
+      "surface_exclusions": [],
+      "tools": [
+        "browser"
+      ],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "addy-agent-skills",
+        "path": "agents/accessibility-auditor.md",
+        "relationship": "adapted"
+      }
+    },
     {
       "bindings": [
         {
@@ -850,6 +1021,135 @@
     {
       "bindings": [
         {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "a11y",
+          "invocation": "a11y",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "a11y",
+          "invocation": "a11y",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": [
+            {
+              "type": "claude-composite-skill",
+              "claude_composite_skill": {
+                "dependencies": [
+                  {
+                    "kind": "agent",
+                    "id": "accessibility-auditor"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "accessibility-engineering"
+                  },
+                  {
+                    "kind": "skill",
+                    "id": "using-agent-skills"
+                  }
+                ],
+                "references": [
+                  {
+                    "kind": "asset",
+                    "id": "accessibility-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "definition-of-done"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "observability-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "orchestration-patterns"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "performance-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "security-checklist"
+                  },
+                  {
+                    "kind": "asset",
+                    "id": "testing-patterns"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Runs an accessibility audit through the accessibility-auditor persona",
+      "id": "a11y",
+      "kind": "skill",
+      "requires": [
+        "agent:accessibility-auditor",
+        "asset:definition-of-done",
+        "skill:accessibility-engineering",
+        "skill:using-agent-skills"
+      ],
+      "source": "skills/a11y",
+      "surface_exclusions": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "addy-agent-skills",
+        "path": "commands/a11y.toml",
+        "relationship": "adapted"
+      }
+    },
+    {
+      "bindings": [
+        {
+          "invocation": "accessibility-engineering",
+          "mode": "native",
+          "name": "accessibility-engineering",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "agents",
+          "capabilities": []
+        },
+        {
+          "invocation": "accessibility-engineering",
+          "mode": "native",
+          "name": "accessibility-engineering",
+          "projection": "skill",
+          "sharing": "exclusive",
+          "surface": "claude",
+          "capabilities": []
+        }
+      ],
+      "description": "Audits existing interfaces for WCAG 2.2 AA conformance and remediates verified violations",
+      "id": "accessibility-engineering",
+      "kind": "skill",
+      "requires": [],
+      "source": "skills/accessibility-engineering",
+      "surface_exclusions": [],
+      "conflicts": [],
+      "notices": [
+        "notice:mit"
+      ],
+      "origin": {
+        "id": "addy-agent-skills",
+        "path": "skills/accessibility-engineering",
+        "relationship": "exact-copy"
+      }
+    },
+    {
+      "bindings": [
+        {
           "invocation": "api-and-interface-design",
           "mode": "native",
           "name": "api-and-interface-design",
@@ -1120,7 +1420,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/code-review-and-quality",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -1508,7 +1808,7 @@
           "capabilities": []
         }
       ],
-      "description": "Records architectural decisions and durable engineering context",
+      "description": "Records architectural decisions and durable engineering context, and detects documentation drift",
       "id": "documentation-and-adrs",
       "kind": "skill",
       "requires": [],
@@ -1574,7 +1874,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/doubt-driven-development",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -1611,7 +1911,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/frontend-ui-engineering",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -1722,7 +2022,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/incremental-implementation",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -1796,7 +2096,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/observability-and-instrumentation",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -1833,7 +2133,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/performance-optimization",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -1957,7 +2257,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/planning-and-task-breakdown",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -2096,7 +2396,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/security-and-hardening",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -2235,7 +2535,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/shipping-and-launch",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -2383,7 +2683,7 @@
           "capabilities": []
         }
       ],
-      "description": "Creates structured specifications before significant implementation work",
+      "description": "Creates and evolves structured specifications before significant implementation work",
       "id": "spec-driven-development",
       "kind": "skill",
       "requires": [],
@@ -2530,7 +2830,7 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/test-driven-development",
-        "relationship": "adapted"
+        "relationship": "exact-copy"
       }
     },
     {
@@ -2612,19 +2912,8 @@
       "origin": {
         "id": "addy-agent-skills",
         "path": "skills/using-agent-skills",
-        "relationship": "adapted"
-      },
-      "variants": [
-        {
-          "surface": "claude",
-          "source": "skills/using-agent-skills-claude",
-          "origin": {
-            "id": "addy-agent-skills",
-            "path": "skills/using-agent-skills",
-            "relationship": "adapted"
-          }
-        }
-      ]
+        "relationship": "exact-copy"
+      }
     },
     {
       "bindings": [

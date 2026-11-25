@@ -1,7 +1,8 @@
 # Addy two-surface review
 
-Addy 5.0.1 retains the original skill trees, supporting assets, MIT notice, and
-four named specialists. The source revision is unchanged. Codex role files are
+Addy 5.1.0 retains the original skill trees, supporting assets, MIT notice, and
+five named specialists. The source revision is reviewed in
+[the 2026-11-24 upstream review](../design/addy-upstream-2026-11-24.md). Codex role files are
 explicitly selected only at global scope on `agents`; Claude role documents
 are supported at global and project scope. Neither files nor a preview prove
 that a client loaded, authorized, or used a role. Browser and network tools
@@ -9,27 +10,28 @@ remain external prerequisites and are never configured by this Pack.
 
 The 5.0.1 native-closure correction restores explicit `claude-composite-skill`
 declarations for `build`, `code-simplify`, `constraints`, `plan`, `review`,
-`ship`, `spec`, `test`, `using-agent-skills`, and `webperf`. Each composition
+`ship`, `spec`, `test`, `using-agent-skills`, and `webperf`; 5.1.0 adds `a11y`. Each composition
 retains its declared workflow dependencies and all seven transitive supporting
-assets under `references/`. A separate reviewed Claude source for
-`using-agent-skills` keeps its entry bytes unchanged while allowing the
-composition to supply `references/definition-of-done.md` without colliding with
-the source copy. The common Agents tree, original upstream revision,
+assets under `references/`. Since 5.1.0 the upstream skill trees ship their
+own `references/shared/` copies, so `using-agent-skills` uses one exact tree on
+both surfaces and the composition's `references/definition-of-done.md` no
+longer collides with a source copy. The common Agents tree, original upstream revision,
 provenance, required dependencies, and MIT notice remain unchanged. This is an
 explicit native adaptation; it does not grant on-demand or plugin eligibility.
 
-The nine former command resources are reviewed adaptations, not runtime command
+The ten former command resources are reviewed adaptations, not runtime command
 projections. Each keeps its original upstream `commands/*.toml` provenance.
 `build` keeps the single-task and approved autonomous modes; `constraints`,
 `plan`, and `spec` keep their interview and planning gates; `code-simplify`
 keeps behavior-preserving verification; `test` keeps the test-first loop and
 conditional browser prerequisite; `review` retains five-axis review; `webperf`
-keeps measured/deep versus source-only modes; and `ship` keeps its parallel
+keeps measured/deep versus source-only modes; `a11y` keeps deep versus quick
+modes behind the `accessibility-auditor` role; and `ship` keeps its parallel
 specialist fan-out, narrow skip condition, report synthesis, decision and
-rollback. `ship` and `webperf` now explicitly stop when required named roles
+rollback. `ship`, `webperf`, and `a11y` explicitly stop when required named roles
 or authorization are unavailable, rather than treating self-review as a
 successful specialist delegation. Configured files do not establish runtime
-access. Each derived skill declares its selected native dependencies; the four
+access. Each derived skill declares its selected native dependencies; the five
 specialist documents retain their dependency on `using-agent-skills` and the
 owned asset/legal closure.
 
@@ -46,6 +48,8 @@ other aspects are portable.
 
 | Skill | Reason for exclusion |
 | --- | --- |
+| a11y | Requires the native accessibility-auditor role; no plugin role adaptation was reviewed. |
+| accessibility-engineering | Runs a bundled audit script with pinned external tools and refers to sibling skill and role paths. |
 | browser-testing-with-devtools | Requires an independently configured and authorized Chrome DevTools MCP runtime and host-specific setup. |
 | build | Nested workflow invocations and runtime/approval-sensitive autonomous execution need reviewed plugin invocation contracts. |
 | ci-cd-and-automation | Assumes CI runtime, credentials, and project configuration; plugin execution context is not reviewed. |
