@@ -29,7 +29,7 @@ bytes into disposable standard Catalog stores, following the clean-HOME status
 reproduction. Ordinary installed CLI commands must emit general and targeted
 status reports with no installations, preserve unrelated installed Ponytail in
 general status, and install/update/inspect/remove complete Addy at global and
-project scope. It compares every skill's complete files, all ten compositions'
+project scope. It compares every skill's complete files, all eleven compositions'
 supporting assets and legal closure, rejects removal of a drifted asset without
 mutation, and proves all retired Addy projections absent while preserving
 foreign configuration. Native client executables are absent from its runtime

@@ -99,4 +99,4 @@ Categorize every finding, using the same severity labels as the `code-review-and
 
 - **Invoke directly when:** the user asks for a review of a specific change, file, or PR.
 - **Invoke via:** the `ship` skill (parallel fan-out alongside `security-auditor` and `test-engineer`). the `review` skill runs the `code-review-and-quality` skill in the main session and does not spawn this persona.
-- **Do not invoke from another persona.** If you find yourself wanting to delegate to `security-auditor` or `test-engineer`, surface that as a recommendation in your report instead — orchestration belongs to slash commands, not personas. See [docs/agents.md](https://github.com/addyosmani/agent-skills/blob/aeac41d4d005999432bb7312f7ff06383a91d59d/docs/agents.md).
+- **Do not invoke from another persona.** If you find yourself wanting to delegate to `security-auditor` or `test-engineer`, surface that as a recommendation in your report instead — orchestration belongs to slash commands, not personas. See [docs/agents.md](https://github.com/addyosmani/agent-skills/blob/e997ac5b9a74eab332d5e9793bb38a38c8cfdd74/docs/agents.md).

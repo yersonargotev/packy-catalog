@@ -98,7 +98,7 @@ def native_closure(probe, workspace, manifest, scope):
         actual = {str(path.relative_to(target)): (path.read_bytes(), path.stat().st_mode & 0o777)
                   for path in target.rglob("*") if path.is_file()}
         legacy.require(actual == expected, "native skill tree differs: " + skill["id"])
-    legacy.require(len(checked) == 10 and len(assets) == 7, "incomplete Addy composition acceptance")
+    legacy.require(len(checked) == 11 and len(assets) == 7, "incomplete Addy composition acceptance")
     notice = (legacy.ROOT / "packs/addy/notices/addy-mit").read_bytes()
     if scope == "project":
         legacy.require(notice.strip() in (base / "PACKY-NOTICES.md").read_bytes(), "project MIT legal closure missing")
