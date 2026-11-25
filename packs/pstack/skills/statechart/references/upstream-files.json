@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "repository": "cursor/plugins",
-  "commit": "1ba91fc25c0977741dd0e267849e6234b037ed0a",
+  "commit": "41e400932eca14f289e7db717a70455256b6d388",
   "upstream_root": "pstack/skills/statechart",
   "origin_scope": "entry-document",
   "upstream_files": {
     "SKILL.md": {
-      "sha256": "010b7b4532406739b1c3a426d1a45f02bb618a42561fc96b3976e064a7f8384d",
+      "sha256": "ca7b3e43b1ddc4fb2425a33960f9390357323a869e1d921b6e2aff4f3004d55e",
       "mode": "0644"
     },
     "references/render.md": {
@@ -18,7 +18,7 @@
       "mode": "0644"
     },
     "scripts/backends/mermaid.ts": {
-      "sha256": "75704b2704a9399a39479ff704a580d5b9a1d0fede01fe771df28bf799b434b6",
+      "sha256": "ce293d34ce3928d93329bd6d1a889d5722620008dae4339add79ef226c3f9b88",
       "mode": "0644"
     },
     "scripts/backends/plain-text.ts": {
@@ -34,7 +34,7 @@
       "mode": "0644"
     },
     "scripts/frontends/dot.ts": {
-      "sha256": "4eef9ec848557dcd01ca8dbbec75b71c0653c1b73583108bafbb6f559f6d677b",
+      "sha256": "cd2e681ff58c759ddeaa17c2f3d4af1f0c3e71273566be555187b5d0e7767dac",
       "mode": "0644"
     },
     "scripts/frontends/marks.ts": {
@@ -67,6 +67,14 @@
     },
     "scripts/ir.ts": {
       "sha256": "5602beca4e4ac08421cfa07e4da989f0e75439f1d136cc923226909e771dc7ff",
+      "mode": "0644"
+    },
+    "scripts/janitor.ts": {
+      "sha256": "defac41e4cbfca3044c5078c544a0667f857a610c500c5ec96cb3bfaeec7120b",
+      "mode": "0644"
+    },
+    "scripts/kill.ts": {
+      "sha256": "058df69d1184029e55d7e81b4fd37a6dc8557c9208979fb7032482d5ab0db448",
       "mode": "0644"
     },
     "scripts/package.json": {
@@ -110,7 +118,7 @@
       "mode": "0644"
     },
     "scripts/run.ts": {
-      "sha256": "f330e0a3b0a9f8181c2e52252c4a47db3f0a64f79a7cca5490263e33a5f13c72",
+      "sha256": "fb6ec4a1835a15e6e72df28bb932b8df5a4c04c5de6f9c270fd63ff5cd148dc7",
       "mode": "0644"
     },
     "scripts/statechart": {
@@ -118,7 +126,7 @@
       "mode": "0755"
     },
     "scripts/statechart.ts": {
-      "sha256": "1c653f05d0cd0f3298455701f36e3d7d1f837f93e6e642f7c20afb5d613c2d12",
+      "sha256": "5d5feff7d78204c828a8e30d531d23419234a81a7149dc3e48efb08dd770d6c1",
       "mode": "0644"
     },
     "scripts/test/ConfigOracle.java": {
@@ -126,7 +134,7 @@
       "mode": "0644"
     },
     "scripts/test/chart.test.ts": {
-      "sha256": "3f9022fcc981d17f58b5e7a9302e766241f81a477bda70c3e621d7a1d95f19c1",
+      "sha256": "e5c4bb0dcb9bcb570066d427ee768b2eb01aea87aa3bd9136c8e92459f513ae4",
       "mode": "0644"
     },
     "scripts/test/charts/Braces.mmd": {
@@ -142,7 +150,7 @@
       "mode": "0644"
     },
     "scripts/test/cli.test.ts": {
-      "sha256": "8a3b028dafe2065029a66242f7a3832d18058e772a0dfc1b2c170511ffee8e07",
+      "sha256": "7201a0eece44078a27f85880e2118c69bbfa072fbb9770af1db64442f03970a7",
       "mode": "0644"
     },
     "scripts/test/config-fuzz.test.ts": {
@@ -1030,7 +1038,7 @@
       "mode": "0644"
     },
     "scripts/test/corpus/Login/chart.mmd": {
-      "sha256": "6cfda25977c467c106f9fb7f5602960bdd40919ac9294994ccd3bb33346faf35",
+      "sha256": "2aba56af645f56e371a87c22908e110ab259bed055a979d348220209d89b9862",
       "mode": "0644"
     },
     "scripts/test/corpus/Login/graph.dot": {
@@ -1574,11 +1582,15 @@
       "mode": "0644"
     },
     "scripts/test/corpus.test.ts": {
-      "sha256": "5686aa487dfec3e0a06b3c15390dbc3ab5953ced532c5eee7d5c5e2f54f492c7",
+      "sha256": "b280d27ca7c33bb9a8df2fbbd6d59c5b8c41e3ceaad0c7c73fba4ce9af85824b",
       "mode": "0644"
     },
     "scripts/test/differential.test.ts": {
       "sha256": "d4d64a7d17b4630616e797f1b184848c2a8b7712777d9982cafee81dc6046a9f",
+      "mode": "0644"
+    },
+    "scripts/test/drawn.ts": {
+      "sha256": "369ac67009b9ddfa19e080b9f99e2eeb59fc3616c2b374a92b5b1e653df55919",
       "mode": "0644"
     },
     "scripts/test/grid/Grid.cfg": {
@@ -1598,11 +1610,11 @@
       "mode": "0755"
     },
     "scripts/test/labels.ts": {
-      "sha256": "5a884161428fc00229d9a0e896001df4b262b56a441b6b3d66d1b59b06050650",
+      "sha256": "12c8403517b423ea7af0ed5c5d788ff872f9ba127ca11555ae128076a27a83ca",
       "mode": "0644"
     },
     "scripts/test/messages.test.ts": {
-      "sha256": "e7ca0ea446907074452df5388719598bb297d7f8ee50145b8b8f2a41c0c4c92f",
+      "sha256": "70dc23d0a9c76e9949f052c8f426d35463a1416aca2457d09de544654d0f5721",
       "mode": "0644"
     },
     "scripts/test/pipeline.test.ts": {
@@ -1614,7 +1626,7 @@
       "mode": "0644"
     },
     "scripts/test/render.test.ts": {
-      "sha256": "9cb369e5f4c464ca540ccc3de4fdd76670b84e54f06955ccb46908826579ac23",
+      "sha256": "717d36625f0ed5edb5086b9bf1993b79801700f9889b58aa7faa38e3fa0d50a2",
       "mode": "0644"
     },
     "scripts/test/tlc-out.test.ts": {
@@ -1650,6 +1662,8 @@
     "scripts/frontends/verdict.ts": "scripts/frontends/verdict.ts",
     "scripts/frontends/view.ts": "scripts/frontends/view.ts",
     "scripts/ir.ts": "scripts/ir.ts",
+    "scripts/janitor.ts": "scripts/janitor.ts",
+    "scripts/kill.ts": "scripts/kill.ts",
     "scripts/passes/annotate.ts": "scripts/passes/annotate.ts",
     "scripts/passes/label.ts": "scripts/passes/label.ts",
     "scripts/passes/lift.ts": "scripts/passes/lift.ts",

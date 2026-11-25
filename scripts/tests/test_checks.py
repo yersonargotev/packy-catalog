@@ -25,7 +25,7 @@ class OrdinaryChecks(unittest.TestCase):
         (self.project / "scripts/tests").mkdir()
         self.fixture = self.project / "scripts/tests/test_fixture.py"
         self.fixture.write_text("import unittest\nclass Fixture(unittest.TestCase):\n    def test_pass(self):\n        pass\n")
-        self.helpers = sorted((self.project / "packs/pstack").rglob("check-plan.mjs"))
+        self.helpers = sorted((self.project / "packs/pstack").rglob("worktree-audit.sh"))
         for helper in self.helpers:
             helper.write_text("#!/bin/sh\nexit 0\n")
         self.before = {helper: helper.read_bytes() for helper in self.helpers}

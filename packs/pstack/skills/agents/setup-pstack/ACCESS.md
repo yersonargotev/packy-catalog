@@ -51,9 +51,15 @@ and does not change the host's own model configuration.
    A model shown in a picker is not proof that its subagent tool accepts it.
    If no model list is available, use `inherit-parent`; do not guess slugs.
 2. Read an existing `~/.pstack/codex-models.md` if present. Preserve role choices
-   still supported by this host. Drop retired role names.
-3. Ask the user for a reasoning budget: unlimited (max), large (xhigh),
-   medium (high), or small (medium). Offer large when no preference exists.
+   still supported by this host. A line whose role is not in the shape below,
+   such as `hardest tasks`, `architect runners`, `reflect tooling`, or
+   `why investigators`, is from a retired role. Drop it and tell the user.
+   A file without the `# defaults: 3` line comes from an older setup. Turn
+   its `# budget: unlimited` line into `large`, because no role runs above
+   `xhigh`. Every other supported value is the user's choice and stays.
+3. Ask the user for a reasoning budget: large (xhigh), medium (high), or
+   small (medium). Offer large when no preference exists. No role runs above
+   `xhigh`; offer only confirmed models at `xhigh` or below.
    Apply the requested tier to confirmed models, including every panel entry,
    while preserving supported role choices and panel sizes. Show the resulting
    model and reasoning tier for each role before writing. Let the user change
@@ -63,32 +69,26 @@ and does not change the host's own model configuration.
    Keep `auto` and `inherit-parent` entries unchanged: omit the model override
    and inherit the host reasoning setting. If no model catalog is available,
    record the budget as a preference, not an applied reasoning tier.
-4. Write the complete file atomically. Use the role names below. A panel value
-   can list multiple models; each entry represents one candidate or reviewer.
-   Use `inherit-parent` for a role when the host cannot select a model for it. The cross-judge pool is tried in preference order and only supported models from a family other than the parent qualify; `auto` and `inherit-parent` never judge.
+4. Write the complete file atomically, with the `# defaults: 3` line. Use the
+   role names below. A panel value can list multiple models; each entry
+   represents one candidate or reviewer.
+   Use `inherit-parent` for a role when the host cannot select a model for it. The cross-judge pool is tried in preference order and only supported models from a vendor other than the parent's qualify; `auto` and `inherit-parent` never judge.
 5. Read the file back and report the active choices and any host limitation.
 
 ```text
 # pstack model preferences for the current host. This file is read by pstack
 # skills; it is not automatically loaded by the host.
 # host: codex
+# defaults: 3
 # budget: large
 feature, refactoring: inherit-parent
 bug-fix: inherit-parent
 perf-issue: inherit-parent
 hillclimb: inherit-parent
 judgment and prose: inherit-parent
-hardest tasks: inherit-parent
-how explorer: inherit-parent
-how explainer: inherit-parent
-why investigators: inherit-parent
-why synthesizer: inherit-parent
-reflect tooling: inherit-parent
-reflect judgment, divergent, synthesizer: inherit-parent
 arena runners: inherit-parent, inherit-parent
 arena cross-judge pool: inherit-parent
 swarm workers: inherit-parent
-architect runners: inherit-parent, inherit-parent
 interrogate reviewers: inherit-parent, inherit-parent
 ```
 
