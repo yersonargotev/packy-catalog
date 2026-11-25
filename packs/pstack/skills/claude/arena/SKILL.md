@@ -26,7 +26,7 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Use the `arena runners` line in `~/.pstack/claude-models.md`. If the rule or that line is missing, use two independent agents inheriting the host model. An `auto` or `inherit-parent` runner entry means the parent model, so omit `model` for it. If a configured model is unavailable, use only another confirmed supported choice or inherit the host model, and report the loss of model diversity. Never retry a rejected model. Keep the configured number of runner seats, defaulting to two when no preference exists. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
+3. Pick the runners from the `arena runners` line in `~/.pstack/claude-models.md`. If that line is missing, use two independent agents inheriting the host model. An `auto` or `inherit-parent` entry is the parent model, so omit `model` for it. If a configured model is unavailable, use only another confirmed supported choice or inherit the host model, and report the loss of model diversity. Never retry a rejected model. Keep the configured number of runner seats, defaulting to two when no preference exists. Spawn more for multiple design directions, and repeat one model when the work is generation-bound, not judgment-sensitive.
 4. Assign output paths. Each candidate writes to its own location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the **separate-before-serializing-shared-state** principle skill.
 
 ## Phase B: Fan out
@@ -37,7 +37,7 @@ If a candidate produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, read the `arena cross-judge pool` line in `~/.pstack/claude-models.md` in preference order. Run one judge only on a confirmed available model from a different family than the parent's. An `auto` or `inherit-parent` entry is the parent model and cannot judge. Never retry a model the host rejected. If no supported different-family model is available, skip the judge, pick the base alone in Phase D, and disclose the missing cross-model check. If the parent's family is unknown, disclose that the family check could not run. The judge sees the rubric and candidates by path label, scores each criterion, and recommends a base with rationale. It runs alongside the parent's reading in Phase D after every candidate has finished writing.
+After all Phase B candidates complete, spawn one judge from the `arena cross-judge pool` line in `~/.pstack/claude-models.md`, in preference order. The judge is never from the parent's vendor, so use the first confirmed available entry from another vendor. An `auto` or `inherit-parent` entry is the parent model and never judges. If you do not know the parent's model, use the first confirmed entry and disclose that the vendor check did not run. Never retry a model the host rejected. Move to the next such entry, or skip the judge, pick the base alone in Phase D, and disclose the missing cross-model check. While you read in Phase D, the judge scores each candidate, by path label, on each rubric criterion and recommends a base.
 
 ## Phase D: Pick a base
 

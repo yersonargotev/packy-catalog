@@ -1,5 +1,4 @@
 """Run the ordinary suite with Pack helper execution sentinels."""
-import json
 import os
 from pathlib import Path
 import shlex
@@ -19,18 +18,16 @@ def main():
         project = Path(scratch) / "catalog"
         shutil.copytree(ROOT, project, ignore=shutil.ignore_patterns(".git", "__pycache__"))
         log = Path(scratch) / "helper-execution.log"
-        helpers = sorted((project / "packs/pstack").rglob("check-plan.mjs"))
+        helpers = sorted((project / "packs/pstack").rglob("worktree-audit.sh"))
         if not helpers:
-            sys.exit("no pstack plan helpers found for the inertness check")
+            sys.exit("no pstack shell helpers found for the inertness check")
         for helper in helpers:
             name = helper.relative_to(project).as_posix()
-            # This sentinel records both direct shell and Node .mjs dispatch.
+            # This sentinel records both direct execution and explicit shell dispatch.
             helper.write_text(
                 "#!/bin/sh\n"
-                f"// 2>/dev/null; printf '%s\\n' {shlex.quote(name)} >> {shlex.quote(str(log))}; exit 97\n"
-                'import { appendFileSync } from "node:fs";\n'
-                f"appendFileSync({json.dumps(str(log))}, {json.dumps(name + chr(10))});\n"
-                "process.exit(97);\n"
+                f"printf '%s\\n' {shlex.quote(name)} >> {shlex.quote(str(log))}\n"
+                "exit 97\n"
             )
         # Git state belongs to the disposable fixtures, never to the caller.
         env = {key: value for key, value in os.environ.items()

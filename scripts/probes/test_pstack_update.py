@@ -66,7 +66,6 @@ class PstackUpdateProbeTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('claude: preserved', result.stdout)
 
-
     def test_accepts_retirement_of_an_unselected_host(self):
         self.manifest['surfaces'].remove('agents')
         for resource in self.manifest['resources']:
@@ -134,18 +133,6 @@ class PstackUpdateProbeTest(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn('claude: resource selection drift', result.stderr)
 
-    def test_plan_scenarios_pass_without_mutating_owned_helpers(self):
-        paths = [PROJECT / 'packs/pstack/skills' / host / 'poteto-mode/scripts/check-plan.mjs'
-                 for host in ('', 'claude', 'agents')]
-        before = [p.read_bytes() for p in paths]
-        result = self.run_probe('plans', '--project', str(PROJECT))
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn('common: 6 plan scenarios passed', result.stdout)
-        self.assertIn('claude: 6 plan scenarios passed', result.stdout)
-        self.assertIn('agents: 6 plan scenarios passed', result.stdout)
-        self.assertEqual([p.read_bytes() for p in paths], before)
-
-
     def test_compares_effective_dependencies_instead_of_shadowed_common_values(self):
         for variant in self.manifest['resources'][0]['variants']:
             variant['requires'] = []
@@ -168,27 +155,6 @@ class PstackUpdateProbeTest(unittest.TestCase):
         result = self.contracts()
         self.assertEqual(result.returncode, 1)
         self.assertIn('drift at notice:license', result.stderr)
-
-    def test_failing_checker_removes_execution_state_without_touching_pack(self):
-        folder = self.candidate / 'packs/pstack/skills/poteto-mode/scripts'
-        folder.mkdir(parents=True)
-        helper = folder / 'check-plan.mjs'
-        body = "import fs from 'node:fs'; fs.writeFileSync('touched.txt', 'temporary'); process.exit(7);"
-        helper.write_text(body)
-        result = self.run_probe('plans', '--project', str(self.candidate))
-        self.assertEqual(result.returncode, 1)
-        self.assertIn('common/valid', result.stderr)
-        self.assertIn('got exit 7', result.stderr)
-        self.assertEqual(helper.read_text(), body)
-        self.assertEqual(list(self.candidate.rglob('touched.txt')), [])
-
-    def test_checker_that_accepts_everything_fails_the_negative_scenario(self):
-        folder = self.candidate / 'packs/pstack/skills/poteto-mode/scripts'
-        folder.mkdir(parents=True)
-        (folder / 'check-plan.mjs').write_text("console.log('1 PR sections, 0 problems');")
-        result = self.run_probe('plans', '--project', str(self.candidate))
-        self.assertEqual(result.returncode, 1)
-        self.assertIn('common/obsolete-cadence', result.stderr)
 
     def test_rejects_new_pack_wide_runtime_requirement(self):
         self.manifest['external_requirements'] = ['new-runtime']

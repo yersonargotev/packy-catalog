@@ -43,7 +43,7 @@ Use accessible current-workspace history and authorized tools. Missing history, 
 
 Open a todolist with one entry per phase (Frame, Fan out, Cross-judge, Pick, Graft, Verify) before launching anything.
 
-Match reasoning to task difficulty with supported controls and confirmed role preferences. Use standard speed unless urgency calls for fast mode; verification preserves its configured speed. For `auto` or `inherit-parent`, omit model, effort, and speed overrides.
+Match reasoning to task difficulty with supported controls and confirmed role preferences. For `auto` or `inherit-parent`, omit model, effort, and speed overrides.
 
 ## Phase A: Frame
 
@@ -51,7 +51,7 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Use the `arena runners` line in `~/.pstack/codex-models.md`. Without that line, use two independent agents inheriting the host model. For `auto` or `inherit-parent`, omit model, effort, and speed overrides. If a configured model is unavailable, use a confirmed supported equivalent from the same family or drop the seat and disclose it. If fewer than two seats remain, add independent runners on a remaining supported model, or inherit the host model when none remain. Keep one seat when the configured list has only one entry. Report any loss of model diversity. Spawn more runners when the task covers multiple design directions.
+3. Pick the runners from the `arena runners` line in `~/.pstack/codex-models.md`. Without that line, use two independent agents inheriting the host model. An `auto` or `inherit-parent` entry is the parent model, so omit model, effort, and speed overrides for it. If a configured model is unavailable, use a confirmed supported equivalent from the same family or drop the seat, and disclose it. Keep at least two runners, or one when the configured list has only one entry: add each needed runner on a remaining supported model, or inherit the host model when none remain. Report any loss of model diversity. Spawn more for multiple design directions.
 4. Assign output paths. Each candidate writes to its own location (a git worktree where possible, otherwise `/tmp/arena-<slug>/candidate-<n>/`), per the [pstack:principle-separate-before-serializing-shared-state]({{packy.access:pstack:principle-separate-before-serializing-shared-state}}).
 
 ## Phase B: Fan out
@@ -62,7 +62,7 @@ If a candidate produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, try the confirmed `arena cross-judge pool` entries in `~/.pstack/codex-models.md` in preference order. The judge must use a different model family from the parent. `auto` and `inherit-parent` resolve to the parent and never qualify as a diverse judge. Use only model choices supported by the actual host. If no supported different-family model runs, skip the judge, choose the base in Phase D, and disclose the missing independent judgment. If the parent's model family cannot be established, disclose that the family check did not run. The judge reads the rubric and candidate paths, scores each criterion, and recommends a base. Run it alongside your Phase D reading, after all candidates stop writing.
+After all Phase B candidates complete, spawn one judge from the confirmed `arena cross-judge pool` entries in `~/.pstack/codex-models.md`, in preference order. The judge is never from the parent's vendor, so use the first supported entry from another vendor. An `auto` or `inherit-parent` entry is the parent model and never judges. If you do not know the parent's model, use the first confirmed entry and disclose that the vendor check did not run. If a configured model is unavailable, use a confirmed supported equivalent from the same family, then the next such entry, or skip the judge, pick the base alone in Phase D, and disclose the missing independent judgment. While you read in Phase D, the judge scores each candidate, by path label, on each rubric criterion and recommends a base.
 
 ## Phase D: Pick a base
 

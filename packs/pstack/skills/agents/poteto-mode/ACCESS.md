@@ -38,10 +38,9 @@ tracker and decision-log destinations for host-run orchestration.
 Plan files, decision trails, generated skills, evidence and stores belong in the
 selected target/output or owned scratch, never inside Catalog resources.
 
-Before authorized helper execution, check Node for the plan checker; Bun and
-package/network access for the watcher; Git and the selected
-forge CLI for repository queries; Bash and the shell utilities for the worktree
-audit. Runtimes and credentials are unverified prerequisites, not retrieval
+Before authorized helper execution, check Bun and package/network access for the
+watcher; Git and the selected forge CLI for repository queries; Bash and the
+shell utilities for the worktree audit. Runtimes and credentials are unverified prerequisites, not retrieval
 requirements. The effective bootstrap already stages a copy of the scripts in
 separate temporary execution/dependency space, runs frozen dependency installation
 there, re-executes with the original target working directory and removes staged
@@ -54,13 +53,13 @@ worktree, sends a message or provisions a scheduler.
 Resolve `playbooks/` and `references/` from this resource root even when a plan
 or a delegate runs elsewhere. Use the `ACCESS-` playbook/reference copies linked
 here for on-demand work; retain the native copies for native invocation.
+`worker.md` has no `ACCESS-` copy; both invocations share it.
 
 ## Prepared pstack dependencies
 
 - [pstack:architect]({{packy.access:pstack:architect}})
 - [pstack:arena]({{packy.access:pstack:arena}})
 - [pstack:benchmark-checklist]({{packy.access:pstack:benchmark-checklist}})
-- [pstack:how]({{packy.access:pstack:how}})
 - [pstack:interrogate]({{packy.access:pstack:interrogate}})
 - [pstack:ketchup]({{packy.access:pstack:ketchup}})
 - [pstack:no-comments]({{packy.access:pstack:no-comments}})
@@ -88,7 +87,6 @@ here for on-demand work; retain the native copies for native invocation.
 - [pstack:principle-subtract-before-you-add]({{packy.access:pstack:principle-subtract-before-you-add}})
 - [pstack:principle-test-behavior-not-implementation]({{packy.access:pstack:principle-test-behavior-not-implementation}})
 - [pstack:principle-type-system-discipline]({{packy.access:pstack:principle-type-system-discipline}})
-- [pstack:reflect]({{packy.access:pstack:reflect}})
 - [pstack:setup-pstack]({{packy.access:pstack:setup-pstack}})
 - [pstack:show-me-your-work]({{packy.access:pstack:show-me-your-work}})
 - [pstack:swarm]({{packy.access:pstack:swarm}})
@@ -127,27 +125,19 @@ merges, messages, and other external actions.
 
 The Principles section below grounds every trigger. In your reply, name each principle that shaped a decision and the specific choice it changed. Cite only principles whose prepared principle entry you read this session.
 
-Remaining triggers:
+The remaining triggers live only here:
 
-- Your first message on a task → tell the user, in your own words, their goal, the problem they are solving, and, if the task ships a change, the smallest change you expect to meet it. Don't wait for confirmation. If the evidence rules out the change the user asked for, show it and stop. Restate the user's goal in each subagent brief, and open each PR's `## Why` with it. Open each final report with it too, your final reply included, except after a fully specified one-line edit.
-- Nontrivial change, architecture decision, or "are we sure?" → the [pstack:how]({{packy.access:pstack:how}}) skill.
-- About to use the host question tool on a "which approach", "how should I", or "what should this do" fork → classify it before you ask. If the answer is a fact you could observe by running something (behavior, timing, layout, output, perf, even whether an eval separates), it is not the human's to answer. Sketch it via the Prototype playbook (`playbooks/ACCESS-prototype.md`) and let the result decide. If the task is a read-only Investigation whose deliverable is a cited answer, stay in it and answer from the evidence rather than building a sketch. Reserve the question for a genuine product or preference call no experiment can settle. Under a full-autonomy grant, decide a call that the grant covers, act on it, and report it, with no reply word and no offer. Under the grant, apply a default for a call that only the operator can make. Report the default with a full explanation, and say in plain words what the operator could tell you to do instead. The operator answers in their own words. Never give a shorthand token to type back. Gates that the operator named and the Always-pause list in Autonomy still need the operator.
-- Any code → name the data shape first, and choose its organizing structure per [pstack:principle-model-the-domain]({{packy.access:pstack:principle-model-the-domain}}).
-- Code crossing a function boundary → the [pstack:architect]({{packy.access:pstack:architect}}) skill, parallel design exploration before implementing.
-- Parallel fan-out → the [pstack:swarm]({{packy.access:pstack:swarm}}) skill for coverage matrices, races, gauntlets, and exploration partitions. Use [pstack:arena]({{packy.access:pstack:arena}}) for design or code bakeoffs with base selection and grafting.
-- Contested design → the [pstack:interrogate]({{packy.access:pstack:interrogate}}) skill (multi-model adversarial) before shipping.
-- Nontrivial multi-step → write the throughput checkpoint (Feature step 3).
-- Any prose surface → the [pstack:unslop]({{packy.access:pstack:unslop}}) skill. Your reply is a prose surface. Write it per **Writing the reply**. Agent-facing prose also follows the **skill-authoring guide** available on this host (or write and validate the skill directly).
-- Docs, RFCs, readmes, PR descriptions, or commit messages → the [pstack:technical-writing]({{packy.access:pstack:technical-writing}}) skill (`pstack:technical-writing`).
-- Before commit → the `deslop` skill from the `cursor-team-kit` plugin (`/deslop`).
-- Before review → the [pstack:no-comments]({{packy.access:pstack:no-comments}}) skill (`pstack:no-comments`).
-- Shipping UI / IDE / CLI → the matching control skill. `cursor-team-kit` publishes `control-cli` (CLIs and TUIs) and `control-ui` (browser / Electron / web UIs). For bug fixes, reproduce first on the same surface yourself. Hand to the user only under the narrow Bug fix step 1 exception.
-- Running a benchmark, measuring perf yourself, or reporting a speedup or regression you measured → the [pstack:benchmark-checklist]({{packy.access:pstack:benchmark-checklist}}) skill before you report or act on the number.
-- Any PR-status request → the **Babysit** playbook (`playbooks/ACCESS-babysit.md`). That includes "babysit this", "get it green", "address the bugbot comments", and the commonest phrasing, "check on PR X" / "anything outstanding on X". Never triggered by merely opening a PR. Declare its mode before polling. The playbook's step 1 owns the request-to-mode mapping. Reaching for `drive` inside a phase agent stops that agent finishing its turn.
-- Asked to land or ship a green stack → the **Shipping** playbook (`playbooks/ACCESS-shipping.md`). Green is not safe. Nothing gets armed before an independent per-PR verdict, and only the contiguous verified run from the root lands.
-- Bugbot or the agentic security review commented → skeptical posture. They catch real bugs and also file non-issues and nitpicks, so assess each on its merits and dismiss noise with a concrete reason instead of churning code. Triage fix / dismiss / ask per `references/ACCESS-bugbot-triage.md`.
-- Broken skill mid-task → fix it in its own PR. Don't block. Don't silently work around it.
-- Long, autonomous, or multi-phase work, or any task the user steps away from to review later ("going to bed", "trust it when i'm back", "monitor until X") → a decision trail via the [pstack:show-me-your-work]({{packy.access:pstack:show-me-your-work}}) skill. Commit it when stakes need an auditable record. Keep it local otherwise.
+- First message → restate the user's goal and the smallest change that meets it, then proceed. Open each subagent brief, PR `## Why`, and final report with the goal.
+- Starting any agent, whether a native subagent or another delegated worker → the first line of its kickoff is `Read <path>/worker.md before anything else.`, with `<path>` the absolute path of the prepared poteto-mode `resource_root`, the folder that holds this entry and `worker.md`. The operator's rules live in on-demand entries that do not load on their own, so they reach another agent no other way. Keep the rest of the kickoff to the goal and the task, plus this prepared entry's absolute path, resource root and initiating context.
+- A fork you could settle by running something → prototype it per `playbooks/ACCESS-prototype.md` instead of asking.
+- Code → name the data shape first. Across a function boundary → [pstack:architect]({{packy.access:pstack:architect}}). Fan-out → [pstack:swarm]({{packy.access:pstack:swarm}}). Bakeoff → [pstack:arena]({{packy.access:pstack:arena}}). Contested design → [pstack:interrogate]({{packy.access:pstack:interrogate}}).
+- Prose, your reply included → [pstack:unslop]({{packy.access:pstack:unslop}}). Docs, PR descriptions, commit messages → [pstack:technical-writing]({{packy.access:pstack:technical-writing}}).
+- Before commit → `/deslop` from the `cursor-team-kit` plugin. Before review → [pstack:no-comments]({{packy.access:pstack:no-comments}}).
+- Shipping UI / IDE / CLI → `control-ui` or `control-cli` from `cursor-team-kit`.
+- A number you measured → [pstack:benchmark-checklist]({{packy.access:pstack:benchmark-checklist}}).
+- PR status → the **Babysit** playbook (`playbooks/ACCESS-babysit.md`). Landing a green stack → the **Shipping** playbook (`playbooks/ACCESS-shipping.md`).
+- Bot review comments → judge each on its merits.
+- Long or unattended work → [pstack:show-me-your-work]({{packy.access:pstack:show-me-your-work}}).
 
 ## Principles
 
@@ -204,60 +194,47 @@ Read the prepared leaf entry in full for any principle you apply. Each entry nam
 
 ## Subagents
 
-**Use an available general-purpose agent and include the prepared poteto-mode instructions in its brief.** The chat receiving `pstack:poteto-mode` runs the playbook; delegate bounded steps rather than delegating the whole playbook. Routed workflow skills define roles, not host agent registrations. Use the current host's advertised agent types and parameters.
+**Use an available general-purpose agent and include the prepared poteto-mode instructions in its brief.** The chat receiving `pstack:poteto-mode` runs the playbook itself; delegate bounded steps rather than delegating the whole playbook. Routed workflow skills define roles, not host agent registrations. Use the current host's advertised agent types and parameters.
 
-**Defaults for every native subagent call.** `background execution for initial calls and follow-ups only when the live host tool supports it`, explicitly scoped permissions for each task, file pointers not inlined context, explicit model per role (configurable via `pstack:setup-pstack`. Defaults `inherit-parent` for code, `inherit-parent` for prose and judgment). Code delegates tier by difficulty. The hardest changes (cross-cutting design, gnarly concurrency, subtle algorithms) go to your strongest judgment model (`inherit-parent`), whether the task needs judgment on vague intent or is a precisely specified sequence of steps to execute to the letter. Trivial mechanical edits go to your fast code model. Per-role lines in the `pstack:setup-pstack` rule override these defaults and the model choices in the routed skills ([pstack:how]({{packy.access:pstack:how}}), [pstack:why]({{packy.access:pstack:why}}), [pstack:arena]({{packy.access:pstack:arena}}), [pstack:swarm]({{packy.access:pstack:swarm}}), [pstack:architect]({{packy.access:pstack:architect}}), [pstack:interrogate]({{packy.access:pstack:interrogate}}), [pstack:reflect]({{packy.access:pstack:reflect}})). A role with no line keeps its default, and a role line of `inherit-parent` or `auto` runs that role on the parent chat model (omit the model override). Each code playbook's configured model comes from its line (`feature, refactoring`, `bug-fix`, `perf-issue`, or `hillclimb`), and the hardest changes read `hardest tasks`. Prose and judgment read `judgment and prose`.
+**Defaults for every native subagent call.** `background execution for initial calls and follow-ups only when the live host tool supports it`, explicitly scoped permissions for each task, file pointers not inlined context, and an explicit model per role. `pstack:setup-pstack` writes `~/.pstack/codex-models.md`, whose per-role lines override the defaults below and the role models in the routed skills ([pstack:arena]({{packy.access:pstack:arena}}), [pstack:swarm]({{packy.access:pstack:swarm}}), [pstack:interrogate]({{packy.access:pstack:interrogate}})). A role with no line keeps its default. A line of `inherit-parent` or `auto` runs the role on the parent model, so omit the model override. Each code playbook reads its own line (`feature, refactoring`, `bug-fix`, `perf-issue`, or `hillclimb`), prose and judgment read `judgment and prose`, and trivial mechanical edits read `swarm workers`.
 
-**Match effort and speed to the job.** Start from the role's confirmed model and budget in `~/.pstack/codex-models.md`. Raise reasoning one supported step for the hardest or subtlest work, lower it one for judgment and two or more for routine work. Use only effort levels and speed controls advertised by the live tool and supported by that model. Fast mode is for urgency, such as failing trunk or a person blocked now; otherwise use standard speed. Verification keeps the `swarm workers` model and speed, with effort matched to the job. Preserve the selected model and panel diversity. `auto` and `inherit-parent` omit model, effort, and speed overrides. If the tool rejects an adjustment, retry once with the confirmed role settings and disclose it. Never retry a model already rejected by the tool. If the confirmed settings also fail, use a supported same-family equivalent when available, or inherit the host model and report the loss of diversity. When a control is unavailable, keep the preference unapplied rather than inventing model slugs or claiming it ran.
+- Code, prose, and judgment: `inherit-parent`.
+- Trivial mechanical edits: `inherit-parent`.
+- Diverse review and design panels: one runner on each distinct confirmed model in the panel role's line. Same-model runners are not a diverse panel.
 
-You own every subagent's work. Review the diff and write your own summary, don't pass through what it said. A second opinion is the same prompt against a different model. Agreement is high-signal.
+**Match effort and speed to the job.** Start from the role's confirmed model and budget in `~/.pstack/codex-models.md`, keep its family, and set the level the job needs. Panel seats keep their confirmed level. Raise any other role one supported step, up to xhigh, for the hardest or subtlest work, lower it one step for judgment, and two or more steps for routine work. No role runs above xhigh. Use only effort levels and speed controls advertised by the live tool and supported by that model, and apply a speed setting only when the confirmed preference names it. Verification always runs on the `swarm workers` model and speed. `auto` and `inherit-parent` omit model, effort, and speed overrides. If the tool rejects a model or adjustment, never pass it again. Fall back to the role's confirmed settings, then the calling skill's fallback, then a supported same-family equivalent, then inherit the host model. Say so, and report any loss of panel diversity. When a control is unavailable, keep the preference unapplied rather than inventing model slugs or claiming it ran.
 
-**Fresh subagents by default.** Give new work to a fresh subagent with consolidated scope, meaning the original brief, every later directive, and the prior agent's report and branch. This holds for a fix round, a follow-up, a retry, and the next queue item. Resume, message, or queue a follow-up on an existing subagent only when the new work strictly needs state that lives in that agent and is costly to move: its local checkout, its uncommitted changes, or a process it still runs, such as a dev server, a simulator, or a babysit watcher. A stop or hold order to a running agent is not reuse. A role such as a PR owner outlives its agent. Once that agent returns, a fresh agent takes the role's next round. Interrupt-chained resumes silently drop directives, so fire a fresh subagent with consolidated scope rather than trusting a "done" summary.
+You own every subagent's work. Review the diff and write your own summary. A second opinion is the same prompt on another vendor's model.
+
+**Fresh subagents by default.** Give a fix round, a follow-up, a retry, or the next queue item to a fresh subagent with the original brief, every later directive, and the prior agent's report and branch. Resume an existing subagent only when the work needs state that lives in it and is costly to move: its checkout, its uncommitted changes, or a process it still runs.
 
 ## Writing the reply
 
-Write the reply clean as you draft it. A cleanup pass after drafting does not remove these patterns.
-
-- **Short declarative sentences.** One thought per sentence, ended with a period.
-- **No long-dash character anywhere.** Write a file-list bullet as a sentence ("`main.js` owns persistence and the IPC handlers") and a bold section header as its own sentence ("**Verification.** End to end via CDP").
-- **A colon as a mid-sentence connector is also out** (unslop rule 14). A colon before a list is fine.
-- **Terse is not an excuse to drop content.** Short sentences, but every section the playbook's reply names stays: details, tradeoffs, choices, open decisions.
-- **Frame impact for the consumer and the maintainer.** Name who the work is for (an end user, a colleague importing the library) and what changes for them before any implementation detail. Then what the next engineer who owns this code inherits. If you can't say what either would notice, the work or the explanation is off.
-- **Never fabricate a link, citation, or transcript reference.** Link only artifacts you produced or read this session.
-- **Every claim carries its evidence or its label in the same sentence.** Measured, inferred, or guess. A prediction or an unseen cause is a guess. Never hand the human a check you could run.
-
-Every playbook ends with a reply written this way, PR link as `https://github.com/<owner>/<repo>/pull/<number>`. Each playbook's own reply lines name only the content unique to that playbook.
-
-## Comments
-
-Comments follow the same rule as the reply. Write them clean as you go. Keep a comment only for a non-obvious *why* the code can't show. A verify or test script gets no phase-narrating comments such as `// Phase 1: add cards`. The assertion or log string documents the step, as in `assert(ok, 'persisted across restart')`. This applies to every file you produce, including the delegate's diff.
+Write short declarative sentences with no long dash and no colon as a connector. Lead with what changes for the user. Give each claim its evidence or a label (measured, inferred, or guess). Never hand the human a check you could run.
 
 ## Playbooks
 
-Open a todolist whose first items are the matched playbook's steps, copied in verbatim, before any task-specific todos. A step you choose not to do stays in the list with a one-line `skip: <reason>`. Match the task to a playbook below, open its named file, and copy its steps in verbatim.
+Match the task to a playbook below and open its `ACCESS-` file. Copy its steps into the host's todo-list tool first. Large, cross-cutting, or unattended work, or a task no playbook fits, routes to the optional `pstack:figure-it-out` route (obtain it with the initiating surface/snapshot when selected; if unavailable, design and verify a scoped direct workflow).
 
-A large or cross-cutting effort (a migration across many call sites, an ambitious multi-part change), or work the user steps away from to trust later, routes to the optional `pstack:figure-it-out` route (obtain it with the initiating surface/snapshot when selected; if unavailable, design and verify a scoped direct workflow) even when a narrower playbook like Feature fits. Use optional `pstack:figure-it-out` (obtain it with the initiating surface/snapshot when selected; if unavailable, design and verify a scoped direct workflow) whenever no bundled playbook fits. It designs a bespoke, rigorous playbook for the task. A standing project-scale program (multi-day, many stacked PRs, a fleet of subagents under one coordinator) routes to **Orchestrate** instead. figure-it-out designs one bespoke run, orchestrate runs the program.
-
-- **Investigation.** Read-only question: how does X work, why was Y built this way, are we sure about Z, should we do X or Y. `playbooks/ACCESS-investigation.md`.
-- **Bug fix.** A reported defect to reproduce, root-cause, and fix with runtime evidence. `playbooks/ACCESS-bug-fix.md`.
-- **Perf issue.** A measured slowness to trace and improve against a baseline. `playbooks/ACCESS-perf-issue.md`.
-- **Hillclimb.** Sustained, scientific improvement of one metric against a target: loop hypotheses with before/after measurement, a decision log, and one commit per accepted win. Distinct from Perf issue, which is a one-off fix. `playbooks/ACCESS-hillclimb.md`.
-- **Runtime forensics.** Diagnose a runtime symptom (leak, idle-CPU spin, glitch) from live instrumentation. The deliverable is a diagnosis, not a fix. `playbooks/ACCESS-runtime-forensics.md`.
-- **Trace forensics.** Diagnose a captured profiling artifact (cpuprofile, trace, spindump, heap snapshot) handed to you after the fact. The deliverable is a diagnosis, not a fix. `playbooks/ACCESS-trace-forensics.md`.
-- **Feature.** New or changed behavior, built from a named data shape. `playbooks/ACCESS-feature.md`.
-- **Refactoring.** A behavior-preserving change to structure or shape (rename, extract, inline, dedupe, move). `playbooks/ACCESS-refactoring.md`.
-- **Prototype.** A throwaway sketch to make a design or behavioral decision cheaply, or to settle an empirical fork by observing it instead of asking the human ("prototype", "mock it up", "try this layout", "sketch it to decide"). `playbooks/ACCESS-prototype.md`.
-- **Visual parity.** Pixel-exact UI equivalence: matching two implementations or migrating a styling system. `playbooks/ACCESS-visual-parity.md`.
-- **Authoring or modifying a skill.** Writing or editing a SKILL.md. `playbooks/ACCESS-authoring-a-skill.md`.
-- **Eval.** Testing how a skill, structure, or prompt change affects agent behavior before promoting it. `playbooks/ACCESS-eval.md`.
-- **Babysit.** Driving a PR or a stack to merge-ready: conflicts, review threads, CI. `playbooks/ACCESS-babysit.md`.
-- **Shipping.** The half after Babysit. Independently verifying a green stack, then landing the contiguous verified run bottom-up through `gh` by default or Origin when its CLI is available. `playbooks/ACCESS-shipping.md`.
-- **Autonomous run.** A long task to drive to completion without stopping ("run until done", "monitor until X"). `playbooks/ACCESS-autonomous-run.md`.
-- **Orchestrate.** A standing project handed to one coordinator chat: multi-day, many stacked PRs, dozens to hundreds of subagents, minimal human turns ("run this whole project", "own this migration until it lands"). Distinct from Autonomous run, which drives one task to a predicate. Work one agent could finish inside the session's budget routes there, not here, however program-shaped the phrasing sounds. `playbooks/ACCESS-orchestrate.md`.
-- **Autopilot-full.** A queue of independent PRs run to merged with full autonomy. One owner per PR carries build through merge, and the root swarm-verifies each PR before its owner merges ("autopilot this queue", "full autopilot", one-owner-per-PR programs). `playbooks/ACCESS-autopilot-full.md`.
-- **Autopilot-stack.** Autopilot-full without the merge. A queue of PRs built and verified with full autonomy, then handed to the operator to land. A PR stacks only on a PR it builds on ("autopilot-stack", "autopilot, don't merge", "stack them, don't ship", "build the stack, I'll land it"). `playbooks/ACCESS-autopilot-stack.md`.
-- **Session pickup.** Resuming or taking over a prior agent's in-flight work from a transcript, cloud-agent URL, or pushed branch. `playbooks/ACCESS-session-pickup.md`.
-- **Pause safely.** Suspending in-flight work cleanly so it can be resumed, on an explicit pause, going offline, a Codex restart, or imminent context compaction. The complement to Session pickup. Full steps: `playbooks/ACCESS-pause-safely.md`.
-- **Multi-phase or multi-PR plan.** Work that spans phases or stacked PRs. `playbooks/ACCESS-multi-phase-plan.md`.
-- **Worktree and simulator cleanup.** Reclaiming local disk by pruning merged or abandoned git worktrees and stale iOS simulators ("what's using my disk", "clean up worktrees", "prune safe-to-prune worktrees", "free up space", "delete old simulators"). `playbooks/ACCESS-worktree-cleanup.md`.
-- **Opening a PR.** Invoked at the end of every other playbook. `playbooks/ACCESS-opening-a-pr.md`.
+- Investigation: `playbooks/ACCESS-investigation.md`
+- Bug fix: `playbooks/ACCESS-bug-fix.md`
+- Perf issue: `playbooks/ACCESS-perf-issue.md`
+- Hillclimb: `playbooks/ACCESS-hillclimb.md`
+- Runtime forensics: `playbooks/ACCESS-runtime-forensics.md`
+- Trace forensics: `playbooks/ACCESS-trace-forensics.md`
+- Feature: `playbooks/ACCESS-feature.md`
+- Refactoring: `playbooks/ACCESS-refactoring.md`
+- Prototype: `playbooks/ACCESS-prototype.md`
+- Visual parity: `playbooks/ACCESS-visual-parity.md`
+- Authoring a skill: `playbooks/ACCESS-authoring-a-skill.md`
+- Eval: `playbooks/ACCESS-eval.md`
+- Babysit: `playbooks/ACCESS-babysit.md`
+- Shipping: `playbooks/ACCESS-shipping.md`
+- Autonomous run: `playbooks/ACCESS-autonomous-run.md`
+- Autopilot-full: `playbooks/ACCESS-autopilot-full.md`
+- Autopilot-stack: `playbooks/ACCESS-autopilot-stack.md`
+- Session pickup: `playbooks/ACCESS-session-pickup.md`
+- Pause safely: `playbooks/ACCESS-pause-safely.md`
+- Multi-phase plan: `playbooks/ACCESS-multi-phase-plan.md`
+- Worktree cleanup: `playbooks/ACCESS-worktree-cleanup.md`
+- Opening a PR: `playbooks/ACCESS-opening-a-pr.md`

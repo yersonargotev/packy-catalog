@@ -13,7 +13,7 @@ The manifest selects the reviewed source for that surface.
 - `packs/pstack/skills/shared/<id>` contains one host-neutral adaptation that
   both surface variants select. It is used where the hosts differ only in the
   execution preface: the principles, `blast-radius`, `bro`, `correct`,
-  `in-your-own-words`, `ketchup`, `sharpen`, `tdd`, `teach`,
+  `in-your-own-words`, `ketchup`, `reframe`, `sharpen`, `tdd`, `teach`,
   `technical-writing` and `unslop`.
 - `packs/pstack/skills/statechart` contains a shared portable adaptation.
 
@@ -43,13 +43,13 @@ Packy execution guidance, explicit invocation metadata, and on-demand access.
 Its package metadata omits test commands and development dependencies.
 
 The upstream development tests and recorded TLC corpus are not distributed.
-The complete original has 407 files, including 376 files under `scripts/test`.
+The complete original has 410 files, including 377 files under `scripts/test`.
 Retaining that tree in addition to the existing original and host adaptations
 would exceed the pinned engine's 1,024-entry Pack budget.
 
 This new resource has an explicit exception to the full-original retention
 policy recorded in ADR 0003. The original entry is retained as
-`references/upstream-SKILL.md`. The complete 407-file upstream inventory is
+`references/upstream-SKILL.md`. The complete 410-file upstream inventory is
 retained in `references/upstream-files.json`, including paths, hashes and modes.
 The manifest's adapted origin points to the entry document. It does not claim
 that typed origin validation checks the runtime files. The separate

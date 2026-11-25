@@ -95,6 +95,7 @@ Recommend `pstack:poteto-mode` for a broad workflow. Name a leaf skill when the 
 | Do any non-trivial task with rigor | [pstack:poteto-mode]({{packy.access:pstack:poteto-mode}}) |
 | Check that the agent understood the goal and problem | `pstack:in-your-own-words` |
 | Get a prompt rewritten deeper, not bigger, before sending it. It returns the rewrite and does not execute the task | `pstack:sharpen` |
+| Learn the expert words for what they're building, including words borrowed from neighboring fields, with every cited source checked, and get their description rewritten with them | `pstack:reframe` |
 | Catch up on what changed in this chat, with every item waiting on the user listed and decidable from the reply | `pstack:ketchup` |
 | Catch up with a short subtitled video and the waiting calls as text | `pstack:ketchup-video` |
 | Know how code works now, or where new code should live | `pstack:how` |
@@ -134,12 +135,11 @@ Close calls:
 
 - `pstack:how` explains mechanics; `pstack:why` explains reasons; `pstack:teach` presents the result plainly.
 - `pstack:arena` gives independent workers the same brief and synthesizes candidates; `pstack:swarm` splits work into slices or a race.
-- `pstack:architect` proceeds to implementation after design. Add "with checkpoint" when the user wants to approve the design first.
 - `pstack:interrogate` reviews a diff; `pstack:blast-radius` checks consequences outside it.
 - `pstack:recall` uses accessible, authorized history and reports gaps. `pstack:ketchup` covers this chat since the user's last message. Picking up one branch uses the Session pickup playbook.
-- `pstack:figure-it-out` designs one rigorous run; Orchestrate coordinates a program across PRs; Autonomous run drives a task toward a completion check.
+- `pstack:figure-it-out` designs one rigorous run; Autonomous run drives a task toward a completion check.
 
-External integrations such as bot webhooks, browser control, and schedulers require available tools and the user's task authority. pstack has no standalone `$orchestrate` skill; Orchestrate is a playbook. A separately installed skill with that name has its own contract.
+External integrations such as bot webhooks, browser control, and schedulers require available tools and the user's task authority. pstack has no standalone `$orchestrate` skill. A separately installed skill with that name has its own contract.
 
 ## Playbooks and principles
 

@@ -88,17 +88,17 @@ skills whose hosts differ only in the execution preface, `skills/shared`.
 After reviewing the changed content, run:
 
 ```sh
-python3 -B scripts/probes/pstack-update.py plans
 python3 -B -m unittest discover -s scripts/probes -p 'test_pstack_update.py'
 python3 -B scripts/probes/pstack-helpers.py
 ```
 
-The plan probe checks six cases per common, Agents, and Claude checker. These
-include matching inline-code delimiters, obsolete audit cadence, and a missing
-live lane. The 16 probe tests check failures and temporary-state cleanup.
+The 13 probe tests check surface-contract drift and temporary-state cleanup.
+Upstream removed the `check-plan.mjs` plan checker in 0.15.48, so the former
+`plans` command and its plan-checker tests are retired with it.
 The helper probe runs watcher help and decision-log append/escaping on both
 adaptations, checking that authored and installed bytes stay unchanged.
-Orchestrate now uses available host tools; its retired `orch` scripts are absent.
+Upstream also removed the Orchestrate playbook; its retired `orch` scripts
+remain absent.
 Verify the shared statechart runtime and its complete source inventory against
 an exact upstream checkout:
 
@@ -106,11 +106,11 @@ an exact upstream checkout:
 python3 -B scripts/probes/pstack-statechart.py --upstream /path/to/cursor-plugins
 ```
 
-This compares the checkout commit, all 407 upstream file hashes and modes, the
-30 retained original files, the production package metadata, and the shared
+This compares the checkout commit, all 410 upstream file hashes and modes, the
+32 retained original files, the production package metadata, and the shared
 source contract. Runtime execution and TLC availability remain separate checks.
 
-Node and Bun are required for these opt-in execution checks. They do not run
+Bun is required for the helper probe's execution checks. They do not run
 through ordinary catalog validation.
 
 For a clean committed candidate, run the native/access lifecycle check:

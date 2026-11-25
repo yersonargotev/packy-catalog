@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "pstack",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "description": "Apply pstack's reviewed portable engineering workflows and principles",
   "selectable": true,
   "surfaces": [
@@ -17,7 +17,7 @@
     {
       "id": "cursor-plugins",
       "repository": "cursor/plugins",
-      "commit": "1ba91fc25c0977741dd0e267849e6234b037ed0a"
+      "commit": "41e400932eca14f289e7db717a70455256b6d388"
     }
   ],
   "resources": [
@@ -60,14 +60,7 @@
       "source": "skills/architect",
       "description": "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape.",
       "requires": [
-        "skill:arena",
-        "skill:how",
-        "skill:interrogate",
-        "skill:principle-foundational-thinking",
-        "skill:principle-outcome-oriented-execution",
-        "skill:principle-redesign-from-first-principles",
-        "skill:principle-subtract-before-you-add",
-        "skill:why"
+        "skill:arena"
       ],
       "conflicts": [],
       "notices": [
@@ -112,16 +105,7 @@
             "notice:pstack-mit"
           ],
           "requires": [
-            "skill:arena",
-            "skill:how",
-            "skill:interrogate",
-            "skill:principle-exhaust-the-design-space",
-            "skill:principle-fix-root-causes",
-            "skill:principle-foundational-thinking",
-            "skill:principle-outcome-oriented-execution",
-            "skill:principle-redesign-from-first-principles",
-            "skill:principle-subtract-before-you-add",
-            "skill:why"
+            "skill:arena"
           ],
           "description": "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape.",
           "on_demand": {
@@ -129,78 +113,15 @@
             "entry_document": "ACCESS.md",
             "prerequisites": [
               "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
-              "authorized host subagents and independent candidate/review capability; confirmed host model preferences when present",
-              "target project/source access and separate writable grounding, sketch, candidate and output locations"
+              "target project/source access and a separate writable sketch location; pstack:arena prerequisites when a large or contested design runs there"
             ],
             "reference_files": [
-              "ACCESS.md",
-              "references/ACCESS-rationale-template.md",
-              "references/ACCESS-runner-prompt.md"
+              "ACCESS.md"
             ],
             "dependencies": [
               {
                 "type": "skill",
                 "target": "pstack:arena"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:how"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:interrogate"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-boundary-discipline"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-encode-lessons-in-structure"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-exhaust-the-design-space"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-fix-root-causes"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-foundational-thinking"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-laziness-protocol"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-make-operations-idempotent"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-minimize-reader-load"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-outcome-oriented-execution"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-redesign-from-first-principles"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-separate-before-serializing-shared-state"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-subtract-before-you-add"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:why"
               }
             ]
           }
@@ -217,94 +138,22 @@
             "notice:pstack-mit"
           ],
           "requires": [
-            "skill:arena",
-            "skill:how",
-            "skill:interrogate",
-            "skill:principle-exhaust-the-design-space",
-            "skill:principle-fix-root-causes",
-            "skill:principle-foundational-thinking",
-            "skill:principle-outcome-oriented-execution",
-            "skill:principle-redesign-from-first-principles",
-            "skill:principle-subtract-before-you-add",
-            "skill:why"
+            "skill:arena"
           ],
           "description": "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "authorized host subagents and independent candidate/review capability; confirmed host model preferences when present",
-              "target project/source access and separate writable grounding, sketch, candidate and output locations"
+              "target project/source access and a separate writable sketch location; pstack:arena prerequisites when a large or contested design runs there"
             ],
             "reference_files": [
-              "ACCESS.md",
-              "references/ACCESS-rationale-template.md",
-              "references/ACCESS-runner-prompt.md"
+              "ACCESS.md"
             ],
             "dependencies": [
               {
                 "type": "skill",
                 "target": "pstack:arena"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:how"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:interrogate"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-boundary-discipline"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-encode-lessons-in-structure"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-exhaust-the-design-space"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-fix-root-causes"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-foundational-thinking"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-laziness-protocol"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-make-operations-idempotent"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-minimize-reader-load"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-outcome-oriented-execution"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-redesign-from-first-principles"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-separate-before-serializing-shared-state"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-subtract-before-you-add"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:why"
               }
             ]
           }
@@ -1702,7 +1551,7 @@
       "kind": "skill",
       "id": "interrogate",
       "source": "skills/interrogate",
-      "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles.",
+      "description": "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Adversaries try to break a change or design, and only findings proven by a run survive.",
       "requires": [
         "skill:arena",
         "skill:in-your-own-words"
@@ -2424,7 +2273,6 @@
       "description": "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints.",
       "requires": [
         "skill:architect",
-        "skill:how",
         "skill:principle-fix-root-causes",
         "skill:principle-redesign-from-first-principles",
         "skill:why"
@@ -2473,7 +2321,6 @@
           ],
           "requires": [
             "skill:architect",
-            "skill:how",
             "skill:principle-fix-root-causes",
             "skill:principle-redesign-from-first-principles",
             "skill:why"
@@ -2494,10 +2341,6 @@
               {
                 "type": "skill",
                 "target": "pstack:architect"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:how"
               },
               {
                 "type": "skill",
@@ -2527,7 +2370,6 @@
           ],
           "requires": [
             "skill:architect",
-            "skill:how",
             "skill:principle-fix-root-causes",
             "skill:principle-redesign-from-first-principles",
             "skill:why"
@@ -2547,10 +2389,6 @@
               {
                 "type": "skill",
                 "target": "pstack:architect"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:how"
               },
               {
                 "type": "skill",
@@ -2700,7 +2538,6 @@
         "skill:architect",
         "skill:arena",
         "skill:benchmark-checklist",
-        "skill:how",
         "skill:interrogate",
         "skill:no-comments",
         "skill:principle-attack-the-premise",
@@ -2727,7 +2564,6 @@
         "skill:principle-subtract-before-you-add",
         "skill:principle-test-behavior-not-implementation",
         "skill:principle-type-system-discipline",
-        "skill:reflect",
         "skill:setup-pstack",
         "skill:show-me-your-work",
         "skill:swarm",
@@ -2780,7 +2616,6 @@
             "skill:architect",
             "skill:arena",
             "skill:benchmark-checklist",
-            "skill:how",
             "skill:interrogate",
             "skill:ketchup",
             "skill:no-comments",
@@ -2808,7 +2643,6 @@
             "skill:principle-subtract-before-you-add",
             "skill:principle-test-behavior-not-implementation",
             "skill:principle-type-system-discipline",
-            "skill:reflect",
             "skill:setup-pstack",
             "skill:show-me-your-work",
             "skill:swarm",
@@ -2820,9 +2654,9 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
+              "Bun and package/network access for watcher dependency installation",
               "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
               "Git, Bash/shell utilities and selected gh or Origin CLI for project/forge/worktree helpers; credentials only for authorized queries",
-              "Node for plan checks; Bun and package/network access for watcher dependency installation",
               "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority",
               "explicit intended target, owned temporary execution/dependency space and separate writable tracker/output/evidence destinations",
               "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence"
@@ -2841,7 +2675,6 @@
               "playbooks/ACCESS-investigation.md",
               "playbooks/ACCESS-multi-phase-plan.md",
               "playbooks/ACCESS-opening-a-pr.md",
-              "playbooks/ACCESS-orchestrate.md",
               "playbooks/ACCESS-pause-safely.md",
               "playbooks/ACCESS-perf-issue.md",
               "playbooks/ACCESS-prototype.md",
@@ -2852,7 +2685,8 @@
               "playbooks/ACCESS-trace-forensics.md",
               "playbooks/ACCESS-visual-parity.md",
               "playbooks/ACCESS-worktree-cleanup.md",
-              "references/ACCESS-bugbot-triage.md"
+              "references/ACCESS-bugbot-triage.md",
+              "worker.md"
             ],
             "dependencies": [
               {
@@ -2866,10 +2700,6 @@
               {
                 "type": "skill",
                 "target": "pstack:benchmark-checklist"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:how"
               },
               {
                 "type": "skill",
@@ -2978,10 +2808,6 @@
               {
                 "type": "skill",
                 "target": "pstack:principle-type-system-discipline"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:reflect"
               },
               {
                 "type": "skill",
@@ -3029,7 +2855,6 @@
             "skill:architect",
             "skill:arena",
             "skill:benchmark-checklist",
-            "skill:how",
             "skill:interrogate",
             "skill:ketchup",
             "skill:no-comments",
@@ -3057,7 +2882,6 @@
             "skill:principle-subtract-before-you-add",
             "skill:principle-test-behavior-not-implementation",
             "skill:principle-type-system-discipline",
-            "skill:reflect",
             "skill:setup-pstack",
             "skill:show-me-your-work",
             "skill:swarm",
@@ -3069,8 +2893,8 @@
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
+              "Bun and package/network access for watcher dependency installation",
               "Git, Bash/shell utilities and selected gh or Origin CLI for project/forge/worktree helpers; credentials only for authorized queries",
-              "Node for plan checks; Bun and package/network access for watcher dependency installation",
               "active session or verified scheduler for monitoring; task-specific setup, shipping/merge approval and external-service authority",
               "explicit intended target, owned temporary execution/dependency space and separate writable tracker/output/evidence destinations",
               "supported host delegation and independent/diverse reviewers; confirmed host model preferences; real live/perf evidence"
@@ -3089,7 +2913,6 @@
               "playbooks/ACCESS-investigation.md",
               "playbooks/ACCESS-multi-phase-plan.md",
               "playbooks/ACCESS-opening-a-pr.md",
-              "playbooks/ACCESS-orchestrate.md",
               "playbooks/ACCESS-pause-safely.md",
               "playbooks/ACCESS-perf-issue.md",
               "playbooks/ACCESS-prototype.md",
@@ -3100,7 +2923,8 @@
               "playbooks/ACCESS-trace-forensics.md",
               "playbooks/ACCESS-visual-parity.md",
               "playbooks/ACCESS-worktree-cleanup.md",
-              "references/ACCESS-bugbot-triage.md"
+              "references/ACCESS-bugbot-triage.md",
+              "worker.md"
             ],
             "dependencies": [
               {
@@ -3114,10 +2938,6 @@
               {
                 "type": "skill",
                 "target": "pstack:benchmark-checklist"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:how"
               },
               {
                 "type": "skill",
@@ -3229,10 +3049,6 @@
               },
               {
                 "type": "skill",
-                "target": "pstack:reflect"
-              },
-              {
-                "type": "skill",
                 "target": "pstack:setup-pstack"
               },
               {
@@ -3269,12 +3085,7 @@
       "id": "principle-attack-the-premise",
       "source": "skills/principle-attack-the-premise",
       "description": "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it.",
-      "requires": [
-        "skill:principle-build-the-lever",
-        "skill:principle-fix-root-causes",
-        "skill:principle-laziness-protocol",
-        "skill:principle-redesign-from-first-principles"
-      ],
+      "requires": [],
       "conflicts": [],
       "notices": [
         "notice:pstack-mit"
@@ -3317,12 +3128,7 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [
-            "skill:principle-build-the-lever",
-            "skill:principle-fix-root-causes",
-            "skill:principle-laziness-protocol",
-            "skill:principle-redesign-from-first-principles"
-          ],
+          "requires": [],
           "description": "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it.",
           "on_demand": {
             "protocol": "skill-tree-v1",
@@ -3333,20 +3139,7 @@
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": [
-              {
-                "type": "skill",
-                "target": "pstack:principle-build-the-lever"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-fix-root-causes"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-laziness-protocol"
-              }
-            ]
+            "dependencies": []
           }
         },
         {
@@ -3360,12 +3153,7 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [
-            "skill:principle-build-the-lever",
-            "skill:principle-fix-root-causes",
-            "skill:principle-laziness-protocol",
-            "skill:principle-redesign-from-first-principles"
-          ],
+          "requires": [],
           "description": "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it.",
           "on_demand": {
             "protocol": "skill-tree-v1",
@@ -3374,20 +3162,7 @@
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": [
-              {
-                "type": "skill",
-                "target": "pstack:principle-build-the-lever"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-fix-root-causes"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-laziness-protocol"
-              }
-            ]
+            "dependencies": []
           }
         }
       ]
@@ -3506,11 +3281,7 @@
       "id": "principle-build-the-lever",
       "source": "skills/principle-build-the-lever",
       "description": "Apply to any non-trivial work, not just bulk work: edits, migrations, analyses, checks. Build the tool that does it or proves it (codemod, script, generator, or a skill your subagents follow) instead of working by hand. The tool is the artifact a reviewer can rerun.",
-      "requires": [
-        "skill:principle-encode-lessons-in-structure",
-        "skill:principle-laziness-protocol",
-        "skill:principle-prove-it-works"
-      ],
+      "requires": [],
       "conflicts": [],
       "notices": [
         "notice:pstack-mit"
@@ -3553,11 +3324,7 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [
-            "skill:principle-encode-lessons-in-structure",
-            "skill:principle-laziness-protocol",
-            "skill:principle-prove-it-works"
-          ],
+          "requires": [],
           "description": "Apply to any non-trivial work, not just bulk work: edits, migrations, analyses, checks. Build the tool that does it or proves it (codemod, script, generator, or a skill your subagents follow) instead of working by hand. The tool is the artifact a reviewer can rerun.",
           "on_demand": {
             "protocol": "skill-tree-v1",
@@ -3568,16 +3335,7 @@
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": [
-              {
-                "type": "skill",
-                "target": "pstack:principle-laziness-protocol"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-prove-it-works"
-              }
-            ]
+            "dependencies": []
           }
         },
         {
@@ -3591,11 +3349,7 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [
-            "skill:principle-encode-lessons-in-structure",
-            "skill:principle-laziness-protocol",
-            "skill:principle-prove-it-works"
-          ],
+          "requires": [],
           "description": "Apply to any non-trivial work, not just bulk work: edits, migrations, analyses, checks. Build the tool that does it or proves it (codemod, script, generator, or a skill your subagents follow) instead of working by hand. The tool is the artifact a reviewer can rerun.",
           "on_demand": {
             "protocol": "skill-tree-v1",
@@ -3604,16 +3358,7 @@
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": [
-              {
-                "type": "skill",
-                "target": "pstack:principle-laziness-protocol"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:principle-prove-it-works"
-              }
-            ]
+            "dependencies": []
           }
         }
       ]
@@ -3949,7 +3694,7 @@
       "kind": "skill",
       "id": "principle-explain-the-number",
       "source": "skills/principle-explain-the-number",
-      "description": "Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think.",
+      "description": "Apply before you measure, and before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -4705,9 +4450,7 @@
       "id": "principle-minimize-reader-load",
       "source": "skills/principle-minimize-reader-load",
       "description": "Apply when reviewing or shaping code that's hard to trace. Count layers between question and answer, and hidden state in the reader's head; collapse one-caller wrappers and shrink mutable scope.",
-      "requires": [
-        "skill:principle-guard-the-context-window"
-      ],
+      "requires": [],
       "conflicts": [],
       "notices": [
         "notice:pstack-mit"
@@ -4750,9 +4493,7 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [
-            "skill:principle-guard-the-context-window"
-          ],
+          "requires": [],
           "description": "Apply when reviewing or shaping code that's hard to trace. Count layers between question and answer, and hidden state in the reader's head; collapse one-caller wrappers and shrink mutable scope.",
           "on_demand": {
             "protocol": "skill-tree-v1",
@@ -4777,9 +4518,7 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [
-            "skill:principle-guard-the-context-window"
-          ],
+          "requires": [],
           "description": "Apply when reviewing or shaping code that's hard to trace. Count layers between question and answer, and hidden state in the reader's head; collapse one-caller wrappers and shrink mutable scope.",
           "on_demand": {
             "protocol": "skill-tree-v1",
@@ -5823,8 +5562,7 @@
       "source": "skills/recall",
       "description": "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work.",
       "requires": [
-        "skill:unslop",
-        "skill:why"
+        "skill:unslop"
       ],
       "conflicts": [],
       "notices": [
@@ -5869,8 +5607,7 @@
             "notice:pstack-mit"
           ],
           "requires": [
-            "skill:unslop",
-            "skill:why"
+            "skill:unslop"
           ],
           "description": "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work.",
           "on_demand": {
@@ -5879,7 +5616,8 @@
             "prerequisites": [
               "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
               "Git/GitHub live-state access and actual source identifiers; default seven-day scoped window",
-              "accessible current-workspace history or explicitly reported history gap; authorized shared-record connectors"
+              "accessible current-workspace history or explicitly reported history gap; authorized shared-record connectors",
+              "authorized host subagents for parallel per-source investigators when available; otherwise sequential sweeps are labeled"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -5888,10 +5626,6 @@
               {
                 "type": "skill",
                 "target": "pstack:unslop"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:why"
               }
             ]
           }
@@ -5908,8 +5642,7 @@
             "notice:pstack-mit"
           ],
           "requires": [
-            "skill:unslop",
-            "skill:why"
+            "skill:unslop"
           ],
           "description": "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work.",
           "on_demand": {
@@ -5917,7 +5650,8 @@
             "entry_document": "ACCESS.md",
             "prerequisites": [
               "Git/GitHub live-state access and actual source identifiers; default seven-day scoped window",
-              "accessible current-workspace history or explicitly reported history gap; authorized shared-record connectors"
+              "accessible current-workspace history or explicitly reported history gap; authorized shared-record connectors",
+              "authorized host subagents for parallel per-source investigators when available; otherwise sequential sweeps are labeled"
             ],
             "reference_files": [
               "ACCESS.md"
@@ -5926,10 +5660,6 @@
               {
                 "type": "skill",
                 "target": "pstack:unslop"
-              },
-              {
-                "type": "skill",
-                "target": "pstack:why"
               }
             ]
           }
@@ -5940,7 +5670,7 @@
       "kind": "skill",
       "id": "reflect",
       "source": "skills/reflect",
-      "description": "Spawn three parallel review subagents over the active transcript, surface learnings, and route each to a concrete edit on an existing skill. Use when the user says reflect.",
+      "description": "Mine the active transcript for durable learnings and route each to a concrete edit on an existing skill. Use when the user says reflect.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -5984,29 +5714,20 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [
-            "skill:principle-encode-lessons-in-structure"
-          ],
-          "description": "Spawn three parallel review subagents over the active transcript, surface learnings, and route each to a concrete edit on an existing skill. Use when the user says reflect.",
+          "requires": [],
+          "description": "Mine the active transcript for durable learnings and route each to a concrete edit on an existing skill. Use when the user says reflect.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
               "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
-              "authorized host subagent capability; independent or diverse review only when available",
-              "confirmed host model preferences when present; otherwise inherit-parent",
-              "explicit user approval and editable target source before applying skill edits",
-              "verified current-session transcript or labeled digest"
+              "accessible current-session transcript; unavailable history is a reported limitation",
+              "explicit user approval and editable target source before applying skill edits"
             ],
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": [
-              {
-                "type": "skill",
-                "target": "pstack:principle-encode-lessons-in-structure"
-              }
-            ]
+            "dependencies": []
           }
         },
         {
@@ -6020,28 +5741,111 @@
           "notices": [
             "notice:pstack-mit"
           ],
-          "requires": [
-            "skill:principle-encode-lessons-in-structure"
-          ],
-          "description": "Spawn three parallel review subagents over the active transcript, surface learnings, and route each to a concrete edit on an existing skill. Use when the user says reflect.",
+          "requires": [],
+          "description": "Mine the active transcript for durable learnings and route each to a concrete edit on an existing skill. Use when the user says reflect.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "authorized host subagent capability; independent or diverse review only when available",
-              "confirmed host model preferences when present; otherwise inherit-parent",
-              "explicit user approval and editable target source before applying skill edits",
-              "verified current-session transcript or labeled digest"
+              "accessible current-session transcript; unavailable history is a reported limitation",
+              "explicit user approval and editable target source before applying skill edits"
             ],
             "reference_files": [
               "ACCESS.md"
             ],
-            "dependencies": [
-              {
-                "type": "skill",
-                "target": "pstack:principle-encode-lessons-in-structure"
-              }
-            ]
+            "dependencies": []
+          }
+        }
+      ]
+    },
+    {
+      "kind": "skill",
+      "id": "reframe",
+      "source": "skills/reframe",
+      "description": "Teach the expert words for what the operator is building, borrow words from neighboring fields that solved the same problem, then rewrite their description with them. Use for /reframe.",
+      "requires": [],
+      "conflicts": [],
+      "notices": [
+        "notice:pstack-mit"
+      ],
+      "origin": {
+        "id": "cursor-plugins",
+        "path": "pstack/skills/reframe",
+        "relationship": "exact-copy"
+      },
+      "bindings": [
+        {
+          "surface": "agents",
+          "projection": "skill",
+          "name": "reframe",
+          "invocation": "$reframe",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        },
+        {
+          "surface": "claude",
+          "projection": "skill",
+          "name": "reframe",
+          "invocation": "reframe",
+          "mode": "native",
+          "sharing": "exclusive",
+          "capabilities": []
+        }
+      ],
+      "surface_exclusions": [],
+      "variants": [
+        {
+          "surface": "agents",
+          "source": "skills/shared/reframe",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/reframe",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Teach the expert words for what the operator is building, borrow words from neighboring fields that solved the same problem, then rewrite their description with them. Use for $reframe or /reframe.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
+              "authorized access to the target files, code and description, or explicitly reported gaps",
+              "authorized web access to open and confirm every cited link; unconfirmed citations are cut and missing access is a reported limitation"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
+          }
+        },
+        {
+          "surface": "claude",
+          "source": "skills/shared/reframe",
+          "origin": {
+            "id": "cursor-plugins",
+            "path": "pstack/skills/reframe",
+            "relationship": "adapted"
+          },
+          "notices": [
+            "notice:pstack-mit"
+          ],
+          "requires": [],
+          "description": "Teach the expert words for what the operator is building, borrow words from neighboring fields that solved the same problem, then rewrite their description with them. Use for $reframe or /reframe.",
+          "on_demand": {
+            "protocol": "skill-tree-v1",
+            "entry_document": "ACCESS.md",
+            "prerequisites": [
+              "authorized access to the target files, code and description, or explicitly reported gaps",
+              "authorized web access to open and confirm every cited link; unconfirmed citations are cut and missing access is a reported limitation"
+            ],
+            "reference_files": [
+              "ACCESS.md"
+            ],
+            "dependencies": []
           }
         }
       ]
@@ -6168,7 +5972,7 @@
       "kind": "skill",
       "id": "sharpen",
       "source": "skills/sharpen",
-      "description": "Sharpen a task before starting: the expert approach, what the user is really after, and the right level of specification. Use for /sharpen.",
+      "description": "Make a task deeper, not bigger, then rewrite the prompt. Use for /sharpen.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -7156,7 +6960,7 @@
       "kind": "skill",
       "id": "why",
       "source": "skills/why",
-      "description": "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCPs and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior.",
+      "description": "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Returns a cited read on decisions and tradeoffs. Use how for runtime behavior.",
       "requires": [],
       "conflicts": [],
       "notices": [
@@ -7201,14 +7005,12 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCPs and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior.",
+          "description": "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Returns a cited read on decisions and tradeoffs. Use how for runtime behavior.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
               "Codex-specific workflow: compatible client capabilities and authorization are required; the Agents convention alone does not provide them",
-              "authorized host subagent capability; independent or diverse review only when available",
-              "confirmed host model preferences when present; otherwise inherit-parent",
               "target code/history and authorized evidence connectors; unavailable sources reported as gaps"
             ],
             "reference_files": [
@@ -7241,13 +7043,11 @@
             "notice:pstack-mit"
           ],
           "requires": [],
-          "description": "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCPs and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior.",
+          "description": "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Returns a cited read on decisions and tradeoffs. Use how for runtime behavior.",
           "on_demand": {
             "protocol": "skill-tree-v1",
             "entry_document": "ACCESS.md",
             "prerequisites": [
-              "authorized host subagent capability; independent or diverse review only when available",
-              "confirmed host model preferences when present; otherwise inherit-parent",
               "target code/history and authorized evidence connectors; unavailable sources reported as gaps"
             ],
             "reference_files": [
