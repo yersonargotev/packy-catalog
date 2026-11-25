@@ -31,14 +31,6 @@ def source_fidelity(upstream, manifest):
         legacy.require(bool(files), "missing upstream resource: " + str(source))
         for original in files:
             copied = target if source.is_file() else target / original.relative_to(source)
-            if resource["id"] == "software-factory" and original == source / "SKILL.md":
-                copied = target / "upstream-SKILL.md"
-                native = (target / "SKILL.md").read_text()
-                upstream_text = original.read_text()
-                description = upstream_text.splitlines()[2].removeprefix("description: ")
-                expected = upstream_text.replace("description: " + description,
-                                                 "description: " + json.dumps(description), 1)
-                legacy.require(native == expected, "software-factory adaptation exceeds YAML quoting fix")
             legacy.require(original.read_bytes() == copied.read_bytes()
                            and bool(original.stat().st_mode & 0o111) == bool(copied.stat().st_mode & 0o111),
                            "source bytes or executable mode differ: " + str(copied))

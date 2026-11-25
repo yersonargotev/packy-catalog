@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "matty",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Matty workflow",
   "selectable": true,
   "surfaces": [
@@ -17,7 +17,7 @@
     {
       "id": "mattpocock-skills",
       "repository": "mattpocock/skills",
-      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa"
+      "commit": "d65391149dbb5fe76478e76fa8d5122b2aa5a70e"
     }
   ],
   "resources": [
@@ -131,7 +131,7 @@
           "capabilities": []
         }
       ],
-      "description": "Experimental, explicitly invoked coordination of long-running goals through subagents and a persistent wiki",
+      "description": "Experimental, explicitly invoked delegation of work to fresh subagents with a dated persistent wiki",
       "id": "chief-of-staff",
       "kind": "skill",
       "requires": [],
@@ -154,7 +154,7 @@
           "background subagents with fresh contexts",
           "configured issue tracker and user-approved planning decisions for large-work delivery",
           "explicit user invocation of this experimental workflow",
-          "host scheduling support and user authorization for any selected recurring schedule",
+          "host scheduling support and user authorization for any accepted recurring job",
           "writable shared wiki following its conventions, or user-agreed location before creating one"
         ],
         "reference_files": [
