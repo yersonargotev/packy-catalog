@@ -1,5 +1,0 @@
-interface:
-  display_name: "Software Factory"
-  short_description: "Design agent software factories and their services"
-policy:
-  allow_implicit_invocation: false
