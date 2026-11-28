@@ -46,12 +46,15 @@ normal preview, consent, ownership, and drift checks.
 
 For a complete `<pack>:<skill>` identity, the surface bootstrap retrieves it
 directly. `get skill` checks reviewed compatibility; prior discovery is optional.
-For an incomplete request, inspect the known Pack with
-`packy show <pack> --surface <surface> --json`; enumerate `packy list --json` first
-only when the Pack is unknown. Capture `show` JSON in writable scratch space,
-then display matching rows with a local JSON reader. If the name is unknown or
-unmatched, display only qualified identities and descriptions first, then
-inspect complete metadata for the matching candidates. The Packy CLI skill includes capture/filter examples.
+For an incomplete request, search first with
+`packy search <terms> --surface <surface> --json`, trying two or three terms.
+Search returns compact qualified candidates, including incompatible ones with
+their reason; inspect a candidate with `packy show <pack> --surface <surface> --json`
+when its dependencies or prerequisites matter. When search misses, or the
+installed Packy has no `search` command, fall back to `packy list --json` and
+`packy show <pack> --surface <surface> --json` for each relevant Pack. Capture
+`show` JSON in writable scratch space and display only qualified identities and
+descriptions with a local JSON reader. The Packy CLI skill includes capture/filter examples.
 There is no embedded Pack list. A unique match resolves directly; several matches
 require the user's choice. Keep Pack-qualified identities. Native bindings and installed copies
 alone do not establish reviewed on-demand compatibility.
@@ -108,16 +111,12 @@ Require a successful versioned `skill-access` report with `result: "prepared"`
 and the requested identity and surface. The direct route retains all report,
 dependency, prerequisite and snapshot checks described above.
 
-For an unspecified “TDD” request, discover the relevant candidates and ask the
+For an unspecified “TDD” request, search for the relevant candidates and ask the
 user to choose between qualified matches such as `matty:tdd` and `pstack:tdd`.
 The CLI does not perform natural-language ranking or resolve that product choice.
-Using `jq` to display only exact-name matches:
 
 ```sh
-packy list --json
-packy show matty --surface agents --json > <scratch>/matty.json
-packy show pstack --surface agents --json > <scratch>/pstack.json
-jq '.skills[] | select(.qualified_skill | endswith(":tdd"))' <scratch>/matty.json <scratch>/pstack.json
+packy search tdd --surface agents --json
 # After the user selects matty:tdd:
 packy get skill matty:tdd --surface agents --json
 ```
@@ -141,7 +140,7 @@ the resource cache merely to infer the target project.
 | Packy is unavailable | Install the supporting released CLI explicitly; no substitute development binary. |
 | No local catalog | Acquire with `packy init` or `packy catalog refresh` after authorization. |
 | Several matching names | Ask the user to choose a qualified identity; do not prefer an installed copy. |
-| `invalid_identity` or `unknown_skill` | Correct the qualified identity using focused discovery: inspect the named Pack first, using `list` if the Pack is unknown or unresolved. Discovery describes the current selection; preserve the initiating surface and `--snapshot` on nested retrieval retries. |
+| `invalid_identity` or `unknown_skill` | Correct the qualified identity using focused discovery: inspect the named Pack first, using `search` or `list` if the Pack is unknown or unresolved. Discovery describes the current selection; preserve the initiating surface and `--snapshot` on nested retrieval retries. |
 | Incompatible surface/resource | Correct the explicit surface/identity or request a reviewed adaptation. |
 | Missing retained content | Restore that exact retained revision; do not retry against latest or native copies. |
 | Missing runtime, tool, model or service | Read resources normally; report/check prerequisites before the relevant procedure, preserving its stop/fallback policy. |
