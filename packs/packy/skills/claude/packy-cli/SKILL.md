@@ -14,7 +14,7 @@ host-specific inspection and retrieval, including nested calls.
 
 1. If the request already identifies `<pack>:<skill>` (for example `matty:retro`),
    proceed directly to **Obtain and read** with that identity. Retrieval checks
-   reviewed compatibility; no prior `list` or `show` is needed.
+   reviewed compatibility; no prior discovery is needed.
 2. Otherwise, search the selected local catalog first:
 
    ```sh
@@ -31,8 +31,8 @@ host-specific inspection and retrieval, including nested calls.
 
    If search finds nothing relevant, or this Packy release has no `search`
    command, fall back to `packy list --json` and
-   `packy show <pack> --surface claude --json` for each relevant Pack. Capture each
-   inspection in writable scratch space, then filter it before displaying
+   `packy show <pack> --surface claude --json` for each relevant Pack. Capture
+   each inspection in writable scratch space, then filter it before displaying
    results, for example using `jq`:
 
    ```sh

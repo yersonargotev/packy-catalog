@@ -50,8 +50,8 @@ For an incomplete request, search first with
 `packy search <terms> --surface <surface> --json`, trying two or three terms.
 Search returns compact qualified candidates, including incompatible ones with
 their reason; inspect a candidate with `packy show <pack> --surface <surface> --json`
-when its dependencies or prerequisites matter. When search misses, or the
-installed Packy has no `search` command, fall back to `packy list --json` and
+when its dependencies, definition, or prerequisites matter. When search misses,
+or an older installed Packy has no `search` command, fall back to `packy list --json` and
 `packy show <pack> --surface <surface> --json` for each relevant Pack. Capture
 `show` JSON in writable scratch space and display only qualified identities and
 descriptions with a local JSON reader. The Packy CLI skill includes capture/filter examples.
