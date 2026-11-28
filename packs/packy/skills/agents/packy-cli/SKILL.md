@@ -14,26 +14,36 @@ host-specific inspection and retrieval, including nested calls.
 
 1. If the request already identifies `<pack>:<skill>` (for example `matty:retro`),
    proceed directly to **Obtain and read** with that identity. Retrieval checks
-   reviewed compatibility; no prior `list` or `show` is needed.
-2. Otherwise, discover only what is missing. If the Pack is unknown, first run
-   `packy list --json`. Capture each relevant Pack's inspection in writable
-   scratch space, then filter it before displaying results. With a known skill
-   name, for example using `jq`:
+   reviewed compatibility; no prior discovery is needed.
+2. Otherwise, search the selected local catalog first:
+
+   ```sh
+   packy search <terms> --surface agents --json
+   ```
+
+   A skill matches when every term is a case-insensitive substring of its
+   qualified skill, native name, or effective description; there are no
+   synonyms or ranking. Use the request's distinctive words, and try two or
+   three terms (alone or combined) before falling back. Results include
+   incompatible candidates with `compatible: false` and their `reason`. When a
+   candidate's dependencies, definition, or prerequisites matter, inspect its Pack
+   with `packy show <pack> --surface agents --json`.
+
+   If search finds nothing relevant, or `packy search` fails with an unknown
+   command or flag error because the installed Packy predates it, fall back to `packy list --json` and
+   `packy show <pack> --surface agents --json` for each relevant Pack. Capture
+   each inspection in writable scratch space, then filter it before displaying
+   results, for example using `jq`:
 
    ```sh
    packy show <pack> --surface agents --json > <scratch>/pack.json
-   jq --arg name "<skill>" '.skills[] | select(.qualified_skill | endswith(":" + $name))' <scratch>/pack.json
+   jq '.skills[] | {qualified_skill, description}' <scratch>/pack.json
    ```
 
-   If no exact name matches or the request needs description matching, display
-   only identity/description summaries with
-   `jq '.skills[] | {qualified_skill, description}' <scratch>/pack.json`, then
-   inspect complete metadata for the matching candidates. Expand to other Packs
-   when the known Pack is unresolved or has no match. Use another local JSON
-   reader if `jq` is unavailable; keep the full captured report out of context.
-   Match the request against qualified identities, effective descriptions,
-   reviewed compatibility, dependencies, and known prerequisites. Preserve each
-   `<pack>:<skill>` identity throughout selection.
+   Use another local JSON reader if `jq` is unavailable; keep the full captured
+   report out of context. Match the request against qualified identities,
+   effective descriptions, reviewed compatibility, dependencies, and known
+   prerequisites. Preserve each `<pack>:<skill>` identity throughout selection.
 3. Select a unique match directly. When multiple skills match, ask the user to
    choose among the qualified candidates and explain their relevant differences.
    Installed state, native aliases, and modified installed copies do not rank or
@@ -102,7 +112,7 @@ catalog exists, explain explicit acquisition with `packy init` or
 identity errors require correcting the selection, not guessing another host or
 revision. Read `get skill` structured errors and discovery's stderr/nonzero exit.
 For `invalid_identity` or `unknown_skill`, return to focused discovery: inspect
-the named Pack first, using `list` only if the Pack is unknown or unresolved.
+the named Pack first, using `search` or `list` only if the Pack is unknown or unresolved.
 Preserve the initiating host and `--snapshot` on any nested retrieval retry;
 discovery describes the currently selected catalog, not an older pinned snapshot.
 If Packy itself is unavailable, explain that the CLI must be installed explicitly;
