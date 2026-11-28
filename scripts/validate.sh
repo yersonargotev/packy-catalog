@@ -17,6 +17,7 @@ for argument in "$@"; do
   fi
 done
 "$catalog_root/scripts/validate-publication-workflows.sh" >&2
+python3 -B "$catalog_root/scripts/check_on_demand_coverage.py" >&2
 if $baseline_seen; then
   output=plain
   if $json_output; then output=json; fi

@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "id": "argote",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "description": "Yerson Argote's engineering, communication, and issue-delivery workflows",
   "selectable": true,
   "surfaces": [
@@ -112,7 +112,11 @@
           "references": [],
           "roles": []
         }
-      ]
+      ],
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "prerequisites": []
+      }
     },
     {
       "description": "Formalizes existing local changes through an issue, a pull request, a protected merge, cleanup, and sync",
@@ -151,7 +155,14 @@
           "references": [],
           "roles": []
         }
-      ]
+      ],
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "prerequisites": [
+          "issue tracker and remote repository access",
+          "target Git repository with local changes"
+        ]
+      }
     },
     {
       "description": "Sets up a Home Repo that owns shared skills, steering files, and docs, with navigation pointers to other repos",
@@ -190,7 +201,15 @@
           "references": [],
           "roles": []
         }
-      ]
+      ],
+      "on_demand": {
+        "protocol": "skill-tree-v1",
+        "prerequisites": [
+          "read access to the local repositories",
+          "user answers and plan approval",
+          "writable target directory"
+        ]
+      }
     },
     {
       "kind": "skill",
