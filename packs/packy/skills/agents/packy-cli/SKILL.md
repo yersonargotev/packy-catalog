@@ -29,8 +29,8 @@ host-specific inspection and retrieval, including nested calls.
    candidate's dependencies, definition, or prerequisites matter, inspect its Pack
    with `packy show <pack> --surface agents --json`.
 
-   If search finds nothing relevant, or this Packy release has no `search`
-   command, fall back to `packy list --json` and
+   If search finds nothing relevant, or `packy search` fails with an unknown
+   command or flag error because the installed Packy predates it, fall back to `packy list --json` and
    `packy show <pack> --surface agents --json` for each relevant Pack. Capture
    each inspection in writable scratch space, then filter it before displaying
    results, for example using `jq`:

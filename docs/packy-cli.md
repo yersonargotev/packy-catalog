@@ -8,7 +8,7 @@ independent of the engine release selected by `packy-release.json`.
 ## Set up a surface
 
 Install Packy explicitly if unavailable. Use the released CLI supporting the
-[on-demand protocol](https://github.com/yersonargotev/packy/blob/v0.2.32/docs/on-demand-skills.md).
+[on-demand protocol](https://github.com/yersonargotev/packy/blob/v0.2.39/docs/on-demand-skills.md).
 Explicitly acquire with `packy init` when there is no local catalog, or update
 availability with `packy catalog refresh`. Discovery/retrieval never refresh
 implicitly.
@@ -51,7 +51,7 @@ For an incomplete request, search first with
 Search returns compact qualified candidates, including incompatible ones with
 their reason; inspect a candidate with `packy show <pack> --surface <surface> --json`
 when its dependencies, definition, or prerequisites matter. When search misses,
-or an older installed Packy has no `search` command, fall back to `packy list --json` and
+or an installed Packy older than v0.2.39 rejects `search`, fall back to `packy list --json` and
 `packy show <pack> --surface <surface> --json` for each relevant Pack. Capture
 `show` JSON in writable scratch space and display only qualified identities and
 descriptions with a local JSON reader. The Packy CLI skill includes capture/filter examples.
