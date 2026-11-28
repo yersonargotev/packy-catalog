@@ -78,6 +78,7 @@ with open(os.environ["TEST_DOWNLOAD_LOG"], "a") as log:
         (pack / "pack.json").write_text(json.dumps(manifest))
         (pack / "instructions").mkdir()
         (pack / "instructions/guidance.md").write_text("# Test guidance\n")
+        (self.project / "docs/on-demand-exceptions.json").write_text('{"skills": {}}\n')
         return pack
 
     def test_local_validation_and_baseline_are_source_free_and_inert(self):

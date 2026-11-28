@@ -31,6 +31,14 @@ _Avoid_: Catalog Resource when referring to the installed instance.
 Use of a Catalog Resource of kind skill without installing that resource in the
 target project.
 
+**On-demand Compatibility**:
+A reviewed declaration that a skill can be followed outside an installation.
+It is never inferred from the skill's files.
+
+**On-demand Coverage Exception**:
+A skill recorded, with a reason, as not yet or not ever offered for On-demand
+Skill Access.
+
 **Packy CLI Skill**:
 The agent-facing skill that explains how to discover and obtain skills through
 the Packy CLI.
